@@ -6,7 +6,7 @@ on:
             - main
 
 jobs:
-    coverall:
+    test:
         runs-on: ubuntu-latest
         strategy:
             matrix:
