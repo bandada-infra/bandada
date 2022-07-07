@@ -11,12 +11,12 @@ coverage.json
 # docs
 docs
 
+# types
+types
+
 # production
 dist
 build
-
-# github
-.github/ISSUE_TEMPLATE
 
 # misc
 .DS_Store

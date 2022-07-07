@@ -6,6 +6,12 @@
         "start": "nx serve",
         "build": "nx build",
         "test": "nx test",
+        "start:all": "nx run-many --target=serve --all",
+        "build:all": "nx run-many --target=build --all",
+        "test:all": "nx run-many --target=test --all",
+        "lint": "nx affected:lint --files *",
+        "prettier": "nx format:check --files ./*",
+        "prettier:write": "nx format:write --files ./*",
         "commit": "cz",
         "precommit": "lint-staged"
     },

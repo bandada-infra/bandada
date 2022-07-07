@@ -1,3 +1,4 @@
 {
-    "**/*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix"]
+    "*{.js,.ts,.jsx,.tsx}": "nx affected:lint --fix --files=",
+    "*": "nx format:write --files="
 }
