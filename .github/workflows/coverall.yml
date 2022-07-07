@@ -8,6 +8,11 @@ on:
 jobs:
     coverall:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                app:
+                    - api
+                    - dashboard
 
         steps:
             - uses: actions/checkout@v2
@@ -40,3 +45,15 @@ jobs:
               uses: coverallsapp/github-action@master
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
+                  path-to-lcov: /coverage/${{ matrix.app }}/lcov.info
+                  parallel: true
+
+    finish:
+        needs: test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Coveralls Finished
+              uses: coverallsapp/github-action@master
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  parallel-finished: true

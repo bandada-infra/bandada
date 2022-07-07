@@ -12,5 +12,14 @@ export default {
         "^.+\\.[tj]s$": "ts-jest"
     },
     moduleFileExtensions: ["ts", "js", "html"],
-    coverageDirectory: "../../coverage/apps/api"
+    coverageDirectory: "../../coverage/api",
+    coverageReporters: ["lcov"],
+    coverageThreshold: {
+        global: {
+            branches: 90,
+            functions: 95,
+            lines: 95,
+            statements: 95
+        }
+    }
 }
