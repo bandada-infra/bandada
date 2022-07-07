@@ -1,90 +1,130 @@
-# SemaphoreCloud
+<p align="center">
+    <h1 align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon-dark.svg">
+        <source media="(prefers-color-scheme: light)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
+        <img width="40" alt="Semaphore icon." src="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
+      </picture>
+      ZK-Groups
+    </h1>
+</p>
 
-This project was generated using [Nx](https://nx.dev).
+<p align="center">
+    <a href="https://github.com/semaphore-protocol" target="_blank">
+        <img src="https://img.shields.io/badge/project-Semaphore-blue.svg?style=flat-square">
+    </a>
+    <a href="https://github.com/semaphore-protocol/zk-groups/blob/main/LICENSE">
+        <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/zk-groups.svg?style=flat-square">
+    </a>
+    <a href="https://github.com/semaphore-protocol/zk-groups/actions?query=workflow%3Atest">
+        <img alt="GitHub Workflow test" src="https://img.shields.io/github/workflow/status/semaphore-protocol/zk-groups/test?label=test&style=flat-square&logo=github">
+    </a>
+    <a href="https://github.com/semaphore-protocol/zk-groups/actions?query=workflow%3Astyle">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/workflow/status/semaphore-protocol/zk-groups/style?label=style&style=flat-square&logo=github">
+    </a>
+    <a href="https://coveralls.io/github/semaphore-protocol/zk-groups">
+        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/semaphore-protocol/zk-groups?label=coverage (ts)&style=flat-square&logo=coveralls">
+    </a>
+    <a href="https://eslint.org/">
+        <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
+    </a>
+    <a href="https://prettier.io/">
+        <img alt="Code style prettier" src="https://img.shields.io/badge/code%20style-prettier-f8bc45?style=flat-square&logo=prettier">
+    </a>
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+</p>
 
-🔎 **Smart, Fast and Extensible Build System**
+<div align="center">
+    <h4>
+        <a href="/CONTRIBUTING.md">
+            👥 Contributing
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="/CODE_OF_CONDUCT.md">
+            🤝 Code of conduct
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="https://github.com/semaphore-protocol/zk-groups/contribute">
+            🔎 Issues
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="https://t.me/joinchat/B-PQx1U3GtAh--Z4Fwo56A">
+            🗣️ Chat &amp; Support
+        </a>
+    </h4>
+</div>
 
-## Adding capabilities to your workspace
+| Semaphore provides a set of JavaScript libraries to create identities, groups, generate zero-knowledge proofs and verify them with minimal effort. |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- |
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+## 🛠 Install
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+Clone this repository:
 
-Below are our core plugins:
+```bash
+git clone https://github.com/semaphore-protocol/zk-groups.git
+```
 
--   [React](https://reactjs.org)
-    -   `npm install --save-dev @nrwl/react`
--   Web (no framework frontends)
-    -   `npm install --save-dev @nrwl/web`
--   [Angular](https://angular.io)
-    -   `npm install --save-dev @nrwl/angular`
--   [Nest](https://nestjs.com)
-    -   `npm install --save-dev @nrwl/nest`
--   [Express](https://expressjs.com)
-    -   `npm install --save-dev @nrwl/express`
--   [Node](https://nodejs.org)
-    -   `npm install --save-dev @nrwl/node`
+and install the dependencies:
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+```bash
+cd zk-groups && yarn
+```
 
-## Generate an application
+## 📜 Usage
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+### Code quality and formatting
 
-> You can use any of the plugins above to generate applications as well.
+Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+```bash
+yarn lint
+```
 
-## Generate a library
+Run [Prettier](https://prettier.io/) to check formatting rules:
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+```bash
+yarn prettier
+```
 
-> You can also use any of the plugins above to generate libraries as well.
+or to automatically format the code:
 
-Libraries are shareable across libraries and applications. They can be imported from `@semaphore-cloud/mylib`.
+```bash
+yarn prettier:write
+```
 
-## Development server
+### Conventional commits
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+Semaphore uses [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/). A [command line utility](https://github.com/commitizen/cz-cli) to commit using the correct syntax can be used by running:
 
-## Code scaffolding
+```bash
+yarn commit
+```
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+It will also automatically check that the modified files comply with ESLint and Prettier rules.
 
-## Build
+### Testing
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run [Jest](https://jestjs.io/) to test the code with coverage:
 
-## Running unit tests
+```bash
+yarn test:all
+```
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+```bash
+yarn test <app-name> # For specific apps
+```
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+### Build packages
 
-## Running end-to-end tests
+Run [Webpack](https://webpack.js.org/) to build the applications:
 
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+```bash
+yarn build:all
+```
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+```bash
+yarn build <app-name> # For specific apps
+```
 
-## Understand your workspace
-
-Run `nx graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+A `dist` folder will be created.
