@@ -73,6 +73,44 @@ cd zk-groups && yarn
 
 ## 📜 Usage
 
+### Starting applications
+
+Run the following commands to start the applications:
+
+```bash
+yarn start:all # To start all the applications
+```
+
+```bash
+yarn start <app-name> # For specific apps
+```
+
+### Building applications
+
+Run [Webpack](https://webpack.js.org/) to build the applications:
+
+```bash
+yarn build:all
+```
+
+```bash
+yarn build <app-name> # For specific apps
+```
+
+A `dist` folder will be created.
+
+### Testing
+
+Run [Jest](https://jestjs.io/) to test the code with coverage:
+
+```bash
+yarn test:all
+```
+
+```bash
+yarn test <app-name> # For specific apps
+```
+
 ### Code quality and formatting
 
 Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
@@ -102,29 +140,3 @@ yarn commit
 ```
 
 It will also automatically check that the modified files comply with ESLint and Prettier rules.
-
-### Testing
-
-Run [Jest](https://jestjs.io/) to test the code with coverage:
-
-```bash
-yarn test:all
-```
-
-```bash
-yarn test <app-name> # For specific apps
-```
-
-### Build packages
-
-Run [Webpack](https://webpack.js.org/) to build the applications:
-
-```bash
-yarn build:all
-```
-
-```bash
-yarn build <app-name> # For specific apps
-```
-
-A `dist` folder will be created.
