@@ -39,13 +39,13 @@ jobs:
               run: yarn
 
             - name: Test libraries
-              run: yarn test:all
+              run: yarn test ${{ matrix.app }} --coverage
 
             - name: Coveralls
               uses: coverallsapp/github-action@master
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  path-to-lcov: /coverage/${{ matrix.app }}/lcov.info
+                  path-to-lcov: ./coverage/${{ matrix.app }}/lcov.info
                   parallel: true
 
     finish:
