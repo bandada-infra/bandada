@@ -54,7 +54,7 @@
     </h4>
 </div>
 
-| Semaphore provides a set of JavaScript libraries to create identities, groups, generate zero-knowledge proofs and verify them with minimal effort. |
+| Groups are an important concept when we speak about privacy and zero knowledge technologies. They can be thought of as anonymity sets, and are a way to establish necessary trust between a set of participants while letting users keep control over how their identities are stored and used. Semaphore groups uses incremental binary Merkle trees, Poseidon hashes and Semaphore identity commitments as tree leaves. The goal of this project is to provide a comprehensive infrastructure to allow anyone to create their own groups. |
 | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
