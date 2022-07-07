@@ -1,6 +1,6 @@
 {
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "apps/admin/src",
+    "sourceRoot": "apps/dashboard/src",
     "projectType": "application",
     "targets": {
         "build": {
@@ -9,15 +9,15 @@
             "defaultConfiguration": "production",
             "options": {
                 "compiler": "babel",
-                "outputPath": "dist/apps/admin",
-                "index": "apps/admin/src/index.html",
+                "outputPath": "dist/apps/dashboard",
+                "index": "apps/dashboard/src/index.html",
                 "baseHref": "/",
-                "main": "apps/admin/src/main.tsx",
-                "polyfills": "apps/admin/src/polyfills.ts",
-                "tsConfig": "apps/admin/tsconfig.app.json",
+                "main": "apps/dashboard/src/main.tsx",
+                "polyfills": "apps/dashboard/src/polyfills.ts",
+                "tsConfig": "apps/dashboard/tsconfig.app.json",
                 "assets": [
-                    "apps/admin/src/favicon.ico",
-                    "apps/admin/src/assets"
+                    "apps/dashboard/src/favicon.ico",
+                    "apps/dashboard/src/assets"
                 ],
                 "styles": [],
                 "scripts": [],
@@ -33,8 +33,8 @@
                 "production": {
                     "fileReplacements": [
                         {
-                            "replace": "apps/admin/src/environments/environment.ts",
-                            "with": "apps/admin/src/environments/environment.prod.ts"
+                            "replace": "apps/dashboard/src/environments/environment.ts",
+                            "with": "apps/dashboard/src/environments/environment.prod.ts"
                         }
                     ],
                     "optimization": true,
@@ -50,15 +50,15 @@
             "executor": "@nrwl/web:dev-server",
             "defaultConfiguration": "development",
             "options": {
-                "buildTarget": "admin:build",
+                "buildTarget": "dashboard:build",
                 "hmr": true
             },
             "configurations": {
                 "development": {
-                    "buildTarget": "admin:build:development"
+                    "buildTarget": "dashboard:build:development"
                 },
                 "production": {
-                    "buildTarget": "admin:build:production",
+                    "buildTarget": "dashboard:build:production",
                     "hmr": false
                 }
             }
@@ -67,14 +67,14 @@
             "executor": "@nrwl/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["apps/admin/**/*.{ts,tsx,js,jsx}"]
+                "lintFilePatterns": ["apps/dashboard/**/*.{ts,tsx,js,jsx}"]
             }
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/apps/admin"],
+            "outputs": ["coverage/apps/dashboard"],
             "options": {
-                "jestConfig": "apps/admin/jest.config.ts",
+                "jestConfig": "apps/dashboard/jest.config.ts",
                 "passWithNoTests": true
             }
         }

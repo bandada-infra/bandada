@@ -1,17 +1,17 @@
 {
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "apps/admin-e2e/src",
+    "sourceRoot": "apps/dashboard-e2e/src",
     "projectType": "application",
     "targets": {
         "e2e": {
             "executor": "@nrwl/cypress:cypress",
             "options": {
-                "cypressConfig": "apps/admin-e2e/cypress.json",
-                "devServerTarget": "admin:serve:development"
+                "cypressConfig": "apps/dashboard-e2e/cypress.json",
+                "devServerTarget": "dashboard:serve:development"
             },
             "configurations": {
                 "production": {
-                    "devServerTarget": "admin:serve:production"
+                    "devServerTarget": "dashboard:serve:production"
                 }
             }
         },
@@ -19,10 +19,10 @@
             "executor": "@nrwl/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
-                "lintFilePatterns": ["apps/admin-e2e/**/*.{js,ts}"]
+                "lintFilePatterns": ["apps/dashboard-e2e/**/*.{js,ts}"]
             }
         }
     },
     "tags": [],
-    "implicitDependencies": ["admin"]
+    "implicitDependencies": ["dashboard"]
 }
