@@ -19,7 +19,7 @@ services:
             - mongo
 
         ports:
-        - "3333:3333"
+            - "3333:3333"
 
     mongodb:
         image: mongo:4.4
@@ -42,9 +42,9 @@ services:
             - mongo
 
 networks:
-  app:
-    internal: false
-    driver: bridge
+    app:
+        internal: false
+        driver: bridge
 
-  mongo:
-    internal: false
+    mongo:
+        internal: false
