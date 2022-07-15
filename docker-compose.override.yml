@@ -1,0 +1,50 @@
+version: "3.2"
+
+services:
+    srv-api:
+        container_name: "srv-api"
+        build:
+            context: ./
+            dockerfile: ./apps/api/Dockerfile
+        image: ${DOMAIN}/api:latest
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=development
+        env_file:
+            - ./.env
+        depends_on:
+            - mongodb
+        networks:
+            - app
+            - mongo
+
+        ports:
+        - "3333:3333"
+
+    mongodb:
+        image: mongo:4.4
+        restart: always
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "3"
+        container_name: mongodb
+        ports:
+            - "27017:27017"
+        environment:
+            - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+        volumes:
+            - "./apps/mongodb/.data:/data/db"
+        networks:
+            - mongo
+
+networks:
+  app:
+    internal: false
+    driver: bridge
+
+  mongo:
+    internal: false
