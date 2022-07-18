@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common"
 import { PassportModule } from "@nestjs/passport"
 import { AuthController } from "./auth.controller"
 import * as passport from "passport"
-import { GithubStrategy } from "./strategy"
+import { GithubStrategy, TwitterStrategy } from "./strategy"
 import { AuthService } from "./auth.service"
 import { AccountService } from "../account/account.service"
 import { AccountModule } from "../account/account.module"
@@ -10,7 +10,13 @@ import { CookieSerializer } from "../common/cookie.serializer"
 
 @Module({
     imports: [AccountModule, PassportModule.register({ session: true })],
-    providers: [GithubStrategy, AuthService, AccountService, CookieSerializer],
+    providers: [
+        GithubStrategy,
+        TwitterStrategy,
+        AuthService,
+        AccountService,
+        CookieSerializer
+    ],
     controllers: [AuthController]
 })
 export class AuthModule implements NestModule {
