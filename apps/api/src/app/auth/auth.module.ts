@@ -3,10 +3,13 @@ import { PassportModule } from "@nestjs/passport"
 import { AuthController } from "./auth.controller"
 import * as passport from "passport"
 import { GithubStrategy } from "./strategy"
+import { AuthService } from "./auth.service"
+import { UserService } from "../user/user.service"
+import { UserModule } from "../user/user.module"
 
 @Module({
-    imports: [PassportModule.register({ session: true })],
-    providers: [GithubStrategy],
+    imports: [UserModule, PassportModule.register({ session: true })],
+    providers: [GithubStrategy, AuthService, UserService],
     controllers: [AuthController]
 })
 export class AuthModule implements NestModule {

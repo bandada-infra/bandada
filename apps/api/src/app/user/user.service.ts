@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common"
-import { MongoRepository, UpdateResult } from "typeorm"
+import { ObjectID, Repository, UpdateResult } from "typeorm"
 import { InjectRepository } from "@nestjs/typeorm"
 
 import { CreateUserDTO } from "./dto/create-user.dto"
-import { UserModel } from "./User.model"
+import { UserModel } from "./user.model"
 import { UpdateUserDTO } from "./dto/update-user.dto"
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(UserModel)
-        private userRepository: MongoRepository<UserModel>
+        private userRepository: Repository<UserModel>
     ) {}
 
     public async create(
@@ -23,18 +23,18 @@ export class UserService {
         return await this.userRepository.find()
     }
 
-    public async findOne(id: number | string): Promise<UserModel> {
+    public async findOne(id: ObjectID): Promise<UserModel> {
         return await this.userRepository.findOneBy({ id })
     }
 
     public async update(
-        id: number | string,
+        id: ObjectID,
         payload: UpdateUserDTO
     ): Promise<UpdateResult> {
         return await this.userRepository.update(id, payload)
     }
 
-    public async remove(id: number | string) {
-        return await this.userRepository.delete(id)
+    public async remove(id: ObjectID): Promise<void> {
+        await this.userRepository.delete(id)
     }
 }

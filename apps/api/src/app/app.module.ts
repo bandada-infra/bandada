@@ -17,7 +17,7 @@ import { UserModule } from "./user/user.module"
             username: process.env.MONGO_PASSWORD,
             password: process.env.MONGO_USERNAME,
             database: process.env.MONGO_DATABASE,
-            ssl: true,
+            ssl: process.env.NODE_ENV === "production" ? true : false,
 
             autoLoadEntities: true,
 

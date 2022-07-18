@@ -1,3 +1,4 @@
 export type Profile = {
-    emails: string[]
+    id: string | number
+    emails: any[]
 }
