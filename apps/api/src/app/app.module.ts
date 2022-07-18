@@ -4,12 +4,12 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
-import { UserModule } from "./user/user.module"
+import { AccountModule } from "./user/account.module"
 
 @Module({
     imports: [
         AuthModule,
-        UserModule,
+        AccountModule,
         TypeOrmModule.forRoot({
             type: "mongodb",
             host: process.env.DB_HOST,
