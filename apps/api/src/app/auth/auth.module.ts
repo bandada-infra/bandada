@@ -4,12 +4,13 @@ import { AuthController } from "./auth.controller"
 import * as passport from "passport"
 import { GithubStrategy } from "./strategy"
 import { AuthService } from "./auth.service"
-import { AccountService } from "../user/account.service"
-import { AccountModule } from "../user/account.module"
+import { AccountService } from "../account/account.service"
+import { AccountModule } from "../account/account.module"
+import { CookieSerializer } from "../common/cookie.serializer"
 
 @Module({
     imports: [AccountModule, PassportModule.register({ session: true })],
-    providers: [GithubStrategy, AuthService, AccountService],
+    providers: [GithubStrategy, AuthService, AccountService, CookieSerializer],
     controllers: [AuthController]
 })
 export class AuthModule implements NestModule {
@@ -25,6 +26,8 @@ export class AuthModule implements NestModule {
                         query: { state }
                     } = req
 
+                    console.log(state)
+
                     loginOption.state = state
                     next()
                 },
@@ -33,7 +36,7 @@ export class AuthModule implements NestModule {
                     res.redirect("/")
                 }
             )
-            .forRoutes("api/auth/github/callback")
+            .forRoutes("auth/github/callback")
         consumer
             .apply(
                 (req, _, next: () => void) => {
@@ -49,6 +52,6 @@ export class AuthModule implements NestModule {
                     res.redirect("/")
                 }
             )
-            .forRoutes("api/auth/twitter/callback")
+            .forRoutes("auth/twitter/callback")
     }
 }
