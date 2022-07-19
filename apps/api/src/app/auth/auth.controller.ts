@@ -1,18 +1,31 @@
-import { Controller, Get, UseGuards } from "@nestjs/common"
-import { AuthGuard } from "@nestjs/passport"
+import { Controller, Get, Res, UseGuards } from "@nestjs/common"
 import * as passport from "passport"
+import { GitHubOAuthGuard } from "./guards/github.guard"
+import { TwitterOAuthGuard } from "./guards/twitter.guard"
 
 @Controller("auth")
 export class AuthController {
-    @UseGuards(AuthGuard("github"))
+    @UseGuards(GitHubOAuthGuard)
     @Get("/github")
-    githubAuthentication() {
+    githubOAuth() {
         passport.authenticate("github")
     }
 
-    @UseGuards(AuthGuard("twitter"))
+    @UseGuards(GitHubOAuthGuard)
+    @Get("/github/callback")
+    githubOAuthRedirect(_, @Res() res) {
+        res.redirect(`${process.env.BASE_URL}/api`)
+    }
+
+    @UseGuards(TwitterOAuthGuard)
     @Get("/twitter")
-    twitterAuthentication() {
-        passport.authenticate("github")
+    twitterOAuth() {
+        passport.authenticate("twitter")
+    }
+
+    @UseGuards(TwitterOAuthGuard)
+    @Get("/twitter/callback")
+    twitterOAuthRedirect(_, @Res() res) {
+        res.redirect(`${process.env.BASE_URL}/api`)
     }
 }

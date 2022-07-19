@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common"
-import { ObjectID, Repository, UpdateResult } from "typeorm"
+import { FindOptionsWhere, ObjectID, Repository, UpdateResult } from "typeorm"
 import { InjectRepository } from "@nestjs/typeorm"
 
 import { CreateAccountDTO } from "./dto/create-account.dto"
@@ -23,8 +23,12 @@ export class AccountService {
         return await this.accountRepository.find()
     }
 
-    public async findOne(id: ObjectID): Promise<AccountModel> {
-        return await this.accountRepository.findOneBy({ id })
+    public async findOne(
+        payload:
+            | FindOptionsWhere<AccountModel>
+            | FindOptionsWhere<AccountModel>[]
+    ): Promise<AccountModel> {
+        return await this.accountRepository.findOneBy(payload)
     }
 
     public async update(
