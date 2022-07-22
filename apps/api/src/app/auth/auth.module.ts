@@ -24,6 +24,7 @@ import { JwtModule } from "@nestjs/jwt"
         AccountService,
         CookieSerializer
     ],
-    controllers: [AuthController]
+    controllers: [AuthController],
+    exports: [PassportModule, JwtModule]
 })
 export class AuthModule {}

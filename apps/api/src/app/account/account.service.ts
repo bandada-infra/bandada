@@ -10,7 +10,7 @@ import { UpdateAccountDTO } from "./dto/update-account.dto"
 export class AccountService {
     constructor(
         @InjectRepository(AccountModel)
-        private accountRepository: Repository<AccountModel>
+        private readonly accountRepository: Repository<AccountModel>
     ) {}
 
     public async create(

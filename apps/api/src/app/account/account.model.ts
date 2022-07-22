@@ -1,28 +1,27 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm"
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn
+} from "typeorm"
 
-@Entity()
+@Entity("accounts")
 export class AccountModel {
-    @ObjectIdColumn()
-    id: ObjectID
-
+    @PrimaryGeneratedColumn()
+    id: string
     @Column()
     service: string
-
     @Column({ generatedType: "STORED" })
     tokens: {
         accessToken: string
         userId: string
     }
-
     @Column()
     username: string
-
     @Column()
     fullName: string
-
     @Column()
     avatarURL: string
-
-    @Column()
+    @CreateDateColumn()
     signUpDate: Date
 }

@@ -1,10 +1,11 @@
-import { Module } from "@nestjs/common"
+import { DynamicModule, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
 import { AccountModule } from "./account/account.module"
+import { ConnectionOptions } from "typeorm"
 
 @Module({
     imports: [
@@ -30,4 +31,17 @@ import { AccountModule } from "./account/account.module"
     controllers: [AppController],
     providers: [AppService]
 })
-export class AppModule {}
+export class AppModule {
+    static forRoot(connectionOptions: ConnectionOptions): DynamicModule {
+        return {
+            module: AppModule,
+            imports: [
+                AuthModule,
+                AccountModule,
+                TypeOrmModule.forRoot(connectionOptions)
+            ],
+            controllers: [AppController],
+            providers: [AppService]
+        }
+    }
+}
