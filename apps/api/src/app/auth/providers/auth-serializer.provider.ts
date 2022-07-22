@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common"
 import { PassportSerializer } from "@nestjs/passport"
-import { ObjectID } from "typeorm"
 import { AccountModel } from "../../account/account.model"
 import { AccountService } from "../../account/account.service"
 
@@ -12,13 +11,13 @@ export class AuthSerializer extends PassportSerializer {
 
     serializeUser(
         account: AccountModel,
-        done: (error: Error, account: { id: ObjectID }) => void
+        done: (error: Error, account: { id: string }) => void
     ) {
         done(null, { id: account.id })
     }
 
     async deserializeUser(
-        payload: { id: ObjectID },
+        payload: { id: string },
         done: (error: Error, account: AccountModel) => void
     ) {
         const user = await this.accountService.findOne({ id: payload.id })
