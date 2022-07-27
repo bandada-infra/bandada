@@ -15,12 +15,12 @@ import { MembersService } from "./members.service"
 export class MembersController {
     constructor(private readonly membersService: MembersService) {}
 
-    @Get(":groupId")
-    getAllMembers(@Param("groupId") groupId: string): Member[] {
+    @Get(":groupName")
+    getAllMembers(@Param("groupName") groupName: string): Member[] {
         return this.membersService.getAllMembers()
     }
 
-    @Get(":groupId/:index")
+    @Get(":groupName/:index")
     getMemberByIndex(@Param("index") index: number) {
         const member = this.membersService.getMemberByIndex(index)
         if (!member) {
@@ -29,12 +29,12 @@ export class MembersController {
         return member
     }
 
-    @Post(":groupId")
+    @Post(":groupName")
     addMember(
-        @Param("groupId") groupId: string,
+        @Param("groupName") groupName: string,
         @Body() memberData: AddMemberDto
     ) {
-        const identityCommitmentsList = this.getAllMembers(groupId).map(
+        const identityCommitmentsList = this.getAllMembers(groupName).map(
             (member) => member.identityCommitment
         )
         if (identityCommitmentsList.includes(memberData.identityCommitment)) {
