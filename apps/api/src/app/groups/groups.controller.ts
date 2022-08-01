@@ -39,6 +39,9 @@ export class GroupsController {
 
     @Get(':name/:member/proof')
     generateMerkleProof(@Param('name') groupName: string, @Param('member') idCommitment: string): MerkleProof{
+        BigInt.prototype["toJSON"] = function () {
+            return this.toString();
+        };
         return this.groupsService.generateMerkleProof(groupName,idCommitment);
     }
 

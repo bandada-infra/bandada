@@ -4,6 +4,6 @@ export class GroupData {
     description: string;
     admin: string; // @todo: change the admin property
     treeDepth: number;
-    members: bigint[];
+    members: string[];
     createdAt: number;
 }

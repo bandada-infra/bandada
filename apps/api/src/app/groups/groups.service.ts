@@ -9,7 +9,7 @@ import { MerkleProof } from './types';
 export class GroupsService {
     private groupsData: GroupData[] = [];
     private groups: Group[] = [];
-
+    
     /**
      * Show all groups data in database.
      * @returns List of existing groups.
@@ -25,7 +25,7 @@ export class GroupsService {
      */
     getGroupData(groupName: string): GroupData {
         const groupData = this.groupsData.find(group => group.name === groupName);
-        
+
         if(!groupData) {
             throw new NotFoundException(`Group with "${groupName}" not found.`);
         }
@@ -56,7 +56,7 @@ export class GroupsService {
      */
     isGroupMember(groupName: string, idCommitment: string): boolean{
         const groupIndex = this.getGroupData(groupName).id;
-
+        
         if (this.groups[groupIndex].indexOf(BigInt(idCommitment)) >= 0){
             return true;
         }
@@ -74,8 +74,8 @@ export class GroupsService {
         if (!this.isGroupMember(groupName,idCommitment)){
             const groupIndex = this.getGroupData(groupName).id;
             
-            this.groupsData[groupIndex].members.push(BigInt(idCommitment));
-            this.groups[groupIndex].addMember(BigInt(idCommitment));
+            this.groupsData[groupIndex].members.push(idCommitment);
+            this.groups[groupIndex].addMember(idCommitment);
         }
         else{
             throw new BadRequestException("The member already exists in the group.");
