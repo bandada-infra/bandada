@@ -6,13 +6,11 @@ import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
 import { AccountModule } from "./account/account.module"
 import { ConnectionOptions } from "typeorm"
-import { MembersModule } from './members/members.module'
 import { GroupsModule } from './groups/groups.module'
 @Module({
     imports: [
         AuthModule,
         AccountModule,
-        MembersModule,
         GroupsModule,
         TypeOrmModule.forRoot({
             type: "mongodb",
