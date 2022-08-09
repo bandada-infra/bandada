@@ -17,6 +17,9 @@
     },
     "private": true,
     "dependencies": {
+        "@chakra-ui/react": "^2.2.6",
+        "@emotion/react": "^11.10.0",
+        "@emotion/styled": "^11.10.0",
         "@nestjs/common": "^8.0.0",
         "@nestjs/core": "^8.0.0",
         "@nestjs/jwt": "^9.0.0",
@@ -28,6 +31,7 @@
         "class-validator": "^0.13.2",
         "core-js": "^3.6.5",
         "express-session": "^1.17.3",
+        "framer-motion": "^7.0.0",
         "mongodb": "^4.8.0",
         "passport": "^0.6.0",
         "passport-github": "^1.1.0",
