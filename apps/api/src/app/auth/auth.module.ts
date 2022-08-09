@@ -21,7 +21,6 @@ import { JwtModule } from "@nestjs/jwt"
         GithubStrategy,
         TwitterStrategy,
         AuthService,
-        AccountService,
         CookieSerializer
     ],
     controllers: [AuthController],
