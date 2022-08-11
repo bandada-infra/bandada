@@ -2,7 +2,8 @@ import { Route, Routes } from "react-router-dom"
 
 import NavBar from "src/components/navbar"
 import Home from "src/pages/home"
-import Sso from "src/pages/sso"
+import SSO from "src/pages/sso"
+import MyGroups from "src/pages/my-groups"
 
 export function App() {
     return (
@@ -10,7 +11,8 @@ export function App() {
             <NavBar />
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/sso" element={<Sso />} />
+                <Route path="/sso" element={<SSO />} />
+                <Route path="/my-groups" element={<MyGroups />} />
             </Routes>
         </>
     )
