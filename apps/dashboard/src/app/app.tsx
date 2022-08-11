@@ -1,9 +1,8 @@
 import { Route, Routes } from "react-router-dom"
 
-import NavBar from "../components/navbar"
-import Home from "../pages/home"
-import Login from "../pages/login"
-import Join from "../pages/join"
+import NavBar from "src/components/navbar"
+import Home from "src/pages/home"
+import Login from "src/pages/login"
 
 export function App() {
     return (
@@ -12,7 +11,6 @@ export function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/join" element={<Join />} />
             </Routes>
         </>
     )
