@@ -1,10 +1,4 @@
-import { Center, Container, Heading } from "@chakra-ui/react"
+import { Heading } from "@chakra-ui/react"
 export default function Home(): JSX.Element {
-    return (
-        <Container>
-            <Center mt="300px">
-                <Heading>ZK Groups</Heading>
-            </Center>
-        </Container>
-    )
+    return <Heading fontSize="150px">ZK Groups</Heading>
 }

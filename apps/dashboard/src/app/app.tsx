@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom"
 
 import NavBar from "src/components/navbar"
 import Home from "src/pages/home"
-import Login from "src/pages/login"
+import Sso from "src/pages/sso"
 
 export function App() {
     return (
@@ -10,7 +10,7 @@ export function App() {
             <NavBar />
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/sso" element={<Sso />} />
             </Routes>
         </>
     )

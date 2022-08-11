@@ -38,6 +38,7 @@
         "passport-twitter": "^1.0.4",
         "react": "18.1.0",
         "react-dom": "18.1.0",
+        "react-icons": "^4.4.0",
         "react-router-dom": "6.3.0",
         "reflect-metadata": "^0.1.13",
         "regenerator-runtime": "0.13.7",
