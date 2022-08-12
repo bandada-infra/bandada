@@ -1,5 +1,3 @@
-import { Size } from "./groupSize"
-
 export type Group = {
     name: string
     description: string

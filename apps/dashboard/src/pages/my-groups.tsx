@@ -11,17 +11,26 @@ import {
     Text
 } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
 import CreatGroupModal from "src/components/modal"
 import GroupBox from "src/components/group-box"
 import { Group } from "src/types/groups"
-
-const groupList: Group[] = []
+import useGroups from "src/hooks/useGroups"
 
 export default function MyGroups(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
+    const [_groupList, setGroupList] = useState<Group[] | null>(null)
+    const { getGroupList } = useGroups()
+
+    useEffect(() => {
+        ;(async () => {
+            const groupList = await getGroupList()
+            setGroupList(groupList)
+        })()
+    }, [getGroupList, onClose])
+
     return (
         <Container maxW="container.xl">
             <Flex justifyContent="space-between" mt="43px">
@@ -84,8 +93,8 @@ export default function MyGroups(): JSX.Element {
                 </Select>
             </Flex>
             <Center minH="400px" mt="70px" border="1px solid #E4E4E4">
-                {groupList.length > 0 ? (
-                    <GroupBox groupList={groupList} />
+                {_groupList && _groupList.length > 0 ? (
+                    <GroupBox groupList={_groupList} />
                 ) : (
                     <Flex flexDir="column">
                         <Text fontSize="2xl" fontWeight="bold">

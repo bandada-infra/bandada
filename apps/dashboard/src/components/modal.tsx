@@ -16,7 +16,8 @@ import {
     UseDisclosureProps
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import {groupSizeInfo } from "src/types/groups"
+import { groupSizeInfo } from "src/types/groups"
+import useGroups from "src/hooks/useGroups"
 
 export default function CreatGroupModal({
     isOpen,
@@ -26,6 +27,8 @@ export default function CreatGroupModal({
     const [_groupName, setGroupName] = useState<string>()
     const [_groupDescription, setGroupDescription] = useState<string>()
     const [_groupSize, setGroupSize] = useState<string>("small")
+    const { createGroup } = useGroups()
+
     function nextStep() {
         setStep(_step + 1)
     }
@@ -166,7 +169,8 @@ export default function CreatGroupModal({
                                         {_groupSize &&
                                             groupSizeInfo[_groupSize].capacity +
                                                 ", Tree depth " +
-                                                groupSizeInfo[_groupSize].treeDepth}
+                                                groupSizeInfo[_groupSize]
+                                                    .treeDepth}
                                     </Text>
                                     <Text mt="20px">{_groupDescription}</Text>
                                     <Text mt="20px">Use for</Text>
@@ -184,6 +188,20 @@ export default function CreatGroupModal({
                                         bgColor="gray.800"
                                         color="#FAFBFC"
                                         _hover={{ bg: "gray.600" }}
+                                        onClick={() => {
+                                            if (
+                                                _groupName &&
+                                                _groupDescription &&
+                                                onClose
+                                            ) {
+                                                createGroup(
+                                                    _groupName,
+                                                    _groupDescription,
+                                                    _groupSize
+                                                )
+                                                onClose()
+                                            }
+                                        }}
                                     >
                                         Create
                                     </Button>
