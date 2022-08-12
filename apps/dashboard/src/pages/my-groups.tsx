@@ -13,7 +13,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-import CreatGroupModal from "src/components/modal"
+import CreatGroupModal from "src/components/creat-group-modal"
 import GroupBox from "src/components/group-box"
 import { Group } from "src/types/groups"
 import useGroups from "src/hooks/useGroups"
@@ -21,7 +21,7 @@ import useGroups from "src/hooks/useGroups"
 export default function MyGroups(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
-    const [_groupList, setGroupList] = useState<Group[] | null>(null)
+    const [_groupList, setGroupList] = useState<Group[] | null>()
     const { getGroupList } = useGroups()
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function MyGroups(): JSX.Element {
             const groupList = await getGroupList()
             setGroupList(groupList)
         })()
-    }, [getGroupList, onClose])
+    }, [getGroupList])
 
     return (
         <Container maxW="container.xl">

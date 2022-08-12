@@ -8,7 +8,7 @@ interface GroupList {
 
 export default function GroupBox({ groupList }: GroupList): JSX.Element {
     return (
-        <Grid templateColumns="repeat(4, 1fr)" gap={10} p="20px">
+        <Grid templateColumns="repeat(4, 1fr)" gap={10} p="20px" w="100%">
             {groupList.map((group) => (
                 <GridItem w="100%" border="1px">
                     <GroupCard {...group} />

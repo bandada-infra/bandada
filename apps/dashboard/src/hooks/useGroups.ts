@@ -27,7 +27,7 @@ export default function useGroups(): ReturnParameters {
                 name: groupName,
                 description: groupDescription,
                 size: groupSize,
-                members: 0
+                members: []
             }
             try {
                 const groupList = await getGroupList()
