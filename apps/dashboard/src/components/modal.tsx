@@ -16,65 +16,25 @@ import {
     UseDisclosureProps
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-
-export type sizeProps = {
-    sizeFor: string
-    capacity: string
-    useCases: string[]
-    treeDepth: number
-}
-
-export type GroupProps = {
-    name: string
-    description: string
-    size: string
-    info: sizeProps
-}
-
-const sizeInfo: Record<string, sizeProps> = {
-    small: {
-        sizeFor: "For communities, small teams",
-        capacity: "Capacity 30 thousand",
-        useCases: ["voting", "feedback"],
-        treeDepth: 16
-    },
-    medium: {
-        sizeFor: "For cities, large teams",
-        capacity: "Capacity 500 thousand",
-        useCases: ["voting", "feedback"],
-        treeDepth: 20
-    },
-    large: {
-        sizeFor: "For nations",
-        capacity: "Capacity 30 Million",
-        useCases: ["voting", "feedback"],
-        treeDepth: 25
-    },
-    xl: {
-        sizeFor: "For multiple nations, contries",
-        capacity: "Capacity 1 Billion",
-        useCases: ["voting", "feedback"],
-        treeDepth: 30
-    }
-}
+import {groupSizeInfo } from "src/types/groups"
 
 export default function CreatGroupModal({
     isOpen,
     onClose
 }: UseDisclosureProps): JSX.Element {
-    const [step, setStep] = useState<number>(0)
-    const [groupName, setGroupName] = useState<string>()
-    const [groupDescription, setGroupDescription] = useState<string>()
-    const [groupSize, setGroupSize] = useState<string>("small")
+    const [_step, setStep] = useState<number>(0)
+    const [_groupName, setGroupName] = useState<string>()
+    const [_groupDescription, setGroupDescription] = useState<string>()
+    const [_groupSize, setGroupSize] = useState<string>("small")
     function nextStep() {
-        setStep(step + 1)
+        setStep(_step + 1)
     }
     function previousStep() {
-        setStep(step - 1)
+        setStep(_step - 1)
     }
 
     function submitGroupInfo() {
-        if (groupName && groupDescription) {
+        if (_groupName && _groupDescription) {
             nextStep()
         } else {
             alert("Please fill out the Name and Description")
@@ -94,10 +54,10 @@ export default function CreatGroupModal({
                 cursor="pointer"
             >
                 <Text>{prop.size}</Text>
-                <Text>{sizeInfo[prop.size].sizeFor}</Text>
-                <Text>{sizeInfo[prop.size].capacity}</Text>
+                <Text>{groupSizeInfo[prop.size].sizeFor}</Text>
+                <Text>{groupSizeInfo[prop.size].capacity}</Text>
                 <Text>Use for</Text>
-                {sizeInfo[prop.size].useCases.map((useCase) => {
+                {groupSizeInfo[prop.size].useCases.map((useCase) => {
                     return <Text>-{useCase}</Text>
                 })}
             </Flex>
@@ -120,15 +80,15 @@ export default function CreatGroupModal({
             <ModalOverlay />
             <ModalContent w="600px">
                 <ModalHeader borderBottom="1px" borderColor="gray.200">
-                    {step === 0
+                    {_step === 0
                         ? "Create a new group"
-                        : step === 1
+                        : _step === 1
                         ? "Choose a group size"
                         : "Review group details"}
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {step === 0 ? (
+                    {_step === 0 ? (
                         <Flex
                             h="300px"
                             flexDir="column"
@@ -137,7 +97,7 @@ export default function CreatGroupModal({
                             <FormControl>
                                 <FormLabel>Name</FormLabel>
                                 <Input
-                                    value={groupName}
+                                    value={_groupName}
                                     onChange={(e) =>
                                         setGroupName(e.target.value)
                                     }
@@ -147,7 +107,7 @@ export default function CreatGroupModal({
                             <FormControl>
                                 <FormLabel>Description</FormLabel>
                                 <Input
-                                    value={groupDescription}
+                                    value={_groupDescription}
                                     onChange={(e) =>
                                         setGroupDescription(e.target.value)
                                     }
@@ -164,7 +124,7 @@ export default function CreatGroupModal({
                                 Continue
                             </Button>
                         </Flex>
-                    ) : step === 1 ? (
+                    ) : _step === 1 ? (
                         <Box>
                             <Flex>
                                 <GroupSizeComponent size="small" />
@@ -200,18 +160,18 @@ export default function CreatGroupModal({
                                         fontWeight="bold"
                                         mt="15px"
                                     >
-                                        {groupName}
+                                        {_groupName}
                                     </Text>
                                     <Text mt="15px" color="#75797E">
-                                        {groupSize &&
-                                            sizeInfo[groupSize].capacity +
+                                        {_groupSize &&
+                                            groupSizeInfo[_groupSize].capacity +
                                                 ", Tree depth " +
-                                                sizeInfo[groupSize].treeDepth}
+                                                groupSizeInfo[_groupSize].treeDepth}
                                     </Text>
-                                    <Text mt="20px">{groupDescription}</Text>
+                                    <Text mt="20px">{_groupDescription}</Text>
                                     <Text mt="20px">Use for</Text>
-                                    {groupSize &&
-                                        sizeInfo[groupSize].useCases.map(
+                                    {_groupSize &&
+                                        groupSizeInfo[_groupSize].useCases.map(
                                             (useCase) => {
                                                 return <Text>-{useCase}</Text>
                                             }

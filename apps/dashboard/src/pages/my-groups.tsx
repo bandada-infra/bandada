@@ -14,6 +14,10 @@ import { useDisclosure } from "@chakra-ui/react"
 import { useState } from "react"
 import { FiSearch } from "react-icons/fi"
 import CreatGroupModal from "src/components/modal"
+import GroupBox from "src/components/group-box"
+import { Group } from "src/types/groups"
+
+const groupList: Group[] = []
 
 export default function MyGroups(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -79,24 +83,28 @@ export default function MyGroups(): JSX.Element {
                     <option value="groupSize">Group size</option>
                 </Select>
             </Flex>
-            <Center h="400px" mt="70px" border="1px solid #E4E4E4">
-                <Flex flexDir="column">
-                    <Text fontSize="2xl" fontWeight="bold">
-                        You have not created any groups
-                    </Text>
-                    <Center mt="32px">
-                        <Button
-                            fontSize="lg"
-                            bgColor="gray.800"
-                            color="#FAFBFC"
-                            _hover={{ bg: "gray.600" }}
-                            width="fit-content"
-                            onClick={onOpen}
-                        >
-                            Get Started!
-                        </Button>
-                    </Center>
-                </Flex>
+            <Center minH="400px" mt="70px" border="1px solid #E4E4E4">
+                {groupList.length > 0 ? (
+                    <GroupBox groupList={groupList} />
+                ) : (
+                    <Flex flexDir="column">
+                        <Text fontSize="2xl" fontWeight="bold">
+                            You have not created any groups
+                        </Text>
+                        <Center mt="32px">
+                            <Button
+                                fontSize="lg"
+                                bgColor="gray.800"
+                                color="#FAFBFC"
+                                _hover={{ bg: "gray.600" }}
+                                width="fit-content"
+                                onClick={onOpen}
+                            >
+                                Get Started!
+                            </Button>
+                        </Center>
+                    </Flex>
+                )}
             </Center>
             <CreatGroupModal isOpen={isOpen} onClose={onClose} />
         </Container>
