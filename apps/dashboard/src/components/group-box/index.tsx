@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Center,
     Flex,
@@ -18,45 +19,52 @@ interface GroupList {
 export default function GroupBox({ groupList }: GroupList): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
-        <Center
-            minH="400px"
-            mt="70px"
-            border="1px solid #E4E4E4"
-            borderRadius="4px"
-            bgColor="#FEFFFF"
-        >
+        <Box>
             {groupList.length > 0 ? (
                 <Grid
                     templateColumns="repeat(4, 1fr)"
                     gap={10}
-                    p="20px"
                     w="100%"
+                    mt="60px"
                 >
                     {groupList.map((group) => (
-                        <GridItem w="100%" border="1px">
+                        <GridItem
+                            w="100%"
+                            borderRadius="4px"
+                            bgColor="#FCFCFC"
+                            boxShadow="0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)"
+                        >
                             <GroupCard {...group} />
                         </GridItem>
                     ))}
                 </Grid>
             ) : (
-                <Flex flexDir="column">
-                    <Text fontSize="2xl" fontWeight="bold">
-                        You have not created any groups
-                    </Text>
-                    <Center mt="32px">
-                        <Button
-                            fontSize="lg"
-                            width="fit-content"
-                            onClick={onOpen}
-                            variant="solid"
-                            colorScheme="primary"
-                        >
-                            Get Started!
-                        </Button>
-                    </Center>
-                    <CreatGroupModal isOpen={isOpen} onClose={onClose} />
-                </Flex>
+                <Center
+                    minH="400px"
+                    mt="70px"
+                    border="1px solid #E4E4E4"
+                    borderRadius="4px"
+                    bgColor="#FEFFFF"
+                >
+                    <Flex flexDir="column">
+                        <Text fontSize="2xl" fontWeight="bold">
+                            You have not created any groups
+                        </Text>
+                        <Center mt="32px">
+                            <Button
+                                fontSize="lg"
+                                width="fit-content"
+                                onClick={onOpen}
+                                variant="solid"
+                                colorScheme="primary"
+                            >
+                                Get Started!
+                            </Button>
+                        </Center>
+                        <CreatGroupModal isOpen={isOpen} onClose={onClose} />
+                    </Flex>
+                </Center>
             )}
-        </Center>
+        </Box>
     )
 }

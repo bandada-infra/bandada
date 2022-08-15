@@ -6,8 +6,10 @@ export default function GroupCard(group: Group): JSX.Element {
     return (
         <Container p="20px">
             <Heading fontSize="2xl">{group.name}</Heading>
-            <Text mt="10px">{group.members.length}members</Text>
-            <Text mt="30px" mb="28px">
+            <Text mt="10px" color="gray.500">
+                {group.members.length} members
+            </Text>
+            <Text mt="30px" mb="28px" color="gray.500">
                 {group.description}
             </Text>
             <Link to={`/manage?group=${group.name}`}>

@@ -34,7 +34,15 @@ export default function Manage(): JSX.Element {
             <Box borderBottom="1px" borderColor="gray.200">
                 <Flex mt="40px" justifyContent="space-between">
                     <Heading fontSize="32px">{groupName}</Heading>
-                    <Button onClick={onOpen}>New Invite</Button>
+                    <Button
+                        onClick={onOpen}
+                        variant="solid"
+                        fontWeight="400"
+                        fontSize="16px"
+                        border="1px solid #373A3E"
+                    >
+                        New Invite
+                    </Button>
                 </Flex>
                 <Text mt="16px" mb="29px">
                     {_group?.size === "xl"

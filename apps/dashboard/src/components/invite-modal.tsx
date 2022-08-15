@@ -32,17 +32,23 @@ export default function InviteModal({
     return (
         <Modal isOpen={!!isOpen} onClose={onClose ? onClose : console.error}>
             <ModalOverlay />
-            <ModalContent w="600px">
+            <ModalContent maxW="600px">
                 <ModalHeader borderBottom="1px" borderColor="gray.200">
                     Generate a unique invitation
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <FormControl mb="10px">
-                        <FormLabel>Invite link</FormLabel>
-                        <Flex>
+                    <FormControl marginY="10px">
+                        <FormLabel color="gray.500" fontWeight="700">
+                            Invite link
+                        </FormLabel>
+                        <Flex alignItems="center">
                             <InputGroup>
-                                <Input value={_inviteLink} fontSize="13px" />
+                                <Input
+                                    value={_inviteLink}
+                                    fontSize="16px"
+                                    color="gray.500"
+                                />
                                 <InputRightElement>
                                     <IconButton
                                         aria-label="Copy button"

@@ -1,5 +1,7 @@
-import Button from "./button";
+import Button from "./button"
+import Modal from "./modal"
 
 export default {
-    Button
+    Button,
+    Modal
 }

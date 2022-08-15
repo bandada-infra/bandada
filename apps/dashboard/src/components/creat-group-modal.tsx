@@ -6,6 +6,7 @@ import {
     FormControl,
     FormLabel,
     Input,
+    Link,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -26,7 +27,7 @@ export default function CreatGroupModal({
     const [_step, setStep] = useState<number>(0)
     const [_groupName, setGroupName] = useState<string>()
     const [_groupDescription, setGroupDescription] = useState<string>()
-    const [_groupSize, setGroupSize] = useState<string>("small")
+    const [_groupSize, setGroupSize] = useState<string>()
     const { createGroup } = useGroups()
 
     function nextStep() {
@@ -43,26 +44,44 @@ export default function CreatGroupModal({
             alert("Please fill out the Name and Description")
         }
     }
+    function submitGroupSize() {
+        if (_groupSize) {
+            nextStep()
+        } else {
+            alert("Select the group size")
+        }
+    }
 
     function GroupSizeComponent(prop: { size: string }) {
         return (
             <Flex
                 flexDir="column"
-                w="315px"
-                h="340px"
-                border="1px solid #D0D1D2"
+                w="280px"
+                minH="250px"
+                border={
+                    _groupSize === prop.size
+                        ? "2px solid #373A3E"
+                        : "1px solid #D0D1D2"
+                }
+                borderRadius="4px"
                 onClick={() => {
                     setGroupSize(prop.size)
                 }}
                 cursor="pointer"
             >
-                <Text>{prop.size}</Text>
-                <Text>{groupSizeInfo[prop.size].sizeFor}</Text>
-                <Text>{groupSizeInfo[prop.size].capacity}</Text>
-                <Text>Use for</Text>
-                {groupSizeInfo[prop.size].useCases.map((useCase) => {
-                    return <Text>-{useCase}</Text>
-                })}
+                <Box p="15px">
+                    <Text fontSize="lg" fontWeight="bold">
+                        {prop.size}
+                    </Text>
+                    <Text color="gray.500">
+                        {groupSizeInfo[prop.size].sizeFor}
+                    </Text>
+                    <Text mt="15px">{groupSizeInfo[prop.size].capacity}</Text>
+                    <Text mt="15px">Use for</Text>
+                    {groupSizeInfo[prop.size].useCases.map((useCase) => {
+                        return <Text>-{useCase}</Text>
+                    })}
+                </Box>
             </Flex>
         )
     }
@@ -73,7 +92,7 @@ export default function CreatGroupModal({
                 setStep(0)
                 setGroupName(undefined)
                 setGroupDescription(undefined)
-                setGroupSize("small")
+                setGroupSize(undefined)
             }
         })()
     }, [isOpen])
@@ -81,7 +100,7 @@ export default function CreatGroupModal({
     return (
         <Modal isOpen={!!isOpen} onClose={onClose ? onClose : console.error}>
             <ModalOverlay />
-            <ModalContent w="600px">
+            <ModalContent maxW={_step === 1 ? "1200px" : "600px"}>
                 <ModalHeader borderBottom="1px" borderColor="gray.200">
                     {_step === 0
                         ? "Create a new group"
@@ -128,22 +147,23 @@ export default function CreatGroupModal({
                         </Flex>
                     ) : _step === 1 ? (
                         <Box>
-                            <Flex>
+                            <Flex justifyContent="space-between">
                                 <GroupSizeComponent size="small" />
                                 <GroupSizeComponent size="medium" />
                                 <GroupSizeComponent size="large" />
                                 <GroupSizeComponent size="xl" />
                             </Flex>
-                            <Text mt="20px">
+                            <Text mt="20px" color="#3B3B48" textAlign="center">
                                 Group size can be adjusted at any time. To learn
-                                how size is calculated, visit our docs.
+                                how size is calculated, visit our
+                                <Link fontWeight="bold"> docs.</Link>
                             </Text>
                             <Flex justifyContent="space-between" mt="20px">
                                 <Button onClick={previousStep} fontSize="lg">
                                     Back
                                 </Button>
                                 <Button
-                                    onClick={nextStep}
+                                    onClick={submitGroupSize}
                                     fontSize="lg"
                                     variant="solid"
                                     colorScheme="primary"
@@ -189,6 +209,7 @@ export default function CreatGroupModal({
                                             if (
                                                 _groupName &&
                                                 _groupDescription &&
+                                                _groupSize &&
                                                 onClose
                                             ) {
                                                 createGroup(
