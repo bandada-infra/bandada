@@ -120,9 +120,8 @@ export default function CreatGroupModal({
                             <Button
                                 onClick={submitGroupInfo}
                                 fontSize="lg"
-                                bgColor="gray.800"
-                                color="#FAFBFC"
-                                _hover={{ bg: "gray.600" }}
+                                variant="solid"
+                                colorScheme="primary"
                             >
                                 Continue
                             </Button>
@@ -146,9 +145,8 @@ export default function CreatGroupModal({
                                 <Button
                                     onClick={nextStep}
                                     fontSize="lg"
-                                    bgColor="gray.800"
-                                    color="#FAFBFC"
-                                    _hover={{ bg: "gray.600" }}
+                                    variant="solid"
+                                    colorScheme="primary"
                                 >
                                     Continue
                                 </Button>
@@ -185,9 +183,8 @@ export default function CreatGroupModal({
                                         mt="20px"
                                         mb="20px"
                                         fontSize="lg"
-                                        bgColor="gray.800"
-                                        color="#FAFBFC"
-                                        _hover={{ bg: "gray.600" }}
+                                        variant="solid"
+                                        colorScheme="primary"
                                         onClick={() => {
                                             if (
                                                 _groupName &&

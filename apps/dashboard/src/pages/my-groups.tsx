@@ -40,9 +40,8 @@ export default function MyGroups(): JSX.Element {
                 <Center>
                     <Button
                         fontSize="lg"
-                        bgColor="gray.800"
-                        color="#FAFBFC"
-                        _hover={{ bg: "gray.600" }}
+                        variant="solid"
+                        colorScheme="primary"
                         onClick={onOpen}
                     >
                         New group
@@ -58,10 +57,14 @@ export default function MyGroups(): JSX.Element {
             >
                 <Center
                     borderBottom={_selectedForm === "groups" ? "2px" : "none"}
-                    color={_selectedForm === "groups" ? "#151616" : "#75797E"}
                 >
                     <Button
-                        bgColor="rgba(0,0,0,0)"
+                        variant="solid"
+                        color={
+                            _selectedForm === "groups"
+                                ? "primary.900"
+                                : "primary.500"
+                        }
                         onClick={() => {
                             setSelectedForm("groups")
                         }}
@@ -71,10 +74,14 @@ export default function MyGroups(): JSX.Element {
                 </Center>
                 <Center
                     borderBottom={_selectedForm === "folders" ? "2px" : "none"}
-                    color={_selectedForm === "folders" ? "#151616" : "#75797E"}
                 >
                     <Button
-                        bgColor="rgba(0,0,0,0)"
+                        variant="solid"
+                        color={
+                            _selectedForm === "folders"
+                                ? "primary.900"
+                                : "primary.500"
+                        }
                         onClick={() => {
                             setSelectedForm("folders")
                         }}

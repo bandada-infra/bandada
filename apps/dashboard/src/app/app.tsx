@@ -1,14 +1,15 @@
 import { Route, Routes } from "react-router-dom"
-
+import { ChakraProvider } from "@chakra-ui/react"
 import NavBar from "src/components/navbar"
 import Home from "src/pages/home"
 import SSO from "src/pages/sso"
 import MyGroups from "src/pages/my-groups"
 import Manage from "src/pages/manage"
+import theme from "src/styles"
 
 export function App() {
     return (
-        <>
+        <ChakraProvider theme={theme}>
             <NavBar />
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -16,7 +17,7 @@ export function App() {
                 <Route path="/my-groups" element={<MyGroups />} />
                 <Route path="/manage" element={<Manage />} />
             </Routes>
-        </>
+        </ChakraProvider>
     )
 }
 

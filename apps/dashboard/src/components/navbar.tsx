@@ -26,15 +26,14 @@ export default function NavBar(): JSX.Element {
 
                     <Center>
                         <Link to="/sso?opt=login">
-                            <Button mr="10px" bgColor="rgba(0,0,0,0)">
+                            <Button mr="10px" variant="solid">
                                 Log in
                             </Button>
                         </Link>
                         <Link to="/sso?opt=get-started">
                             <Button
-                                bgColor="gray.800"
-                                color="#FAFBFC"
-                                _hover={{ bg: "gray.600" }}
+                                variant="solid"
+                                colorScheme="primary"
                             >
                                 Get started
                             </Button>

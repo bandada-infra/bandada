@@ -18,7 +18,13 @@ interface GroupList {
 export default function GroupBox({ groupList }: GroupList): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
-        <Center minH="400px" mt="70px" border="1px solid #E4E4E4">
+        <Center
+            minH="400px"
+            mt="70px"
+            border="1px solid #E4E4E4"
+            borderRadius="4px"
+            bgColor="#FEFFFF"
+        >
             {groupList.length > 0 ? (
                 <Grid
                     templateColumns="repeat(4, 1fr)"
@@ -40,11 +46,10 @@ export default function GroupBox({ groupList }: GroupList): JSX.Element {
                     <Center mt="32px">
                         <Button
                             fontSize="lg"
-                            bgColor="gray.800"
-                            color="#FAFBFC"
-                            _hover={{ bg: "gray.600" }}
                             width="fit-content"
                             onClick={onOpen}
+                            variant="solid"
+                            colorScheme="primary"
                         >
                             Get Started!
                         </Button>

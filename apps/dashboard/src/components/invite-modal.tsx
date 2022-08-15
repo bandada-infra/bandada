@@ -47,15 +47,15 @@ export default function InviteModal({
                                     <IconButton
                                         aria-label="Copy button"
                                         icon={<FaRegCopy />}
-                                        bgColor="rgba(0,0,0,0)"
                                         onClick={copyLink}
+                                        variant="solid"
+                                        h="100%"
                                     />
                                 </InputRightElement>
                             </InputGroup>
                             <Button
-                                bgColor="gray.800"
-                                color="#FAFBFC"
-                                _hover={{ bg: "gray.600" }}
+                                variant="solid"
+                                colorScheme="primary"
                                 ml="10px"
                             >
                                 New Link
