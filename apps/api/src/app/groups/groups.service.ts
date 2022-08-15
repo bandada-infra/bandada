@@ -1,21 +1,43 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { GroupData } from "./entities/group.entity";
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from '@semaphore-protocol/group';
 import { MerkleProof } from './types';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MongoRepository } from 'typeorm';
 
 @Injectable()
 export class GroupsService {
-    private groupsData: GroupData[] = [];
     private groups: Group[] = [];
+
+    constructor(
+        @InjectRepository(GroupData)
+        private readonly groupRepository: MongoRepository<GroupData>
+    ) {
+        (async () => {
+            try{
+                for(const groupData of await this.groupRepository.find({order:{index:"ASC"}})){
+                    const group = new Group(groupData.treeDepth);
+                    if(groupData.members.length > 0){
+                        group.addMembers(groupData.members);
+                    }
+                    this.groups.push(group);
+                }
+
+                Logger.log(`✔️ GroupModule GroupData in DataBase --> group object sync clear`);
+            }catch(e){
+                console.error(e.message);
+            }
+        })();
+    }
     
     /**
      * Show all groups data in database.
      * @returns List of existing groups.
      */
-    getAllGroupsData(): GroupData[] {
-        return this.groupsData;
+    async getAllGroupsData(): Promise<GroupData[]> {
+        return await this.groupRepository.find();
     }
 
     /**
@@ -23,12 +45,13 @@ export class GroupsService {
      * @param groupName Group name wants to find.
      * @returns One group data.
      */
-    getGroupData(groupName: string): GroupData {
-        const groupData = this.groupsData.find(group => group.name === groupName);
+    async getGroupData(groupName: string): Promise<GroupData> {
+        const groupData = await this.groupRepository.findOneBy({name: groupName});
 
         if(!groupData) {
-            throw new NotFoundException(`Group with "${groupName}" not found.`);
+            throw new NotFoundException(`The group: {'${groupName}'} not found.`);
         }
+
         return groupData;
     }
 
@@ -36,16 +59,23 @@ export class GroupsService {
      * Create group in database and `Group`(with @semaphore-protocol/group).
      * @param groupData Information for creating group.
      */
-    createGroup(groupData:CreateGroupDto){
-        this.groupsData.push({
-            id: this.groupsData.length,
-            admin:"dev",
-            members:[],
-            createdAt: Date.now(),
-            ...groupData,
-        });
+    async createGroup(groupData:CreateGroupDto): Promise<GroupData>{
+        try{
+            this.groups.push(new Group(groupData.treeDepth,'0'));
 
-        this.groups.push(new Group(groupData.treeDepth));
+            const newGroupData = this.groupRepository.create({
+                index: +(await this.groupRepository.count()),
+                admin:"test",
+                members:[],
+                tag:0,
+                ...groupData});
+
+            return await this.groupRepository.save(newGroupData);
+        }catch(e){
+            this.groups.pop();
+
+            throw new InternalServerErrorException(e.writeErrors);
+        }
     }
 
     /**
@@ -54,31 +84,30 @@ export class GroupsService {
      * @param idCommitment Member's identity commitment.
      * @returns True or false.
      */
-    isGroupMember(groupName: string, idCommitment: string): boolean{
-        const groupIndex = this.getGroupData(groupName).id;
-        
-        if (this.groups[groupIndex].indexOf(BigInt(idCommitment)) >= 0){
-            return true;
-        }
-        else{
-            return false;
-        }
+    async isGroupMember(groupName: string, idCommitment: string): Promise<boolean>{
+        const groupIndex = (await this.getGroupData(groupName)).index;
+
+        return (this.groups[groupIndex].indexOf(BigInt(idCommitment)) >= 0) ? true : false;
     }
 
     /**
      * If a member does not exist in the group, member is added to the database and `Group`(with @semaphore-protocol/group).
      * @param groupName Group name wants to find.
      * @param idCommitment Member's identity commitment.
+     * @returns True or false.
      */
-    addMember(groupName:string, idCommitment: string){
-        if (!this.isGroupMember(groupName,idCommitment)){
-            const groupIndex = this.getGroupData(groupName).id;
-            
-            this.groupsData[groupIndex].members.push(idCommitment);
-            this.groups[groupIndex].addMember(idCommitment);
+    async addMember(groupName:string, idCommitment: string): Promise<boolean>{
+        if (!(await this.isGroupMember(groupName,idCommitment))){
+            const groupData = await this.getGroupData(groupName);
+
+            groupData.members.push(idCommitment);
+
+            this.groups[groupData.index].addMember(idCommitment);
+
+            return (await this.groupRepository.save(groupData)) ? true : false;
         }
         else{
-            throw new BadRequestException("The member already exists in the group.");
+            throw new BadRequestException(`The member: {'${idCommitment}'} already exists in the group: {'${groupName}'}.`);
         }
     }
 
@@ -88,15 +117,15 @@ export class GroupsService {
      * @param idCommitment Member's identity commitment.
      * @returns Member's merkle proof.
      */
-    generateMerkleProof(groupName: string, idCommitment: string): MerkleProof {
-        if(this.isGroupMember(groupName,idCommitment)){
-            const groupIndex = this.getGroupData(groupName).id;
+    async generateMerkleProof(groupName: string, idCommitment: string): Promise<MerkleProof> {
+        if(await this.isGroupMember(groupName,idCommitment)){
+            const groupIndex = (await this.getGroupData(groupName)).index;
             const memberIndex = this.groups[groupIndex].indexOf(BigInt(idCommitment));
 
             return this.groups[groupIndex].generateProofOfMembership(memberIndex);
         }
         else{
-            throw new BadRequestException("The member does not exist in the group.");
+            throw new BadRequestException(`The member: {'${idCommitment}'} does not exist in the group: {'${groupName}'}.`);
         }
     }
 
@@ -104,10 +133,11 @@ export class GroupsService {
      * Can update the name and description of the Group.
      * @param groupName Group name wants to find.
      * @param updateData Information for updating group.
+     * @returns True or false.
      */
-    updateGroup(groupName: string, updateData: UpdateGroupDto){
-        const groupData = this.getGroupData(groupName);
-        this.groupsData = this.groupsData.filter(groupData => groupData.name !== groupName);
-        this.groupsData.push({...groupData,...updateData});
+    async updateGroup(groupName: string, updateData: UpdateGroupDto): Promise<boolean>{
+        const _id = (await this.groupRepository.findOneBy({name: groupName}))._id;
+
+        return (await this.groupRepository.updateOne({ _id }, { $set: updateData })) ? true : false;
     }
 }
