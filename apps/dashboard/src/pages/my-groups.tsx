@@ -7,14 +7,14 @@ import {
     Input,
     InputGroup,
     InputLeftElement,
-    Select,
-    Text
+    Select
 } from "@chakra-ui/react"
 import { useDisclosure } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
 import CreatGroupModal from "src/components/creat-group-modal"
 import GroupBox from "src/components/group-box"
+import GroupFolder from "src/components/group-folder"
 import { Group } from "src/types/groups"
 import useGroups from "src/hooks/useGroups"
 
@@ -56,7 +56,10 @@ export default function MyGroups(): JSX.Element {
                 h="76px"
                 mt="24px"
             >
-                <Center>
+                <Center
+                    borderBottom={_selectedForm === "groups" ? "2px" : "none"}
+                    color={_selectedForm === "groups" ? "#151616" : "#75797E"}
+                >
                     <Button
                         bgColor="rgba(0,0,0,0)"
                         onClick={() => {
@@ -66,7 +69,10 @@ export default function MyGroups(): JSX.Element {
                         Groups
                     </Button>
                 </Center>
-                <Center>
+                <Center
+                    borderBottom={_selectedForm === "folders" ? "2px" : "none"}
+                    color={_selectedForm === "folders" ? "#151616" : "#75797E"}
+                >
                     <Button
                         bgColor="rgba(0,0,0,0)"
                         onClick={() => {
@@ -92,29 +98,11 @@ export default function MyGroups(): JSX.Element {
                     <option value="groupSize">Group size</option>
                 </Select>
             </Flex>
-            <Center minH="400px" mt="70px" border="1px solid #E4E4E4">
-                {_groupList && _groupList.length > 0 ? (
-                    <GroupBox groupList={_groupList} />
-                ) : (
-                    <Flex flexDir="column">
-                        <Text fontSize="2xl" fontWeight="bold">
-                            You have not created any groups
-                        </Text>
-                        <Center mt="32px">
-                            <Button
-                                fontSize="lg"
-                                bgColor="gray.800"
-                                color="#FAFBFC"
-                                _hover={{ bg: "gray.600" }}
-                                width="fit-content"
-                                onClick={onOpen}
-                            >
-                                Get Started!
-                            </Button>
-                        </Center>
-                    </Flex>
-                )}
-            </Center>
+            {_selectedForm === "groups" ? (
+                <GroupBox groupList={_groupList ? _groupList : []} />
+            ) : (
+                <GroupFolder />
+            )}
             <CreatGroupModal isOpen={isOpen} onClose={onClose} />
         </Container>
     )
