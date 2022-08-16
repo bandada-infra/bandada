@@ -17,12 +17,16 @@ export class GroupsService {
     ) {
         (async () => {
             try{
-                for(const groupData of await this.groupRepository.find({order:{index:"ASC"}})){
-                    const group = new Group(groupData.treeDepth);
-                    if(groupData.members.length > 0){
-                        group.addMembers(groupData.members);
+                const groupsData = await this.groupRepository.find({order:{index:"ASC"}});
+
+                if(groupsData){
+                    for(const groupData of groupsData){
+                        const group = new Group(groupData.treeDepth);
+                        if(groupData.members.length > 0){
+                            group.addMembers(groupData.members);
+                        }
+                        this.groups.push(group);
                     }
-                    this.groups.push(group);
                 }
 
                 Logger.log(`✔️ GroupModule GroupData in DataBase --> group object sync clear`);
@@ -58,6 +62,7 @@ export class GroupsService {
     /**
      * Create group in database and `Group`(with @semaphore-protocol/group).
      * @param groupData Information for creating group.
+     * @returns Created group data.
      */
     async createGroup(groupData:CreateGroupDto): Promise<GroupData>{
         try{
@@ -85,9 +90,9 @@ export class GroupsService {
      * @returns True or false.
      */
     async isGroupMember(groupName: string, idCommitment: string): Promise<boolean>{
-        const groupIndex = (await this.getGroupData(groupName)).index;
+        const groupData = await this.getGroupData(groupName);
 
-        return (this.groups[groupIndex].indexOf(BigInt(idCommitment)) >= 0) ? true : false;
+        return (groupData.members.includes(idCommitment)) ? true : false;
     }
 
     /**
