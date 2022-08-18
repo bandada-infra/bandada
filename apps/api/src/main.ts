@@ -1,47 +1,44 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import { Logger, ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
-
 import { AppModule } from "./app/app.module"
-import * as session from "express-session"
+import session from "express-session"
+import createMemoryStore from "memorystore"
 
 async function bootstrap() {
-    const app = await NestFactory.create(
-        AppModule.forRoot({
-            type: "mongodb",
-            host: process.env.DB_HOST,
-            port: parseInt(process.env.DB_PORT),
-            username: process.env.MONGO_PASSWORD,
-            password: process.env.MONGO_USERNAME,
-            database: process.env.MONGO_DATABASE,
-            ssl: process.env.NODE_ENV === "production" ? true : false,
-            synchronize: true
-        })
-    )
+    const app = await NestFactory.create(AppModule)
 
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
             forbidNonWhitelisted: true,
-            transform: true,
+            transform: true
         })
     )
-    
+
     const globalPrefix = "api"
-    app.setGlobalPrefix(globalPrefix)
     const port = process.env.PORT || 3333
+    const MemoryStore = createMemoryStore(session)
+
+    app.setGlobalPrefix(globalPrefix)
     app.use(
-        session({
-            secret: "zk_groups_dev_session", // @todo (Isaac): move this to environment variables.
-            resave: false,
-            saveUninitialized: false
-        })
+        process.env.NODE_ENV === "production"
+            ? session({
+                  cookie: { maxAge: 86400000 },
+                  store: new MemoryStore({
+                      checkPeriod: 86400000 // Prune expired entries every 24h.
+                  }),
+                  resave: false,
+                  secret: process.env.SESSION_SECRET
+              })
+            : session({
+                  resave: false,
+                  secret: "hello world",
+                  saveUninitialized: false
+              })
     )
+
     await app.listen(port)
+
     Logger.log(
         `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
     )

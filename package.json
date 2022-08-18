@@ -81,6 +81,7 @@
         "eslint-plugin-react-hooks": "4.5.0",
         "jest": "27.5.1",
         "lint-staged": "^12.4.2",
+        "memorystore": "^1.6.7",
         "nx": "14.1.8",
         "prettier": "^2.5.1",
         "react-test-renderer": "18.1.0",
