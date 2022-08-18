@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common"
-import { PassportModule } from "@nestjs/passport"
-import { AuthController } from "./auth.controller"
-import { GithubStrategy, TwitterStrategy } from "./strategies"
-import { AuthService } from "./auth.service"
-import { AccountService } from "../account/account.service"
-import { AccountModule } from "../account/account.module"
-import { CookieSerializer } from "../common/cookie.serializer"
 import { JwtModule } from "@nestjs/jwt"
+import { PassportModule } from "@nestjs/passport"
+import { AccountModule } from "../accounts/account.module"
+import { CookieSerializer } from "../common/cookie.serializer"
+import { AuthController } from "./auth.controller"
+import { AuthService } from "./auth.service"
+import { GithubStrategy } from "./strategies/github.strategy"
+import { TwitterStrategy } from "./strategies/twitter.strategy"
 
 @Module({
     imports: [
@@ -17,13 +17,7 @@ import { JwtModule } from "@nestjs/jwt"
             signOptions: { expiresIn: "60s" }
         })
     ],
-    providers: [
-        GithubStrategy,
-        TwitterStrategy,
-        AuthService,
-        AccountService,
-        CookieSerializer
-    ],
+    providers: [GithubStrategy, TwitterStrategy, AuthService, CookieSerializer],
     controllers: [AuthController],
     exports: [PassportModule, JwtModule]
 })
