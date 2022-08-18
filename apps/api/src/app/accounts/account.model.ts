@@ -4,18 +4,20 @@ import {
     Entity,
     PrimaryGeneratedColumn
 } from "typeorm"
+import { ServiceType } from "../auth/type"
 
 @Entity("accounts")
 export class AccountModel {
     @PrimaryGeneratedColumn()
     id: string
     @Column()
-    service: string
-    @Column({ generatedType: "STORED" })
-    tokens: {
-        accessToken: string
-        userId: string
-    }
+    service: ServiceType
+    @Column()
+    userId: string
+    @Column()
+    accessToken: string
+    @Column()
+    refreshToken: string
     @Column()
     username: string
     @Column()
@@ -23,5 +25,5 @@ export class AccountModel {
     @Column()
     avatarURL: string
     @CreateDateColumn()
-    signUpDate: Date
+    createdAt: Date
 }
