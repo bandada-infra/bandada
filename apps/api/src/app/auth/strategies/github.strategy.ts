@@ -1,7 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
-import { Strategy, VerifyCallback } from "passport-github"
-import { AccountModel } from "../../account/account.model"
+import { Profile, Strategy } from "passport-github"
 import { AuthService } from "../auth.service"
 
 @Injectable()
@@ -20,27 +19,21 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
     async validate(
         accessToken: string,
         refreshToken: string,
-        profile,
-        done: VerifyCallback
+        profile: Profile,
+        done: (error: any, user?: any) => void
     ) {
         if (profile) {
-            const payload = {
+            const token = await this.authService.findOrCreateAccount({
                 service: "github",
-                tokens: {
-                    accessToken,
-                    userId: profile.id
-                },
-                email: profile._json.email,
+                userId: profile.id,
+                accessToken,
+                refreshToken,
                 username: profile.username,
                 fullName: profile.displayName,
                 avatarURL: profile.photos[0].value
-            }
-            const token: string = await this.authService.findOrCreateAccount(
-                payload
-            )
+            })
 
-            console.log(token)
-
+            // TODO: generate jwt token here.
             done(null, token)
         }
     }
