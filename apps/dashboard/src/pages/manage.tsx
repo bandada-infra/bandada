@@ -1,6 +1,6 @@
 import { Box, Button, Container, Flex, Heading, Text } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { useSearchParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import useMembers from "src/hooks/useMembers"
 import { Group } from "src/types/groups"
 import { Member } from "src/types/members"
@@ -10,8 +10,7 @@ import InviteModal from "src/components/invite-modal"
 
 export default function Manage(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [searchParams] = useSearchParams()
-    const groupName = searchParams.get("group")
+    const { groupName } = useParams()
     const { getGroup, getMembersList } = useMembers()
     const [_group, setGroup] = useState<Group | null>()
     const [_membersList, setMembersList] = useState<Member[] | null>()

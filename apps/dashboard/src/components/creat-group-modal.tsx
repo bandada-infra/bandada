@@ -174,7 +174,12 @@ export default function CreatGroupModal({
                         </Box>
                     ) : (
                         <Box>
-                            <Container w="315px" border="1px solid #D0D1D2">
+                            <Container
+                                w="315px"
+                                border="1px solid #D0D1D2"
+                                mt="20px"
+                                pb="20px"
+                            >
                                 <Flex flexDir="column">
                                     <Text
                                         fontSize="lg"
@@ -198,38 +203,34 @@ export default function CreatGroupModal({
                                                 return <Text>-{useCase}</Text>
                                             }
                                         )}
-
-                                    <Button
-                                        mt="20px"
-                                        mb="20px"
-                                        fontSize="lg"
-                                        variant="solid"
-                                        colorScheme="primary"
-                                        onClick={() => {
-                                            if (
-                                                _groupName &&
-                                                _groupDescription &&
-                                                _groupSize &&
-                                                onClose
-                                            ) {
-                                                createGroup(
-                                                    _groupName,
-                                                    _groupDescription,
-                                                    _groupSize
-                                                )
-                                                onClose()
-                                            }
-                                        }}
-                                    >
-                                        Create
-                                    </Button>
                                 </Flex>
                             </Container>
-                            <Flex justifyContent="space-between" mt="20px">
+                            <Flex justifyContent="space-between" marginY="20px">
                                 <Button onClick={previousStep} fontSize="lg">
                                     Back
                                 </Button>
-                                <Button onClick={onClose}>Cancel</Button>
+                                <Button
+                                    fontSize="lg"
+                                    variant="solid"
+                                    colorScheme="primary"
+                                    onClick={() => {
+                                        if (
+                                            _groupName &&
+                                            _groupDescription &&
+                                            _groupSize &&
+                                            onClose
+                                        ) {
+                                            createGroup(
+                                                _groupName,
+                                                _groupDescription,
+                                                _groupSize
+                                            )
+                                            onClose()
+                                        }
+                                    }}
+                                >
+                                    Create
+                                </Button>
                             </Flex>
                         </Box>
                     )}

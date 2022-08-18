@@ -15,7 +15,7 @@ export function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/sso" element={<SSO />} />
                 <Route path="/my-groups" element={<MyGroups />} />
-                <Route path="/manage" element={<Manage />} />
+                <Route path="/my-groups/:groupName" element={<Manage />} />
             </Routes>
         </ChakraProvider>
     )
