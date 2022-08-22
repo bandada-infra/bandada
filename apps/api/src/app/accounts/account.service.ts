@@ -1,7 +1,12 @@
 import { Injectable } from "@nestjs/common"
-import { FindOptionsWhere, ObjectID, Repository, UpdateResult } from "typeorm"
+import {
+    DeleteResult,
+    FindOptionsWhere,
+    ObjectID,
+    Repository,
+    UpdateResult
+} from "typeorm"
 import { InjectRepository } from "@nestjs/typeorm"
-
 import { CreateAccountDTO } from "./dto/create-account.dto"
 import { AccountModel } from "./account.model"
 import { UpdateAccountDTO } from "./dto/update-account.dto"
@@ -20,7 +25,7 @@ export class AccountService {
     }
 
     public async findAll(): Promise<AccountModel[]> {
-        return await this.accountRepository.find()
+        return this.accountRepository.find()
     }
 
     public async findOne(
@@ -28,17 +33,17 @@ export class AccountService {
             | FindOptionsWhere<AccountModel>
             | FindOptionsWhere<AccountModel>[]
     ): Promise<AccountModel> {
-        return await this.accountRepository.findOneBy(payload)
+        return this.accountRepository.findOneBy(payload)
     }
 
     public async update(
         id: ObjectID,
         payload: UpdateAccountDTO
     ): Promise<UpdateResult> {
-        return await this.accountRepository.update(id, payload)
+        return this.accountRepository.update(id, payload)
     }
 
-    public async remove(id: ObjectID): Promise<void> {
-        await this.accountRepository.delete(id)
+    public async remove(id: ObjectID): Promise<DeleteResult> {
+        return this.accountRepository.delete(id)
     }
 }
