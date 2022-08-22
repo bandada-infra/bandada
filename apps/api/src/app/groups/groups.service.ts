@@ -5,7 +5,7 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from '@semaphore-protocol/group';
 import { MerkleProof } from './types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
+import { MongoRepository, UpdateWriteOpResult } from 'typeorm';
 
 @Injectable()
 export class GroupsService {
@@ -16,26 +16,23 @@ export class GroupsService {
         private readonly groupRepository: MongoRepository<GroupData>
     ) {
         (async () => {
-            try{
-                const groupsData = await this.groupRepository.find({order:{index:"ASC"}});
+            const groupsData = await this.groupRepository.find({order:{index:"ASC"}});
+            this.groups = [];
 
-                if(groupsData){
-                    for(const groupData of groupsData){
-                        const group = new Group(groupData.treeDepth);
-                        if(groupData.members.length > 0){
-                            group.addMembers(groupData.members);
-                        }
-                        this.groups.push(group);
+            if(groupsData){
+                for(const groupData of groupsData){
+                    const group = new Group(groupData.treeDepth);
+                    if(groupData.members.length > 0){
+                        group.addMembers(groupData.members);
                     }
+                    this.groups.push(group);
                 }
-
-                Logger.log(`✔️ GroupModule GroupData in DataBase --> group object sync clear`);
-            }catch(e){
-                console.error(e.message);
             }
+
+            Logger.log(`✔️ GroupModule GroupData in DataBase --> @semaphore-protocol/group object sync clear`);
         })();
     }
-    
+
     /**
      * Show all groups data in database.
      * @returns List of existing groups.
@@ -99,9 +96,9 @@ export class GroupsService {
      * If a member does not exist in the group, member is added to the database and `Group`(with @semaphore-protocol/group).
      * @param groupName Group name wants to find.
      * @param idCommitment Member's identity commitment.
-     * @returns True or false.
+     * @returns Group data with added member.
      */
-    async addMember(groupName:string, idCommitment: string): Promise<boolean>{
+    async addMember(groupName:string, idCommitment: string): Promise<GroupData>{
         if (!(await this.isGroupMember(groupName,idCommitment))){
             const groupData = await this.getGroupData(groupName);
 
@@ -109,7 +106,7 @@ export class GroupsService {
 
             this.groups[groupData.index].addMember(idCommitment);
 
-            return (await this.groupRepository.save(groupData)) ? true : false;
+            return await this.groupRepository.save(groupData);
         }
         else{
             throw new BadRequestException(`The member: {'${idCommitment}'} already exists in the group: {'${groupName}'}.`);
@@ -140,9 +137,9 @@ export class GroupsService {
      * @param updateData Information for updating group.
      * @returns True or false.
      */
-    async updateGroup(groupName: string, updateData: UpdateGroupDto): Promise<boolean>{
-        const _id = (await this.groupRepository.findOneBy({name: groupName}))._id;
+    async updateGroup(groupName: string, updateData: UpdateGroupDto): Promise<UpdateWriteOpResult>{
+        const groupData = await this.getGroupData(groupName);
 
-        return (await this.groupRepository.updateOne({ _id }, { $set: updateData })) ? true : false;
+        return await this.groupRepository.updateOne({ _id: groupData._id }, { $set: updateData });
     }
 }

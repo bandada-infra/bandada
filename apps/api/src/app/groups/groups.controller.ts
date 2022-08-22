@@ -4,6 +4,7 @@ import { GroupData } from './entities/group.entity';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { MerkleProof } from './types';
+import { UpdateWriteOpResult } from 'typeorm';
 
 @Controller('groups')
 export class GroupsController {
@@ -33,7 +34,7 @@ export class GroupsController {
 
     @Post(':name/:member')
     // @todo need jwt auth guard
-    addMember(@Param('name') groupName: string, @Param('member') idCommitment: string): Promise<boolean>{
+    addMember(@Param('name') groupName: string, @Param('member') idCommitment: string): Promise<GroupData>{
         return this.groupsService.addMember(groupName, idCommitment);
     }
 
@@ -47,7 +48,7 @@ export class GroupsController {
 
     @Patch(':name')
     // @todo need jwt auth guard
-    updateGroup(@Param('name') groupName: string, @Body() updateData: UpdateGroupDto): Promise<boolean>{
+    updateGroup(@Param('name') groupName: string, @Body() updateData: UpdateGroupDto): Promise<UpdateWriteOpResult>{
         return this.groupsService.updateGroup(groupName,updateData);
     }
 }

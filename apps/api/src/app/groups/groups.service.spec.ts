@@ -37,6 +37,15 @@ describe('GroupsService', () => {
     tag: 0,
     ...createGroupArgs
   }
+  const TestGroupAddedMember: GroupData = {
+    _id: new ObjectId(),
+    index: 0,
+    admin: "test",
+    members: ['123123'],
+    createdAt: "2022-08-14T11:11:11.111Z",
+    tag: 0,
+    ...createGroupArgs
+  }
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -49,6 +58,12 @@ describe('GroupsService', () => {
     service = module.get<GroupsService>(GroupsService);
     groupRepository = module.get(getRepositoryToken(GroupData));
   });
+
+  it('Should be init', async () => {
+    groupRepository.find.mockResolvedValue([TestGroupAddedMember]);
+
+    expect(groupRepository.find).toBeCalledTimes(1);
+  })
 
   it('Should be defined', () => {
     expect(service).toBeDefined();
@@ -107,13 +122,16 @@ describe('GroupsService', () => {
       const result = await service.isGroupMember('Test group', '123123');
       expect(result).toBeFalsy();
     });
+
+    it('Should return true with group containing member', async () => {
+      groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember);
+
+      const result = await service.isGroupMember('Test group', '123123');
+      expect(result).toBeTruthy();
+    })
   });
 
   describe('# addMember',() => {
-    const TestGroupAddedMember: GroupData = {
-      members: ['123123'],
-      ...TestGroup
-    }
     beforeEach(async () => {
       groupRepository.create.mockResolvedValueOnce(TestGroup);
       groupRepository.save.mockResolvedValueOnce(TestGroup);
@@ -125,7 +143,7 @@ describe('GroupsService', () => {
       groupRepository.findOneBy.mockResolvedValue(TestGroup);
       groupRepository.save.mockResolvedValue(TestGroupAddedMember);
       const result = await service.addMember('Test group','123123');
-      expect(result).toBeTruthy();
+      expect(result).toBe(TestGroupAddedMember);
     });
 
     it('Should throw 400 error about exist member', async () => {
@@ -139,9 +157,14 @@ describe('GroupsService', () => {
   });
 
   describe('# generateMerkleProof', () => {
-    const TestGroupAddedMember: GroupData = {
+    const TestGroupAddedMember2: GroupData = {
+      _id: new ObjectId(),
+      index: 0,
+      admin: "test",
       members: ['111111'],
-      ...TestGroup
+      createdAt: "2022-08-14T11:11:11.111Z",
+      tag: 0,
+      ...createGroupArgs
     }
     beforeEach(async () => {
       groupRepository.create.mockResolvedValue(TestGroup);
@@ -152,10 +175,10 @@ describe('GroupsService', () => {
 
     it('Should return Merkle proof', async () => {
       groupRepository.findOneBy.mockResolvedValue(TestGroup);
-      groupRepository.save.mockResolvedValue(TestGroupAddedMember);
+      groupRepository.save.mockResolvedValue(TestGroupAddedMember2);
       await service.addMember('Test group','111111');
 
-      groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember);
+      groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember2);
       const merkleproof = await service.generateMerkleProof('Test group', '111111');
 
       expect(merkleproof).toBeDefined();
@@ -163,7 +186,7 @@ describe('GroupsService', () => {
 
     it('Should throw 400 error about not exist member', async () => {
       try{
-        groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember);
+        groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember2);
         await service.generateMerkleProof('Test group', '999999');
       } catch (e) {
         expect(e).toBeInstanceOf(BadRequestException);
@@ -185,7 +208,7 @@ describe('GroupsService', () => {
       groupRepository.findOneBy.mockResolvedValue(TestGroup);
       groupRepository.updateOne.mockResolvedValue(true);
       const result = await service.updateGroup('Test group', updateGroupArgs);
-      expect(result).toBeTruthy();
+      expect(result).toBeDefined();
     });
   });
 });
