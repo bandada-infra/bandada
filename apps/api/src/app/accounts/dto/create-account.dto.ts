@@ -1,5 +1,5 @@
 import { IsString } from "class-validator"
-import { ServiceType } from "../../auth/type"
+import { ServiceType } from "../../auth/types"
 
 export class CreateAccountDTO {
     @IsString()

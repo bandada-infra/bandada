@@ -6,6 +6,7 @@ import { CookieSerializer } from "../common/cookie.serializer"
 import { AuthController } from "./auth.controller"
 import { AuthService } from "./auth.service"
 import { GithubStrategy } from "./strategies/github.strategy"
+import { RedditStrategy } from "./strategies/reddit.strategy"
 import { TwitterStrategy } from "./strategies/twitter.strategy"
 
 @Module({
@@ -17,7 +18,13 @@ import { TwitterStrategy } from "./strategies/twitter.strategy"
             signOptions: { expiresIn: "60s" }
         })
     ],
-    providers: [GithubStrategy, TwitterStrategy, AuthService, CookieSerializer],
+    providers: [
+        GithubStrategy,
+        TwitterStrategy,
+        RedditStrategy,
+        AuthService,
+        CookieSerializer
+    ],
     controllers: [AuthController],
     exports: [PassportModule, JwtModule]
 })
