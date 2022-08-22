@@ -4,7 +4,7 @@ import {
     Entity,
     PrimaryGeneratedColumn
 } from "typeorm"
-import { ServiceType } from "../auth/type"
+import { ServiceType } from "../auth/types"
 
 @Entity("accounts")
 export class AccountModel {

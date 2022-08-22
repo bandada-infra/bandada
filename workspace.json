@@ -4,6 +4,7 @@
     "projects": {
         "api": "apps/api",
         "dashboard": "apps/dashboard",
-        "dashboard-e2e": "apps/dashboard-e2e"
+        "dashboard-e2e": "apps/dashboard-e2e",
+        "passport-reddit": "libs/passport-reddit"
     }
 }

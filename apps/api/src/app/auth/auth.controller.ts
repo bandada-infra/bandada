@@ -33,4 +33,16 @@ export class AuthController {
     twitterCallback(_: Request, @Res() response: Response) {
         response.redirect(`${process.env.BASE_URL}/api`)
     }
+
+    @Get("reddit")
+    @UseGuards(AuthGuard("reddit"))
+    reddit() {
+        throw new UnauthorizedException()
+    }
+
+    @Get("reddit/callback")
+    @UseGuards(AuthGuard("reddit"))
+    redditCallback(_: Request, @Res() response: Response) {
+        response.redirect(`${process.env.BASE_URL}/api`)
+    }
 }
