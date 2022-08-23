@@ -32,7 +32,6 @@ export class TwitterStrategy extends PassportStrategy(Strategy, "twitter") {
                 avatarURL: profile.photos[0].value
             })
 
-            // TODO: generate jwt token here.
             done(null, token)
         }
     }

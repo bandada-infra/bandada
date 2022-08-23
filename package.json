@@ -32,6 +32,7 @@
         "mongodb": "^4.8.0",
         "passport": "^0.6.0",
         "passport-github": "^1.1.0",
+        "passport-jwt": "^4.0.0",
         "passport-oauth2": "^1.6.1",
         "passport-twitter": "^1.0.4",
         "react": "18.1.0",
