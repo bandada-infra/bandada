@@ -2,14 +2,15 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    PrimaryGeneratedColumn
+    ObjectID,
+    ObjectIdColumn,
 } from "typeorm"
 import { ServiceType } from "../auth/types"
 
 @Entity("accounts")
 export class AccountModel {
-    @PrimaryGeneratedColumn()
-    id: string
+    @ObjectIdColumn()
+    id: ObjectID
     @Column()
     service: ServiceType
     @Column()

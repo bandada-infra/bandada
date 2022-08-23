@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt"
 import { AccountModel } from "../accounts/account.model"
 import { AccountService } from "../accounts/account.service"
 import { CreateAccountDTO } from "../accounts/dto/create-account.dto"
+import { Payload } from "./types"
 
 @Injectable()
 export class AuthService {
@@ -28,8 +29,14 @@ export class AuthService {
 
     public async generateToken(payload: AccountModel): Promise<string> {
         return this.jwtService.sign({
-            id: payload.id,
+            userId: payload.userId,
             username: payload.username
         })
+    }
+
+    async tokenValidateAccount(payload: Payload): Promise<AccountModel | undefined> {
+        const userFind = await this.accountService.findOne({userId: payload.userId, username: payload.username});
+
+        return userFind;
     }
 }

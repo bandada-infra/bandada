@@ -32,7 +32,6 @@ export class RedditStrategy extends PassportStrategy(Strategy, "reddit") {
                 avatarURL: profile.icon_img
             })
 
-            // TODO: generate jwt token here.
             done(null, token)
         }
     }

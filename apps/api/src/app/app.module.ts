@@ -21,7 +21,6 @@ import { GroupsModule } from './groups/groups.module'
             ssl: process.env.NODE_ENV === "production" ? true : false,
             autoLoadEntities: true,
             synchronize: process.env.NODE_ENV === "production" ? false : true,
-            entities: [AccountModel]
         })
     ],
     controllers: [AppController],
