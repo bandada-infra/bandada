@@ -1,31 +1,48 @@
-import { Controller, Get, Res, UseGuards } from "@nestjs/common"
-import * as passport from "passport"
-import { GitHubOAuthGuard } from "./guards/github.guard"
-import { TwitterOAuthGuard } from "./guards/twitter.guard"
+import {
+    Controller,
+    Get,
+    Res,
+    UnauthorizedException,
+    UseGuards
+} from "@nestjs/common"
+import { AuthGuard } from "@nestjs/passport"
+import { Response, Request } from "express"
 
 @Controller("auth")
 export class AuthController {
-    @UseGuards(GitHubOAuthGuard)
-    @Get("/github")
-    githubOAuth() {
-        passport.authenticate("github")
+    @Get("github")
+    @UseGuards(AuthGuard("github"))
+    github() {
+        throw new UnauthorizedException()
     }
 
-    @UseGuards(GitHubOAuthGuard)
-    @Get("/github/callback")
-    githubOAuthRedirect(_, @Res() res) {
-        res.redirect(`${process.env.BASE_URL}/api`)
+    @Get("github/callback")
+    @UseGuards(AuthGuard("github"))
+    githubCallback(_: Request, @Res() response: Response) {
+        response.redirect(`${process.env.BASE_URL}/api`)
     }
 
-    @UseGuards(TwitterOAuthGuard)
-    @Get("/twitter")
-    twitterOAuth() {
-        passport.authenticate("twitter")
+    @Get("twitter")
+    @UseGuards(AuthGuard("twitter"))
+    twitter() {
+        throw new UnauthorizedException()
     }
 
-    @UseGuards(TwitterOAuthGuard)
-    @Get("/twitter/callback")
-    twitterOAuthRedirect(_, @Res() res) {
-        res.redirect(`${process.env.BASE_URL}/api`)
+    @Get("twitter/callback")
+    @UseGuards(AuthGuard("twitter"))
+    twitterCallback(_: Request, @Res() response: Response) {
+        response.redirect(`${process.env.BASE_URL}/api`)
+    }
+
+    @Get("reddit")
+    @UseGuards(AuthGuard("reddit"))
+    reddit() {
+        throw new UnauthorizedException()
+    }
+
+    @Get("reddit/callback")
+    @UseGuards(AuthGuard("reddit"))
+    redditCallback(_: Request, @Res() response: Response) {
+        response.redirect(`${process.env.BASE_URL}/api`)
     }
 }

@@ -3,6 +3,7 @@
     "compilerOptions": {
         "rootDir": ".",
         "sourceMap": true,
+        "esModuleInterop": true,
         "declaration": false,
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,
@@ -14,7 +15,9 @@
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
-        "paths": {}
+        "paths": {
+            "@zk-groups/passport-reddit": ["libs/passport-reddit/src/index.ts"]
+        }
     },
     "exclude": ["node_modules", "tmp"]
 }

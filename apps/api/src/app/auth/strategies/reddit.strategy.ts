@@ -1,17 +1,17 @@
 import { Injectable, Logger } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
-import { Profile, Strategy } from "passport-twitter"
+import { Profile, Strategy } from "@zk-groups/passport-reddit"
 import { AuthService } from "../auth.service"
 
 @Injectable()
-export class TwitterStrategy extends PassportStrategy(Strategy, "twitter") {
+export class RedditStrategy extends PassportStrategy(Strategy, "reddit") {
     logger = new Logger(this.constructor.name)
 
     constructor(private readonly authService: AuthService) {
         super({
-            consumerKey: process.env.TWITTER_CONSUMER_KEY,
-            consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-            callbackURL: `${process.env.BASE_URL}/api/auth/twitter/callback`
+            clientID: process.env.REDDIT_CLIENT_ID,
+            clientSecret: process.env.REDDIT_CLIENT_SECRET,
+            callbackURL: `${process.env.BASE_URL}/api/auth/reddit/callback`
         })
     }
 
@@ -23,13 +23,13 @@ export class TwitterStrategy extends PassportStrategy(Strategy, "twitter") {
     ) {
         if (profile) {
             const token = await this.authService.findOrCreateAccount({
-                service: "twitter",
+                service: "reddit",
                 userId: profile.id,
                 accessToken,
                 refreshToken,
-                username: profile.username,
-                fullName: profile.displayName,
-                avatarURL: profile.photos[0].value
+                username: profile.name,
+                fullName: profile.subreddit.title,
+                avatarURL: profile.icon_img
             })
 
             // TODO: generate jwt token here.
