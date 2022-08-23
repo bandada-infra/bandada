@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { GroupData } from "./entities/group.entity";
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -61,15 +61,15 @@ export class GroupsService {
      * @param groupData Information for creating group.
      * @returns Created group data.
      */
-    async createGroup(groupData:CreateGroupDto): Promise<GroupData>{
+    async createGroup(groupData:CreateGroupDto, adminUserId: string): Promise<GroupData>{
         try{
-            this.groups.push(new Group(groupData.treeDepth,'0'));
+            this.groups.push(new Group(groupData.treeDepth));
 
             const newGroupData = this.groupRepository.create({
                 index: +(await this.groupRepository.count()),
-                admin:"test",
-                members:[],
-                tag:0,
+                admin: adminUserId,
+                members: [],
+                tag: 0,
                 ...groupData});
 
             return await this.groupRepository.save(newGroupData);
@@ -98,9 +98,13 @@ export class GroupsService {
      * @param idCommitment Member's identity commitment.
      * @returns Group data with added member.
      */
-    async addMember(groupName:string, idCommitment: string): Promise<GroupData>{
+    async addMember(groupName:string, idCommitment: string, adminUserId: string): Promise<GroupData>{
         if (!(await this.isGroupMember(groupName,idCommitment))){
             const groupData = await this.getGroupData(groupName);
+
+            if (groupData.admin !== adminUserId){
+                throw new UnauthorizedException(`No permissions: You are not an admin of this group: {'${groupName}'}.`);
+            }
 
             groupData.members.push(idCommitment);
 
@@ -137,8 +141,12 @@ export class GroupsService {
      * @param updateData Information for updating group.
      * @returns True or false.
      */
-    async updateGroup(groupName: string, updateData: UpdateGroupDto): Promise<UpdateWriteOpResult>{
+    async updateGroup(groupName: string, updateData: UpdateGroupDto, adminUserId: string): Promise<UpdateWriteOpResult>{
         const groupData = await this.getGroupData(groupName);
+
+        if (groupData.admin !== adminUserId){
+            throw new UnauthorizedException(`No permissions: You are not an admin of this group: {'${groupName}'}.`);
+        }
 
         return await this.groupRepository.updateOne({ _id: groupData._id }, { $set: updateData });
     }
