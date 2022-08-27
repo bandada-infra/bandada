@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import useMembers from "src/hooks/useMembers"
 import { Group } from "src/types/groups"
-import { Member } from "src/types/members"
 import { CgProfile } from "react-icons/cg"
 import { useDisclosure } from "@chakra-ui/react"
 import InviteModal from "src/components/invite-modal"
@@ -13,7 +12,7 @@ export default function Manage(): JSX.Element {
     const { groupName } = useParams()
     const { getGroup, getMembersList } = useMembers()
     const [_group, setGroup] = useState<Group | null>()
-    const [_membersList, setMembersList] = useState<Member[] | null>()
+    const [_membersList, setMembersList] = useState<string[] | null>()
 
     useEffect(() => {
         ;(async () => {
@@ -72,7 +71,7 @@ export default function Manage(): JSX.Element {
                         >
                             <CgProfile size="20px" />
                             <Text fontSize="16px" ml="16px">
-                                {member.identityCommitment}
+                                {member}
                             </Text>
                         </Flex>
                     ))}

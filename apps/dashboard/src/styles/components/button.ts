@@ -28,7 +28,7 @@ const Button = {
                             bg
                         }
                     },
-                    _active: `${c}.900`
+                    _active: { bg: `${c}.900` }
                 }
             }
 
