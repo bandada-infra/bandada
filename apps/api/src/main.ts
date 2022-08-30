@@ -37,6 +37,8 @@ async function bootstrap() {
               })
     )
 
+    app.enableCors()
+
     await app.listen(port)
 
     Logger.log(

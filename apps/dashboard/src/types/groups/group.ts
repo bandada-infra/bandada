@@ -1,6 +1,6 @@
 export type Group = {
     name: string
     description: string
-    size: string
+    treeDepth: number
     members: string[]
 }

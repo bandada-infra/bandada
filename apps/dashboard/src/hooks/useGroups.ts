@@ -1,44 +1,42 @@
 import { useCallback } from "react"
 import { Group } from "src/types/groups"
-
-const mockGroupList: Group[] = []
+import request from "src/utils/request"
+import { AxiosRequestConfig } from "axios"
 
 type ReturnParameters = {
     getGroupList: () => Promise<Group[] | null>
     createGroup: (
         groupName: string,
         groupDescription: string,
-        groupSize: string
+        groupTreeDepth: number
     ) => Promise<true | null>
 }
 
 export default function useGroups(): ReturnParameters {
     const getGroupList = useCallback(async (): Promise<Group[] | null> => {
-        return mockGroupList
+        const groupList = await request("http://localhost:3333/api/groups")
+        return groupList
     }, [])
 
     const createGroup = useCallback(
         async (
             groupName: string,
             groupDescription: string,
-            groupSize: string
+            groupTreeDepth: number
         ): Promise<true | null> => {
-            const newGroup: Group = {
-                name: groupName,
-                description: groupDescription,
-                size: groupSize,
-                members: []
+            const config: AxiosRequestConfig = {
+                method: "post",
+                data: {
+                    name: groupName,
+                    description: groupDescription,
+                    treeDepth: groupTreeDepth
+                }
             }
-            try {
-                const groupList = await getGroupList()
-                groupList?.push(newGroup)
-            } catch (error) {
-                console.error(error)
-            }
+            await request("http://localhost:3333/api/groups", config)
 
             return true
         },
-        [getGroupList]
+        []
     )
 
     return {

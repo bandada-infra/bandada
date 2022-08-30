@@ -43,11 +43,11 @@ export default function Manage(): JSX.Element {
                     </Button>
                 </Flex>
                 <Text mt="16px" mb="29px">
-                    {_group?.size === "xl"
+                    {_group?.treeDepth === 30
                         ? "Globe size group"
-                        : _group?.size === "large"
+                        : _group?.treeDepth === 25
                         ? "Nation size group"
-                        : _group?.size === "medium"
+                        : _group?.treeDepth === 20
                         ? "City size group"
                         : "Community size group"}
                 </Text>
@@ -68,6 +68,7 @@ export default function Manage(): JSX.Element {
                             borderColor="gray.200"
                             p="16px"
                             alignItems="center"
+                            key={member}
                         >
                             <CgProfile size="20px" />
                             <Text fontSize="16px" ml="16px">
@@ -92,22 +93,22 @@ export default function Manage(): JSX.Element {
                         <Box>
                             <Text>{_group?.members.length} members</Text>
                             <Text mt="10">
-                                {_group?.size === "xl"
+                                {_group?.treeDepth === 30
                                     ? "Capacity 1 Billion"
-                                    : _group?.size === "large"
+                                    : _group?.treeDepth === 25
                                     ? "Capacity 30 Million"
-                                    : _group?.size === "medium"
+                                    : _group?.treeDepth === 20
                                     ? "Capacity 500 Thousand"
                                     : "Capacity 30 Thousand"}
                             </Text>
                         </Box>
                         <Box>
                             <Text>
-                                {_group?.size === "xl"
+                                {_group?.treeDepth === 30
                                     ? "Tree depth 30"
-                                    : _group?.size === "large"
+                                    : _group?.treeDepth === 25
                                     ? "Tree depth 25"
-                                    : _group?.size === "medium"
+                                    : _group?.treeDepth === 20
                                     ? "Tree depth 20"
                                     : "Tree depth 16"}
                             </Text>

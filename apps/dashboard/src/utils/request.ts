@@ -7,5 +7,5 @@ export default async function request(
 ): Promise<any> {
     const { data }: AxiosResponse<any> = await axios(url, config)
 
-    return data?.data
+    return data
 }
