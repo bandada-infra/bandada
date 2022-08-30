@@ -19,10 +19,12 @@ import { Group } from "src/types/groups"
 import useGroups from "src/hooks/useGroups"
 
 export default function MyGroups(): JSX.Element {
+    const { getGroupList } = useGroups()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
     const [_groupList, setGroupList] = useState<Group[] | null>()
-    const { getGroupList } = useGroups()
+    const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
+    const [_searchField, setSearchField] = useState<string>("")
 
     useEffect(() => {
         ;(async () => {
@@ -30,6 +32,17 @@ export default function MyGroups(): JSX.Element {
             setGroupList(groupList)
         })()
     }, [getGroupList])
+
+    useEffect(() => {
+        _groupList &&
+            setSearchedGroupList(
+                _groupList.filter((group) =>
+                    group.name
+                        .toLowerCase()
+                        .includes(_searchField.toLowerCase())
+                )
+            )
+    }, [_searchField, _groupList])
 
     return (
         <Container maxW="container.xl">
@@ -96,7 +109,12 @@ export default function MyGroups(): JSX.Element {
                         pointerEvents="none"
                         children={<FiSearch />}
                     />
-                    <Input placeholder="Search groups" />
+                    <Input
+                        placeholder="Search groups"
+                        onChange={(e) => {
+                            setSearchField(e.target.value)
+                        }}
+                    />
                 </InputGroup>
                 <Select textAlign="center" w="max-content">
                     <option value="name">Name</option>
@@ -106,7 +124,9 @@ export default function MyGroups(): JSX.Element {
                 </Select>
             </Flex>
             {_selectedForm === "groups" ? (
-                <GroupBox groupList={_groupList ? _groupList : []} />
+                <GroupBox
+                    groupList={_searchedGroupList ? _searchedGroupList : []}
+                />
             ) : (
                 <GroupFolder />
             )}
