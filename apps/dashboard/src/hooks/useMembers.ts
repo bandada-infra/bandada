@@ -1,6 +1,7 @@
 import { useCallback } from "react"
 import { Group } from "src/types/groups"
 import request from "src/utils/request"
+import { environment } from "src/environments/environment"
 
 type ReturnParameters = {
     getGroup: (groupName: string) => Promise<Group | null>
@@ -11,7 +12,7 @@ export default function useMembers(): ReturnParameters {
     const getGroup = useCallback(
         async (groupName: string): Promise<Group | null> => {
             const groupList = await request(
-                `http://localhost:3333/api/groups/${groupName}`
+                `${environment.apiUrl}/groups/${groupName}`
             )
             return groupList
         },

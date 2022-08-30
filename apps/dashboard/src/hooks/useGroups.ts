@@ -2,6 +2,7 @@ import { useCallback } from "react"
 import { Group } from "src/types/groups"
 import request from "src/utils/request"
 import { AxiosRequestConfig } from "axios"
+import { environment } from "src/environments/environment"
 
 type ReturnParameters = {
     getGroupList: () => Promise<Group[] | null>
@@ -14,7 +15,7 @@ type ReturnParameters = {
 
 export default function useGroups(): ReturnParameters {
     const getGroupList = useCallback(async (): Promise<Group[] | null> => {
-        const groupList = await request("http://localhost:3333/api/groups")
+        const groupList = await request(`${environment.apiUrl}/groups`)
         return groupList
     }, [])
 
@@ -32,7 +33,7 @@ export default function useGroups(): ReturnParameters {
                     treeDepth: groupTreeDepth
                 }
             }
-            await request("http://localhost:3333/api/groups", config)
+            await request(`${environment.apiUrl}/groups`, config)
 
             return true
         },
