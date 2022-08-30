@@ -6,6 +6,7 @@ import SSO from "src/pages/sso"
 import MyGroups from "src/pages/my-groups"
 import Manage from "src/pages/manage"
 import theme from "src/styles"
+import NotFoundPage from "src/pages/404"
 
 export function App() {
     return (
@@ -16,6 +17,7 @@ export function App() {
                 <Route path="/sso" element={<SSO />} />
                 <Route path="/my-groups" element={<MyGroups />} />
                 <Route path="/my-groups/:groupName" element={<Manage />} />
+                <Route path="/*" element={<NotFoundPage />} />
             </Routes>
         </ChakraProvider>
     )
