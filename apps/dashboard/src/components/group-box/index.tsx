@@ -33,6 +33,7 @@ export default function GroupBox({ groupList }: GroupList): JSX.Element {
                             borderRadius="4px"
                             bgColor="#FCFCFC"
                             boxShadow="0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)"
+                            key={group.name}
                         >
                             <GroupCard {...group} />
                         </GridItem>

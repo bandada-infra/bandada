@@ -25,9 +25,9 @@ export default function CreatGroupModal({
     onClose
 }: UseDisclosureProps): JSX.Element {
     const [_step, setStep] = useState<number>(0)
-    const [_groupName, setGroupName] = useState<string>()
-    const [_groupDescription, setGroupDescription] = useState<string>()
-    const [_groupSize, setGroupSize] = useState<string>()
+    const [_groupName, setGroupName] = useState<string>("")
+    const [_groupDescription, setGroupDescription] = useState<string>("")
+    const [_groupSize, setGroupSize] = useState<string>("")
     const { createGroup } = useGroups()
 
     function nextStep() {
@@ -38,10 +38,14 @@ export default function CreatGroupModal({
     }
 
     function submitGroupInfo() {
-        if (_groupName && _groupDescription) {
-            nextStep()
-        } else {
+        if (!_groupName || !_groupDescription) {
             alert("Please fill out the Name and Description")
+        } else if (_groupDescription && _groupDescription.length < 10) {
+            alert("Please write the description of 10 characters or more")
+        } else if (_groupName && _groupName.length > 50) {
+            alert("Please write the group name in 50 characters or less")
+        } else {
+            nextStep()
         }
     }
     function submitGroupSize() {
@@ -79,7 +83,7 @@ export default function CreatGroupModal({
                     <Text mt="15px">{groupSizeInfo[prop.size].capacity}</Text>
                     <Text mt="15px">Use for</Text>
                     {groupSizeInfo[prop.size].useCases.map((useCase) => {
-                        return <Text>-{useCase}</Text>
+                        return <Text key={useCase}>-{useCase}</Text>
                     })}
                 </Box>
             </Flex>
@@ -90,9 +94,9 @@ export default function CreatGroupModal({
         ;(async () => {
             if (!isOpen) {
                 setStep(0)
-                setGroupName(undefined)
-                setGroupDescription(undefined)
-                setGroupSize(undefined)
+                setGroupName("")
+                setGroupDescription("")
+                setGroupSize("")
             }
         })()
     }, [isOpen])
@@ -200,7 +204,11 @@ export default function CreatGroupModal({
                                     {_groupSize &&
                                         groupSizeInfo[_groupSize].useCases.map(
                                             (useCase) => {
-                                                return <Text>-{useCase}</Text>
+                                                return (
+                                                    <Text key={useCase}>
+                                                        -{useCase}
+                                                    </Text>
+                                                )
                                             }
                                         )}
                                 </Flex>
@@ -223,7 +231,8 @@ export default function CreatGroupModal({
                                             createGroup(
                                                 _groupName,
                                                 _groupDescription,
-                                                _groupSize
+                                                groupSizeInfo[_groupSize]
+                                                    .treeDepth
                                             )
                                             onClose()
                                         }
