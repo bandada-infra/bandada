@@ -6,6 +6,7 @@ import { CookieSerializer } from "../common/cookie.serializer"
 import { AuthController } from "./auth.controller"
 import { AuthService } from "./auth.service"
 import { GithubStrategy } from "./strategies/github.strategy"
+import { JwtStrategy } from "./strategies/jwt.strategy"
 import { RedditStrategy } from "./strategies/reddit.strategy"
 import { TwitterStrategy } from "./strategies/twitter.strategy"
 
@@ -14,7 +15,7 @@ import { TwitterStrategy } from "./strategies/twitter.strategy"
         AccountModule,
         PassportModule.register({ session: true }),
         JwtModule.register({
-            secret: "zk_groups_jwt_secret",
+            secret: process.env.JWT_SECRET_KEY,
             signOptions: { expiresIn: "60s" }
         })
     ],
@@ -23,7 +24,8 @@ import { TwitterStrategy } from "./strategies/twitter.strategy"
         TwitterStrategy,
         // RedditStrategy,
         AuthService,
-        CookieSerializer
+        CookieSerializer,
+        JwtStrategy
     ],
     controllers: [AuthController],
     exports: [PassportModule, JwtModule]

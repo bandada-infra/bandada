@@ -1,4 +1,4 @@
-import { BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
@@ -24,25 +24,25 @@ describe('GroupsService', () => {
   let groupRepository: mockRepository<GroupData>;
 
   const createGroupArgs: CreateGroupDto = {
-    name:"Test group",
-    description:"This group is for unit test.",
+    name:'Test group',
+    description:'This group is for unit test.',
     treeDepth:16
   }
   const TestGroup: GroupData = {
     _id: new ObjectId(),
     index: 0,
-    admin: "test",
+    admin: 'testAdmin',
     members: [],
-    createdAt: "2022-08-14T11:11:11.111Z",
+    createdAt: '2022-08-14T11:11:11.111Z',
     tag: 0,
     ...createGroupArgs
   }
   const TestGroupAddedMember: GroupData = {
     _id: new ObjectId(),
     index: 0,
-    admin: "test",
+    admin: 'testAdmin',
     members: ['123123'],
-    createdAt: "2022-08-14T11:11:11.111Z",
+    createdAt: '2022-08-14T11:11:11.111Z',
     tag: 0,
     ...createGroupArgs
   }
@@ -101,14 +101,15 @@ describe('GroupsService', () => {
       groupRepository.create.mockResolvedValue(TestGroup);
       groupRepository.save.mockResolvedValue(TestGroup);
 
-      const result = await service.createGroup(createGroupArgs);
+      const result = await service.createGroup(createGroupArgs, 'testAdmin');
 
       expect(result).toMatchObject(TestGroup);
     });
+
     it('Should be unique with group name', async () => {
       try{
-      groupRepository.save.mockRejectedValueOnce(new Error("duplicated group name"));
-      await service.createGroup(createGroupArgs);
+      groupRepository.save.mockRejectedValueOnce(new Error('duplicated group name'));
+      await service.createGroup(createGroupArgs, 'testAdmin');
       }catch(e){
         expect(e).toBeInstanceOf(InternalServerErrorException);
       }
@@ -136,20 +137,29 @@ describe('GroupsService', () => {
       groupRepository.create.mockResolvedValueOnce(TestGroup);
       groupRepository.save.mockResolvedValueOnce(TestGroup);
 
-      await service.createGroup(createGroupArgs);
+      await service.createGroup(createGroupArgs, 'testAdmin');
+    });
+
+    it('Should throw 401 error about not a group admin', async () => {
+      groupRepository.findOneBy.mockResolvedValue(TestGroup);
+      try{
+        await service.addMember('Test group', '123123', 'otherAdmin');
+      } catch (e) {
+        expect(e).toBeInstanceOf(UnauthorizedException);
+      }
     });
 
     it('Should add a member', async () => {
       groupRepository.findOneBy.mockResolvedValue(TestGroup);
       groupRepository.save.mockResolvedValue(TestGroupAddedMember);
-      const result = await service.addMember('Test group','123123');
+      const result = await service.addMember('Test group', '123123', 'testAdmin');
       expect(result).toBe(TestGroupAddedMember);
     });
 
     it('Should throw 400 error about exist member', async () => {
       groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember);
       try{
-        await service.addMember('Test group','123123');
+        await service.addMember('Test group', '123123', 'testAdmin');
       } catch (e) {
         expect(e).toBeInstanceOf(BadRequestException);
       }
@@ -160,9 +170,9 @@ describe('GroupsService', () => {
     const TestGroupAddedMember2: GroupData = {
       _id: new ObjectId(),
       index: 0,
-      admin: "test",
+      admin: 'test',
       members: ['111111'],
-      createdAt: "2022-08-14T11:11:11.111Z",
+      createdAt: '2022-08-14T11:11:11.111Z',
       tag: 0,
       ...createGroupArgs
     }
@@ -170,13 +180,13 @@ describe('GroupsService', () => {
       groupRepository.create.mockResolvedValue(TestGroup);
       groupRepository.save.mockResolvedValue(TestGroup);
 
-      await service.createGroup(createGroupArgs);
+      await service.createGroup(createGroupArgs, 'testAdmin');
     });
 
     it('Should return Merkle proof', async () => {
       groupRepository.findOneBy.mockResolvedValue(TestGroup);
       groupRepository.save.mockResolvedValue(TestGroupAddedMember2);
-      await service.addMember('Test group','111111');
+      await service.addMember('Test group', '111111', 'testAdmin');
 
       groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember2);
       const merkleproof = await service.generateMerkleProof('Test group', '111111');
@@ -196,19 +206,30 @@ describe('GroupsService', () => {
 
   describe('# updateGroup', () => {
     const updateGroupArgs: UpdateGroupDto = {
-      description: "change my group description."
+      description: 'change my group description.'
     }
     beforeEach(async () => {
       groupRepository.create.mockResolvedValue(TestGroup);
       groupRepository.save.mockResolvedValue(TestGroup);
 
-      await service.createGroup(createGroupArgs);
+      await service.createGroup(createGroupArgs, 'testAdmin');
     });
-    it("Should update a group", async () => {
+
+    it('Should throw 401 error about not a group admin', async () => {
       groupRepository.findOneBy.mockResolvedValue(TestGroup);
-      groupRepository.updateOne.mockResolvedValue(true);
-      const result = await service.updateGroup('Test group', updateGroupArgs);
-      expect(result).toBeDefined();
+      try{
+        await service.updateGroup('Test group', updateGroupArgs, 'otherAdmin');
+      } catch (e) {
+        expect(e).toBeInstanceOf(UnauthorizedException);
+      }
+    });
+
+    it('Should update a group', async () => {
+      groupRepository.findOneBy.mockResolvedValue(TestGroup);
+
+      await service.updateGroup('Test group', updateGroupArgs, 'testAdmin');
+
+      expect(groupRepository.updateOne).toBeCalledTimes(1);
     });
   });
 });

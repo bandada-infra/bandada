@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { GroupData } from './entities/group.entity';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { MerkleProof } from './types';
 import { UpdateWriteOpResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('groups')
 export class GroupsController {
@@ -17,9 +18,9 @@ export class GroupsController {
     }
 
     @Post()
-    // @todo need jwt auth guard
-    createGroup(@Body() groupData: CreateGroupDto): Promise<GroupData>{
-        return this.groupsService.createGroup(groupData);
+    @UseGuards(AuthGuard('jwt'))
+    createGroup(@Req() req: Request, @Body() groupData: CreateGroupDto): Promise<GroupData>{
+        return this.groupsService.createGroup(groupData, req['user'].userId);
     }
 
     @Get(':name')
@@ -33,9 +34,9 @@ export class GroupsController {
     }
 
     @Post(':name/:member')
-    // @todo need jwt auth guard
-    addMember(@Param('name') groupName: string, @Param('member') idCommitment: string): Promise<GroupData>{
-        return this.groupsService.addMember(groupName, idCommitment);
+    @UseGuards(AuthGuard('jwt'))
+    addMember(@Req() req: Request, @Param('name') groupName: string, @Param('member') idCommitment: string): Promise<GroupData>{
+        return this.groupsService.addMember(groupName, idCommitment, req['user'].userId);
     }
 
     @Get(':name/:member/proof')
@@ -47,8 +48,8 @@ export class GroupsController {
     }
 
     @Patch(':name')
-    // @todo need jwt auth guard
-    updateGroup(@Param('name') groupName: string, @Body() updateData: UpdateGroupDto): Promise<UpdateWriteOpResult>{
-        return this.groupsService.updateGroup(groupName,updateData);
+    @UseGuards(AuthGuard('jwt'))
+    updateGroup(@Req() req: Request, @Param('name') groupName: string, @Body() updateData: UpdateGroupDto): Promise<UpdateWriteOpResult>{
+        return this.groupsService.updateGroup(groupName,updateData, req['user'].userId);
     }
 }

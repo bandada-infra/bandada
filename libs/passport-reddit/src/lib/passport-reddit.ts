@@ -79,7 +79,7 @@ export class Strategy extends OAuth2Strategy {
                 post_headers,
                 post_data,
                 null,
-                function (error, data, _response) {
+                function (error: any, data: any) {
                     if (error) {
                         callback(error)
                     } else {

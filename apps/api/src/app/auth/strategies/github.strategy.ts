@@ -33,7 +33,6 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
                 avatarURL: profile.photos[0].value
             })
 
-            // TODO: generate jwt token here.
             done(null, token)
         }
     }
