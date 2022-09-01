@@ -33,7 +33,8 @@ async function bootstrap() {
             : session({
                   resave: false,
                   secret: "hello world",
-                  saveUninitialized: false
+                  saveUninitialized: false,
+                  cookie: { httpOnly: false }
               })
     )
 

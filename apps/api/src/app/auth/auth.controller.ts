@@ -8,6 +8,8 @@ import {
 import { AuthGuard } from "@nestjs/passport"
 import { Response, Request } from "express"
 
+const REDIRECT_URL = "http://localhost:4200/my-groups"
+
 @Controller("auth")
 export class AuthController {
     @Get("github")
@@ -19,7 +21,7 @@ export class AuthController {
     @Get("github/callback")
     @UseGuards(AuthGuard("github"))
     githubCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.BASE_URL}/api`)
+        response.redirect(REDIRECT_URL)
     }
 
     @Get("twitter")
@@ -31,7 +33,7 @@ export class AuthController {
     @Get("twitter/callback")
     @UseGuards(AuthGuard("twitter"))
     twitterCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.BASE_URL}/api`)
+        response.redirect(REDIRECT_URL)
     }
 
     @Get("reddit")
@@ -43,6 +45,6 @@ export class AuthController {
     @Get("reddit/callback")
     @UseGuards(AuthGuard("reddit"))
     redditCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.BASE_URL}/api`)
+        response.redirect(REDIRECT_URL)
     }
 }
