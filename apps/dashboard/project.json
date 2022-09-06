@@ -5,8 +5,8 @@
     "targets": {
         "build": {
             "executor": "@nrwl/web:webpack",
+            "defaultConfiguration": "development",
             "outputs": ["{options.outputPath}"],
-            "defaultConfiguration": "production",
             "options": {
                 "compiler": "babel",
                 "outputPath": "dist/apps/dashboard",
