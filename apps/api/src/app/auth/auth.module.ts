@@ -22,7 +22,7 @@ import { TwitterStrategy } from "./strategies/twitter.strategy"
     providers: [
         GithubStrategy,
         TwitterStrategy,
-        // RedditStrategy,
+        RedditStrategy,
         AuthService,
         CookieSerializer,
         JwtStrategy
