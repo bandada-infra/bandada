@@ -1,23 +1,19 @@
-FROM node:14-alpine
-# set our node environment, either development or production
-# defaults to production, compose overrides this to development on build and run
+FROM node:16-alpine
+
 ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
+ARG PORT=3333
 
-RUN mkdir -p /api
-ADD . /api
+ENV NODE_ENV=${NODE_ENV}
+ENV PORT=${PORT}
 
-WORKDIR /api
+USER node
+WORKDIR /home/node/api
 
-RUN yarn cache clean
+COPY --chown=node:node ./dist/apps/api .
 
-RUN yarn install --production=false
+RUN yarn
+RUN yarn add big-integer
 
-# Build production files
-RUN yarn build
+EXPOSE ${PORT}
 
-# Bundle app source
-COPY . .
-
-EXPOSE 3333
-CMD ["node", "dist/apps/api/main.js"]
+CMD ["node", "./main.js"]
