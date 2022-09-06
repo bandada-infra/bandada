@@ -15,9 +15,10 @@ import { GroupsModule } from "./groups/groups.module"
             type: "mongodb",
             host: process.env.DB_HOST,
             port: parseInt(process.env.DB_PORT),
-            username: process.env.DB_PASSWORD,
-            password: process.env.DB_USERNAME,
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
+            authSource: "admin",
             ssl: process.env.NODE_ENV === "production" ? true : false,
             autoLoadEntities: true,
             synchronize: process.env.NODE_ENV === "production" ? false : true
