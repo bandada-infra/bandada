@@ -6,8 +6,10 @@ import { Group } from "src/types/groups"
 import { CgProfile } from "react-icons/cg"
 import { useDisclosure } from "@chakra-ui/react"
 import InviteModal from "src/components/invite-modal"
+import { useNavigate } from "react-router-dom"
 
 export default function Manage(): JSX.Element {
+    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { groupName } = useParams()
     const { getGroup, getMembersList } = useMembers()
@@ -18,14 +20,16 @@ export default function Manage(): JSX.Element {
         ;(async () => {
             if (groupName) {
                 const group = await getGroup(groupName)
-                setGroup(group)
-                const membersList = await getMembersList(groupName)
-                if (membersList) {
+                if (group) {
+                    setGroup(group)
+                    const membersList = await getMembersList(groupName)
                     setMembersList(membersList)
+                } else {
+                    navigate(`/group-not-found/${groupName}`)
                 }
             }
         })()
-    }, [getGroup, groupName, getMembersList])
+    }, [getGroup, groupName, getMembersList, navigate])
 
     return (
         <Container maxW="container.xl">

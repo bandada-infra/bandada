@@ -11,10 +11,14 @@ type ReturnParameters = {
 export default function useMembers(): ReturnParameters {
     const getGroup = useCallback(
         async (groupName: string): Promise<Group | null> => {
-            const groupList = await request(
-                `${environment.apiUrl}/groups/${groupName}`
-            )
-            return groupList
+            try {
+                const groupList = await request(
+                    `${environment.apiUrl}/groups/${groupName}`
+                )
+                return groupList
+            } catch (e) {
+                return null
+            }
         },
         []
     )
