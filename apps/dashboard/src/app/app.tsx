@@ -1,52 +1,25 @@
-import NxWelcome from "./nx-welcome"
-
-import { Route, Routes, Link } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
+import { ChakraProvider } from "@chakra-ui/react"
+import NavBar from "src/components/navbar"
+import Home from "src/pages/home"
+import SSO from "src/pages/sso"
+import MyGroups from "src/pages/my-groups"
+import Manage from "src/pages/manage"
+import theme from "src/styles"
+import NotFoundPage from "src/pages/404"
 
 export function App() {
     return (
-        <>
-            <NxWelcome title="dashboard" />
-            <div />
-
-            {/* START: routes */}
-            {/* These routes and navigation have been generated for you */}
-            {/* Feel free to move and update them to fit your needs */}
-            <br />
-            <hr />
-            <br />
-            <div role="navigation">
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/page-2">Page 2</Link>
-                    </li>
-                </ul>
-            </div>
+        <ChakraProvider theme={theme}>
+            <NavBar />
             <Routes>
-                <Route
-                    path="/"
-                    element={
-                        <div>
-                            This is the generated root route.{" "}
-                            <Link to="/page-2">Click here for page 2.</Link>
-                        </div>
-                    }
-                />
-                <Route
-                    path="/page-2"
-                    element={
-                        <div>
-                            <Link to="/">
-                                Click here to go back to root page.
-                            </Link>
-                        </div>
-                    }
-                />
+                <Route path="/" element={<Home />} />
+                <Route path="/sso" element={<SSO />} />
+                <Route path="/my-groups" element={<MyGroups />} />
+                <Route path="/my-groups/:groupName" element={<Manage />} />
+                <Route path="/*" element={<NotFoundPage />} />
             </Routes>
-            {/* END: routes */}
-        </>
+        </ChakraProvider>
     )
 }
 

@@ -1,0 +1,71 @@
+import {
+    Box,
+    Button,
+    Center,
+    Flex,
+    Grid,
+    GridItem,
+    Text,
+    useDisclosure
+} from "@chakra-ui/react"
+import { Group } from "src/types/groups"
+import GroupCard from "./group-card"
+import CreatGroupModal from "src/components/creat-group-modal"
+
+interface GroupList {
+    groupList: Array<Group>
+}
+
+export default function GroupBox({ groupList }: GroupList): JSX.Element {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    return (
+        <Box>
+            {groupList.length > 0 ? (
+                <Grid
+                    templateColumns="repeat(4, 1fr)"
+                    gap={10}
+                    w="100%"
+                    mt="60px"
+                >
+                    {groupList.map((group) => (
+                        <GridItem
+                            w="100%"
+                            borderRadius="4px"
+                            bgColor="#FCFCFC"
+                            boxShadow="0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)"
+                            key={group.name}
+                        >
+                            <GroupCard {...group} />
+                        </GridItem>
+                    ))}
+                </Grid>
+            ) : (
+                <Center
+                    minH="400px"
+                    mt="70px"
+                    border="1px solid #E4E4E4"
+                    borderRadius="4px"
+                    bgColor="#FEFFFF"
+                >
+                    <Flex flexDir="column">
+                        <Text fontSize="2xl" fontWeight="bold">
+                            You have not created any groups
+                        </Text>
+                        <Center mt="32px">
+                            <Button
+                                fontSize="lg"
+                                width="fit-content"
+                                onClick={onOpen}
+                                variant="solid"
+                                colorScheme="primary"
+                            >
+                                Get Started!
+                            </Button>
+                        </Center>
+                        <CreatGroupModal isOpen={isOpen} onClose={onClose} />
+                    </Flex>
+                </Center>
+            )}
+        </Box>
+    )
+}

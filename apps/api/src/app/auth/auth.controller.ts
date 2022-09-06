@@ -19,7 +19,7 @@ export class AuthController {
     @Get("github/callback")
     @UseGuards(AuthGuard("github"))
     githubCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.BASE_URL}/api`)
+        response.redirect(`${process.env.REDIRECT_URL}/my-groups`)
     }
 
     @Get("twitter")
@@ -31,7 +31,7 @@ export class AuthController {
     @Get("twitter/callback")
     @UseGuards(AuthGuard("twitter"))
     twitterCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.BASE_URL}/api`)
+        response.redirect(`${process.env.REDIRECT_URL}/my-groups`)
     }
 
     @Get("reddit")
@@ -43,6 +43,6 @@ export class AuthController {
     @Get("reddit/callback")
     @UseGuards(AuthGuard("reddit"))
     redditCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.BASE_URL}/api`)
+        response.redirect(`${process.env.REDIRECT_URL}/my-groups`)
     }
 }

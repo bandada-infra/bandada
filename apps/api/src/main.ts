@@ -33,9 +33,12 @@ async function bootstrap() {
             : session({
                   resave: false,
                   secret: "hello world",
-                  saveUninitialized: false
+                  saveUninitialized: false,
+                  cookie: { httpOnly: false }
               })
     )
+
+    app.enableCors()
 
     await app.listen(port)
 
