@@ -3,6 +3,7 @@ import { NestFactory } from "@nestjs/core"
 import { AppModule } from "./app/app.module"
 import session from "express-session"
 import createMemoryStore from "memorystore"
+import cookieParser from "cookie-parser"
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
@@ -20,6 +21,7 @@ async function bootstrap() {
     const MemoryStore = createMemoryStore(session)
 
     app.setGlobalPrefix(globalPrefix)
+    app.use(cookieParser())
     app.use(
         process.env.NODE_ENV === "production"
             ? session({
@@ -33,8 +35,7 @@ async function bootstrap() {
             : session({
                   resave: false,
                   secret: "hello world",
-                  saveUninitialized: false,
-                  cookie: { httpOnly: false }
+                  saveUninitialized: false
               })
     )
     app.enableCors({
