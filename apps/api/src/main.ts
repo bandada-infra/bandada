@@ -37,8 +37,10 @@ async function bootstrap() {
                   cookie: { httpOnly: false }
               })
     )
-
-    app.enableCors()
+    app.enableCors({
+        origin: true,
+        credentials: true
+    })
 
     await app.listen(port)
 
