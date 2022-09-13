@@ -46,7 +46,7 @@ export class GroupsService {
      * @param adminUserId account userId from jwt auth.
      * @returns List of admin's existing groups.
      */
-    async getOnesGroupsData(adminUserId: string): Promise<GroupData[]>{
+    async getGroupsByAdmin(adminUserId: string): Promise<GroupData[]>{
         return await this.groupRepository.findBy({admin: adminUserId});
     }
 

@@ -25,8 +25,8 @@ export class GroupsController {
 
     @Get('admin-groups')
     @UseGuards(AuthGuard('jwt'))
-    getOnesGroups(@Req() req: Request): Promise<GroupData[]>{
-        return this.groupsService.getOnesGroupsData(req['user'].userId);
+    getGroupsByAdmin(@Req() req: Request): Promise<GroupData[]>{
+        return this.groupsService.getGroupsByAdmin(req['user'].userId);
     }
 
     @Get(':name')

@@ -82,7 +82,7 @@ describe('GroupsService', () => {
   describe('# getOnesGroupsData', () => {
     it('Should return an groupData array.', async () => {
       groupRepository.findBy.mockResolvedValue([]);
-      const result = await service.getOnesGroupsData('testAdmin');
+      const result = await service.getGroupsByAdmin('testAdmin');
 
       expect(result).toBeInstanceOf(Array);
     });
