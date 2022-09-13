@@ -16,7 +16,7 @@ import { TwitterStrategy } from "./strategies/twitter.strategy"
         PassportModule.register({ session: true }),
         JwtModule.register({
             secret: process.env.JWT_SECRET_KEY,
-            signOptions: { expiresIn: "60s" }
+            signOptions: { expiresIn: "300s" }
         })
     ],
     providers: [

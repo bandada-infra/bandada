@@ -1,6 +1,7 @@
 import {
     Controller,
     Get,
+    Req,
     Res,
     UnauthorizedException,
     UseGuards
@@ -18,8 +19,15 @@ export class AuthController {
 
     @Get("github/callback")
     @UseGuards(AuthGuard("github"))
-    githubCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.REDIRECT_URL}/my-groups`)
+    githubCallback(@Req() req: Request, @Res() res: Response) {
+        const jwtToken = req['user']
+        if(jwtToken){
+        res.cookie('jwt',jwtToken,{
+            httpOnly:false, //@todo: make true for security
+            maxAge:24*60*60*1000
+            })
+        }
+        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
     }
 
     @Get("twitter")
@@ -30,8 +38,15 @@ export class AuthController {
 
     @Get("twitter/callback")
     @UseGuards(AuthGuard("twitter"))
-    twitterCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.REDIRECT_URL}/my-groups`)
+    twitterCallback(@Req() req: Request, @Res() res: Response) {
+        const jwtToken = req['user']
+        if(jwtToken){
+        res.cookie('jwt',jwtToken,{
+            httpOnly:false,
+            maxAge:24*60*60*1000
+            })
+        }
+        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
     }
 
     @Get("reddit")
@@ -42,7 +57,14 @@ export class AuthController {
 
     @Get("reddit/callback")
     @UseGuards(AuthGuard("reddit"))
-    redditCallback(_: Request, @Res() response: Response) {
-        response.redirect(`${process.env.REDIRECT_URL}/my-groups`)
+    redditCallback(@Req() req: Request, @Res() res: Response) {
+        const jwtToken = req['user']
+        if(jwtToken){
+        res.cookie('jwt',jwtToken,{
+            httpOnly:false,
+            maxAge:24*60*60*1000
+            })
+        }
+        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
     }
 }

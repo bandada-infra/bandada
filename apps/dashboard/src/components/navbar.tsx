@@ -13,9 +13,9 @@ import { Cookies } from "react-cookie"
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
     const cookies = new Cookies()
-    const userSession = cookies.get("connect.sid")
+    const userSession = cookies.get("jwt")
     function logOut() {
-        cookies.remove("connect.sid")
+        cookies.remove("jwt")
         navigate("/")
         window.location.reload()
     }
