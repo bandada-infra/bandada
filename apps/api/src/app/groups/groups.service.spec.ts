@@ -10,6 +10,7 @@ import { GroupsService } from './groups.service';
 
 const mockRepository = {
   find: jest.fn(),
+  findBy: jest.fn(),
   findOneBy: jest.fn(),
   create: jest.fn(),
   save: jest.fn(),
@@ -78,6 +79,14 @@ describe('GroupsService', () => {
     });
   });
 
+  describe('# getOnesGroupsData', () => {
+    it('Should return an groupData array.', async () => {
+      groupRepository.findBy.mockResolvedValue([]);
+      const result = await service.getGroupsByAdmin('testAdmin');
+
+      expect(result).toBeInstanceOf(Array);
+    });
+  });
   describe('# getGroup', () => {
 
     it('Should return a groupData', async () => {

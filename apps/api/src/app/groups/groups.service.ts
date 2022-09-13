@@ -42,6 +42,15 @@ export class GroupsService {
     }
 
     /**
+     * Show admin's groups data in database.
+     * @param adminUserId account userId from jwt auth.
+     * @returns List of admin's existing groups.
+     */
+    async getGroupsByAdmin(adminUserId: string): Promise<GroupData[]>{
+        return await this.groupRepository.findBy({admin: adminUserId});
+    }
+
+    /**
      * Show one specific group data in database.
      * @param groupName Group name wants to find.
      * @returns One group data.
@@ -59,6 +68,7 @@ export class GroupsService {
     /**
      * Create group in database and `Group`(with @semaphore-protocol/group).
      * @param groupData Information for creating group.
+     * @param adminUserId account userId from jwt auth.
      * @returns Created group data.
      */
     async createGroup(groupData:CreateGroupDto, adminUserId: string): Promise<GroupData>{
@@ -96,6 +106,7 @@ export class GroupsService {
      * If a member does not exist in the group, member is added to the database and `Group`(with @semaphore-protocol/group).
      * @param groupName Group name wants to find.
      * @param idCommitment Member's identity commitment.
+     * @param adminUserId account userId from jwt auth.
      * @returns Group data with added member.
      */
     async addMember(groupName:string, idCommitment: string, adminUserId: string): Promise<GroupData>{
@@ -139,6 +150,7 @@ export class GroupsService {
      * Can update the name and description of the Group.
      * @param groupName Group name wants to find.
      * @param updateData Information for updating group.
+     * @param adminUserId account userId from jwt auth.
      * @returns True or false.
      */
     async updateGroup(groupName: string, updateData: UpdateGroupDto, adminUserId: string): Promise<UpdateWriteOpResult>{

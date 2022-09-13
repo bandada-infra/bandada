@@ -23,6 +23,12 @@ export class GroupsController {
         return this.groupsService.createGroup(groupData, req['user'].userId);
     }
 
+    @Get('admin-groups')
+    @UseGuards(AuthGuard('jwt'))
+    getGroupsByAdmin(@Req() req: Request): Promise<GroupData[]>{
+        return this.groupsService.getGroupsByAdmin(req['user'].userId);
+    }
+
     @Get(':name')
     getGroup(@Param('name') groupName: string): Promise<GroupData> {
         return this.groupsService.getGroupData(groupName);
