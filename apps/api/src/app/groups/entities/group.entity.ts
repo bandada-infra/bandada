@@ -18,7 +18,7 @@ export class GroupData {
     description: string;
 
     @Column()
-    admin: string; // @todo: change the admin property
+    admin: string;
 
     @Column()
     treeDepth: number;
