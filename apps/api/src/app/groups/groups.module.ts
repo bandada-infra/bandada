@@ -7,6 +7,7 @@ import { GroupsService } from "./groups.service"
 @Module({
     imports: [TypeOrmModule.forFeature([GroupData])],
     controllers: [GroupsController],
-    providers: [GroupsService]
+    providers: [GroupsService],
+    exports: [GroupsService]
 })
 export class GroupsModule {}
