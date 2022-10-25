@@ -5,12 +5,14 @@ import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
 import { GroupsModule } from "./groups/groups.module"
+import { InvitesModule } from "./invites/invites.module"
 
 @Module({
     imports: [
         AuthModule,
         AccountModule,
         GroupsModule,
+        InvitesModule,
         TypeOrmModule.forRoot({
             type: "mongodb",
             host: process.env.DB_HOST,
@@ -20,8 +22,8 @@ import { GroupsModule } from "./groups/groups.module"
             database: process.env.DB_DATABASE,
             // authSource: "admin",
             ssl: process.env.NODE_ENV === "production" ? true : false,
-            autoLoadEntities: true,
-            synchronize: process.env.NODE_ENV === "production" ? false : true
+            autoLoadEntities: true
+            // synchronize: process.env.NODE_ENV === "production" ? false : true
         })
     ],
     controllers: [AppController],
