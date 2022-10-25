@@ -25,6 +25,7 @@ export default function InviteModal({
     const [_inviteLink, setInviteLink] = useState<string>(
         "https://www.zkgroups.com/invite/redeem/YUxc"
     )
+
     const copyLink = async () => {
         navigator.clipboard.writeText(_inviteLink)
     }

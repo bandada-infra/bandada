@@ -19,9 +19,9 @@ export default function SSO(): JSX.Element {
                 flexDir="column"
                 justifyContent="space-between"
             >
-                <SsoButton provider="Github"/>
-                <SsoButton provider="Twitter"/>
-                <SsoButton provider="Reddit"/>
+                <SsoButton provider="Github" />
+                <SsoButton provider="Twitter" />
+                <SsoButton provider="Reddit" />
             </Flex>
         </Container>
     )

@@ -18,7 +18,7 @@ import { GroupsModule } from "./groups/groups.module"
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
-            authSource: "admin",
+            // authSource: "admin",
             ssl: process.env.NODE_ENV === "production" ? true : false,
             autoLoadEntities: true,
             synchronize: process.env.NODE_ENV === "production" ? false : true
