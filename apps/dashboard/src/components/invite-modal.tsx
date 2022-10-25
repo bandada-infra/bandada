@@ -17,17 +17,18 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { FaRegCopy } from "react-icons/fa"
+import useInvites from "src/hooks/useInvites"
 
 export default function InviteModal({
     isOpen,
-    onClose
-}: UseDisclosureProps): JSX.Element {
-    const [_inviteLink, setInviteLink] = useState<string>(
-        "https://www.zkgroups.com/invite/redeem/YUxc"
-    )
+    onClose,
+    groupName
+}: UseDisclosureProps & any): JSX.Element {
+    const { generateMagicLink } = useInvites()
+    const [_magicLink, setMagicLink] = useState<string>("")
 
     const copyLink = async () => {
-        navigator.clipboard.writeText(_inviteLink)
+        navigator.clipboard.writeText(_magicLink)
     }
 
     return (
@@ -46,7 +47,7 @@ export default function InviteModal({
                         <Flex alignItems="center">
                             <InputGroup>
                                 <Input
-                                    value={_inviteLink}
+                                    value={_magicLink}
                                     fontSize="16px"
                                     color="gray.500"
                                 />
@@ -64,6 +65,11 @@ export default function InviteModal({
                                 variant="solid"
                                 colorScheme="primary"
                                 ml="10px"
+                                onClick={async () =>
+                                    setMagicLink(
+                                        await generateMagicLink(groupName)
+                                    )
+                                }
                             >
                                 New Link
                             </Button>
