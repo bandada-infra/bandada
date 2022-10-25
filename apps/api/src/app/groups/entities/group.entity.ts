@@ -7,7 +7,7 @@ import {
     ObjectIdColumn
 } from "typeorm"
 
-@Entity()
+@Entity("groups")
 export class GroupData {
     @ObjectIdColumn()
     _id: ObjectId
