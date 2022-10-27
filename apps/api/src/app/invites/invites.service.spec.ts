@@ -90,6 +90,21 @@ describe("InvitesService", () => {
 
             await expect(result).rejects.toThrow("No permissions")
         })
+
+        it("Should not create an invite if an internal error is thrown", async () => {
+            inviteRepository.create.mockResolvedValue(invite)
+            inviteRepository.save.mockImplementation(() => {
+                throw new Error("DB error")
+            })
+            groupsService.getGroupData.mockResolvedValue(group)
+
+            const result = invitesService.createInvite(
+                createInviteDto,
+                "testAdmin"
+            )
+
+            await expect(result).rejects.toThrow("Internal Server Error")
+        })
     })
 
     describe("# generateCode", () => {

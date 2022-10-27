@@ -45,7 +45,7 @@ export class InvitesService {
         try {
             return this.inviteRepository.save(invite)
         } catch (e) {
-            throw new InternalServerErrorException(e.writeErrors)
+            throw new InternalServerErrorException()
         }
     }
 

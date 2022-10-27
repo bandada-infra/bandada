@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { ObjectId } from "mongodb"
 import {
     Column,
