@@ -18,8 +18,6 @@ export class InvitesController {
             req["user"].userId
         )
 
-        console.log(code)
-
         return code
     }
 
