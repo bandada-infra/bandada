@@ -15,7 +15,7 @@ import {
     ModalOverlay,
     UseDisclosureProps
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { FaRegCopy } from "react-icons/fa"
 import useInvites from "src/hooks/useInvites"
 
@@ -27,12 +27,12 @@ export default function InviteModal({
     const { generateMagicLink } = useInvites()
     const [_magicLink, setMagicLink] = useState<string>("")
 
-    const copyLink = async () => {
+    const copyLink = useCallback(async () => {
         navigator.clipboard.writeText(_magicLink)
-    }
+    }, [_magicLink])
 
     return (
-        <Modal isOpen={!!isOpen} onClose={onClose ? onClose : console.error}>
+        <Modal isOpen={!!isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent maxW="600px">
                 <ModalHeader borderBottom="1px" borderColor="gray.200">
@@ -50,14 +50,14 @@ export default function InviteModal({
                                     value={_magicLink}
                                     fontSize="16px"
                                     color="gray.500"
+                                    readOnly
                                 />
                                 <InputRightElement>
                                     <IconButton
                                         aria-label="Copy button"
                                         icon={<FaRegCopy />}
                                         onClick={copyLink}
-                                        variant="solid"
-                                        h="100%"
+                                        variant="link"
                                     />
                                 </InputRightElement>
                             </InputGroup>

@@ -1,4 +1,3 @@
-import { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
 import { environment } from "src/environments/environment"
 import request from "src/utils/request"
@@ -10,15 +9,14 @@ type ReturnParameters = {
 export default function useInvites(): ReturnParameters {
     const generateMagicLink = useCallback(
         async (groupName: string): Promise<string> => {
-            const config: AxiosRequestConfig = {
+            const code = await request(`${environment.apiUrl}/invites`, {
                 method: "post",
                 data: {
                     groupName
                 }
-            }
+            })
 
-            const code = await request(`${environment.apiUrl}/invites`, config)
-
+            // TODO: update this URL with the client-app one.
             return `https://zk-groups.com/${code}`
         },
         []
