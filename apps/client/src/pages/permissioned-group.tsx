@@ -2,7 +2,7 @@ import { Button, Center, Container, Heading } from "@chakra-ui/react"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 
-export default function PermissionGroup(): JSX.Element {
+export default function PermissionedGroup(): JSX.Element {
     const { groupName } = useParams()
     const { invitationCode } = useParams()
     const [isValid, setIsValid] = useState<boolean>(false)
