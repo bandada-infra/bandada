@@ -5,7 +5,6 @@ export type Group = {
     members: string[]
 }
 
-
 export type Size = {
     sizeFor: string
     capacity: string

@@ -34,9 +34,14 @@ export class AuthService {
         })
     }
 
-    async tokenValidateAccount(payload: Payload): Promise<AccountModel | undefined> {
-        const userFind = await this.accountService.findOne({userId: payload.userId, username: payload.username});
+    async tokenValidateAccount(
+        payload: Payload
+    ): Promise<AccountModel | undefined> {
+        const userFind = await this.accountService.findOne({
+            userId: payload.userId,
+            username: payload.username
+        })
 
-        return userFind;
+        return userFind
     }
 }

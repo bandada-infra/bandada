@@ -123,7 +123,12 @@ export default function Manage(): JSX.Element {
                     </Flex>
                 </Box>
             </Flex>
-            <InviteModal isOpen={isOpen} onClose={onClose} />
+
+            <InviteModal
+                isOpen={isOpen}
+                onClose={onClose}
+                groupName={groupName}
+            />
         </Container>
     )
 }

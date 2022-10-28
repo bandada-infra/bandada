@@ -20,11 +20,11 @@ export class AuthController {
     @Get("github/callback")
     @UseGuards(AuthGuard("github"))
     githubCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req['user']
-        if(jwtToken){
-        res.cookie('jwt',jwtToken,{
-            httpOnly:false, //@todo: make true for security
-            maxAge:24*60*60*1000
+        const jwtToken = req["user"]
+        if (jwtToken) {
+            res.cookie("jwt", jwtToken, {
+                httpOnly: false, //@todo: make true for security
+                maxAge: 24 * 60 * 60 * 1000
             })
         }
         res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
@@ -39,11 +39,11 @@ export class AuthController {
     @Get("twitter/callback")
     @UseGuards(AuthGuard("twitter"))
     twitterCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req['user']
-        if(jwtToken){
-        res.cookie('jwt',jwtToken,{
-            httpOnly:false,
-            maxAge:24*60*60*1000
+        const jwtToken = req["user"]
+        if (jwtToken) {
+            res.cookie("jwt", jwtToken, {
+                httpOnly: false,
+                maxAge: 24 * 60 * 60 * 1000
             })
         }
         res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
@@ -58,11 +58,11 @@ export class AuthController {
     @Get("reddit/callback")
     @UseGuards(AuthGuard("reddit"))
     redditCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req['user']
-        if(jwtToken){
-        res.cookie('jwt',jwtToken,{
-            httpOnly:false,
-            maxAge:24*60*60*1000
+        const jwtToken = req["user"]
+        if (jwtToken) {
+            res.cookie("jwt", jwtToken, {
+                httpOnly: false,
+                maxAge: 24 * 60 * 60 * 1000
             })
         }
         res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
