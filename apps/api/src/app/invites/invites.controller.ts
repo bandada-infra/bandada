@@ -20,13 +20,4 @@ export class InvitesController {
 
         return code
     }
-
-    //@Patch(":code")
-    //@UseGuards(AuthGuard("jwt"))
-    //redeemInvite(
-    //@Req() req: Request,
-    //@Param("code") code: string
-    //): Promise<void> {
-    //return this.invitesService.redeemInvite(code, req["user"].userId)
-    //}
 }

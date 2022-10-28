@@ -53,18 +53,13 @@ export class GroupsController {
         return this.groupsService.isGroupMember(groupName, idCommitment)
     }
 
-    @Post(":name/:member")
-    @UseGuards(AuthGuard("jwt"))
-    addMember(
-        @Req() req: Request,
+    @Post(":name/:member/:invite-code")
+    async addMember(
         @Param("name") groupName: string,
-        @Param("member") idCommitment: string
-    ): Promise<GroupData> {
-        return this.groupsService.addMember(
-            groupName,
-            idCommitment,
-            req["user"].userId
-        )
+        @Param("member") idCommitment: string,
+        @Param("invite-code") inviteCode: string
+    ): Promise<void> {
+        await this.groupsService.addMember(groupName, idCommitment, inviteCode)
     }
 
     @Get(":name/:member/proof")

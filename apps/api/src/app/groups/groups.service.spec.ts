@@ -8,26 +8,19 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { ObjectId } from "mongodb"
 import { MongoRepository } from "typeorm"
+import { InvitesService } from "../invites/invites.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupData } from "./entities/group.entity"
 import { GroupsService } from "./groups.service"
 
-const mockRepository = {
-    find: jest.fn(),
-    findBy: jest.fn(),
-    findOneBy: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    count: jest.fn(),
-    updateOne: jest.fn()
-}
-
-type mockRepository<T> = Partial<Record<keyof MongoRepository<T>, jest.Mock>>
+type MockRepository<T> = Partial<Record<keyof MongoRepository<T>, jest.Mock>>
+type MockInvitesService = Partial<Record<keyof InvitesService, jest.Mock>>
 
 describe("GroupsService", () => {
-    let service: GroupsService
-    let groupRepository: mockRepository<GroupData>
+    let groupsService: GroupsService
+    let groupRepository: MockRepository<GroupData>
+    let invitesService: MockInvitesService
 
     const createGroupArgs: CreateGroupDto = {
         name: "Test group",
@@ -58,14 +51,29 @@ describe("GroupsService", () => {
             providers: [
                 GroupsService,
                 {
+                    provide: InvitesService,
+                    useValue: {
+                        redeemInvite: jest.fn()
+                    }
+                },
+                {
                     provide: getRepositoryToken(GroupData),
-                    useValue: mockRepository
+                    useValue: {
+                        find: jest.fn(),
+                        findBy: jest.fn(),
+                        findOneBy: jest.fn(),
+                        create: jest.fn(),
+                        save: jest.fn(),
+                        count: jest.fn(),
+                        updateOne: jest.fn()
+                    }
                 }
             ]
         }).compile()
 
-        service = module.get<GroupsService>(GroupsService)
+        groupsService = module.get<GroupsService>(GroupsService)
         groupRepository = module.get(getRepositoryToken(GroupData))
+        invitesService = module.get(InvitesService)
     })
 
     it("Should be init", async () => {
@@ -75,13 +83,13 @@ describe("GroupsService", () => {
     })
 
     it("Should be defined", () => {
-        expect(service).toBeDefined()
+        expect(groupsService).toBeDefined()
     })
 
     describe("# getAllGroupsData", () => {
         it("Should return an groupData array", async () => {
             groupRepository.find.mockResolvedValue([])
-            const result = await service.getAllGroupsData()
+            const result = await groupsService.getAllGroupsData()
 
             expect(result).toBeInstanceOf(Array)
         })
@@ -90,7 +98,7 @@ describe("GroupsService", () => {
     describe("# getOnesGroupsData", () => {
         it("Should return an groupData array.", async () => {
             groupRepository.findBy.mockResolvedValue([])
-            const result = await service.getGroupsByAdmin("testAdmin")
+            const result = await groupsService.getGroupsByAdmin("testAdmin")
 
             expect(result).toBeInstanceOf(Array)
         })
@@ -98,14 +106,14 @@ describe("GroupsService", () => {
     describe("# getGroup", () => {
         it("Should return a groupData", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroup)
-            const group = await service.getGroupData("Test group")
+            const group = await groupsService.getGroupData("Test group")
             expect(group).toBeDefined()
         })
 
         it("Should throw 404 error about not exist group", async () => {
             try {
                 groupRepository.findOneBy.mockResolvedValue(undefined)
-                await service.getGroupData("Master group")
+                await groupsService.getGroupData("Master group")
             } catch (e) {
                 expect(e).toBeInstanceOf(NotFoundException)
             }
@@ -117,7 +125,7 @@ describe("GroupsService", () => {
             groupRepository.create.mockResolvedValue(TestGroup)
             groupRepository.save.mockResolvedValue(TestGroup)
 
-            const result = await service.createGroup(
+            const result = await groupsService.createGroup(
                 createGroupArgs,
                 "testAdmin"
             )
@@ -130,7 +138,7 @@ describe("GroupsService", () => {
                 groupRepository.save.mockRejectedValueOnce(
                     new Error("duplicated group name")
                 )
-                await service.createGroup(createGroupArgs, "testAdmin")
+                await groupsService.createGroup(createGroupArgs, "testAdmin")
             } catch (e) {
                 expect(e).toBeInstanceOf(InternalServerErrorException)
             }
@@ -141,14 +149,20 @@ describe("GroupsService", () => {
         it("Should return false with empty group", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroup)
 
-            const result = await service.isGroupMember("Test group", "123123")
+            const result = await groupsService.isGroupMember(
+                "Test group",
+                "123123"
+            )
             expect(result).toBeFalsy()
         })
 
         it("Should return true with group containing member", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember)
 
-            const result = await service.isGroupMember("Test group", "123123")
+            const result = await groupsService.isGroupMember(
+                "Test group",
+                "123123"
+            )
             expect(result).toBeTruthy()
         })
     })
@@ -158,33 +172,31 @@ describe("GroupsService", () => {
             groupRepository.create.mockResolvedValueOnce(TestGroup)
             groupRepository.save.mockResolvedValueOnce(TestGroup)
 
-            await service.createGroup(createGroupArgs, "testAdmin")
-        })
-
-        it("Should throw 401 error about not a group admin", async () => {
-            groupRepository.findOneBy.mockResolvedValue(TestGroup)
-            try {
-                await service.addMember("Test group", "123123", "otherAdmin")
-            } catch (e) {
-                expect(e).toBeInstanceOf(UnauthorizedException)
-            }
+            await groupsService.createGroup(createGroupArgs, "testAdmin")
         })
 
         it("Should add a member", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroup)
             groupRepository.save.mockResolvedValue(TestGroupAddedMember)
-            const result = await service.addMember(
+            invitesService.redeemInvite.mockResolvedValue(undefined)
+
+            const result = await groupsService.addMember(
                 "Test group",
                 "123123",
-                "testAdmin"
+                "MVHRJQWC"
             )
+
             expect(result).toBe(TestGroupAddedMember)
         })
 
         it("Should throw 400 error about exist member", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember)
             try {
-                await service.addMember("Test group", "123123", "testAdmin")
+                await groupsService.addMember(
+                    "Test group",
+                    "123123",
+                    "MVHRJQWC"
+                )
             } catch (e) {
                 expect(e).toBeInstanceOf(BadRequestException)
             }
@@ -205,16 +217,16 @@ describe("GroupsService", () => {
             groupRepository.create.mockResolvedValue(TestGroup)
             groupRepository.save.mockResolvedValue(TestGroup)
 
-            await service.createGroup(createGroupArgs, "testAdmin")
+            await groupsService.createGroup(createGroupArgs, "testAdmin")
         })
 
         it("Should return Merkle proof", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroup)
             groupRepository.save.mockResolvedValue(TestGroupAddedMember2)
-            await service.addMember("Test group", "111111", "testAdmin")
+            await groupsService.addMember("Test group", "111111", "testAdmin")
 
             groupRepository.findOneBy.mockResolvedValue(TestGroupAddedMember2)
-            const merkleproof = await service.generateMerkleProof(
+            const merkleproof = await groupsService.generateMerkleProof(
                 "Test group",
                 "111111"
             )
@@ -227,7 +239,7 @@ describe("GroupsService", () => {
                 groupRepository.findOneBy.mockResolvedValue(
                     TestGroupAddedMember2
                 )
-                await service.generateMerkleProof("Test group", "999999")
+                await groupsService.generateMerkleProof("Test group", "999999")
             } catch (e) {
                 expect(e).toBeInstanceOf(BadRequestException)
             }
@@ -242,13 +254,13 @@ describe("GroupsService", () => {
             groupRepository.create.mockResolvedValue(TestGroup)
             groupRepository.save.mockResolvedValue(TestGroup)
 
-            await service.createGroup(createGroupArgs, "testAdmin")
+            await groupsService.createGroup(createGroupArgs, "testAdmin")
         })
 
         it("Should throw 401 error about not a group admin", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroup)
             try {
-                await service.updateGroup(
+                await groupsService.updateGroup(
                     "Test group",
                     updateGroupArgs,
                     "otherAdmin"
@@ -261,7 +273,7 @@ describe("GroupsService", () => {
         it("Should update a group", async () => {
             groupRepository.findOneBy.mockResolvedValue(TestGroup)
 
-            await service.updateGroup(
+            await groupsService.updateGroup(
                 "Test group",
                 updateGroupArgs,
                 "testAdmin"

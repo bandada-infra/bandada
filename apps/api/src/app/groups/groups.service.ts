@@ -1,5 +1,7 @@
 import {
     BadRequestException,
+    forwardRef,
+    Inject,
     Injectable,
     InternalServerErrorException,
     Logger,
@@ -13,6 +15,7 @@ import { Group } from "@semaphore-protocol/group"
 import { MerkleProof } from "./types"
 import { InjectRepository } from "@nestjs/typeorm"
 import { MongoRepository, UpdateWriteOpResult } from "typeorm"
+import { InvitesService } from "../invites/invites.service"
 
 @Injectable()
 export class GroupsService {
@@ -20,7 +23,9 @@ export class GroupsService {
 
     constructor(
         @InjectRepository(GroupData)
-        private readonly groupRepository: MongoRepository<GroupData>
+        private readonly groupRepository: MongoRepository<GroupData>,
+        @Inject(forwardRef(() => InvitesService))
+        private readonly invitesService: InvitesService
     ) {
         ;(async () => {
             const groupsData = await this.groupRepository.find({
@@ -128,33 +133,29 @@ export class GroupsService {
      * If a member does not exist in the group, member is added to the database and `Group`(with @semaphore-protocol/group).
      * @param groupName Group name wants to find.
      * @param idCommitment Member's identity commitment.
-     * @param adminUserId account userId from jwt auth.
+     * @param inviteCode Invite code needed to add a new member.
      * @returns Group data with added member.
      */
     async addMember(
         groupName: string,
         idCommitment: string,
-        adminUserId: string
+        inviteCode: string
     ): Promise<GroupData> {
-        if (!(await this.isGroupMember(groupName, idCommitment))) {
-            const groupData = await this.getGroupData(groupName)
-
-            if (groupData.admin !== adminUserId) {
-                throw new UnauthorizedException(
-                    `No permissions: You are not an admin of this group: {'${groupName}'}.`
-                )
-            }
-
-            groupData.members.push(idCommitment)
-
-            this.groups[groupData.index].addMember(idCommitment)
-
-            return await this.groupRepository.save(groupData)
-        } else {
+        if (await this.isGroupMember(groupName, idCommitment)) {
             throw new BadRequestException(
                 `The member: {'${idCommitment}'} already exists in the group: {'${groupName}'}.`
             )
         }
+
+        this.invitesService.redeemInvite(inviteCode)
+
+        const groupData = await this.getGroupData(groupName)
+
+        groupData.members.push(idCommitment)
+
+        this.groups[groupData.index].addMember(idCommitment)
+
+        return this.groupRepository.save(groupData)
     }
 
     /**

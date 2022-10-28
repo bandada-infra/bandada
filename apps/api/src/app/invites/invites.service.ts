@@ -1,4 +1,7 @@
 import {
+    BadRequestException,
+    forwardRef,
+    Inject,
     Injectable,
     InternalServerErrorException,
     UnauthorizedException
@@ -14,6 +17,7 @@ export class InvitesService {
     constructor(
         @InjectRepository(Invite)
         private readonly inviteRepository: MongoRepository<Invite>,
+        @Inject(forwardRef(() => GroupsService))
         private readonly groupsService: GroupsService
     ) {}
 
@@ -50,6 +54,31 @@ export class InvitesService {
     }
 
     /**
+     * Redeems an invite by consuming its code. Every invite
+     * can be used only once.
+     * @param inviteCode Invite code to be redeemed.
+     */
+    async redeemInvite(inviteCode: string): Promise<Invite> {
+        const invite = await this.inviteRepository.findOneBy({
+            code: inviteCode
+        })
+
+        if (invite.redeemed === true) {
+            throw new BadRequestException(
+                `Invite code '${inviteCode}' has already been redeemed`
+            )
+        }
+
+        invite.redeemed = true
+
+        try {
+            return this.inviteRepository.save(invite)
+        } catch (e) {
+            throw new InternalServerErrorException()
+        }
+    }
+
+    /**
      * Generates a random code with a given number of characters.
      * The list of available characters have been chosen to be human readable.
      * @param length Number of characters.
@@ -65,32 +94,4 @@ export class InvitesService {
 
         return code
     }
-
-    //async redeemInvite(code: string, adminUserId: string): Promise<void> {
-    //try {
-    //const invite = await this.inviteRepository.findOneBy({
-    //code
-    //})
-    //const group = await this.groupsService.getGroupData(
-    //invite.group.name
-    //)
-
-    //if (group.admin !== adminUserId) {
-    //throw new UnauthorizedException(
-    //`No permissions: You are not an admin of this group: {'${invite.group.name}'}.`
-    //)
-    //}
-
-    //await this.inviteRepository.updateOne(
-    //{ code },
-    //{
-    //$set: {
-    //redeemed: true
-    //}
-    //}
-    //)
-    //} catch (e) {
-    //throw new InternalServerErrorException(e.writeErrors)
-    //}
-    //}
 }

@@ -11,8 +11,8 @@ import { InvitesModule } from "./invites/invites.module"
     imports: [
         AuthModule,
         AccountModule,
-        GroupsModule,
         InvitesModule,
+        GroupsModule,
         TypeOrmModule.forRoot({
             type: "mongodb",
             host: process.env.DB_HOST,

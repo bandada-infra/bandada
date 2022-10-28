@@ -8,13 +8,13 @@ import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 
-type mockRepository<T> = Partial<Record<keyof MongoRepository<T>, jest.Mock>>
-type mockGroupsService = Partial<Record<keyof GroupsService, jest.Mock>>
+type MockRepository<T> = Partial<Record<keyof MongoRepository<T>, jest.Mock>>
+type MockGroupsService = Partial<Record<keyof GroupsService, jest.Mock>>
 
 describe("InvitesService", () => {
     let invitesService: InvitesService
-    let inviteRepository: mockRepository<Invite>
-    let groupsService: mockGroupsService
+    let inviteRepository: MockRepository<Invite>
+    let groupsService: MockGroupsService
 
     const group: GroupData = {
         _id: new ObjectId(),
@@ -49,7 +49,8 @@ describe("InvitesService", () => {
                     provide: getRepositoryToken(Invite),
                     useValue: {
                         create: jest.fn(),
-                        save: jest.fn()
+                        save: jest.fn(),
+                        findOneBy: jest.fn()
                     }
                 }
             ]
@@ -102,6 +103,45 @@ describe("InvitesService", () => {
                 createInviteDto,
                 "testAdmin"
             )
+
+            await expect(result).rejects.toThrow("Internal Server Error")
+        })
+    })
+
+    describe("# redeemInvite", () => {
+        it("Should redeem an invite", async () => {
+            inviteRepository.findOneBy.mockResolvedValue({ ...invite })
+            inviteRepository.save.mockResolvedValue({
+                ...invite,
+                redeemed: true
+            })
+
+            const result = await invitesService.redeemInvite("MVHRJQWC")
+
+            expect(result).toMatchObject({
+                ...invite,
+                redeemed: true
+            })
+        })
+
+        it("Should not redeem an invite if it has already been redeemed", async () => {
+            inviteRepository.findOneBy.mockResolvedValue({
+                ...invite,
+                redeemed: true
+            })
+
+            const result = invitesService.redeemInvite("MVHRJQWC")
+
+            await expect(result).rejects.toThrow("has already been redeemed")
+        })
+
+        it("Should not redeem an invite if an internal error is thrown", async () => {
+            inviteRepository.findOneBy.mockResolvedValue(invite)
+            inviteRepository.save.mockImplementation(() => {
+                throw new Error("DB error")
+            })
+
+            const result = invitesService.redeemInvite("MVHRJQWC")
 
             await expect(result).rejects.toThrow("Internal Server Error")
         })
