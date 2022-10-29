@@ -15,7 +15,7 @@ type ReturnParameters = {
 
 export default function useGroups(): ReturnParameters {
     const getGroupList = useCallback(async (): Promise<Group[] | null> => {
-        try{
+        try {
             const groupList = await request(
                 `${environment.apiUrl}/groups/admin-groups`
             )

@@ -1,34 +1,40 @@
-import { ObjectId } from 'mongodb';
-import { Column, CreateDateColumn, Entity, Index, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from "mongodb"
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    Index,
+    ObjectIdColumn
+} from "typeorm"
 
-@Entity()
+@Entity("groups")
 export class GroupData {
     @ObjectIdColumn()
-    _id: ObjectId;
+    _id: ObjectId
 
     @Column()
-    @Index({unique: true})
-    index: number;
+    @Index({ unique: true })
+    index: number
 
     @Column()
-    @Index({unique: true})
-    name: string;
+    @Index({ unique: true })
+    name: string
 
     @Column()
-    description: string;
+    description: string
 
     @Column()
-    admin: string;
+    admin: string
 
     @Column()
-    treeDepth: number;
+    treeDepth: number
 
-    @Column({default:[]})
-    members: string[];
+    @Column({ default: [] })
+    members: string[]
 
-    @CreateDateColumn({ type: 'timestamp' })
-    createdAt: string;
+    @CreateDateColumn({ type: "timestamp" })
+    createdAt: string
 
-    @Column({default:0})
-    tag: number;
-} 
+    @Column({ default: 0 })
+    tag: number
+}

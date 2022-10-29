@@ -1,6 +1,6 @@
 export type ServiceType = "twitter" | "github" | "reddit"
 
 export type Payload = {
-    userId: string,
+    userId: string
     username: string
 }

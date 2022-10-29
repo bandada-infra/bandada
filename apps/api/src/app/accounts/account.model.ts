@@ -3,7 +3,7 @@ import {
     CreateDateColumn,
     Entity,
     ObjectID,
-    ObjectIdColumn,
+    ObjectIdColumn
 } from "typeorm"
 import { ServiceType } from "../auth/types"
 
