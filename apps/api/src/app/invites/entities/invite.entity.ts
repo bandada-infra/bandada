@@ -22,6 +22,9 @@ export class Invite {
     @Column({ default: false })
     redeemed: boolean
 
+    @Column()
+    groupName: string
+
     @OneToOne(() => GroupData)
     @JoinColumn()
     group: GroupData

@@ -31,6 +31,7 @@ describe("InvitesService", () => {
     const invite: Invite = {
         _id: new ObjectId(),
         group: group,
+        groupName: "testGroup",
         code: "MVHRJQWC",
         redeemed: false
     }

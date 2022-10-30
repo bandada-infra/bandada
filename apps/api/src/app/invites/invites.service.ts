@@ -42,6 +42,7 @@ export class InvitesService {
 
         const invite = this.inviteRepository.create({
             code: this.generateCode(),
+            groupName: dto.groupName,
             group,
             redeemed: false
         })
@@ -51,6 +52,14 @@ export class InvitesService {
         } catch (e) {
             throw new InternalServerErrorException()
         }
+    }
+
+    async getCodeInfo(inviteCode: string): Promise<any> {
+        const invite = await this.inviteRepository.findOneBy({
+            code: inviteCode
+        })
+
+        return invite
     }
 
     /**
