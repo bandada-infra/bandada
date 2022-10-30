@@ -13,7 +13,8 @@
         "noFallthroughCasesInSwitch": true,
         "baseUrl": ".",
         "paths": {
-            "src/*": ["src/*"]
+            "src/*": ["src/*"],
+            "@utils": ["../../libs/utils/src/index.ts"]
         }
     },
     "files": [],

@@ -13,7 +13,8 @@ import {
 import { Link } from "react-router-dom"
 import { useWeb3React } from "@web3-react/core"
 import { InjectedConnector } from "@web3-react/injected-connector"
-import { providers, utils } from "ethers"
+import { providers } from "ethers"
+import { shortenAddress } from "@utils"
 
 const injectedConnector = new InjectedConnector({
     supportedChainIds: [1, 3, 4, 5, 42]
@@ -31,14 +32,6 @@ export default function NavBar(): JSX.Element {
         })()
     }, [activate])
 
-    function shortenAddress(address: string, chars = 4): string {
-        address = utils.getAddress(address)
-
-        return `${address.substring(0, chars + 2)}...${address.substring(
-            42 - chars
-        )}`
-    }
-
     return (
         <Box bgColor="#F8F9FF" borderBottom="1px" borderColor="gray.200">
             <Container maxWidth="container.xl">
@@ -53,7 +46,11 @@ export default function NavBar(): JSX.Element {
                     <Spacer />
                     <Center>
                         {account ? (
-                            <Tooltip label={hasCopied ? "Copied": "Copy"} closeOnClick={false} hasArrow>
+                            <Tooltip
+                                label={hasCopied ? "Copied" : "Copy"}
+                                closeOnClick={false}
+                                hasArrow
+                            >
                                 <Button
                                     variant="outlined"
                                     color="primary"

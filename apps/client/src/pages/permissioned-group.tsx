@@ -24,18 +24,18 @@ export default function PermissionedGroup(): JSX.Element {
 
     return (
         <Container flex="1" mb="80px" mt="300px" px="80px" maxW="container.lg">
-            {_isRedeemed ? (
-                <Center>
-                    <Heading textAlign="center" as="h2" size="xl">
-                        This link is expired or invalid.
-                    </Heading>
-                </Center>
-            ) : (
+            {_isRedeemed === false ? (
                 <Center flexDirection="column">
                     <Heading textAlign="center" as="h2" size="xl">
                         You are invited to {_groupName} group
                     </Heading>
                     <Button onClick={joinGroup}>Join Group</Button>
+                </Center>
+            ) : (
+                <Center>
+                    <Heading textAlign="center" as="h2" size="xl">
+                        This link is expired or invalid.
+                    </Heading>
                 </Center>
             )}
         </Container>

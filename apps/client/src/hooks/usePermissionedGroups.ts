@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { environment } from "src/environments/environment"
-import request from "src/utils/request"
+import { request } from "@utils"
 import { Invite } from "src/types/invite"
 
 type ReturnParameters = {

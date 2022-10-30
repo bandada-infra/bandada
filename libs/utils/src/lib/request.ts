@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 
 /* istanbul ignore next */
-export default async function request(
+export async function request(
     url: string,
     config?: AxiosRequestConfig
 ): Promise<any> {
