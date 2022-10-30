@@ -7,7 +7,8 @@ import {
     Flex,
     Spacer,
     Text,
-    Tooltip
+    Tooltip,
+    useClipboard
 } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
 import { useWeb3React } from "@web3-react/core"
@@ -20,9 +21,7 @@ const injectedConnector = new InjectedConnector({
 
 export default function NavBar(): JSX.Element {
     const { activate, account } = useWeb3React<providers.Web3Provider>()
-    const copyAccount = async () => {
-        account && (await navigator.clipboard.writeText(account))
-    }
+    const { hasCopied, onCopy } = useClipboard(account || "")
 
     useEffect(() => {
         ;(async () => {
@@ -54,11 +53,11 @@ export default function NavBar(): JSX.Element {
                     <Spacer />
                     <Center>
                         {account ? (
-                            <Tooltip label="copy">
+                            <Tooltip label={hasCopied ? "Copied": "Copy"} closeOnClick={false} hasArrow>
                                 <Button
                                     variant="outlined"
                                     color="primary"
-                                    onClick={copyAccount}
+                                    onClick={onCopy}
                                     sx={{ marginRight: 10 }}
                                 >
                                     {shortenAddress(account)}
