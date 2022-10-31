@@ -26,13 +26,23 @@ interface IZKGroups {
         uint256 groupId,
         bytes32 indexed name,
         uint256 root,
-        uint256 indexed depth
+        uint256 indexed merkleTreeDepth
     );
 
-    event ProofVerified(uint256 indexed groupId, bytes32 signal);
+    event ProofVerified(
+        uint256 indexed groupId,
+        uint256 externalNullfier,
+        uint256 nullifierHash,
+        bytes32 signal
+    );
 
+    event OnchainGroupAdminUpdated(
+        uint256 indexed groupId,
+        address indexed oldAdmin,
+        address indexed newAdmin
+    );
 
-    function updateOffchainGroup(OffchainGroup[] calldata groups) external;
+    function updateOffchainGroups(OffchainGroup[] calldata groups) external;
 
     function verifyOffchainGroupProof(
             uint256 groupId,
@@ -48,9 +58,9 @@ interface IZKGroups {
 
 
 
-    function creatOnchainGroup(
+    function createOnchainGroup(
         uint256 groupId,
-        uint256 depth,
+        uint256 merkleTreeDepth,
         uint256 zeroValue,
         address admin,
         uint256 merkleTreeRootDuration
