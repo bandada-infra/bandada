@@ -6,7 +6,11 @@ export const SNARK_SCALAR_FIELD = BigInt(
 )
 
 export function createOffchainGroupId(name: string): bigint {
-    return BigInt(utils.solidityKeccak256(["string","bytes32"],["Offchain_",name])) % SNARK_SCALAR_FIELD
+    return (
+        BigInt(
+            utils.solidityKeccak256(["string", "bytes32"], ["Offchain_", name])
+        ) % SNARK_SCALAR_FIELD
+    )
 }
 
 export function createIdentityCommitments(n: number): bigint[] {
