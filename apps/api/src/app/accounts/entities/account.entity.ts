@@ -2,29 +2,36 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    ObjectID,
-    ObjectIdColumn
+    PrimaryGeneratedColumn
 } from "typeorm"
-import { ServiceType } from "../auth/types"
+import { ServiceType } from "../../auth/types"
 
 @Entity("accounts")
-export class AccountModel {
-    @ObjectIdColumn()
-    id: ObjectID
-    @Column()
+export class Account {
+    @PrimaryGeneratedColumn()
+    id: number
+
+    @Column("text")
     service: ServiceType
+
     @Column()
     userId: string
+
     @Column()
     accessToken: string
-    @Column()
-    refreshToken: string
+
+    @Column({ nullable: true })
+    refreshToken?: string
+
     @Column()
     username: string
-    @Column()
-    fullName: string
+
+    @Column({ nullable: true })
+    fullName?: string
+
     @Column()
     avatarURL: string
+
     @CreateDateColumn()
     createdAt: Date
 }

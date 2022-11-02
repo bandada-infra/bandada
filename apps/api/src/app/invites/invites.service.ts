@@ -7,7 +7,7 @@ import {
     UnauthorizedException
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { MongoRepository } from "typeorm"
+import { Repository } from "typeorm"
 import { GroupsService } from "../groups/groups.service"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
@@ -16,7 +16,7 @@ import { Invite } from "./entities/invite.entity"
 export class InvitesService {
     constructor(
         @InjectRepository(Invite)
-        private readonly inviteRepository: MongoRepository<Invite>,
+        private readonly inviteRepository: Repository<Invite>,
         @Inject(forwardRef(() => GroupsService))
         private readonly groupsService: GroupsService
     ) {}

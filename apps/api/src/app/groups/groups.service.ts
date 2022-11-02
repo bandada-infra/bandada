@@ -8,14 +8,14 @@ import {
     NotFoundException,
     UnauthorizedException
 } from "@nestjs/common"
-import { GroupData } from "./entities/group.entity"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Group } from "@semaphore-protocol/group"
+import { Repository, UpdateResult } from "typeorm"
+import { InvitesService } from "../invites/invites.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
-import { Group } from "@semaphore-protocol/group"
+import { GroupData } from "./entities/group.entity"
 import { MerkleProof } from "./types"
-import { InjectRepository } from "@nestjs/typeorm"
-import { MongoRepository, UpdateWriteOpResult } from "typeorm"
-import { InvitesService } from "../invites/invites.service"
 
 @Injectable()
 export class GroupsService {
@@ -23,7 +23,7 @@ export class GroupsService {
 
     constructor(
         @InjectRepository(GroupData)
-        private readonly groupRepository: MongoRepository<GroupData>,
+        private readonly groupRepository: Repository<GroupData>,
         @Inject(forwardRef(() => InvitesService))
         private readonly invitesService: InvitesService
     ) {
@@ -195,7 +195,7 @@ export class GroupsService {
         groupName: string,
         updateData: UpdateGroupDto,
         adminUserId: string
-    ): Promise<UpdateWriteOpResult> {
+    ): Promise<UpdateResult> {
         const groupData = await this.getGroupData(groupName)
 
         if (groupData.admin !== adminUserId) {
@@ -204,9 +204,9 @@ export class GroupsService {
             )
         }
 
-        return await this.groupRepository.updateOne(
-            { _id: groupData._id },
-            { $set: updateData }
+        return await this.groupRepository.update(
+            { id: groupData.id },
+            updateData
         )
     }
 }

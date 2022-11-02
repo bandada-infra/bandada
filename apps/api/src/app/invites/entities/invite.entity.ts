@@ -1,19 +1,18 @@
 /* istanbul ignore file */
-import { ObjectId } from "mongodb"
 import {
     Column,
     Entity,
     Index,
     JoinColumn,
-    ObjectIdColumn,
-    OneToOne
+    OneToOne,
+    PrimaryGeneratedColumn
 } from "typeorm"
 import { GroupData } from "../../groups/entities/group.entity"
 
 @Entity("invites")
 export class Invite {
-    @ObjectIdColumn()
-    _id: ObjectId
+    @PrimaryGeneratedColumn()
+    id: number
 
     @Column()
     @Index({ unique: true })

@@ -1,49 +1,46 @@
 import { Injectable } from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
 import {
     DeleteResult,
     FindOptionsWhere,
-    ObjectID,
     Repository,
     UpdateResult
 } from "typeorm"
-import { InjectRepository } from "@nestjs/typeorm"
 import { CreateAccountDTO } from "./dto/create-account.dto"
-import { AccountModel } from "./account.model"
 import { UpdateAccountDTO } from "./dto/update-account.dto"
+import { Account } from "./entities/account.entity"
 
 @Injectable()
 export class AccountService {
     constructor(
-        @InjectRepository(AccountModel)
-        private readonly accountRepository: Repository<AccountModel>
+        @InjectRepository(Account)
+        private readonly accountRepository: Repository<Account>
     ) {}
 
     public async create(
         payload: CreateAccountDTO
-    ): Promise<AccountModel & CreateAccountDTO> {
+    ): Promise<Account & CreateAccountDTO> {
         return this.accountRepository.save(payload)
     }
 
-    public async findAll(): Promise<AccountModel[]> {
+    public async findAll(): Promise<Account[]> {
         return this.accountRepository.find()
     }
 
     public async findOne(
-        payload:
-            | FindOptionsWhere<AccountModel>
-            | FindOptionsWhere<AccountModel>[]
-    ): Promise<AccountModel> {
+        payload: FindOptionsWhere<Account> | FindOptionsWhere<Account>[]
+    ): Promise<Account> {
         return this.accountRepository.findOneBy(payload)
     }
 
     public async update(
-        id: ObjectID,
+        id: number,
         payload: UpdateAccountDTO
     ): Promise<UpdateResult> {
         return this.accountRepository.update(id, payload)
     }
 
-    public async remove(id: ObjectID): Promise<DeleteResult> {
+    public async remove(id: number): Promise<DeleteResult> {
         return this.accountRepository.delete(id)
     }
 }

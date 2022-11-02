@@ -1,14 +1,13 @@
 import { Test } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { ObjectId } from "mongodb"
-import { MongoRepository } from "typeorm"
+import { Repository } from "typeorm"
 import { GroupData } from "../groups/entities/group.entity"
 import { GroupsService } from "../groups/groups.service"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 
-type MockRepository<T> = Partial<Record<keyof MongoRepository<T>, jest.Mock>>
+type MockRepository<T> = Partial<Record<keyof Repository<T>, jest.Mock>>
 type MockGroupsService = Partial<Record<keyof GroupsService, jest.Mock>>
 
 describe("InvitesService", () => {
@@ -17,7 +16,7 @@ describe("InvitesService", () => {
     let groupsService: MockGroupsService
 
     const group: GroupData = {
-        _id: new ObjectId(),
+        id: 1,
         name: "Test",
         description: "This group is for unit test.",
         treeDepth: 16,
@@ -29,7 +28,7 @@ describe("InvitesService", () => {
     }
 
     const invite: Invite = {
-        _id: new ObjectId(),
+        id: 1,
         group: group,
         code: "MVHRJQWC",
         redeemed: false

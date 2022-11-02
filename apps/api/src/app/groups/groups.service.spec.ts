@@ -6,15 +6,14 @@ import {
 } from "@nestjs/common"
 import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { ObjectId } from "mongodb"
-import { MongoRepository } from "typeorm"
+import { Repository } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupData } from "./entities/group.entity"
 import { GroupsService } from "./groups.service"
 
-type MockRepository<T> = Partial<Record<keyof MongoRepository<T>, jest.Mock>>
+type MockRepository<T> = Partial<Record<keyof Repository<T>, jest.Mock>>
 type MockInvitesService = Partial<Record<keyof InvitesService, jest.Mock>>
 
 describe("GroupsService", () => {
@@ -28,7 +27,7 @@ describe("GroupsService", () => {
         treeDepth: 16
     }
     const TestGroup: GroupData = {
-        _id: new ObjectId(),
+        id: 1,
         index: 0,
         admin: "testAdmin",
         members: [],
@@ -37,7 +36,7 @@ describe("GroupsService", () => {
         ...createGroupArgs
     }
     const TestGroupAddedMember: GroupData = {
-        _id: new ObjectId(),
+        id: 1,
         index: 0,
         admin: "testAdmin",
         members: ["123123"],
@@ -65,7 +64,7 @@ describe("GroupsService", () => {
                         create: jest.fn(),
                         save: jest.fn(),
                         count: jest.fn(),
-                        updateOne: jest.fn()
+                        update: jest.fn()
                     }
                 }
             ]
@@ -205,7 +204,7 @@ describe("GroupsService", () => {
 
     describe("# generateMerkleProof", () => {
         const TestGroupAddedMember2: GroupData = {
-            _id: new ObjectId(),
+            id: 1,
             index: 0,
             admin: "test",
             members: ["111111"],
@@ -279,7 +278,7 @@ describe("GroupsService", () => {
                 "testAdmin"
             )
 
-            expect(groupRepository.updateOne).toBeCalledTimes(1)
+            expect(groupRepository.update).toBeCalledTimes(1)
         })
     })
 })
