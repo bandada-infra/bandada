@@ -11,10 +11,10 @@ export class InvitesController {
     @UseGuards(AuthGuard("jwt"))
     async createInvite(
         @Req() req: Request,
-        @Body() body: CreateInviteDto
+        @Body() dto: CreateInviteDto
     ): Promise<string> {
         const { code } = await this.invitesService.createInvite(
-            body,
+            dto,
             req["user"].userId
         )
 

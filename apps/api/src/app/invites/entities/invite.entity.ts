@@ -6,7 +6,7 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn
 } from "typeorm"
-import { GroupData } from "../../groups/entities/group.entity"
+import { Group } from "../../groups/entities/group.entity"
 
 @Entity("invites")
 export class Invite {
@@ -20,6 +20,6 @@ export class Invite {
     @Column({ default: false })
     redeemed?: boolean
 
-    @ManyToOne(() => GroupData)
-    group: GroupData
+    @ManyToOne(() => Group)
+    group: Group
 }

@@ -3,16 +3,15 @@ import {
     Controller,
     Get,
     Param,
-    Patch,
     Post,
+    Put,
     Req,
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
-import { UpdateResult } from "typeorm"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
-import { GroupData } from "./entities/group.entity"
+import { Group } from "./entities/group.entity"
 import { GroupsService } from "./groups.service"
 import { MerkleProof } from "./types"
 
@@ -21,8 +20,8 @@ export class GroupsController {
     constructor(private readonly groupsService: GroupsService) {}
 
     @Get()
-    getAllGroups(): Promise<GroupData[]> {
-        return this.groupsService.getAllGroupsData()
+    getAllGroups(): Promise<Group[]> {
+        return this.groupsService.getAllGroups()
     }
 
     @Post()
@@ -30,19 +29,33 @@ export class GroupsController {
     createGroup(
         @Req() req: Request,
         @Body() groupData: CreateGroupDto
-    ): Promise<GroupData> {
+    ): Promise<Group> {
         return this.groupsService.createGroup(groupData, req["user"].userId)
+    }
+
+    @Put(":name")
+    @UseGuards(AuthGuard("jwt"))
+    updateGroup(
+        @Req() req: Request,
+        @Param("name") groupName: string,
+        @Body() updateData: UpdateGroupDto
+    ): Promise<Group> {
+        return this.groupsService.updateGroup(
+            updateData,
+            groupName,
+            req["user"].userId
+        )
     }
 
     @Get("admin-groups")
     @UseGuards(AuthGuard("jwt"))
-    getGroupsByAdmin(@Req() req: Request): Promise<GroupData[]> {
+    getGroupsByAdmin(@Req() req: Request): Promise<Group[]> {
         return this.groupsService.getGroupsByAdmin(req["user"].userId)
     }
 
     @Get(":name")
-    getGroup(@Param("name") groupName: string): Promise<GroupData> {
-        return this.groupsService.getGroupData(groupName)
+    getGroup(@Param("name") groupName: string): Promise<Group> {
+        return this.groupsService.getGroup(groupName)
     }
 
     @Get(":name/:member")
@@ -71,19 +84,5 @@ export class GroupsController {
             return this.toString()
         }
         return this.groupsService.generateMerkleProof(groupName, idCommitment)
-    }
-
-    @Patch(":name")
-    @UseGuards(AuthGuard("jwt"))
-    updateGroup(
-        @Req() req: Request,
-        @Param("name") groupName: string,
-        @Body() updateData: UpdateGroupDto
-    ): Promise<UpdateResult> {
-        return this.groupsService.updateGroup(
-            groupName,
-            updateData,
-            req["user"].userId
-        )
     }
 }

@@ -3,7 +3,6 @@ import {
     forwardRef,
     Inject,
     Injectable,
-    InternalServerErrorException,
     UnauthorizedException
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -24,17 +23,17 @@ export class InvitesService {
     /**
      * Creates a new group invite with a unique code. Group invites can only be
      * created by group admins.
-     * @param dto Data transfer object used to create new invites.
-     * @param adminUserId Group admin.
+     * @param dto External parameters used to create a new Invite.
+     * @param groupAdmin Group admin.
      * @returns The created invite.
      */
     async createInvite(
         dto: CreateInviteDto,
-        adminUserId: string
+        groupAdmin: string
     ): Promise<Invite> {
-        const group = await this.groupsService.getGroupData(dto.groupName)
+        const group = await this.groupsService.getGroup(dto.groupName)
 
-        if (group.admin !== adminUserId) {
+        if (group.admin !== groupAdmin) {
             throw new UnauthorizedException(
                 `No permissions: You are not the admin of this group: {'${dto.groupName}'}.`
             )
@@ -45,17 +44,14 @@ export class InvitesService {
             group
         })
 
-        try {
-            return this.inviteRepository.save(invite)
-        } catch (e) {
-            throw new InternalServerErrorException()
-        }
+        return this.inviteRepository.save(invite)
     }
 
     /**
      * Redeems an invite by consuming its code. Every invite
      * can be used only once.
      * @param inviteCode Invite code to be redeemed.
+     * @returns The updated invite.
      */
     async redeemInvite(inviteCode: string): Promise<Invite> {
         const invite = await this.inviteRepository.findOneBy({
@@ -70,11 +66,7 @@ export class InvitesService {
 
         invite.redeemed = true
 
-        try {
-            return this.inviteRepository.save(invite)
-        } catch (e) {
-            throw new InternalServerErrorException()
-        }
+        return this.inviteRepository.save(invite)
     }
 
     /**
