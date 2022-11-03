@@ -42,8 +42,7 @@ export class InvitesService {
 
         const invite = this.inviteRepository.create({
             code: this.generateCode(),
-            group,
-            redeemed: false
+            group
         })
 
         try {

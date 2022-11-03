@@ -3,8 +3,7 @@ import {
     Column,
     Entity,
     Index,
-    JoinColumn,
-    OneToOne,
+    ManyToOne,
     PrimaryGeneratedColumn
 } from "typeorm"
 import { GroupData } from "../../groups/entities/group.entity"
@@ -19,9 +18,8 @@ export class Invite {
     code: string
 
     @Column({ default: false })
-    redeemed: boolean
+    redeemed?: boolean
 
-    @OneToOne(() => GroupData)
-    @JoinColumn()
+    @ManyToOne(() => GroupData)
     group: GroupData
 }
