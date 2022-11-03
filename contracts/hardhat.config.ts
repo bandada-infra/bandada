@@ -6,7 +6,6 @@ import { NetworksUserConfig } from "hardhat/types"
 import { resolve } from "path"
 import { config } from "./package.json"
 import "./tasks/deploy-zk-groups"
-import "./tasks/accounts"
 
 dotenvConfig({ path: resolve(__dirname, "../.env") })
 

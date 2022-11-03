@@ -13,15 +13,9 @@ task("deploy:zk-groups", "Deploy a zk-groups contract")
         [],
         types.json
     )
-    .addOptionalParam<string>(
-        "semaphore",
-        "Semaphore contract address",
-        undefined,
-        types.string
-    )
     .setAction(
         async (
-            { logs, verifiers, semaphore },
+            { logs, verifiers },
             { ethers, hardhatArguments }
         ): Promise<Contract> => {
             let deployedContracts: any = getDeployedContracts(
@@ -32,13 +26,9 @@ task("deploy:zk-groups", "Deploy a zk-groups contract")
                 verifiers = verifiersToSolidityArgument(deployedContracts)
             }
 
-            if (!semaphore) {
-                semaphore = deployedContracts?.Semaphore
-            }
-
             const ContractFactory = await ethers.getContractFactory("ZKGroups")
 
-            const contract = await ContractFactory.deploy(semaphore, verifiers)
+            const contract = await ContractFactory.deploy(verifiers)
 
             await contract.deployed()
 
