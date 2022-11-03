@@ -23,7 +23,7 @@ describe("InvitesService", () => {
         index: 0,
         admin: "testAdmin",
         members: [],
-        createdAt: "2022-08-14T11:11:11.111Z",
+        createdAt: new Date(),
         tag: 0
     }
 

@@ -31,7 +31,7 @@ describe("GroupsService", () => {
         index: 0,
         admin: "testAdmin",
         members: [],
-        createdAt: "2022-08-14T11:11:11.111Z",
+        createdAt: new Date(),
         tag: 0,
         ...createGroupArgs
     }
@@ -40,7 +40,7 @@ describe("GroupsService", () => {
         index: 0,
         admin: "testAdmin",
         members: ["123123"],
-        createdAt: "2022-08-14T11:11:11.111Z",
+        createdAt: new Date(),
         tag: 0,
         ...createGroupArgs
     }
@@ -208,7 +208,7 @@ describe("GroupsService", () => {
             index: 0,
             admin: "test",
             members: ["111111"],
-            createdAt: "2022-08-14T11:11:11.111Z",
+            createdAt: new Date(),
             tag: 0,
             ...createGroupArgs
         }
