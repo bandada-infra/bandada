@@ -92,7 +92,7 @@ export class GroupsService {
 
         if (group.admin !== admin) {
             throw new UnauthorizedException(
-                `No permissions: You are not an admin of this group: {'${groupName}'}.`
+                `You are not the admin of the group '${groupName}'`
             )
         }
 
@@ -121,7 +121,7 @@ export class GroupsService {
     ): Promise<Group> {
         if (this.isGroupMember(groupName, member)) {
             throw new BadRequestException(
-                `The member: {'${member}'} already exists in the group: {'${groupName}'}.`
+                `Member '${member}' already exists in the group '${groupName}'`
             )
         }
 
@@ -138,7 +138,7 @@ export class GroupsService {
         cachedGroup.addMember(member)
 
         Logger.log(
-            `GroupsService: member '${member}' has been added to the '${group.name}' group`
+            `GroupsService: member '${member}' has been added to the group '${group.name}'`
         )
 
         return group
@@ -172,9 +172,7 @@ export class GroupsService {
         })
 
         if (!group) {
-            throw new NotFoundException(
-                `The group: {'${groupName}'} not found.`
-            )
+            throw new NotFoundException(`Group '${groupName}' does not exist`)
         }
 
         return group
@@ -201,7 +199,7 @@ export class GroupsService {
     generateMerkleProof(groupName: string, member: string): MerkleProof {
         if (!this.isGroupMember(groupName, member)) {
             throw new BadRequestException(
-                `The member: {'${member}'} does not exist in the group: {'${groupName}'}.`
+                `Member '${member}' does not exist in the group '${groupName}'`
             )
         }
 

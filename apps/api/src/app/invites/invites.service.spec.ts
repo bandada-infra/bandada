@@ -60,7 +60,7 @@ describe("InvitesService", () => {
                 "wrong-admin"
             )
 
-            await expect(fun).rejects.toThrow("No permissions")
+            await expect(fun).rejects.toThrow("You are not the admin")
         })
     })
 
