@@ -6,6 +6,7 @@ import {
     IsOptional,
     MinLength
 } from "class-validator"
+
 export class UpdateGroupDto {
     @IsOptional()
     @IsString()

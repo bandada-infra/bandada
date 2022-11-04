@@ -28,14 +28,14 @@ export class InvitesService {
      * @returns The created invite.
      */
     async createInvite(
-        dto: CreateInviteDto,
+        { groupName }: CreateInviteDto,
         groupAdmin: string
     ): Promise<Invite> {
-        const group = await this.groupsService.getGroup(dto.groupName)
+        const group = await this.groupsService.getGroup(groupName)
 
         if (group.admin !== groupAdmin) {
             throw new UnauthorizedException(
-                `No permissions: You are not the admin of this group: {'${dto.groupName}'}.`
+                `No permissions: You are not the admin of this group: {'${groupName}'}.`
             )
         }
 
