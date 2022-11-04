@@ -7,7 +7,7 @@ import {
 } from "typeorm"
 
 @Entity("groups")
-export class GroupData {
+export class Group {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -28,7 +28,7 @@ export class GroupData {
     @Column()
     treeDepth: number
 
-    @Column("text", { array: true })
+    @Column("simple-array")
     members: string[]
 
     @CreateDateColumn()
