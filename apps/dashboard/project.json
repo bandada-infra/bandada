@@ -21,7 +21,7 @@
                 ],
                 "styles": [],
                 "scripts": [],
-                "webpackConfig": "@nrwl/react/plugins/webpack"
+                "webpackConfig": "webpackConfig.js"
             },
             "configurations": {
                 "development": {
