@@ -8,13 +8,13 @@ import {
     Req,
     UseGuards
 } from "@nestjs/common"
-import { GroupsService } from "./groups.service"
-import { GroupData } from "./entities/group.entity"
-import { UpdateGroupDto } from "./dto/update-group.dto"
-import { CreateGroupDto } from "./dto/create-group.dto"
-import { MerkleProof } from "./types"
-import { UpdateWriteOpResult } from "typeorm"
 import { AuthGuard } from "@nestjs/passport"
+import { UpdateResult } from "typeorm"
+import { CreateGroupDto } from "./dto/create-group.dto"
+import { UpdateGroupDto } from "./dto/update-group.dto"
+import { GroupData } from "./entities/group.entity"
+import { GroupsService } from "./groups.service"
+import { MerkleProof } from "./types"
 
 @Controller("groups")
 export class GroupsController {
@@ -79,7 +79,7 @@ export class GroupsController {
         @Req() req: Request,
         @Param("name") groupName: string,
         @Body() updateData: UpdateGroupDto
-    ): Promise<UpdateWriteOpResult> {
+    ): Promise<UpdateResult> {
         return this.groupsService.updateGroup(
             groupName,
             updateData,

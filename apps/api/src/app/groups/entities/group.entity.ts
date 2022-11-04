@@ -1,16 +1,15 @@
-import { ObjectId } from "mongodb"
 import {
     Column,
     CreateDateColumn,
     Entity,
     Index,
-    ObjectIdColumn
+    PrimaryGeneratedColumn
 } from "typeorm"
 
 @Entity("groups")
 export class GroupData {
-    @ObjectIdColumn()
-    _id: ObjectId
+    @PrimaryGeneratedColumn()
+    id: number
 
     @Column()
     @Index({ unique: true })
@@ -29,11 +28,11 @@ export class GroupData {
     @Column()
     treeDepth: number
 
-    @Column({ default: [] })
+    @Column("text", { array: true })
     members: string[]
 
-    @CreateDateColumn({ type: "timestamp" })
-    createdAt: string
+    @CreateDateColumn()
+    createdAt: Date
 
     @Column({ default: 0 })
     tag: number
