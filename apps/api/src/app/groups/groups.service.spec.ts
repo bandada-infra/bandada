@@ -47,7 +47,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not create two groups with the same name", async () => {
-            const result = groupsService.createGroup(
+            const fun = groupsService.createGroup(
                 {
                     name: "Group1",
                     description: "This is a description",
@@ -56,7 +56,7 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await expect(result).rejects.toThrow("UNIQUE constraint failed")
+            await expect(fun).rejects.toThrow("UNIQUE constraint failed")
         })
     })
 
@@ -74,7 +74,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not update a group if the admin is the wrong one", async () => {
-            const result = groupsService.updateGroup(
+            const fun = groupsService.updateGroup(
                 {
                     description: "This is a new description"
                 },
@@ -82,7 +82,7 @@ describe("GroupsService", () => {
                 "wrong-admin"
             )
 
-            await expect(result).rejects.toThrow("No permissions")
+            await expect(fun).rejects.toThrow("No permissions")
         })
     })
 
@@ -112,9 +112,9 @@ describe("GroupsService", () => {
         })
 
         it("Should throw 404 error about not exist group", async () => {
-            const result = groupsService.getGroup("Group2")
+            const fun = groupsService.getGroup("Group2")
 
-            await expect(result).rejects.toThrow("not found")
+            await expect(fun).rejects.toThrow("not found")
         })
     })
 
@@ -130,42 +130,42 @@ describe("GroupsService", () => {
 
         it("Should add a member to an existing group", async () => {
             const { members } = await groupsService.addMember(
+                { inviteCode: invite.code },
                 "Group1",
-                "123123",
-                invite.code
+                "123123"
             )
 
             expect(members).toHaveLength(1)
         })
 
         it("Should not add any member if they already exist", async () => {
-            const result = groupsService.addMember(
+            const fun = groupsService.addMember(
+                { inviteCode: invite.code },
                 "Group1",
-                "123123",
-                invite.code
+                "123123"
             )
 
-            await expect(result).rejects.toThrow("already exists")
+            await expect(fun).rejects.toThrow("already exists")
         })
     })
 
     describe("# isGroupMember", () => {
-        it("Should return false if a member does not exist", async () => {
-            const result = await groupsService.isGroupMember("Group1", "123122")
+        it("Should return false if a member does not exist", () => {
+            const result = groupsService.isGroupMember("Group1", "123122")
 
             expect(result).toBeFalsy()
         })
 
-        it("Should return true if a member exists", async () => {
-            const result = await groupsService.isGroupMember("Group1", "123123")
+        it("Should return true if a member exists", () => {
+            const result = groupsService.isGroupMember("Group1", "123123")
 
             expect(result).toBeTruthy()
         })
     })
 
     describe("# generateMerkleProof", () => {
-        it("Should return a Merkle proof", async () => {
-            const merkleproof = await groupsService.generateMerkleProof(
+        it("Should return a Merkle proof", () => {
+            const merkleproof = groupsService.generateMerkleProof(
                 "Group1",
                 "123123"
             )
@@ -174,9 +174,10 @@ describe("GroupsService", () => {
         })
 
         it("Should not return any Merkle proof if the member does not exist", async () => {
-            const result = groupsService.generateMerkleProof("Group1", "123122")
+            const fun = () =>
+                groupsService.generateMerkleProof("Group1", "123122")
 
-            await expect(result).rejects.toThrow("does not exist")
+            expect(fun).toThrow("does not exist")
         })
     })
 })

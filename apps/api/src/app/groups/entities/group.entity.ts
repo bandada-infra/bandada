@@ -13,10 +13,6 @@ export class Group {
 
     @Column()
     @Index({ unique: true })
-    index: number
-
-    @Column()
-    @Index({ unique: true })
     name: string
 
     @Column()

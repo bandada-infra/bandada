@@ -55,12 +55,12 @@ describe("InvitesService", () => {
         })
 
         it("Should not create an invite if the admin is the wrong one", async () => {
-            const result = invitesService.createInvite(
+            const fun = invitesService.createInvite(
                 { groupName: "Group1" },
                 "wrong-admin"
             )
 
-            await expect(result).rejects.toThrow("No permissions")
+            await expect(fun).rejects.toThrow("No permissions")
         })
     })
 
@@ -81,9 +81,9 @@ describe("InvitesService", () => {
         })
 
         it("Should not redeem an invite if it has already been redeemed", async () => {
-            const result = invitesService.redeemInvite(invite.code)
+            const fun = invitesService.redeemInvite(invite.code)
 
-            await expect(result).rejects.toThrow("has already been redeemed")
+            await expect(fun).rejects.toThrow("has already been redeemed")
         })
     })
 
