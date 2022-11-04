@@ -82,7 +82,7 @@ describe("GroupsService", () => {
                 "wrong-admin"
             )
 
-            await expect(fun).rejects.toThrow("No permissions")
+            await expect(fun).rejects.toThrow("You are not the admin")
         })
     })
 
@@ -114,7 +114,7 @@ describe("GroupsService", () => {
         it("Should throw 404 error about not exist group", async () => {
             const fun = groupsService.getGroup("Group2")
 
-            await expect(fun).rejects.toThrow("not found")
+            await expect(fun).rejects.toThrow("does not exist")
         })
     })
 

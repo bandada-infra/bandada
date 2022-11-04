@@ -3,6 +3,7 @@ import {
     forwardRef,
     Inject,
     Injectable,
+    Logger,
     UnauthorizedException
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -35,7 +36,7 @@ export class InvitesService {
 
         if (group.admin !== groupAdmin) {
             throw new UnauthorizedException(
-                `No permissions: You are not the admin of this group: {'${groupName}'}.`
+                `You are not the admin of the group '${groupName}'`
             )
         }
 
@@ -44,7 +45,11 @@ export class InvitesService {
             group
         })
 
-        return this.inviteRepository.save(invite)
+        await this.inviteRepository.save(invite)
+
+        Logger.log(`InvitesService: invite '${invite.code}' has been created`)
+
+        return invite
     }
 
     /**
