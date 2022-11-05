@@ -1,150 +1,89 @@
 import { Test } from "@nestjs/testing"
-import { getRepositoryToken } from "@nestjs/typeorm"
-import { ObjectId } from "mongodb"
-import { MongoRepository } from "typeorm"
-import { GroupData } from "../groups/entities/group.entity"
+import { TypeOrmModule } from "@nestjs/typeorm"
+import { Group } from "../groups/entities/group.entity"
 import { GroupsService } from "../groups/groups.service"
-import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 
-type MockRepository<T> = Partial<Record<keyof MongoRepository<T>, jest.Mock>>
-type MockGroupsService = Partial<Record<keyof GroupsService, jest.Mock>>
-
 describe("InvitesService", () => {
     let invitesService: InvitesService
-    let inviteRepository: MockRepository<Invite>
-    let groupsService: MockGroupsService
+    let groupsService: GroupsService
 
-    const group: GroupData = {
-        _id: new ObjectId(),
-        name: "Test",
-        description: "This group is for unit test.",
-        treeDepth: 16,
-        index: 0,
-        admin: "testAdmin",
-        members: [],
-        createdAt: "2022-08-14T11:11:11.111Z",
-        tag: 0
-    }
-
-    const invite: Invite = {
-        _id: new ObjectId(),
-        group: group,
-        groupName: "testGroup",
-        code: "MVHRJQWC",
-        redeemed: false
-    }
-
-    beforeEach(async () => {
+    beforeAll(async () => {
         const module = await Test.createTestingModule({
-            providers: [
-                InvitesService,
-                {
-                    provide: GroupsService,
-                    useValue: {
-                        getGroupData: jest.fn()
-                    }
-                },
-                {
-                    provide: getRepositoryToken(Invite),
-                    useValue: {
-                        create: jest.fn(),
-                        save: jest.fn(),
-                        findOneBy: jest.fn()
-                    }
-                }
-            ]
+            imports: [
+                TypeOrmModule.forRootAsync({
+                    useFactory: () => ({
+                        type: "sqlite",
+                        database: ":memory:",
+                        dropSchema: true,
+                        entities: [Group, Invite],
+                        synchronize: true
+                    })
+                }),
+                TypeOrmModule.forFeature([Group]),
+                TypeOrmModule.forFeature([Invite])
+            ],
+            providers: [GroupsService, InvitesService]
         }).compile()
 
-        invitesService = module.get(InvitesService)
-        inviteRepository = module.get(getRepositoryToken(Invite))
-        groupsService = module.get(GroupsService)
+        invitesService = await module.resolve(InvitesService)
+        groupsService = await module.resolve(GroupsService)
     })
 
     describe("# createInvite", () => {
-        const createInviteDto: CreateInviteDto = {
-            groupName: "Test"
-        }
+        beforeAll(async () => {
+            await groupsService.createGroup(
+                {
+                    name: "Group1",
+                    description: "This is a description",
+                    treeDepth: 16
+                },
+                "admin"
+            )
+        })
 
         it("Should create an invite", async () => {
-            inviteRepository.create.mockResolvedValue(invite)
-            inviteRepository.save.mockResolvedValue(invite)
-            groupsService.getGroupData.mockResolvedValue(group)
-
-            const result = await invitesService.createInvite(
-                createInviteDto,
-                "testAdmin"
+            const { group, code, redeemed } = await invitesService.createInvite(
+                { groupName: "Group1" },
+                "admin"
             )
 
-            expect(result).toMatchObject(invite)
+            expect(redeemed).toBeFalsy()
+            expect(code).toHaveLength(8)
+            expect(group.treeDepth).toBe(16)
         })
 
         it("Should not create an invite if the admin is the wrong one", async () => {
-            inviteRepository.create.mockResolvedValue(invite)
-            inviteRepository.save.mockResolvedValue(invite)
-            groupsService.getGroupData.mockResolvedValue(group)
-
-            const result = invitesService.createInvite(
-                createInviteDto,
-                "testAdmin2"
+            const fun = invitesService.createInvite(
+                { groupName: "Group1" },
+                "wrong-admin"
             )
 
-            await expect(result).rejects.toThrow("No permissions")
-        })
-
-        it("Should not create an invite if an internal error is thrown", async () => {
-            inviteRepository.create.mockResolvedValue(invite)
-            inviteRepository.save.mockImplementation(() => {
-                throw new Error("DB error")
-            })
-            groupsService.getGroupData.mockResolvedValue(group)
-
-            const result = invitesService.createInvite(
-                createInviteDto,
-                "testAdmin"
-            )
-
-            await expect(result).rejects.toThrow("Internal Server Error")
+            await expect(fun).rejects.toThrow("You are not the admin")
         })
     })
 
     describe("# redeemInvite", () => {
+        let invite: Invite
+
+        beforeAll(async () => {
+            invite = await invitesService.createInvite(
+                { groupName: "Group1" },
+                "admin"
+            )
+        })
+
         it("Should redeem an invite", async () => {
-            inviteRepository.findOneBy.mockResolvedValue({ ...invite })
-            inviteRepository.save.mockResolvedValue({
-                ...invite,
-                redeemed: true
-            })
+            const { redeemed } = await invitesService.redeemInvite(invite.code)
 
-            const result = await invitesService.redeemInvite("MVHRJQWC")
-
-            expect(result).toMatchObject({
-                ...invite,
-                redeemed: true
-            })
+            expect(redeemed).toBeTruthy()
         })
 
         it("Should not redeem an invite if it has already been redeemed", async () => {
-            inviteRepository.findOneBy.mockResolvedValue({
-                ...invite,
-                redeemed: true
-            })
+            const fun = invitesService.redeemInvite(invite.code)
 
-            const result = invitesService.redeemInvite("MVHRJQWC")
-
-            await expect(result).rejects.toThrow("has already been redeemed")
-        })
-
-        it("Should not redeem an invite if an internal error is thrown", async () => {
-            inviteRepository.findOneBy.mockResolvedValue(invite)
-            inviteRepository.save.mockImplementation(() => {
-                throw new Error("DB error")
-            })
-
-            const result = invitesService.redeemInvite("MVHRJQWC")
-
-            await expect(result).rejects.toThrow("Internal Server Error")
+            await expect(fun).rejects.toThrow("has already been redeemed")
         })
     })
 

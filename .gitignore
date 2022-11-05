@@ -39,3 +39,13 @@ testem.log
 Thumbs.db
 
 .env
+
+#Hardhat files
+build
+cache
+artifacts
+
+coverage
+coverage.json
+typechain
+typechain-types

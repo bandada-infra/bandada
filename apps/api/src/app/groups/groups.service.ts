@@ -3,210 +3,209 @@ import {
     forwardRef,
     Inject,
     Injectable,
-    InternalServerErrorException,
     Logger,
     NotFoundException,
     UnauthorizedException
 } from "@nestjs/common"
-import { GroupData } from "./entities/group.entity"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Group as CachedGroup } from "@semaphore-protocol/group"
+import { Repository } from "typeorm"
+import { InvitesService } from "../invites/invites.service"
+import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
-import { Group } from "@semaphore-protocol/group"
+import { Group } from "./entities/group.entity"
 import { MerkleProof } from "./types"
-import { InjectRepository } from "@nestjs/typeorm"
-import { MongoRepository, UpdateWriteOpResult } from "typeorm"
-import { InvitesService } from "../invites/invites.service"
 
 @Injectable()
 export class GroupsService {
-    private groups: Group[] = []
+    private cachedGroups: Map<string, CachedGroup>
 
     constructor(
-        @InjectRepository(GroupData)
-        private readonly groupRepository: MongoRepository<GroupData>,
+        @InjectRepository(Group)
+        private readonly groupRepository: Repository<Group>,
         @Inject(forwardRef(() => InvitesService))
         private readonly invitesService: InvitesService
     ) {
         ;(async () => {
-            const groupsData = await this.groupRepository.find({
-                order: { index: "ASC" }
-            })
-            this.groups = []
+            this.cachedGroups = new Map()
+            const groups = await this.getAllGroups()
 
-            if (groupsData) {
-                for (const groupData of groupsData) {
-                    const group = new Group(groupData.treeDepth)
-                    if (groupData.members.length > 0) {
-                        group.addMembers(groupData.members)
-                    }
-                    this.groups.push(group)
-                }
+            /* istanbul ignore next */
+            for (const group of groups) {
+                const cachedGroup = new CachedGroup(group.treeDepth)
+
+                cachedGroup.addMembers(group.members)
+
+                this.cachedGroups.set(group.name, cachedGroup)
             }
 
             Logger.log(
-                `✔️ GroupModule GroupData in DataBase --> @semaphore-protocol/group object sync clear`
+                `GroupsService: ${groups.length} groups have been cached`
             )
         })()
     }
 
     /**
-     * Show all groups data in database.
-     * @returns List of existing groups.
+     * Creates a new group.
+     * @param dto External parameters used to create a new group.
+     * @param admin Admin id from jwt auth.
+     * @returns Created group.
      */
-    async getAllGroupsData(): Promise<GroupData[]> {
-        return await this.groupRepository.find()
-    }
-
-    /**
-     * Show admin's groups data in database.
-     * @param adminUserId account userId from jwt auth.
-     * @returns List of admin's existing groups.
-     */
-    async getGroupsByAdmin(adminUserId: string): Promise<GroupData[]> {
-        return await this.groupRepository.findBy({ admin: adminUserId })
-    }
-
-    /**
-     * Show one specific group data in database.
-     * @param groupName Group name wants to find.
-     * @returns One group data.
-     */
-    async getGroupData(groupName: string): Promise<GroupData> {
-        const groupData = await this.groupRepository.findOneBy({
-            name: groupName
+    async createGroup(
+        { name, description, treeDepth, tag }: CreateGroupDto,
+        admin: string
+    ): Promise<Group> {
+        const group = this.groupRepository.create({
+            name,
+            description,
+            treeDepth,
+            tag,
+            admin: admin,
+            members: []
         })
 
-        if (!groupData) {
-            throw new NotFoundException(
-                `The group: {'${groupName}'} not found.`
+        await this.groupRepository.save(group)
+
+        const cachedGroup = new CachedGroup(treeDepth)
+
+        this.cachedGroups.set(name, cachedGroup)
+
+        Logger.log(`GroupsService: group '${name}' has been created`)
+
+        return group
+    }
+
+    /**
+     * Updates some parameters of the group.
+     * @param dto External parameters used to update a group.
+     * @param groupName Group name.
+     * @param admin Admin id from jwt auth.
+     * @returns Updated group.
+     */
+    async updateGroup(
+        { description, treeDepth, tag }: UpdateGroupDto,
+        groupName: string,
+        admin: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupName)
+
+        if (group.admin !== admin) {
+            throw new UnauthorizedException(
+                `You are not the admin of the group '${groupName}'`
             )
         }
 
-        return groupData
+        group.description = description
+        group.treeDepth = treeDepth
+        group.tag = tag
+
+        await this.groupRepository.save(group)
+
+        Logger.log(`GroupsService: group '${group.name}' has been updated`)
+
+        return group
     }
 
     /**
-     * Create group in database and `Group`(with @semaphore-protocol/group).
-     * @param groupData Information for creating group.
-     * @param adminUserId account userId from jwt auth.
-     * @returns Created group data.
-     */
-    async createGroup(
-        groupData: CreateGroupDto,
-        adminUserId: string
-    ): Promise<GroupData> {
-        try {
-            this.groups.push(new Group(groupData.treeDepth))
-
-            const newGroupData = this.groupRepository.create({
-                index: +(await this.groupRepository.count()),
-                admin: adminUserId,
-                members: [],
-                tag: 0,
-                ...groupData
-            })
-
-            return await this.groupRepository.save(newGroupData)
-        } catch (e) {
-            this.groups.pop()
-
-            throw new InternalServerErrorException(e.writeErrors)
-        }
-    }
-
-    /**
-     * Check if a member belongs to a group.
-     * @param groupName Group name wants to find.
-     * @param idCommitment Member's identity commitment.
-     * @returns True or false.
-     */
-    async isGroupMember(
-        groupName: string,
-        idCommitment: string
-    ): Promise<boolean> {
-        const groupData = await this.getGroupData(groupName)
-
-        return groupData.members.includes(idCommitment) ? true : false
-    }
-
-    /**
-     * If a member does not exist in the group, member is added to the database and `Group`(with @semaphore-protocol/group).
-     * @param groupName Group name wants to find.
-     * @param idCommitment Member's identity commitment.
-     * @param inviteCode Invite code needed to add a new member.
+     * If a member does not exist in the group, they is added.
+     * @param dto Parameters used to add a group member.
+     * @param groupName Group name.
+     * @param member Member's identity commitment.
      * @returns Group data with added member.
      */
     async addMember(
+        { inviteCode }: AddMemberDto,
         groupName: string,
-        idCommitment: string,
-        inviteCode: string
-    ): Promise<GroupData> {
-        if (await this.isGroupMember(groupName, idCommitment)) {
+        member: string
+    ): Promise<Group> {
+        if (this.isGroupMember(groupName, member)) {
             throw new BadRequestException(
-                `The member: {'${idCommitment}'} already exists in the group: {'${groupName}'}.`
+                `Member '${member}' already exists in the group '${groupName}'`
             )
         }
 
         this.invitesService.redeemInvite(inviteCode)
 
-        const groupData = await this.getGroupData(groupName)
+        const group = await this.getGroup(groupName)
 
-        groupData.members.push(idCommitment)
+        group.members.push(member)
 
-        this.groups[groupData.index].addMember(idCommitment)
+        await this.groupRepository.save(group)
 
-        return this.groupRepository.save(groupData)
+        const cachedGroup = this.cachedGroups.get(groupName)
+
+        cachedGroup.addMember(member)
+
+        Logger.log(
+            `GroupsService: member '${member}' has been added to the group '${group.name}'`
+        )
+
+        return group
     }
 
     /**
-     * Generate a member's merkle proof in `Group`(with @semaphore-protocol/group)
-     * @param groupName Group name wants to find.
-     * @param idCommitment Member's identity commitment.
-     * @returns Member's merkle proof.
+     * Returns a list of groups.
+     * @returns List of existing groups.
      */
-    async generateMerkleProof(
-        groupName: string,
-        idCommitment: string
-    ): Promise<MerkleProof> {
-        if (await this.isGroupMember(groupName, idCommitment)) {
-            const groupIndex = (await this.getGroupData(groupName)).index
-            const memberIndex = this.groups[groupIndex].indexOf(
-                BigInt(idCommitment)
-            )
-
-            return this.groups[groupIndex].generateProofOfMembership(
-                memberIndex
-            )
-        } else {
-            throw new BadRequestException(
-                `The member: {'${idCommitment}'} does not exist in the group: {'${groupName}'}.`
-            )
-        }
+    async getAllGroups(): Promise<Group[]> {
+        return await this.groupRepository.find()
     }
 
     /**
-     * Can update the name and description of the Group.
-     * @param groupName Group name wants to find.
-     * @param updateData Information for updating group.
-     * @param adminUserId account userId from jwt auth.
+     * Returns a list of groups of a specific admin.
+     * @param admin Admin id from jwt auth.
+     * @returns List of admin's existing groups.
+     */
+    async getGroupsByAdmin(admin: string): Promise<Group[]> {
+        return await this.groupRepository.findBy({ admin })
+    }
+
+    /**
+     * Returns a specific group.
+     * @param groupName Group name.
+     * @returns Specific group.
+     */
+    async getGroup(groupName: string): Promise<Group> {
+        const group = await this.groupRepository.findOneBy({
+            name: groupName
+        })
+
+        if (!group) {
+            throw new NotFoundException(`Group '${groupName}' does not exist`)
+        }
+
+        return group
+    }
+
+    /**
+     * Checks if a member belongs to a group.
+     * @param groupName Group name.
+     * @param member Member's identity commitment.
      * @returns True or false.
      */
-    async updateGroup(
-        groupName: string,
-        updateData: UpdateGroupDto,
-        adminUserId: string
-    ): Promise<UpdateWriteOpResult> {
-        const groupData = await this.getGroupData(groupName)
+    isGroupMember(groupName: string, member: string): boolean {
+        const cachedGroup = this.cachedGroups.get(groupName)
 
-        if (groupData.admin !== adminUserId) {
-            throw new UnauthorizedException(
-                `No permissions: You are not an admin of this group: {'${groupName}'}.`
+        return cachedGroup.indexOf(BigInt(member)) !== -1
+    }
+
+    /**
+     * Generates a proof of membership.
+     * @param groupName Group name.
+     * @param member Member's identity commitment.
+     * @returns Merkle proof.
+     */
+    generateMerkleProof(groupName: string, member: string): MerkleProof {
+        if (!this.isGroupMember(groupName, member)) {
+            throw new BadRequestException(
+                `Member '${member}' does not exist in the group '${groupName}'`
             )
         }
 
-        return await this.groupRepository.updateOne(
-            { _id: groupData._id },
-            { $set: updateData }
-        )
+        const cachedGroup = this.cachedGroups.get(groupName)
+        const memberIndex = cachedGroup.indexOf(BigInt(member))
+
+        return cachedGroup.generateProofOfMembership(memberIndex)
     }
 }

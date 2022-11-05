@@ -40,7 +40,6 @@
         "express-session": "^1.17.3",
         "framer-motion": "^7.0.0",
         "memorystore": "^1.6.7",
-        "mongodb": "^4.8.0",
         "passport": "^0.6.0",
         "passport-github": "^1.1.0",
         "passport-jwt": "^4.0.0",
@@ -54,6 +53,7 @@
         "reflect-metadata": "^0.1.13",
         "regenerator-runtime": "0.13.7",
         "rxjs": "^7.0.0",
+        "sqlite3": "^5.1.2",
         "tslib": "^2.3.0",
         "typeorm": "^0.3.7",
         "webpack": "^5.74.0"

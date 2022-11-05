@@ -3,87 +3,89 @@ import {
     Controller,
     Get,
     Param,
-    Patch,
     Post,
+    Put,
     Req,
     UseGuards
 } from "@nestjs/common"
-import { GroupsService } from "./groups.service"
-import { GroupData } from "./entities/group.entity"
-import { UpdateGroupDto } from "./dto/update-group.dto"
-import { CreateGroupDto } from "./dto/create-group.dto"
-import { MerkleProof } from "./types"
-import { UpdateWriteOpResult } from "typeorm"
 import { AuthGuard } from "@nestjs/passport"
+import { stringifyJSON } from "../common/utils"
+import { AddMemberDto } from "./dto/add-member.dto"
+import { CreateGroupDto } from "./dto/create-group.dto"
+import { UpdateGroupDto } from "./dto/update-group.dto"
+import { Group } from "./entities/group.entity"
+import { GroupsService } from "./groups.service"
 
 @Controller("groups")
 export class GroupsController {
     constructor(private readonly groupsService: GroupsService) {}
 
     @Get()
-    getAllGroups(): Promise<GroupData[]> {
-        return this.groupsService.getAllGroupsData()
+    getAllGroups(): Promise<Group[]> {
+        return this.groupsService.getAllGroups()
     }
 
     @Post()
     @UseGuards(AuthGuard("jwt"))
     createGroup(
         @Req() req: Request,
-        @Body() groupData: CreateGroupDto
-    ): Promise<GroupData> {
-        return this.groupsService.createGroup(groupData, req["user"].userId)
+        @Body() dto: CreateGroupDto
+    ): Promise<Group> {
+        return this.groupsService.createGroup(dto, req["user"].userId)
+    }
+
+    @Put(":name")
+    @UseGuards(AuthGuard("jwt"))
+    updateGroup(
+        @Req() req: Request,
+        @Param("name") groupName: string,
+        @Body() dto: UpdateGroupDto
+    ): Promise<Group> {
+        return this.groupsService.updateGroup(
+            dto,
+            groupName,
+            req["user"].userId
+        )
+    }
+
+    @Post(":name/:member")
+    async addMember(
+        @Param("name") groupName: string,
+        @Param("member") member: string,
+        @Body() dto: AddMemberDto
+    ): Promise<void> {
+        await this.groupsService.addMember(dto, groupName, member)
     }
 
     @Get("admin-groups")
     @UseGuards(AuthGuard("jwt"))
-    getGroupsByAdmin(@Req() req: Request): Promise<GroupData[]> {
+    getGroupsByAdmin(@Req() req: Request): Promise<Group[]> {
         return this.groupsService.getGroupsByAdmin(req["user"].userId)
     }
 
     @Get(":name")
-    getGroup(@Param("name") groupName: string): Promise<GroupData> {
-        return this.groupsService.getGroupData(groupName)
+    getGroup(@Param("name") groupName: string): Promise<Group> {
+        return this.groupsService.getGroup(groupName)
     }
 
     @Get(":name/:member")
     isGroupMember(
         @Param("name") groupName: string,
-        @Param("member") idCommitment: string
-    ): Promise<boolean> {
-        return this.groupsService.isGroupMember(groupName, idCommitment)
-    }
-
-    @Post(":name/:member/:invite-code")
-    async addMember(
-        @Param("name") groupName: string,
-        @Param("member") idCommitment: string,
-        @Param("invite-code") inviteCode: string
-    ): Promise<void> {
-        await this.groupsService.addMember(groupName, idCommitment, inviteCode)
+        @Param("member") member: string
+    ): boolean {
+        return this.groupsService.isGroupMember(groupName, member)
     }
 
     @Get(":name/:member/proof")
     generateMerkleProof(
         @Param("name") groupName: string,
-        @Param("member") idCommitment: string
-    ): Promise<MerkleProof> {
-        BigInt.prototype["toJSON"] = function () {
-            return this.toString()
-        }
-        return this.groupsService.generateMerkleProof(groupName, idCommitment)
-    }
-
-    @Patch(":name")
-    @UseGuards(AuthGuard("jwt"))
-    updateGroup(
-        @Req() req: Request,
-        @Param("name") groupName: string,
-        @Body() updateData: UpdateGroupDto
-    ): Promise<UpdateWriteOpResult> {
-        return this.groupsService.updateGroup(
+        @Param("member") member: string
+    ): string {
+        const merkleProof = this.groupsService.generateMerkleProof(
             groupName,
-            updateData,
-            req["user"].userId
+            member
         )
+
+        return stringifyJSON(merkleProof)
     }
 }

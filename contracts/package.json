@@ -1,0 +1,41 @@
+{
+    "name": "zkgroups-contracts",
+    "version": "0.0.0",
+    "license": "MIT",
+    "description": "zkgroups smart contract",
+    "scripts": {
+        "start": "hardhat node",
+        "compile": "hardhat compile",
+        "deploy": "hardhat deploy:zk-groups",
+        "deploy:goerli": "hardhat deploy:zk-groups --network goerli",
+        "deploy:arbitrum": "hardhat deploy:zk-groups --network arbitrum",
+        "test": "hardhat test",
+        "test:report-gas": "REPORT_GAS=true hardhat test",
+        "test:coverage": "hardhat coverage"
+    },
+    "devDependencies": {
+        "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+        "hardhat": "^2.11.2"
+    },
+    "config": {
+        "solidity": {
+            "version": "0.8.4"
+        },
+        "paths": {
+            "contracts": "./contracts",
+            "tests": "./test",
+            "cache": "./cache",
+            "build": {
+                "contracts": "./build/contracts",
+                "typechain": "./build/typechain"
+            }
+        }
+    },
+    "dependencies": {
+        "@openzeppelin/contracts": "^4.7.3",
+        "@semaphore-protocol/contracts": "^2.5.0",
+        "@semaphore-protocol/hardhat": "^0.1.0",
+        "@semaphore-protocol/identity": "^2.6.1",
+        "@semaphore-protocol/proof": "^2.6.1"
+    }
+}

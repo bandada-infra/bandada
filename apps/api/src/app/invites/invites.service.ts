@@ -3,11 +3,11 @@ import {
     forwardRef,
     Inject,
     Injectable,
-    InternalServerErrorException,
+    Logger,
     UnauthorizedException
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { MongoRepository } from "typeorm"
+import { Repository } from "typeorm"
 import { GroupsService } from "../groups/groups.service"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
@@ -16,7 +16,7 @@ import { Invite } from "./entities/invite.entity"
 export class InvitesService {
     constructor(
         @InjectRepository(Invite)
-        private readonly inviteRepository: MongoRepository<Invite>,
+        private readonly inviteRepository: Repository<Invite>,
         @Inject(forwardRef(() => GroupsService))
         private readonly groupsService: GroupsService
     ) {}
@@ -24,34 +24,32 @@ export class InvitesService {
     /**
      * Creates a new group invite with a unique code. Group invites can only be
      * created by group admins.
-     * @param dto Data transfer object used to create new invites.
-     * @param adminUserId Group admin.
+     * @param dto External parameters used to create a new Invite.
+     * @param groupAdmin Group admin.
      * @returns The created invite.
      */
     async createInvite(
-        dto: CreateInviteDto,
-        adminUserId: string
+        { groupName }: CreateInviteDto,
+        groupAdmin: string
     ): Promise<Invite> {
-        const group = await this.groupsService.getGroupData(dto.groupName)
+        const group = await this.groupsService.getGroup(groupName)
 
-        if (group.admin !== adminUserId) {
+        if (group.admin !== groupAdmin) {
             throw new UnauthorizedException(
-                `No permissions: You are not the admin of this group: {'${dto.groupName}'}.`
+                `You are not the admin of the group '${groupName}'`
             )
         }
 
         const invite = this.inviteRepository.create({
             code: this.generateCode(),
-            groupName: dto.groupName,
-            group,
-            redeemed: false
+            group
         })
 
-        try {
-            return this.inviteRepository.save(invite)
-        } catch (e) {
-            throw new InternalServerErrorException()
-        }
+        await this.inviteRepository.save(invite)
+
+        Logger.log(`InvitesService: invite '${invite.code}' has been created`)
+
+        return invite
     }
 
     async getCodeInfo(inviteCode: string): Promise<any> {
@@ -66,6 +64,7 @@ export class InvitesService {
      * Redeems an invite by consuming its code. Every invite
      * can be used only once.
      * @param inviteCode Invite code to be redeemed.
+     * @returns The updated invite.
      */
     async redeemInvite(inviteCode: string): Promise<Invite> {
         const invite = await this.inviteRepository.findOneBy({
@@ -80,11 +79,7 @@ export class InvitesService {
 
         invite.redeemed = true
 
-        try {
-            return this.inviteRepository.save(invite)
-        } catch (e) {
-            throw new InternalServerErrorException()
-        }
+        return this.inviteRepository.save(invite)
     }
 
     /**
