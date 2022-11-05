@@ -34,7 +34,7 @@ export default function PermissionedGroup(): JSX.Element {
     }, [])
 
     async function joinGroup() {
-        try{
+        try {
             const identityCommitment =
                 _signer &&
                 _groupName &&
