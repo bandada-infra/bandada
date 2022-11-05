@@ -21,7 +21,7 @@
                 ],
                 "styles": [],
                 "scripts": [],
-                "webpackConfig": "webpackConfig.js"
+                "webpackConfig": "apps/client/webpack.config.ts"
             },
             "configurations": {
                 "development": {

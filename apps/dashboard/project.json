@@ -21,7 +21,7 @@
                 ],
                 "styles": [],
                 "scripts": [],
-                "webpackConfig": "webpackConfig.js"
+                "webpackConfig": "apps/dashboard/webpack.config.ts"
             },
             "configurations": {
                 "development": {
