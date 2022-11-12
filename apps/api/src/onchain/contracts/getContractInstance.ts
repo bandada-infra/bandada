@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import ZKGroups from "contract-artifacts/ZKGroups.json"
 import { Contract } from "ethers"
 

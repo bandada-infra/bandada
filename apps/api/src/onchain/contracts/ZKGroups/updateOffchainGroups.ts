@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { ContractReceipt, utils } from "ethers"
 import getSigner from "../../getSigner"
 import getContractInstance from "../getContractInstance"

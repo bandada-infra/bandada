@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { providers, Signer, Wallet } from "ethers"
 
 export default async function getSigner(): Promise<Signer> {

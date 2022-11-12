@@ -52,6 +52,7 @@ export class GroupsService {
     /**
      * Save the updated group's merkle root in the ZKGroups contract.
      */
+    /* istanbul ignore next */
     addTimeout() {
         const period = 60 * 1000 //1 minute
 
