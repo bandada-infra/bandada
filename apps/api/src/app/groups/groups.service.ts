@@ -16,16 +16,19 @@ import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { MerkleProof } from "./types"
-
+import { SchedulerRegistry } from "@nestjs/schedule"
+import updateOffchainGroups from "../../onchain/contracts/ZKGroups/updateOffchainGroups"
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
+    private updatedGroups: Map<string, any[]>
 
     constructor(
         @InjectRepository(Group)
         private readonly groupRepository: Repository<Group>,
         @Inject(forwardRef(() => InvitesService))
-        private readonly invitesService: InvitesService
+        private readonly invitesService: InvitesService,
+        private schedulerRegistry: SchedulerRegistry
     ) {
         ;(async () => {
             this.cachedGroups = new Map()
@@ -44,6 +47,45 @@ export class GroupsService {
                 `GroupsService: ${groups.length} groups have been cached`
             )
         })()
+    }
+
+    /**
+     * Save the updated group's merkle root in the ZKGroups contract.
+     */
+    addTimeout() {
+        const period = 60 * 1000 //1 minute
+
+        const callback = async () => {
+            Logger.log(`GroupsService: (Task) Save off-chain group roots start`)
+
+            if (this.updatedGroups.size > 0) {
+                const updatedGroups = this.updatedGroups
+                this.updatedGroups.clear()
+
+                const transaction = await updateOffchainGroups(updatedGroups)
+
+                if (transaction.status) {
+                    Logger.log(
+                        `GroupsService: (Task) Merkle roots of ${transaction.events.length} groups have been published on-chain`
+                    )
+                } else {
+                    Logger.error(
+                        `GroupsService: (Task) Failed to save merkle roots on-chain`
+                    )
+                }
+            }
+
+            this.schedulerRegistry.deleteTimeout("Save off-chain group roots")
+        }
+
+        const timeout = setTimeout(callback, period)
+        this.schedulerRegistry.addTimeout("Save off-chain group roots", timeout)
+
+        Logger.log(
+            `GroupsService: (Task) Off-chain roots update after ${
+                period / 1000
+            } seconds`
+        )
     }
 
     /**
@@ -140,6 +182,16 @@ export class GroupsService {
         Logger.log(
             `GroupsService: member '${member}' has been added to the group '${group.name}'`
         )
+
+        if (this.updatedGroups === undefined) {
+            this.updatedGroups = new Map()
+        }
+
+        this.updatedGroups.set(groupName, [cachedGroup.root, cachedGroup.depth])
+
+        if (this.schedulerRegistry.getTimeouts().length === 0) {
+            this.addTimeout()
+        }
 
         return group
     }
