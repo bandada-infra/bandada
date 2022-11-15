@@ -1,3 +1,4 @@
+import { ScheduleModule } from "@nestjs/schedule"
 import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Group } from "../groups/entities/group.entity"
@@ -22,7 +23,8 @@ describe("InvitesService", () => {
                     })
                 }),
                 TypeOrmModule.forFeature([Group]),
-                TypeOrmModule.forFeature([Invite])
+                TypeOrmModule.forFeature([Invite]),
+                ScheduleModule.forRoot()
             ],
             providers: [GroupsService, InvitesService]
         }).compile()
