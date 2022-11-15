@@ -1,15 +1,12 @@
 import { useCallback, useState } from "react"
 import { environment } from "src/environments/environment"
-import { request, createIdentity } from "@utils"
+import { request } from "@utils"
 import { Invite } from "src/types/invite"
-import { Signer } from "ethers"
+import { Identity } from "@semaphore-protocol/identity"
 
 type ReturnParameters = {
     validateCode: (inviteCode: string | undefined) => Promise<Invite>
-    generateIdentityCommitment: (
-        signer: Signer,
-        groupName: string
-    ) => Promise<string | null>
+    generateIdentityCommitment: (groupName: string) => Promise<string | null>
     addMember: (
         groupName: string,
         idCommitment: string,
@@ -35,12 +32,10 @@ export default function usePermissionedGroups(): ReturnParameters {
     )
 
     const generateIdentityCommitment = useCallback(
-        async (signer: Signer, groupName: string): Promise<string | null> => {
-            setLoading(true)
-            const identity = await createIdentity(
-                (message) => signer.signMessage(message),
-                groupName
-            )
+        async (groupName: string): Promise<string | null> => {
+            const nonce = 0
+            const message = `Sign this message to generate your ${groupName} Semaphore identity with key nonce: ${nonce}.`
+            const identity = new Identity(message)
             const identityCommitment = identity.getCommitment().toString()
             const hasJoined = await request(
                 `${environment.apiUrl}/groups/${groupName}/${identityCommitment}`
