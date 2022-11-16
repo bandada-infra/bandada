@@ -17,9 +17,6 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@zk-groups/api/*": ["apps/api/src/*"],
-            "@zk-groups/client/*": ["apps/client/src/*"],
-            "@zk-groups/dashboard/*": ["apps/dashboard/src/*"],
             "@zk-groups/passport-reddit": ["libs/passport-reddit/src/index.ts"],
             "@zk-groups/utils": ["libs/utils/src/index.ts"]
         }
