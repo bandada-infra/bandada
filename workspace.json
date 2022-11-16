@@ -3,8 +3,11 @@
     "version": 2,
     "projects": {
         "api": "apps/api",
+        "client": "apps/client",
+        "client-e2e": "apps/client-e2e",
         "dashboard": "apps/dashboard",
         "dashboard-e2e": "apps/dashboard-e2e",
-        "passport-reddit": "libs/passport-reddit"
+        "passport-reddit": "libs/passport-reddit",
+        "utils": "libs/utils"
     }
 }

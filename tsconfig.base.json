@@ -17,7 +17,8 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@zk-groups/passport-reddit": ["libs/passport-reddit/src/index.ts"]
+            "@zk-groups/passport-reddit": ["libs/passport-reddit/src/index.ts"],
+            "@zk-groups/utils": ["libs/utils/src/index.ts"]
         }
     },
     "exclude": ["node_modules", "tmp"]

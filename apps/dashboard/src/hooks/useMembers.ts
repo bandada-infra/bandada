@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { Group } from "src/types/groups"
-import request from "src/utils/request"
+import { request } from "@utils"
 import { environment } from "src/environments/environment"
 
 type ReturnParameters = {

@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { environment } from "src/environments/environment"
-import request from "src/utils/request"
+import { request } from "@utils"
 
 type ReturnParameters = {
     generateMagicLink: (groupName: string) => Promise<string>
@@ -17,7 +17,8 @@ export default function useInvites(): ReturnParameters {
             })
 
             // TODO: update this URL with the client-app one.
-            return `https://zk-groups.com/${code}`
+            // return `https://zk-groups.com/${code}`
+            return `${environment.clientAppUrl}/invites/${code}`
         },
         []
     )

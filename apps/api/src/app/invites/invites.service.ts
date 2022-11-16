@@ -52,6 +52,14 @@ export class InvitesService {
         return invite
     }
 
+    async getCodeInfo(inviteCode: string): Promise<any> {
+        const invite = await this.inviteRepository.findOneBy({
+            code: inviteCode
+        })
+
+        return invite
+    }
+
     /**
      * Redeems an invite by consuming its code. Every invite
      * can be used only once.
