@@ -1,11 +1,11 @@
 import { Box, Button, Container, Flex, Heading, Text } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import useMembers from "src/hooks/useMembers"
-import { Group } from "src/types/groups"
+import useMembers from "../hooks/useMembers"
+import { Group } from "../types/groups"
 import { CgProfile } from "react-icons/cg"
 import { useDisclosure } from "@chakra-ui/react"
-import InviteModal from "src/components/invite-modal"
+import InviteModal from "../components/invite-modal"
 import { useNavigate } from "react-router-dom"
 
 export default function Manage(): JSX.Element {

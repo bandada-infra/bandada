@@ -1,6 +1,6 @@
 import { Container, Heading, Text } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import { Group } from "src/types/groups"
+import { Group } from "../../types/groups"
 
 export default function GroupCard(group: Group): JSX.Element {
     return (

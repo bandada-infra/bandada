@@ -8,9 +8,9 @@ import {
     Text,
     useDisclosure
 } from "@chakra-ui/react"
-import { Group } from "src/types/groups"
+import CreatGroupModal from "../../components/creat-group-modal"
+import { Group } from "../../types/groups"
 import GroupCard from "./group-card"
-import CreatGroupModal from "src/components/creat-group-modal"
 
 interface GroupList {
     groupList: Array<Group>

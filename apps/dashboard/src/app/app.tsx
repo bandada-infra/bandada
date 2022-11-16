@@ -1,12 +1,12 @@
-import { Route, Routes } from "react-router-dom"
 import { ChakraProvider } from "@chakra-ui/react"
-import NavBar from "src/components/navbar"
-import Home from "src/pages/home"
-import SSO from "src/pages/sso"
-import MyGroups from "src/pages/my-groups"
-import Manage from "src/pages/manage"
-import theme from "src/styles"
-import NotFoundPage from "src/pages/404"
+import { Route, Routes } from "react-router-dom"
+import NavBar from "../components/navbar"
+import NotFoundPage from "../pages/404"
+import Home from "../pages/home"
+import Manage from "../pages/manage"
+import MyGroups from "../pages/my-groups"
+import SSO from "../pages/sso"
+import theme from "../styles"
 
 export function App() {
     return (

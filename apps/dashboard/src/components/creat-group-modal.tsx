@@ -17,8 +17,8 @@ import {
     UseDisclosureProps
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { groupSizeInfo } from "src/types/groups"
-import useGroups from "src/hooks/useGroups"
+import { groupSizeInfo } from "../types/groups"
+import useGroups from "../hooks/useGroups"
 
 export default function CreatGroupModal({
     isOpen,

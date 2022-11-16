@@ -1,4 +1,3 @@
-import React, { useEffect } from "react"
 import {
     Box,
     Button,
@@ -10,11 +9,12 @@ import {
     Tooltip,
     useClipboard
 } from "@chakra-ui/react"
-import { Link } from "react-router-dom"
 import { useWeb3React } from "@web3-react/core"
 import { InjectedConnector } from "@web3-react/injected-connector"
+import { shortenAddress } from "@zk-groups/utils"
 import { providers } from "ethers"
-import { shortenAddress } from "@utils"
+import { useEffect } from "react"
+import { Link } from "react-router-dom"
 
 const injectedConnector = new InjectedConnector({
     supportedChainIds: [1, 3, 4, 5, 42]

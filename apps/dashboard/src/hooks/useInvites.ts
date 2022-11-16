@@ -1,6 +1,6 @@
+import { request } from "@zk-groups/utils"
 import { useCallback } from "react"
-import { environment } from "src/environments/environment"
-import { request } from "@utils"
+import { environment } from "../environments/environment"
 
 type ReturnParameters = {
     generateMagicLink: (groupName: string) => Promise<string>

@@ -21,7 +21,7 @@
                 ],
                 "styles": [],
                 "scripts": [],
-                "webpackConfig": "apps/dashboard/webpack.config.ts"
+                "webpackConfig": "@nrwl/react/plugins/webpack"
             },
             "configurations": {
                 "development": {

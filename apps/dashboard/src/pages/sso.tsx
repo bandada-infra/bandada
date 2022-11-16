@@ -1,6 +1,6 @@
 import { Center, Container, Flex, Heading } from "@chakra-ui/react"
 import { useSearchParams } from "react-router-dom"
-import SsoButton from "src/components/sso-button"
+import SsoButton from "../components/sso-button"
 
 export default function SSO(): JSX.Element {
     const [searchParams] = useSearchParams()

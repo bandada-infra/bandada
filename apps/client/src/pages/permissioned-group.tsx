@@ -1,10 +1,10 @@
 import { Button, Center, Container, Heading } from "@chakra-ui/react"
-import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
 import { useWeb3React } from "@web3-react/core"
 import { providers } from "ethers"
-import usePermissionedGroups from "src/hooks/usePermissionedGroups"
-import useSigner from "src/hooks/useSigner"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import usePermissionedGroups from "../hooks/usePermissionedGroups"
+import useSigner from "../hooks/useSigner"
 
 export default function PermissionedGroup(): JSX.Element {
     const { account } = useWeb3React<providers.Web3Provider>()

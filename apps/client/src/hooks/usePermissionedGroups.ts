@@ -1,9 +1,9 @@
 import { Identity } from "@semaphore-protocol/identity"
-import { request } from "@utils"
+import { request } from "@zk-groups/utils"
 import { Signer } from "ethers"
 import { useCallback, useState } from "react"
-import { environment } from "src/environments/environment"
-import { Invite } from "src/types/invite"
+import { environment } from "../environments/environment"
+import { Invite } from "../types/invite"
 
 type ReturnParameters = {
     getInvite: (inviteCode: string | undefined) => Promise<Invite>
