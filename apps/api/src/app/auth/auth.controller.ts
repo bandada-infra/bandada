@@ -7,7 +7,8 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
-import { Response, Request } from "express"
+import { Request, Response } from "express"
+import { environment } from "../../environments/environment"
 
 @Controller("auth")
 export class AuthController {
@@ -27,7 +28,8 @@ export class AuthController {
                 maxAge: 24 * 60 * 60 * 1000
             })
         }
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
+
+        res.redirect(`${environment.dashboardUrl}/my-groups`)
     }
 
     @Get("twitter")
@@ -46,6 +48,7 @@ export class AuthController {
                 maxAge: 24 * 60 * 60 * 1000
             })
         }
+
         res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
     }
 
@@ -65,6 +68,7 @@ export class AuthController {
                 maxAge: 24 * 60 * 60 * 1000
             })
         }
+
         res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
     }
 }

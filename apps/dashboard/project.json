@@ -51,7 +51,8 @@
             "defaultConfiguration": "development",
             "options": {
                 "buildTarget": "dashboard:build",
-                "hmr": true
+                "hmr": true,
+                "port": 3001
             },
             "configurations": {
                 "development": {
