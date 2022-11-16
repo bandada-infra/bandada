@@ -52,9 +52,17 @@ export class InvitesService {
         return invite
     }
 
-    async getCodeInfo(inviteCode: string): Promise<any> {
-        const invite = await this.inviteRepository.findOneBy({
-            code: inviteCode
+    /**
+     * Returns the invite of a specific code.
+     * @param inviteCode Invite code.
+     * @returns The invite data.
+     */
+    async getInvite(inviteCode: string): Promise<any> {
+        const invite = await this.inviteRepository.findOne({
+            where: {
+                code: inviteCode
+            },
+            relations: ["group"]
         })
 
         return invite

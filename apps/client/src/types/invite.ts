@@ -1,6 +1,8 @@
+import { Group } from "./group"
+
 export type Invite = {
     _id: string
     code: string
     redeemed: boolean
-    groupName: string
+    group: Group
 }

@@ -16,9 +16,7 @@ export default function useInvites(): ReturnParameters {
                 }
             })
 
-            // TODO: update this URL with the client-app one.
-            // return `https://zk-groups.com/${code}`
-            return `${environment.clientAppUrl}/invites/${code}`
+            return `${environment.clientUrl}/invites/${code}`
         },
         []
     )

@@ -1,12 +1,12 @@
+import { Identity } from "@semaphore-protocol/identity"
+import { request } from "@utils"
+import { Signer } from "ethers"
 import { useCallback, useState } from "react"
 import { environment } from "src/environments/environment"
-import { request } from "@utils"
 import { Invite } from "src/types/invite"
-import { Signer } from "ethers"
-import { Identity } from "@semaphore-protocol/identity"
 
 type ReturnParameters = {
-    validateCode: (inviteCode: string | undefined) => Promise<Invite>
+    getInvite: (inviteCode: string | undefined) => Promise<Invite>
     generateIdentityCommitment: (
         signer: Signer,
         groupName: string
@@ -24,7 +24,7 @@ export default function usePermissionedGroups(): ReturnParameters {
     const [_loading, setLoading] = useState<boolean>(false)
     const [_hasJoined, setHasjoined] = useState<boolean>(false)
 
-    const validateCode = useCallback(
+    const getInvite = useCallback(
         async (inviteCode: string | undefined): Promise<Invite> => {
             const codeInfo = await request(
                 `${environment.apiUrl}/invites/${inviteCode}`
@@ -59,14 +59,20 @@ export default function usePermissionedGroups(): ReturnParameters {
             inviteCode: string
         ): Promise<void> => {
             await request(
-                `${environment.apiUrl}/groups/${groupName}/${idCommitment}/${inviteCode}`
+                `${environment.apiUrl}/groups/${groupName}/${idCommitment}`,
+                {
+                    method: "post",
+                    data: {
+                        inviteCode
+                    }
+                }
             )
         },
         []
     )
 
     return {
-        validateCode,
+        getInvite,
         generateIdentityCommitment,
         addMember,
         hasjoined: _hasJoined,

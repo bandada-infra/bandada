@@ -12,17 +12,19 @@ export default function PermissionedGroup(): JSX.Element {
     const [_groupName, setGroupName] = useState<string>()
     const [_isRedeemed, setIsRedeemed] = useState<boolean>()
     const _signer = useSigner()
-    const { validateCode, generateIdentityCommitment, addMember, hasjoined } =
+    const { getInvite, generateIdentityCommitment, addMember, hasjoined } =
         usePermissionedGroups()
+
     useEffect(() => {
         ;(async () => {
-            const codeInfo = await validateCode(inviteCode)
-            if (codeInfo) {
-                setGroupName(await codeInfo.groupName)
-                setIsRedeemed(await codeInfo.redeemed)
+            const invite = await getInvite(inviteCode)
+
+            if (invite) {
+                setGroupName(invite.group.name)
+                setIsRedeemed(invite.redeemed)
             }
         })()
-    }, [inviteCode, validateCode])
+    }, [inviteCode, getInvite])
 
     useEffect(() => {
         ;(async () => {
