@@ -1,10 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react"
-import { Route, Routes } from "react-router-dom"
 import { Web3ReactProvider } from "@web3-react/core"
 import { providers } from "ethers"
-import NavBar from "src/components/navbar"
-import Home from "src/pages/home"
-import PermissionedGroup from "src/pages/permissioned-group"
+import { Route, Routes } from "react-router-dom"
+import NavBar from "../components/navbar"
+import Home from "../pages/home"
+import PermissionedGroup from "../pages/permissioned-group"
 
 export function App() {
     function getLibrary(provider: any) {

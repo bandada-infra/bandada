@@ -31,13 +31,7 @@ export class InvitesController {
     }
 
     @Get(":code")
-    async getCodeInfo(@Param("code") inviteCode: string): Promise<Invite> {
-        const invite = await this.invitesService.getCodeInfo(inviteCode)
-        return invite
-    }
-
-    @Post("redeem/:code")
-    async redeemInvite(@Param("code") inviteCode: string): Promise<void> {
-        await this.invitesService.redeemInvite(inviteCode)
+    async getInvite(@Param("code") inviteCode: string): Promise<Invite> {
+        return this.invitesService.getInvite(inviteCode)
     }
 }

@@ -1,9 +1,7 @@
-import { Icon } from "@chakra-ui/react"
-import { IconType } from "react-icons/lib"
-import { Button } from "@chakra-ui/react"
+import { Button, Icon, Link } from "@chakra-ui/react"
 import { FaGithub, FaRedditAlien, FaTwitter } from "react-icons/fa"
-import { Link } from "@chakra-ui/react"
-import { environment } from "src/environments/environment"
+import { IconType } from "react-icons/lib"
+import { environment } from "../environments/environment"
 
 const SsoIcons: Record<string, IconType> = {
     Twitter: FaTwitter,

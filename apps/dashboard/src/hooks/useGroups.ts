@@ -1,8 +1,8 @@
-import { useCallback } from "react"
-import { Group } from "src/types/groups"
-import { request } from "@utils"
+import { request } from "@zk-groups/utils"
 import { AxiosRequestConfig } from "axios"
-import { environment } from "src/environments/environment"
+import { useCallback } from "react"
+import { environment } from "../environments/environment"
+import { Group } from "../types/groups"
 
 type ReturnParameters = {
     getGroupList: () => Promise<Group[] | null>

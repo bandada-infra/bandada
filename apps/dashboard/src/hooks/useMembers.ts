@@ -1,7 +1,7 @@
+import { request } from "@zk-groups/utils"
 import { useCallback } from "react"
-import { Group } from "src/types/groups"
-import { request } from "@utils"
-import { environment } from "src/environments/environment"
+import { environment } from "../environments/environment"
+import { Group } from "../types/groups"
 
 type ReturnParameters = {
     getGroup: (groupName: string) => Promise<Group | null>

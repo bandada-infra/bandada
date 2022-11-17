@@ -3,6 +3,6 @@
 
 export const environment = {
     production: false,
-    apiUrl: "http://localhost:3333/api",
-    clientAppUrl: "http://localhost:3001"
+    apiUrl: "http://localhost:3000/api",
+    clientUrl: "http://localhost:3002"
 }

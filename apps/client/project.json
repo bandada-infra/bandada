@@ -5,8 +5,8 @@
     "targets": {
         "build": {
             "executor": "@nrwl/web:webpack",
+            "defaultConfiguration": "development",
             "outputs": ["{options.outputPath}"],
-            "defaultConfiguration": "production",
             "options": {
                 "compiler": "babel",
                 "outputPath": "dist/apps/client",
@@ -52,7 +52,7 @@
             "options": {
                 "buildTarget": "client:build",
                 "hmr": true,
-                "port": 3001
+                "port": 3002
             },
             "configurations": {
                 "development": {

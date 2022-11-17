@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { FaRegCopy } from "react-icons/fa"
-import useInvites from "src/hooks/useInvites"
+import useInvites from "../hooks/useInvites"
 
 export default function InviteModal({
     isOpen,

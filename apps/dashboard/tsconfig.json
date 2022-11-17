@@ -10,12 +10,7 @@
         "noImplicitOverride": true,
         "noPropertyAccessFromIndexSignature": true,
         "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "baseUrl": ".",
-        "paths": {
-            "src/*": ["src/*"],
-            "@utils": ["../../libs/utils/src/index.ts"]
-        }
+        "noFallthroughCasesInSwitch": true
     },
     "files": [],
     "include": [],

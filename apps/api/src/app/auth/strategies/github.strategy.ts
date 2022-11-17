@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
 import { Profile, Strategy } from "passport-github"
 import { AuthService } from "../auth.service"
+import { environment } from "../../../environments/environment"
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy) {
@@ -11,7 +12,7 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
         super({
             clientID: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: `${process.env.BASE_URL}/api/auth/github/callback`,
+            callbackURL: `${environment.apiUrl}/auth/github/callback`,
             profileFields: ["id", "email", "read:user", "user:email"]
         })
     }

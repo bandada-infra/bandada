@@ -7,16 +7,16 @@ import {
     Input,
     InputGroup,
     InputLeftElement,
-    Select
+    Select,
+    useDisclosure
 } from "@chakra-ui/react"
-import { useDisclosure } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-import CreatGroupModal from "src/components/creat-group-modal"
-import GroupBox from "src/components/group-box"
-import GroupFolder from "src/components/group-folder"
-import { Group } from "src/types/groups"
-import useGroups from "src/hooks/useGroups"
+import CreatGroupModal from "../components/creat-group-modal"
+import GroupBox from "../components/group-box"
+import GroupFolder from "../components/group-folder"
+import useGroups from "../hooks/useGroups"
+import { Group } from "../types/groups"
 
 export default function MyGroups(): JSX.Element {
     const { getGroupList } = useGroups()

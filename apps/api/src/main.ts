@@ -17,7 +17,7 @@ async function bootstrap() {
     )
 
     const globalPrefix = "api"
-    const port = process.env.PORT || 3333
+    const port = 3000
     const MemoryStore = createMemoryStore(session)
 
     app.setGlobalPrefix(globalPrefix)
