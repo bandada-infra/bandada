@@ -66,26 +66,62 @@ describe("InvitesService", () => {
         })
     })
 
+    describe("# getInvite", () => {
+        it("Should get an invite", async () => {
+            const { code } = await invitesService.createInvite(
+                { groupName: "Group1" },
+                "admin"
+            )
+
+            const invite = await invitesService.getInvite(code)
+
+            expect(invite.redeemed).toBeFalsy()
+            expect(invite.code).toHaveLength(8)
+            expect(invite.group).toBeDefined()
+        })
+
+        it("Should return null if invite code does not exist", async () => {
+            const invite = await invitesService.getInvite("12345")
+
+            expect(invite).toBeNull()
+        })
+    })
+
     describe("# redeemInvite", () => {
         let invite: Invite
-
+        const groupName = "Group1"
         beforeAll(async () => {
             invite = await invitesService.createInvite(
-                { groupName: "Group1" },
+                { groupName: groupName },
                 "admin"
             )
         })
 
+        it("Should not redeem an invite if group name does not match", async () => {
+            const fun = invitesService.redeemInvite(invite.code, "wrong-group")
+
+            await expect(fun).rejects.toThrow("is not for 'wrong-group'")
+        })
+
         it("Should redeem an invite", async () => {
-            const { redeemed } = await invitesService.redeemInvite(invite.code)
+            const { redeemed } = await invitesService.redeemInvite(
+                invite.code,
+                groupName
+            )
 
             expect(redeemed).toBeTruthy()
         })
 
         it("Should not redeem an invite if it has already been redeemed", async () => {
-            const fun = invitesService.redeemInvite(invite.code)
+            const fun = invitesService.redeemInvite(invite.code, groupName)
 
             await expect(fun).rejects.toThrow("has already been redeemed")
+        })
+
+        it("Should not redeem an invite if it does not exist", async () => {
+            const fun = invitesService.redeemInvite("12345", groupName)
+
+            await expect(fun).rejects.toThrow("does not exist")
         })
     })
 
