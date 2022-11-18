@@ -60,10 +60,10 @@ export class GroupsService {
             Logger.log(`GroupsService: (Task) Save off-chain group roots start`)
 
             if (this.updatedGroups.size > 0) {
-                const updatedGroups = this.updatedGroups
+                const groups = new Map(this.updatedGroups)
                 this.updatedGroups.clear()
 
-                const transaction = await updateOffchainGroups(updatedGroups)
+                const transaction = await updateOffchainGroups(groups)
 
                 if (transaction.status) {
                     Logger.log(
@@ -168,7 +168,7 @@ export class GroupsService {
             )
         }
 
-        await this.invitesService.redeemInvite(inviteCode)
+        await this.invitesService.redeemInvite(inviteCode, groupName)
 
         const group = await this.getGroup(groupName)
 

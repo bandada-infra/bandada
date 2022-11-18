@@ -74,10 +74,8 @@ export class InvitesService {
      * @param inviteCode Invite code to be redeemed.
      * @returns The updated invite.
      */
-    async redeemInvite(inviteCode: string): Promise<Invite> {
-        const invite = await this.inviteRepository.findOneBy({
-            code: inviteCode
-        })
+    async redeemInvite(inviteCode: string, groupName: string): Promise<Invite> {
+        const invite = await this.getInvite(inviteCode)
 
         if (invite === null) {
             throw new BadRequestException(
@@ -88,6 +86,12 @@ export class InvitesService {
         if (invite.redeemed === true) {
             throw new BadRequestException(
                 `Invite code '${inviteCode}' has already been redeemed`
+            )
+        }
+
+        if (invite.group.name !== groupName) {
+            throw new BadRequestException(
+                `Invite code '${inviteCode}' is not for '${groupName}'`
             )
         }
 
