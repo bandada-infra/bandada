@@ -79,6 +79,12 @@ export class InvitesService {
             code: inviteCode
         })
 
+        if (invite === null) {
+            throw new BadRequestException(
+                `Invite code '${inviteCode}' does not exist`
+            )
+        }
+
         if (invite.redeemed === true) {
             throw new BadRequestException(
                 `Invite code '${inviteCode}' has already been redeemed`

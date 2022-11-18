@@ -168,7 +168,7 @@ export class GroupsService {
             )
         }
 
-        this.invitesService.redeemInvite(inviteCode)
+        await this.invitesService.redeemInvite(inviteCode)
 
         const group = await this.getGroup(groupName)
 
