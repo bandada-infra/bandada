@@ -25,7 +25,7 @@ export default function SSO(): JSX.Element {
     useEffect(() => {
         ;(async () => {
             if (account) {
-                navigate("/onchain-groups")
+                navigate("/my-groups?type=on-chain")
             }
         })()
     }, [account, navigate])

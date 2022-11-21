@@ -5,16 +5,16 @@ import { environment } from "../environments/environment"
 import { Group } from "../types/groups"
 
 type ReturnParameters = {
-    getGroupList: () => Promise<Group[] | null>
-    createGroup: (
+    getOffchainGroupList: () => Promise<Group[] | null>
+    createOffchainGroup: (
         groupName: string,
         groupDescription: string,
         groupTreeDepth: number
     ) => Promise<true | null>
 }
 
-export default function useGroups(): ReturnParameters {
-    const getGroupList = useCallback(async (): Promise<Group[] | null> => {
+export default function useOffchainGroups(): ReturnParameters {
+    const getOffchainGroupList = useCallback(async (): Promise<Group[] | null> => {
         try {
             const groupList = await request(
                 `${environment.apiUrl}/groups/admin-groups`
@@ -25,7 +25,7 @@ export default function useGroups(): ReturnParameters {
         }
     }, [])
 
-    const createGroup = useCallback(
+    const createOffchainGroup = useCallback(
         async (
             groupName: string,
             groupDescription: string,
@@ -47,7 +47,7 @@ export default function useGroups(): ReturnParameters {
     )
 
     return {
-        getGroupList,
-        createGroup
+        getOffchainGroupList,
+        createOffchainGroup
     }
 }

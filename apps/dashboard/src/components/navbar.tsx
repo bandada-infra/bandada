@@ -58,7 +58,7 @@ export default function NavBar(): JSX.Element {
                             <Button variant="solid" mr="10px" onClick={logOut}>
                                 Log out
                             </Button>
-                            <Link to="/my-groups">
+                            <Link to="/my-groups?type=off-chain">
                                 <Button variant="solid" colorScheme="primary">
                                     My Groups
                                 </Button>

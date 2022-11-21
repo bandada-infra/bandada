@@ -18,17 +18,21 @@ import {
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { groupSizeInfo } from "../types/groups"
-import useGroups from "../hooks/useGroups"
+import useOffchainGroups from "../hooks/useOffchainGroups"
+// import useOnchainGrouops from "../hooks/useOnchainGroups"
+import { useSearchParams } from "react-router-dom"
 
-export default function CreatGroupModal({
-    isOpen,
-    onClose
-}: UseDisclosureProps): JSX.Element {
+export default function CreatGroupModal(
+    { isOpen, onClose }: UseDisclosureProps
+): JSX.Element {
+    const [searchParams] = useSearchParams()
+    const pageOption = searchParams.get("type")
     const [_step, setStep] = useState<number>(0)
     const [_groupName, setGroupName] = useState<string>("")
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
-    const { createGroup } = useGroups()
+    const { createOffchainGroup } = useOffchainGroups()
+    // const { createOnchainGroup } = useOnchainGroups()
 
     function nextStep() {
         setStep(_step + 1)
@@ -53,6 +57,19 @@ export default function CreatGroupModal({
             nextStep()
         } else {
             alert("Select the group size")
+        }
+    }
+
+    async function createGroup(
+        groupName: string,
+        groupDescription: string,
+        treeDepth: number
+    ) {
+        if (pageOption === "on-chain") {
+            // createOnchainGroup(groupName, groupDescription, treeDepth)
+            console.log(groupName, groupDescription, treeDepth)
+        } else{
+            createOffchainGroup(groupName, groupDescription, treeDepth)
         }
     }
 
@@ -222,19 +239,16 @@ export default function CreatGroupModal({
                                     variant="solid"
                                     colorScheme="primary"
                                     onClick={() => {
-                                        if (
-                                            _groupName &&
-                                            _groupDescription &&
-                                            _groupSize &&
-                                            onClose
-                                        ) {
+                                        try {
                                             createGroup(
                                                 _groupName,
                                                 _groupDescription,
                                                 groupSizeInfo[_groupSize]
                                                     .treeDepth
                                             )
-                                            onClose()
+                                            onClose && onClose()
+                                        } catch (error) {
+                                            console.error(error)
                                         }
                                     }}
                                 >
