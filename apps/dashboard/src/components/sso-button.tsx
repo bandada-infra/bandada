@@ -11,7 +11,7 @@ const SsoIcons: Record<string, IconType> = {
 
 export default function SsoButton(prop: { provider: string }): JSX.Element {
     return (
-        <Link href={`${environment.apiUrl}/auth/${prop.provider}`}>
+        <Link href={`${environment.apiUrl}/auth/${prop.provider}`} mb="24px">
             <Button
                 h="44px"
                 bgColor="#FFFFFF"
