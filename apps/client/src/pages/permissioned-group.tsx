@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import usePermissionedGroups from "../hooks/usePermissionedGroups"
 import useSigner from "../hooks/useSigner"
+import { useNavigate } from "react-router-dom"
 
 export default function PermissionedGroup(): JSX.Element {
     const { account } = useWeb3React<providers.Web3Provider>()
@@ -14,6 +15,7 @@ export default function PermissionedGroup(): JSX.Element {
     const _signer = useSigner()
     const { getInvite, generateIdentityCommitment, addMember, hasjoined } =
         usePermissionedGroups()
+    const navigate = useNavigate()
 
     useEffect(() => {
         ;(async () => {
@@ -42,10 +44,12 @@ export default function PermissionedGroup(): JSX.Element {
                 (await generateIdentityCommitment(_signer, _groupName))
             if (hasjoined) {
                 alert("You have already joined")
+                navigate("/")
                 return
             }
             if (_groupName && identityCommitment && inviteCode) {
                 addMember(_groupName, identityCommitment, inviteCode)
+                navigate("/")
                 return
             }
         } catch (e) {
