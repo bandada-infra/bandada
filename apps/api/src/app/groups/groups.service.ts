@@ -17,7 +17,7 @@ import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { MerkleProof } from "./types"
 import { SchedulerRegistry } from "@nestjs/schedule"
-import updateOffchainGroups from "../../onchain/contracts/ZKGroups/updateOffchainGroups"
+import { updateOffchainGroups } from "@zk-groups/onchain"
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
