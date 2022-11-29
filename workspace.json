@@ -7,6 +7,7 @@
         "client-e2e": "apps/client-e2e",
         "dashboard": "apps/dashboard",
         "dashboard-e2e": "apps/dashboard-e2e",
+        "onchain": "libs/onchain",
         "passport-reddit": "libs/passport-reddit",
         "utils": "libs/utils"
     }

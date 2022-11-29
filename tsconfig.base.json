@@ -17,6 +17,7 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
+            "@zk-groups/onchain": ["libs/onchain/src/index.ts"],
             "@zk-groups/passport-reddit": ["libs/passport-reddit/src/index.ts"],
             "@zk-groups/utils": ["libs/utils/src/index.ts"]
         }
