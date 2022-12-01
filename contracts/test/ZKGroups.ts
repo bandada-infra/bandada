@@ -3,7 +3,7 @@ import { config as dotenvConfig } from "dotenv"
 import { ZKGroups } from "../build/typechain"
 import { utils } from "ethers"
 import { run } from "hardhat"
-import { createOffchainGroupId, createIdentityCommitments } from "./utils"
+import { createIdentityCommitments } from "./utils"
 import { Group, Member } from "@semaphore-protocol/group"
 import { expect } from "chai"
 import { Identity } from "@semaphore-protocol/identity"
@@ -24,7 +24,6 @@ describe("ZKGroups", () => {
 
     const treeDepth = 20
     const offchainGroupName = utils.formatBytes32String("TestGroupName")
-    const offchainGroupId = createOffchainGroupId(offchainGroupName)
     const group = new Group(treeDepth)
     const members = createIdentityCommitments(3)
 
@@ -78,7 +77,6 @@ describe("ZKGroups", () => {
                 await expect(transaction)
                     .to.emit(contract, "OffchainGroupUpdated")
                     .withArgs(
-                        offchainGroupId,
                         groups[0].name,
                         groups[0].merkleTreeRoot,
                         groups[0].merkleTreeDepth
@@ -89,7 +87,7 @@ describe("ZKGroups", () => {
         describe("# getOffchainRoot", () => {
             it("Should get the merkle tree root of an zk-groups off-chain group", async () => {
                 const merkleTreeRoot = await contract.getOffchainRoot(
-                    offchainGroupId
+                    offchainGroupName
                 )
 
                 expect(merkleTreeRoot).to.equal(
@@ -101,7 +99,7 @@ describe("ZKGroups", () => {
         describe("# getOffchainDepth", () => {
             it("Should get the merkle tree depth of an zk-groups off-chain group", async () => {
                 const merkleTreeDepth = await contract.getOffchainDepth(
-                    offchainGroupId
+                    offchainGroupName
                 )
 
                 expect(merkleTreeDepth).to.equal(treeDepth)
@@ -128,7 +126,7 @@ describe("ZKGroups", () => {
 
             it("Should not verify a proof if the group does not exist", async () => {
                 const transaction = contract.verifyOffchainGroupProof(
-                    1234,
+                    utils.formatBytes32String("1234"),
                     signal,
                     0,
                     0,
@@ -142,7 +140,7 @@ describe("ZKGroups", () => {
 
             it("Should throw an exception if the proof is not valid", async () => {
                 const transaction = contract.verifyOffchainGroupProof(
-                    offchainGroupId,
+                    offchainGroupName,
                     signal,
                     fullProof.publicSignals.nullifierHash,
                     0,
@@ -154,7 +152,7 @@ describe("ZKGroups", () => {
 
             it("Should verify a proof for an off-chain group correctly", async () => {
                 const transaction = contract.verifyOffchainGroupProof(
-                    offchainGroupId,
+                    offchainGroupName,
                     signal,
                     fullProof.publicSignals.nullifierHash,
                     fullProof.publicSignals.merkleRoot,
@@ -164,7 +162,7 @@ describe("ZKGroups", () => {
                 await expect(transaction)
                     .to.emit(contract, "ProofVerified")
                     .withArgs(
-                        offchainGroupId,
+                        offchainGroupName,
                         fullProof.publicSignals.nullifierHash,
                         fullProof.publicSignals.externalNullifier,
                         signal
@@ -173,7 +171,7 @@ describe("ZKGroups", () => {
 
             it("Should not verify the same proof for an off-chain group twice", async () => {
                 const transaction = contract.verifyOffchainGroupProof(
-                    offchainGroupId,
+                    offchainGroupName,
                     signal,
                     fullProof.publicSignals.nullifierHash,
                     fullProof.publicSignals.merkleRoot,

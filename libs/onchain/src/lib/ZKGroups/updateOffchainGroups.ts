@@ -13,7 +13,7 @@ export async function updateOffchainGroups(
 
     for (const [name, merkleTreeInfo] of updatedGroups) {
         offchainGroups.push({
-            name: utils.formatBytes32String(name),
+            groupName: utils.formatBytes32String(name),
             merkleTreeRoot: merkleTreeInfo[0],
             merkleTreeDepth: merkleTreeInfo[1]
         })
