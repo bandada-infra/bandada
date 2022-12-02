@@ -10,30 +10,28 @@ interface IZKGroups {
     }
 
     struct OffchainGroup {
-        bytes32 name;
+        bytes32 groupName;
         uint256 merkleTreeRoot;
         uint256 merkleTreeDepth;
     }
 
     /// @dev Emitted when an off-chain group is updated.
-    /// @param groupId: Id of the group.
-    /// @param name: Name of the off-chain group.
+    /// @param groupName: Name of the off-chain group.
     /// @param merkleTreeRoot: Root of the merkle tree.
     /// @param merkleTreeDepth: Depth of the merkle tree.
     event OffchainGroupUpdated(
-        uint256 groupId,
-        bytes32 indexed name,
+        bytes32 indexed groupName,
         uint256 merkleTreeRoot,
         uint256 indexed merkleTreeDepth
     );
 
     /// @dev Emitted when a Semaphore proof is verified.
-    /// @param groupId: Id of the group.
+    /// @param groupName: Name of the off-chain group.
     /// @param externalNullifier: External nullifier.
     /// @param nullifierHash: Nullifier hash.
     /// @param signal: Semaphore signal.
     event ProofVerified(
-        uint256 indexed groupId,
+        bytes32 indexed groupName,
         uint256 externalNullifier,
         uint256 nullifierHash,
         bytes32 signal
@@ -45,13 +43,13 @@ interface IZKGroups {
 
     /// @dev Saves the nullifier hash to avoid double signaling and emits an event
     /// if the zero-knowledge proof is valid. This is for off-chain group.
-    /// @param groupId: Id of the group.
+    /// @param groupName: Name of the off-chain group.
     /// @param signal: Semaphore signal.
     /// @param nullifierHash: Nullifier hash.
     /// @param externalNullifier: External nullifier.
     /// @param proof: Zero-knowledge proof.
     function verifyOffchainGroupProof(
-            uint256 groupId,
+            bytes32 groupName,
             bytes32 signal,
             uint256 nullifierHash,
             uint256 externalNullifier,
@@ -59,12 +57,12 @@ interface IZKGroups {
         ) external;
 
     /// @dev Returns the merkle tree root of an off-chain group.
-    /// @param groupId: Id of the group.
+    /// @param groupName: Name of the off-chain group.
     /// @return merkleTreeRoot: merkle tree root of the group.
-    function getOffchainRoot(uint256 groupId) external view returns (uint256);
+    function getOffchainRoot(bytes32 groupName) external view returns (uint256);
 
     /// @dev Returns the merkle tree depth of an off-chain group.
-    /// @param groupId: Id of the group.
+    /// @param groupName: Name of the off-chain group.
     /// @return merkleTreeDepth: merkle tree Depth of the group.
-    function getOffchainDepth(uint256 groupId) external view returns (uint256);
+    function getOffchainDepth(bytes32 groupName) external view returns (uint256);
 }
