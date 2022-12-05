@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 import { ContractReceipt, utils } from "ethers"
-import getSigner from "../../getSigner"
-import getContractInstance from "../getContractInstance"
+import getSigner from "../../getBackendSigner"
+import getContractInstance from "../../getContractInstance"
 
-export default async function updateOffchainGroups(
+export async function updateOffchainGroups(
     updatedGroups: Map<string, any[]>
 ): Promise<ContractReceipt> {
     const signer = await getSigner()
@@ -13,13 +13,13 @@ export default async function updateOffchainGroups(
 
     for (const [name, merkleTreeInfo] of updatedGroups) {
         offchainGroups.push({
-            name: utils.formatBytes32String(name),
+            groupName: utils.formatBytes32String(name),
             merkleTreeRoot: merkleTreeInfo[0],
             merkleTreeDepth: merkleTreeInfo[1]
         })
     }
 
-    const transaction = await contractInstance.updateOffchainGroups(
+    const transaction = await contractInstance["updateOffchainGroups"](
         offchainGroups
     )
     return transaction.wait(1)

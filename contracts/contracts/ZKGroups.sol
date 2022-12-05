@@ -17,10 +17,10 @@ contract ZKGroups is IZKGroups, SemaphoreCore, Ownable {
     mapping(uint256 => IVerifier) public verifiers;
 
     /// @dev Gets a group id and returns the off-chain group parameters.
-    mapping(uint256 => OffchainGroup) public offchainGroups;
+    mapping(bytes32 => OffchainGroup) public offchainGroups;
 
     /// @dev Gets a group id and returns boolean about nullifierHashes used.
-    mapping(uint256 => mapping(uint256 => bool)) internal nullifierHashes;
+    mapping(bytes32 => mapping(uint256 => bool)) internal nullifierHashes;
 
     /// @dev Checks if there is a verifier for the given merkle tree depth.
     /// @param merkleTreeDepth: Depth of the merkle tree.
@@ -46,9 +46,7 @@ contract ZKGroups is IZKGroups, SemaphoreCore, Ownable {
     /// @dev See {IZKGroups-updateOffchainGroups}.
     function updateOffchainGroups(OffchainGroup[] calldata _offchainGroups) external override onlyOwner {
         for (uint8 i = 0; i < _offchainGroups.length; ){
-            uint256 groupId = uint256(keccak256(abi.encodePacked("Offchain_",_offchainGroups[i].name))) % SNARK_SCALAR_FIELD;
-            
-            _updateOffchainGroup(groupId, _offchainGroups[i]);
+            _updateOffchainGroup(_offchainGroups[i].groupName, _offchainGroups[i]);
 
             unchecked {
                 ++i;
@@ -58,55 +56,55 @@ contract ZKGroups is IZKGroups, SemaphoreCore, Ownable {
 
     /// @dev See {IZKGroups-verifyOffchainGroupProof}.
     function verifyOffchainGroupProof(
-        uint256 groupId,
+        bytes32 groupName,
         bytes32 signal,
         uint256 nullifierHash,
         uint256 externalNullifier,
         uint256[8] calldata proof
     ) external override {
-        uint256 merkleTreeRoot = getOffchainRoot(groupId);
+        uint256 merkleTreeRoot = getOffchainRoot(groupName);
 
         require(merkleTreeRoot != 0, "Offchain group does not exist");
 
-        require(!nullifierHashes[groupId][nullifierHash], "you cannot use the same nullifier twice");
+        require(!nullifierHashes[groupName][nullifierHash], "you cannot use the same nullifier twice");
 
-        uint256 merkleTreeDepth = getOffchainDepth(groupId);
+        uint256 merkleTreeDepth = getOffchainDepth(groupName);
 
         IVerifier verifier = verifiers[merkleTreeDepth];
 
         _verifyProof(signal, merkleTreeRoot, nullifierHash, externalNullifier, proof, verifier);
 
-        _saveNullifierHash(groupId, nullifierHash);
+        _saveNullifierHash(groupName, nullifierHash);
 
-        emit ProofVerified(groupId, nullifierHash, externalNullifier, signal);
+        emit ProofVerified(groupName, nullifierHash, externalNullifier, signal);
     }
 
     /// @dev See {IZKGroups-getOffchainRoot}.
-    function getOffchainRoot(uint256 groupId) public view override returns (uint256) {
-        return offchainGroups[groupId].merkleTreeRoot;
+    function getOffchainRoot(bytes32 groupName) public view override returns (uint256) {
+        return offchainGroups[groupName].merkleTreeRoot;
     }
 
     /// @dev See {IZKGroups-getOffchainDepth}.
-    function getOffchainDepth(uint256 groupId) public view override returns (uint256) {
-        return offchainGroups[groupId].merkleTreeDepth;
+    function getOffchainDepth(bytes32 groupName) public view override returns (uint256) {
+        return offchainGroups[groupName].merkleTreeDepth;
     }
 
     /// @dev Updates an off-chain group.
-    /// @param groupId: Id of the group.
+    /// @param groupName: Name of the off-chain group.
     /// @param offchainGroup: off-chain group data.
     function _updateOffchainGroup(
-        uint256 groupId,
+        bytes32 groupName,
         OffchainGroup calldata offchainGroup
     ) private onlySupportedMerkleTreeDepth(offchainGroup.merkleTreeDepth){
-        offchainGroups[groupId] = offchainGroup;
+        offchainGroups[groupName] = offchainGroup;
 
-        emit OffchainGroupUpdated(groupId, offchainGroup.name, offchainGroup.merkleTreeRoot, offchainGroup.merkleTreeDepth);
+        emit OffchainGroupUpdated(offchainGroup.groupName, offchainGroup.merkleTreeRoot, offchainGroup.merkleTreeDepth);
     }
 
     /// @dev Save nullifier hash to avoid double signaling.
-    /// @param groupId: Id of the group.
+    /// @param groupName: Name of the off-chain group.
     /// @param nullifierHash: Nullifier hash.
-    function _saveNullifierHash(uint256 groupId, uint256 nullifierHash) internal {
-        nullifierHashes[groupId][nullifierHash] = true;
+    function _saveNullifierHash(bytes32 groupName, uint256 nullifierHash) internal {
+        nullifierHashes[groupName][nullifierHash] = true;
     }
 }
