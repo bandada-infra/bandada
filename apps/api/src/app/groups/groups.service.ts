@@ -92,7 +92,7 @@ export class GroupsService {
     /**
      * Creates a new group.
      * @param dto External parameters used to create a new group.
-     * @param admin Admin id from jwt auth.
+     * @param admin Admin username.
      * @returns Created group.
      */
     async createGroup(
@@ -123,7 +123,7 @@ export class GroupsService {
      * Updates some parameters of the group.
      * @param dto External parameters used to update a group.
      * @param groupName Group name.
-     * @param admin Admin id from jwt auth.
+     * @param admin Admin username.
      * @returns Updated group.
      */
     async updateGroup(
@@ -207,7 +207,7 @@ export class GroupsService {
 
     /**
      * Returns a list of groups of a specific admin.
-     * @param admin Admin id from jwt auth.
+     * @param admin Admin username.
      * @returns List of admin's existing groups.
      */
     async getGroupsByAdmin(admin: string): Promise<Group[]> {

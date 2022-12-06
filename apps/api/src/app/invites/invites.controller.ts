@@ -25,7 +25,7 @@ export class InvitesController {
     ): Promise<string> {
         const { code } = await this.invitesService.createInvite(
             dto,
-            req["user"].userId
+            req["user"].username
         )
 
         return code

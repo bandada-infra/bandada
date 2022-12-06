@@ -2,6 +2,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     PrimaryGeneratedColumn
 } from "typeorm"
 import { ServiceType } from "../../auth/types"
@@ -24,6 +25,7 @@ export class Account {
     refreshToken?: string
 
     @Column()
+    @Index({ unique: true })
     username: string
 
     @Column({ nullable: true })

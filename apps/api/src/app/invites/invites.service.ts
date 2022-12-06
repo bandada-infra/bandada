@@ -25,7 +25,7 @@ export class InvitesService {
      * Creates a new group invite with a unique code. Group invites can only be
      * created by group admins.
      * @param dto External parameters used to create a new Invite.
-     * @param groupAdmin Group admin.
+     * @param groupAdmin Group admin username.
      * @returns The created invite.
      */
     async createInvite(

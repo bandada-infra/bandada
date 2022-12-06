@@ -33,7 +33,7 @@ export class GroupsController {
         @Req() req: Request,
         @Body() dto: CreateGroupDto
     ): Promise<Omit<Group, "id">> {
-        const group = this.groupsService.createGroup(dto, req["user"].userId)
+        const group = this.groupsService.createGroup(dto, req["user"].username)
 
         return mapEntity(group)
     }
@@ -48,7 +48,7 @@ export class GroupsController {
         const group = await this.groupsService.updateGroup(
             dto,
             groupName,
-            req["user"].userId
+            req["user"].username
         )
 
         return group
@@ -67,7 +67,7 @@ export class GroupsController {
     @UseGuards(AuthGuard("jwt"))
     async getGroupsByAdmin(@Req() req: Request): Promise<Omit<Group, "id">[]> {
         const groups = await this.groupsService.getGroupsByAdmin(
-            req["user"].userId
+            req["user"].username
         )
 
         return groups.map(mapEntity)
