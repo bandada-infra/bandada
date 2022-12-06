@@ -19,12 +19,14 @@ import {
 import { useEffect, useState } from "react"
 import { groupSizeInfo } from "../types/groups"
 import useOffchainGroups from "../hooks/useOffchainGroups"
-// import useOnchainGrouops from "../hooks/useOnchainGroups"
 import { useSearchParams } from "react-router-dom"
+import { createGroup as createOnchainGroup } from "@zk-groups/onchain"
+import useSigner from "../hooks/useSigner"
 
-export default function CreatGroupModal(
-    { isOpen, onClose }: UseDisclosureProps
-): JSX.Element {
+export default function CreatGroupModal({
+    isOpen,
+    onClose
+}: UseDisclosureProps): JSX.Element {
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const [_step, setStep] = useState<number>(0)
@@ -32,7 +34,7 @@ export default function CreatGroupModal(
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
     const { createOffchainGroup } = useOffchainGroups()
-    // const { createOnchainGroup } = useOnchainGroups()
+    const _signer = useSigner()
 
     function nextStep() {
         setStep(_step + 1)
@@ -66,9 +68,12 @@ export default function CreatGroupModal(
         treeDepth: number
     ) {
         if (pageOption === "on-chain") {
-            // createOnchainGroup(groupName, groupDescription, treeDepth)
-            console.log(groupName, groupDescription, treeDepth)
-        } else{
+            try{
+                _signer && await createOnchainGroup(_signer, groupName, treeDepth)
+            } catch (error) {
+                console.error(error)
+            }
+        } else {
             createOffchainGroup(groupName, groupDescription, treeDepth)
         }
     }
