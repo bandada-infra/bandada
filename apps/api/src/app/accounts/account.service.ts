@@ -1,13 +1,8 @@
+import { id } from "@ethersproject/hash"
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import {
-    DeleteResult,
-    FindOptionsWhere,
-    Repository,
-    UpdateResult
-} from "typeorm"
+import { FindOptionsWhere, Repository } from "typeorm"
 import { CreateAccountDTO } from "./dto/create-account.dto"
-import { UpdateAccountDTO } from "./dto/update-account.dto"
 import { Account } from "./entities/account.entity"
 
 @Injectable()
@@ -20,11 +15,9 @@ export class AccountService {
     public async create(
         payload: CreateAccountDTO
     ): Promise<Account & CreateAccountDTO> {
-        return this.accountRepository.save(payload)
-    }
+        payload.userId = BigInt(id(payload.userId)).toString()
 
-    public async findAll(): Promise<Account[]> {
-        return this.accountRepository.find()
+        return this.accountRepository.save(payload)
     }
 
     public async findOne(
@@ -33,14 +26,18 @@ export class AccountService {
         return this.accountRepository.findOneBy(payload)
     }
 
-    public async update(
-        id: number,
-        payload: UpdateAccountDTO
-    ): Promise<UpdateResult> {
-        return this.accountRepository.update(id, payload)
-    }
+    //public async findAll(): Promise<Account[]> {
+    //return this.accountRepository.find()
+    //}
 
-    public async remove(id: number): Promise<DeleteResult> {
-        return this.accountRepository.delete(id)
-    }
+    //public async update(
+    //id: number,
+    //payload: UpdateAccountDTO
+    //): Promise<UpdateResult> {
+    //return this.accountRepository.update(id, payload)
+    //}
+
+    //public async remove(id: number): Promise<DeleteResult> {
+    //return this.accountRepository.delete(id)
+    //}
 }
