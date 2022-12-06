@@ -57,7 +57,7 @@ export class InvitesService {
      * @param inviteCode Invite code.
      * @returns The invite data.
      */
-    async getInvite(inviteCode: string): Promise<any> {
+    async getInvite(inviteCode: string): Promise<Invite> {
         const invite = await this.inviteRepository.findOne({
             where: {
                 code: inviteCode

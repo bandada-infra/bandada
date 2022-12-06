@@ -8,6 +8,7 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
+import { mapEntity } from "../common/utils"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
@@ -31,7 +32,13 @@ export class InvitesController {
     }
 
     @Get(":code")
-    async getInvite(@Param("code") inviteCode: string): Promise<Invite> {
-        return this.invitesService.getInvite(inviteCode)
+    async getInvite(
+        @Param("code") inviteCode: string
+    ): Promise<Omit<Invite, "id">> {
+        const invite = (await this.invitesService.getInvite(inviteCode)) as any
+
+        invite.group = invite.group.name
+
+        return mapEntity(invite)
     }
 }
