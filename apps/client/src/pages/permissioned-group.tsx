@@ -20,7 +20,7 @@ export default function PermissionedGroup(): JSX.Element {
             const invite = await getInvite(inviteCode)
 
             if (invite) {
-                setGroupName(invite.group.name)
+                setGroupName(invite.group)
                 setIsRedeemed(invite.redeemed)
             }
         })()
@@ -40,6 +40,7 @@ export default function PermissionedGroup(): JSX.Element {
                 _signer &&
                 _groupName &&
                 (await generateIdentityCommitment(_signer, _groupName))
+
             if (hasjoined) {
                 alert("You have already joined")
                 return
