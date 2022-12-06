@@ -13,6 +13,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Spinner,
     Text,
     UseDisclosureProps
 } from "@chakra-ui/react"
@@ -33,6 +34,7 @@ export default function CreatGroupModal({
     const [_groupName, setGroupName] = useState<string>("")
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
+    const [_loading, setLoading] = useState<boolean>()
     const { createOffchainGroup } = useOffchainGroups()
     const _signer = useSigner()
 
@@ -68,13 +70,19 @@ export default function CreatGroupModal({
         treeDepth: number
     ) {
         if (pageOption === "on-chain") {
-            try{
-                _signer && await createOnchainGroup(_signer, groupName, treeDepth)
+            setLoading(true)
+            try {
+                const transaction =
+                    _signer &&
+                    (await createOnchainGroup(_signer, groupName, treeDepth))
+                setLoading(false)
+                transaction && onClose && onClose()
             } catch (error) {
                 console.error(error)
             }
         } else {
             createOffchainGroup(groupName, groupDescription, treeDepth)
+            onClose && onClose()
         }
     }
 
@@ -235,31 +243,47 @@ export default function CreatGroupModal({
                                         )}
                                 </Flex>
                             </Container>
-                            <Flex justifyContent="space-between" marginY="20px">
-                                <Button onClick={previousStep} fontSize="lg">
-                                    Back
-                                </Button>
-                                <Button
-                                    fontSize="lg"
-                                    variant="solid"
-                                    colorScheme="primary"
-                                    onClick={() => {
-                                        try {
-                                            createGroup(
-                                                _groupName,
-                                                _groupDescription,
-                                                groupSizeInfo[_groupSize]
-                                                    .treeDepth
-                                            )
-                                            onClose && onClose()
-                                        } catch (error) {
-                                            console.error(error)
-                                        }
-                                    }}
+                            {_loading ? (
+                                <Flex
+                                    flexDir="row"
+                                    justifyContent="center"
+                                    marginY="20px"
                                 >
-                                    Create
-                                </Button>
-                            </Flex>
+                                    <Spinner size="md" />
+                                    <Text ml="5">Pending transaction</Text>
+                                </Flex>
+                            ) : (
+                                <Flex
+                                    justifyContent="space-between"
+                                    marginY="20px"
+                                >
+                                    <Button
+                                        onClick={previousStep}
+                                        fontSize="lg"
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                        fontSize="lg"
+                                        variant="solid"
+                                        colorScheme="primary"
+                                        onClick={() => {
+                                            try {
+                                                createGroup(
+                                                    _groupName,
+                                                    _groupDescription,
+                                                    groupSizeInfo[_groupSize]
+                                                        .treeDepth
+                                                )
+                                            } catch (error) {
+                                                console.error(error)
+                                            }
+                                        }}
+                                    >
+                                        Create
+                                    </Button>
+                                </Flex>
+                            )}
                         </Box>
                     )}
                 </ModalBody>
