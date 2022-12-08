@@ -16,6 +16,7 @@ import CreatGroupModal from "../components/creat-group-modal"
 import GroupBox from "../components/group-box"
 import GroupFolder from "../components/group-folder"
 import useOffchainGroups from "../hooks/useOffchainGroups"
+import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { Cookies } from "react-cookie"
@@ -27,7 +28,7 @@ export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const { getOffchainGroupList } = useOffchainGroups()
-    // const { getOnchainGroupList } = useOnchainGroups()
+    const { getOnchainGroupList } = useOnchainGroups()
     const { account } = useEthereumWallet()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const navigate = useNavigate()
@@ -54,12 +55,17 @@ export default function MyGroups(): JSX.Element {
                 const offchainGroupList = await getOffchainGroupList()
                 setGroupList(offchainGroupList)
             } else {
-                // const onchainGroupList = await getOnchainGroupList()
-                const onchainGroupList = null
+                const onchainGroupList = await getOnchainGroupList(account)
                 setGroupList(onchainGroupList)
             }
         })()
-    }, [getOffchainGroupList, _isOffchainGroup, navigate])
+    }, [
+        getOnchainGroupList,
+        getOffchainGroupList,
+        _isOffchainGroup,
+        navigate,
+        account
+    ])
 
     useEffect(() => {
         _groupList &&
@@ -158,7 +164,7 @@ export default function MyGroups(): JSX.Element {
             ) : (
                 <GroupFolder />
             )}
-            <CreatGroupModal isOpen={isOpen} onClose={onClose}/>
+            <CreatGroupModal isOpen={isOpen} onClose={onClose} />
         </Container>
     )
 }
