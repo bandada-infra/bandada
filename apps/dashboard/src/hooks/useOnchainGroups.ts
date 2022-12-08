@@ -5,7 +5,8 @@ import { Uint248 } from "soltypes"
 import { hexStripZeros, toUtf8String } from "ethers/lib/utils"
 import { Group } from "../types/groups"
 
-const SUBGRAPH_URL = "https://api.thegraph.com/subgraphs/name/semaphore-protocol/goerli-5259d3"
+const SUBGRAPH_URL =
+    "https://api.thegraph.com/subgraphs/name/semaphore-protocol/goerli-5259d3"
 
 // const SUBGRAPH_URL =
 //     "https://cors-anywhere.herokuapp.com/https://api.thegraph.com/subgraphs/name/semaphore-protocol/goerli-5259d3" // avoid CORS error

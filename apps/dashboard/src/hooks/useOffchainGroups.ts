@@ -14,7 +14,9 @@ type ReturnParameters = {
 }
 
 export default function useOffchainGroups(): ReturnParameters {
-    const getOffchainGroupList = useCallback(async (): Promise<Group[] | null> => {
+    const getOffchainGroupList = useCallback(async (): Promise<
+        Group[] | null
+    > => {
         try {
             const groupList = await request(
                 `${environment.apiUrl}/groups/admin-groups`
