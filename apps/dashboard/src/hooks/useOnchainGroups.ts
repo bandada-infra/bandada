@@ -51,7 +51,6 @@ export default function useOnchainGroups(): ReturnParameters {
                         memberList.push(member.id)
                     })
                     groupList.push({
-                        id: groups[i].id,
                         name: groupName,
                         description: `${groupName} on-chain group`,
                         treeDepth: groups[i].merkleTree.depth,
