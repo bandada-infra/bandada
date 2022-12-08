@@ -34,7 +34,7 @@ export async function createGroup(
         "createGroup(uint256,uint256,uint256,address)"
     ](groupId, merkleTreeDepth, 0, admin.getAddress())
 
-    return transaction
+    return transaction.wait(1)
 }
 
 export async function updateGroupAdmin(

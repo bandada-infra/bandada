@@ -15,23 +15,57 @@ import { FiSearch } from "react-icons/fi"
 import CreatGroupModal from "../components/creat-group-modal"
 import GroupBox from "../components/group-box"
 import GroupFolder from "../components/group-folder"
-import useGroups from "../hooks/useGroups"
+import useOffchainGroups from "../hooks/useOffchainGroups"
+import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { Cookies } from "react-cookie"
+import useEthereumWallet from "../hooks/useEthereumWallet"
 
 export default function MyGroups(): JSX.Element {
-    const { getGroupList } = useGroups()
+    const cookies = new Cookies()
+    const userSession = cookies.get("jwt")
+    const [searchParams] = useSearchParams()
+    const pageOption = searchParams.get("type")
+    const { getOffchainGroupList } = useOffchainGroups()
+    const { getOnchainGroupList } = useOnchainGroups()
+    const { account } = useEthereumWallet()
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const navigate = useNavigate()
+
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
     const [_groupList, setGroupList] = useState<Group[] | null>()
     const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
+    const [_isOffchainGroup, setIsOffchainGroup] = useState<boolean>()
+
+    useEffect(() => {
+        if (userSession) {
+            setIsOffchainGroup(true)
+        } else if (account) {
+            setIsOffchainGroup(false)
+        } else {
+            navigate("/sso")
+        }
+    }, [account, navigate, userSession])
 
     useEffect(() => {
         ;(async () => {
-            const groupList = await getGroupList()
-            setGroupList(groupList)
+            if (_isOffchainGroup) {
+                const offchainGroupList = await getOffchainGroupList()
+                setGroupList(offchainGroupList)
+            } else {
+                const onchainGroupList = await getOnchainGroupList(account)
+                setGroupList(onchainGroupList)
+            }
         })()
-    }, [getGroupList])
+    }, [
+        getOnchainGroupList,
+        getOffchainGroupList,
+        _isOffchainGroup,
+        navigate,
+        account
+    ])
 
     useEffect(() => {
         _groupList &&
@@ -48,7 +82,7 @@ export default function MyGroups(): JSX.Element {
         <Container maxW="container.xl">
             <Flex justifyContent="space-between" mt="43px">
                 <Center>
-                    <Heading fontSize="40px">My groups</Heading>
+                    <Heading fontSize="40px">My {pageOption} groups</Heading>
                 </Center>
                 <Center>
                     <Button

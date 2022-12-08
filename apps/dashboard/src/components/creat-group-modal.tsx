@@ -13,22 +13,30 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Spinner,
     Text,
     UseDisclosureProps
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { groupSizeInfo } from "../types/groups"
-import useGroups from "../hooks/useGroups"
+import useOffchainGroups from "../hooks/useOffchainGroups"
+import { useSearchParams } from "react-router-dom"
+import { createGroup as createOnchainGroup } from "@zk-groups/onchain"
+import useSigner from "../hooks/useSigner"
 
 export default function CreatGroupModal({
     isOpen,
     onClose
 }: UseDisclosureProps): JSX.Element {
+    const [searchParams] = useSearchParams()
+    const pageOption = searchParams.get("type")
     const [_step, setStep] = useState<number>(0)
     const [_groupName, setGroupName] = useState<string>("")
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
-    const { createGroup } = useGroups()
+    const [_loading, setLoading] = useState<boolean>()
+    const { createOffchainGroup } = useOffchainGroups()
+    const _signer = useSigner()
 
     function nextStep() {
         setStep(_step + 1)
@@ -53,6 +61,28 @@ export default function CreatGroupModal({
             nextStep()
         } else {
             alert("Select the group size")
+        }
+    }
+
+    async function createGroup(
+        groupName: string,
+        groupDescription: string,
+        treeDepth: number
+    ) {
+        if (pageOption === "on-chain") {
+            setLoading(true)
+            try {
+                const transaction =
+                    _signer &&
+                    (await createOnchainGroup(_signer, groupName, treeDepth))
+                setLoading(false)
+                transaction && onClose && onClose()
+            } catch (error) {
+                console.error(error)
+            }
+        } else {
+            createOffchainGroup(groupName, groupDescription, treeDepth)
+            onClose && onClose()
         }
     }
 
@@ -213,34 +243,47 @@ export default function CreatGroupModal({
                                         )}
                                 </Flex>
                             </Container>
-                            <Flex justifyContent="space-between" marginY="20px">
-                                <Button onClick={previousStep} fontSize="lg">
-                                    Back
-                                </Button>
-                                <Button
-                                    fontSize="lg"
-                                    variant="solid"
-                                    colorScheme="primary"
-                                    onClick={() => {
-                                        if (
-                                            _groupName &&
-                                            _groupDescription &&
-                                            _groupSize &&
-                                            onClose
-                                        ) {
-                                            createGroup(
-                                                _groupName,
-                                                _groupDescription,
-                                                groupSizeInfo[_groupSize]
-                                                    .treeDepth
-                                            )
-                                            onClose()
-                                        }
-                                    }}
+                            {_loading ? (
+                                <Flex
+                                    flexDir="row"
+                                    justifyContent="center"
+                                    marginY="20px"
                                 >
-                                    Create
-                                </Button>
-                            </Flex>
+                                    <Spinner size="md" />
+                                    <Text ml="5">Pending transaction</Text>
+                                </Flex>
+                            ) : (
+                                <Flex
+                                    justifyContent="space-between"
+                                    marginY="20px"
+                                >
+                                    <Button
+                                        onClick={previousStep}
+                                        fontSize="lg"
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                        fontSize="lg"
+                                        variant="solid"
+                                        colorScheme="primary"
+                                        onClick={() => {
+                                            try {
+                                                createGroup(
+                                                    _groupName,
+                                                    _groupDescription,
+                                                    groupSizeInfo[_groupSize]
+                                                        .treeDepth
+                                                )
+                                            } catch (error) {
+                                                console.error(error)
+                                            }
+                                        }}
+                                    >
+                                        Create
+                                    </Button>
+                                </Flex>
+                            )}
                         </Box>
                     )}
                 </ModalBody>

@@ -3,6 +3,7 @@ export type Group = {
     description: string
     treeDepth: number
     members: string[]
+    admin: string
 }
 
 export type Size = {
