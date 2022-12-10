@@ -6,30 +6,51 @@ import { Group } from "../types/groups"
 import { CgProfile } from "react-icons/cg"
 import { useDisclosure } from "@chakra-ui/react"
 import InviteModal from "../components/invite-modal"
-import { useNavigate } from "react-router-dom"
+import AddMemberModal from "../components/add-member-modal"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import useOnchainGroups from "../hooks/useOnchainGroups"
 
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { groupName } = useParams()
     const { getGroup, getMembersList } = useMembers()
+    const { getOnchainGroup } = useOnchainGroups()
     const [_group, setGroup] = useState<Group | null>()
     const [_membersList, setMembersList] = useState<string[] | null>()
+    const [searchParams] = useSearchParams()
+    const pageOption = searchParams.get("type")
 
     useEffect(() => {
         ;(async () => {
-            if (groupName) {
-                const group = await getGroup(groupName)
-                if (group) {
-                    setGroup(group)
-                    const membersList = await getMembersList(groupName)
-                    setMembersList(membersList)
+            try {
+                if (pageOption === "on-chain") {
+                    const onchainGroup = await getOnchainGroup(groupName || "")
+                    setGroup(onchainGroup)
+                    setMembersList(onchainGroup?.members)
                 } else {
-                    navigate(`/group-not-found/${groupName}`)
+                    const group = await getGroup(groupName || "")
+                    if (group) {
+                        setGroup(group)
+                        const membersList = await getMembersList(
+                            groupName || ""
+                        )
+                        setMembersList(membersList)
+                    }
                 }
+            } catch (error) {
+                console.error(error)
+                navigate(`/group-not-found/${groupName}`)
             }
         })()
-    }, [getGroup, groupName, getMembersList, navigate])
+    }, [
+        getGroup,
+        groupName,
+        getMembersList,
+        navigate,
+        getOnchainGroup,
+        pageOption
+    ])
 
     return (
         <Container maxW="container.xl">
@@ -123,12 +144,19 @@ export default function Manage(): JSX.Element {
                     </Flex>
                 </Box>
             </Flex>
-
-            <InviteModal
-                isOpen={isOpen}
-                onClose={onClose}
-                groupName={groupName}
-            />
+            {pageOption === "on-chain" ? (
+                <AddMemberModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    groupName={groupName}
+                />
+            ) : (
+                <InviteModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    groupName={groupName}
+                />
+            )}
         </Container>
     )
 }

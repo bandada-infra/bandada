@@ -5,7 +5,7 @@ import getContractInstance from "../../getContractInstance"
 import { HashZero } from "@ethersproject/constants"
 import { Bytes31 } from "soltypes"
 
-function formatUint248String(groupName: string): string {
+export function formatUint248String(groupName: string): string {
     const uint8_arr = toUtf8Bytes(groupName)
 
     if (uint8_arr.length > 30) {
