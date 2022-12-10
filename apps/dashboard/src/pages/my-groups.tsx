@@ -19,12 +19,11 @@ import useOffchainGroups from "../hooks/useOffchainGroups"
 import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { Cookies } from "react-cookie"
 import useEthereumWallet from "../hooks/useEthereumWallet"
+import { request } from "@zk-groups/utils"
+import { environment } from "../environments/environment"
 
 export default function MyGroups(): JSX.Element {
-    const cookies = new Cookies()
-    const userSession = cookies.get("jwt")
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const { getOffchainGroupList } = useOffchainGroups()
@@ -33,6 +32,7 @@ export default function MyGroups(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const navigate = useNavigate()
 
+    const [jwtInCookies, setJwtInCookies] = useState(false)
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
     const [_groupList, setGroupList] = useState<Group[] | null>()
     const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
@@ -40,14 +40,27 @@ export default function MyGroups(): JSX.Element {
     const [_isOffchainGroup, setIsOffchainGroup] = useState<boolean>()
 
     useEffect(() => {
-        if (userSession) {
+        ;(async () => {
+            await request(`${environment.apiUrl}/auth/getUser`)
+                .then((res) => {
+                    setJwtInCookies(true)
+                })
+                .catch((e) => {
+                    console.log("no jwt")
+                    setJwtInCookies(false)
+                })
+        })()
+    }, [])
+
+    useEffect(() => {
+        if (jwtInCookies) {
             setIsOffchainGroup(true)
         } else if (account) {
             setIsOffchainGroup(false)
         } else {
             navigate("/sso")
         }
-    }, [account, navigate, userSession])
+    }, [account, navigate, jwtInCookies])
 
     useEffect(() => {
         ;(async () => {

@@ -1,6 +1,7 @@
 import {
     Controller,
     Get,
+    Post,
     Req,
     Res,
     UnauthorizedException,
@@ -24,7 +25,7 @@ export class AuthController {
         const jwtToken = req["user"]
         if (jwtToken) {
             res.cookie("jwt", jwtToken, {
-                httpOnly: false, //@todo: make true for security
+                httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000
             })
         }
@@ -44,7 +45,7 @@ export class AuthController {
         const jwtToken = req["user"]
         if (jwtToken) {
             res.cookie("jwt", jwtToken, {
-                httpOnly: false,
+                httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000
             })
         }
@@ -64,11 +65,27 @@ export class AuthController {
         const jwtToken = req["user"]
         if (jwtToken) {
             res.cookie("jwt", jwtToken, {
-                httpOnly: false,
+                httpOnly: true,
                 maxAge: 24 * 60 * 60 * 1000
             })
         }
 
         res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
+    }
+
+    @Get("getUser")
+    @UseGuards(AuthGuard("jwt"))
+    jwtCheck() {
+        return true
+    }
+
+    @Post("log-out")
+    @UseGuards(AuthGuard("jwt"))
+    logOut(@Req() req: Request, @Res() res: Response) {
+        res.cookie("jwt", "", {
+            httpOnly: true,
+            maxAge: 0
+        })
+        res.redirect(`${environment.dashboardUrl}`)
     }
 }

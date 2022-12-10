@@ -10,22 +10,25 @@ import {
     useClipboard
 } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
-import { Cookies } from "react-cookie"
 import { useEffect, useState } from "react"
 import useEthereumWallet from "../hooks/useEthereumWallet"
-import { shortenAddress } from "@zk-groups/utils"
+import { request, shortenAddress } from "@zk-groups/utils"
+import { environment } from "../environments/environment"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
-    const cookies = new Cookies()
-    const userSession = cookies.get("jwt")
+    const [jwtInCookies, setJwtInCookies] = useState(false)
     const { disconnect, isWalletConnected, account } = useEthereumWallet()
     const { hasCopied, onCopy } = useClipboard(account || "")
     const [_isWalletConnected, setIsWalletConnected] = useState<boolean>()
     const [_account, setAccount] = useState<string>()
 
     function logOut() {
-        cookies.remove("jwt")
+        request(`${environment.apiUrl}/auth/log-out`, { method: "post" }).catch(
+            (e) => {
+                console.log("no jwt")
+            }
+        )
         navigate("/")
         window.location.reload()
     }
@@ -40,6 +43,19 @@ export default function NavBar(): JSX.Element {
         })()
     }, [isWalletConnected, account])
 
+    useEffect(() => {
+        ;(async () => {
+            await request(`${environment.apiUrl}/auth/getUser`)
+                .then((res) => {
+                    setJwtInCookies(true)
+                })
+                .catch((e) => {
+                    console.log("no jwt")
+                    setJwtInCookies(false)
+                })
+        })()
+    }, [])
+
     return (
         <Box bgColor="#F8F9FF" borderBottom="1px" borderColor="gray.200">
             <Container maxWidth="container.xl">
@@ -53,7 +69,7 @@ export default function NavBar(): JSX.Element {
                     </Center>
 
                     <Spacer />
-                    {userSession ? (
+                    {jwtInCookies ? (
                         <Center>
                             <Button variant="solid" mr="10px" onClick={logOut}>
                                 Log out
