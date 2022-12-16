@@ -17,10 +17,10 @@
         <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/zk-groups.svg?style=flat-square">
     </a>
     <a href="https://github.com/semaphore-protocol/zk-groups/actions?query=workflow%3Atest">
-        <img alt="GitHub Workflow test" src="https://img.shields.io/github/workflow/status/semaphore-protocol/zk-groups/test?label=test&style=flat-square&logo=github">
+        <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/semaphore-protocol/zk-groups/test.yml?branch=main&label=test&style=flat-square&logo=github">
     </a>
     <a href="https://github.com/semaphore-protocol/zk-groups/actions?query=workflow%3Astyle">
-        <img alt="GitHub Workflow style" src="https://img.shields.io/github/workflow/status/semaphore-protocol/zk-groups/style?label=style&style=flat-square&logo=github">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/semaphore-protocol/zk-groups/style.yml?branch=main&label=style&style=flat-square&logo=github">
     </a>
     <a href="https://coveralls.io/github/semaphore-protocol/zk-groups">
         <img alt="Coveralls" src="https://img.shields.io/coveralls/github/semaphore-protocol/zk-groups?label=coverage (ts)&style=flat-square&logo=coveralls">
