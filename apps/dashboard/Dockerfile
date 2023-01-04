@@ -12,18 +12,7 @@ RUN yarn build:all
 
 
 # Create image for the app by copying build artifacts from builder
-FROM node:18-alpine as runner
-USER node
-
-ARG PORT=3333
-ENV NODE_ENV=production
-
-WORKDIR /home/node/api
-COPY --chown=node:node  --from=builder /builder/dist/apps/api ./
-
-RUN yarn
-# TODO: Fix the issue with NX not adding these packages to package.json automatically
-RUN yarn add sqlite3 big-integer
-
-EXPOSE ${PORT}
-CMD ["node", "./main.js"]
+FROM nginx:stable-alpine as runner
+COPY --from=builder /builder/dist/apps/dashboard /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
