@@ -9,12 +9,16 @@
 
 ### Install / Compile
 
-`Contracts` in a NX app, and installation/building can be done by running respective commands in the project root.
+`Contracts` is a NX project, and installation/building can be done by running below commands in the project root.
 
 ```bash
 # in project root
 yarn
-npm yarn build
+
+nx run contracts:build
+
+# or build all projects together
+yarn build:all
 ```
 
 ### Testing
