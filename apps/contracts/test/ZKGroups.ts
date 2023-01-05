@@ -14,13 +14,13 @@ import {
     SolidityProof
 } from "@semaphore-protocol/proof"
 
-dotenvConfig({ path: resolve(__dirname, "../../.env") })
+dotenvConfig({ path: resolve(__dirname, "../../../.env") })
 
 describe("ZKGroups", () => {
     let contract: ZKGroups
 
-    const wasmFilePath = `../snark-artifacts/semaphore.wasm`
-    const zkeyFilePath = `../snark-artifacts/semaphore.zkey`
+    const wasmFilePath = `../../snark-artifacts/semaphore.wasm`
+    const zkeyFilePath = `../../snark-artifacts/semaphore.zkey`
 
     const treeDepth = 20
     const offchainGroupName = utils.formatBytes32String("TestGroupName")

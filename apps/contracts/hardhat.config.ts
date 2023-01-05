@@ -4,7 +4,6 @@ import { config as dotenvConfig } from "dotenv"
 import { HardhatUserConfig } from "hardhat/config"
 import { NetworksUserConfig } from "hardhat/types"
 import { resolve } from "path"
-import { config } from "./package.json"
 import "./tasks/deploy-zk-groups"
 
 dotenvConfig({ path: resolve(__dirname, "../.env") })
@@ -32,12 +31,14 @@ function getNetworks(): NetworksUserConfig {
 }
 
 const hardhatConfig: HardhatUserConfig = {
-    solidity: config.solidity,
+    solidity: {
+        version: "0.8.4"
+    },
     paths: {
-        sources: config.paths.contracts,
-        tests: config.paths.tests,
-        cache: config.paths.cache,
-        artifacts: config.paths.build.contracts
+        sources: "./contracts",
+        tests: "./test",
+        cache: "./cache",
+        artifacts: "./build/contracts"
     },
     networks: {
         hardhat: {
@@ -52,7 +53,7 @@ const hardhatConfig: HardhatUserConfig = {
         coinmarketcap: process.env.COINMARKETCAP_API_KEY
     },
     typechain: {
-        outDir: config.paths.build.typechain,
+        outDir: "./build/typechain",
         target: "ethers-v5"
     },
     etherscan: {
