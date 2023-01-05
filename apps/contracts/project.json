@@ -1,0 +1,62 @@
+{
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/contracts",
+    "projectType": "application",
+    "targets": {
+        "node": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "hardhat node",
+                "cwd": "apps/contracts"
+            }
+        },
+        "build": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "hardhat compile",
+                "cwd": "apps/contracts"
+            }
+        },
+        "deploy": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "hardhat deploy:zk-groups",
+                "cwd": "apps/contracts"
+            }
+        },
+        "deploy-arbitrum": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "hardhat deploy:zk-groups --network arbitrum",
+                "cwd": "apps/contracts"
+            }
+        },
+        "deploy-goerli": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "hardhat deploy:zk-groups --network goerli",
+                "cwd": "apps/contracts"
+            }
+        },
+        "test": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    {
+                        "command": "hardhat test",
+                        "forwardAllArgs": false
+                    }
+                ],
+                "cwd": "apps/contracts"
+            }
+        },
+        "coverage": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "hardhat coverage",
+                "cwd": "apps/contracts"
+            }
+        }
+    },
+    "tags": []
+}

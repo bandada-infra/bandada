@@ -7,21 +7,14 @@
 
 ---
 
-## Install
+### Install / Compile
 
-Install the dependencies:
-
-```bash
-cd contracts
-npm install
-```
-
-### Compile
-
-Compile the smart contracts with Hardhat:
+`Contracts` in a NX app, and installation/building can be done by running respective commands in the project root.
 
 ```bash
-npm run compile
+# in project root
+yarn
+npm yarn build
 ```
 
 ### Testing
@@ -29,19 +22,22 @@ npm run compile
 Run [Mocha](https://mochajs.org/) to test the contracts:
 
 ```bash
-npm run test
+# in project root
+nx run contracts:test
 ```
 
 You can also generate a test coverage report:
 
 ```bash
-npm run test:coverage
+# in project root
+nx run contracts:coverage
 ```
 
 Or a test gas report:
 
 ```bash
-npm run test:report-gas
+# in project root
+REPORT_GAS=true nx run contracts:test
 ```
 
 ### Deploy contracts
@@ -49,9 +45,12 @@ npm run test:report-gas
 Deploy a zk-groups contract with Semaphore-supported networks:
 
 ```bash
-npm run deploy:goerli
+# in project root
+nx run contracts:deploy
 # or
-npm run deploy:arbitrum
+nx run contracts:deploy-arbitrum
+# or
+nx run contracts:deploy-goerli
 ```
 
 If you want to deploy contracts on Goerli or Arbitrum, remember to provide a valid private key and an Infura API in your `.env` file.
