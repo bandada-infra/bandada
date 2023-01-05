@@ -99,6 +99,14 @@ yarn build <app-name> # For specific apps
 
 A `dist` folder will be created.
 
+### Running in Docker
+
+You can also run `zk-groups` using docker by running below command in the project root:
+
+```sh
+docker-compose up -d
+```
+
 ### Testing
 
 Run [Jest](https://jestjs.io/) to test the code with coverage:
