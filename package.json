@@ -8,7 +8,7 @@
         "test": "nx test",
         "start:all": "nx run-many --target=serve --all",
         "build:all": "nx run-many --target=build --all",
-        "test:all": "nx run-many --target=test --all --coverage",
+        "test:all": "nx run-many --target=test --projects=api,client,dashboard --coverage",
         "lint": "nx affected:lint --files *",
         "prettier": "prettier -c .",
         "prettier:write": "prettier -w .",
