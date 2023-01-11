@@ -1,16 +1,13 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-/// @title zk-groups interface.
-/// @dev Interface of a ZKGroups contract.
+/// @title ZKGroups contract interface.
 interface IZKGroups {
-    struct Verifier {
-        address contractAddress;
-        uint256 merkleTreeDepth;
-    }
+    error ZKGroups__GroupDoesNotExist();
+    error ZKGroups__YouAreUsingTheSameNillifierTwice();
+    error ZKGroups__MerkleTreeDepthIsNotSupported();
 
-    struct OffchainGroup {
-        bytes32 groupName;
+    struct Group {
         uint256 merkleTreeRoot;
         uint256 merkleTreeDepth;
     }
@@ -19,50 +16,53 @@ interface IZKGroups {
     /// @param groupName: Name of the off-chain group.
     /// @param merkleTreeRoot: Root of the merkle tree.
     /// @param merkleTreeDepth: Depth of the merkle tree.
-    event OffchainGroupUpdated(
+    event GroupUpdated(
         bytes32 indexed groupName,
         uint256 merkleTreeRoot,
-        uint256 indexed merkleTreeDepth
+        uint256 merkleTreeDepth
     );
 
-    /// @dev Emitted when a Semaphore proof is verified.
+    /// @dev Emitted when a Semaphore proof is correctly verified.
     /// @param groupName: Name of the off-chain group.
+    /// @param merkleTreeRoot: Root of the Merkle tree.
     /// @param externalNullifier: External nullifier.
     /// @param nullifierHash: Nullifier hash.
     /// @param signal: Semaphore signal.
     event ProofVerified(
         bytes32 indexed groupName,
+        uint256 merkleTreeRoot,
         uint256 externalNullifier,
         uint256 nullifierHash,
-        bytes32 signal
+        uint256 signal
     );
 
     /// @dev Updates the off-chain groups.
-    /// @param groups: List of off-chain groups.
-    function updateOffchainGroups(OffchainGroup[] calldata groups) external;
+    /// @param groupNames: List of off-chain group names.
+    /// @param groups: List of off-chain group parameters.
+    function updateGroups(bytes32[] calldata groupNames, Group[] calldata groups) external;
 
     /// @dev Saves the nullifier hash to avoid double signaling and emits an event
-    /// if the zero-knowledge proof is valid. This is for off-chain group.
+    /// if the zero-knowledge proof is valid.
     /// @param groupName: Name of the off-chain group.
     /// @param signal: Semaphore signal.
     /// @param nullifierHash: Nullifier hash.
     /// @param externalNullifier: External nullifier.
     /// @param proof: Zero-knowledge proof.
-    function verifyOffchainGroupProof(
+    function verifyProof(
             bytes32 groupName,
-            bytes32 signal,
+            uint256 signal,
             uint256 nullifierHash,
             uint256 externalNullifier,
             uint256[8] calldata proof
         ) external;
 
-    /// @dev Returns the merkle tree root of an off-chain group.
+    /// @dev Returns the Merkle tree root of an off-chain group.
     /// @param groupName: Name of the off-chain group.
-    /// @return merkleTreeRoot: merkle tree root of the group.
-    function getOffchainRoot(bytes32 groupName) external view returns (uint256);
+    /// @return merkleTreeRoot: Merkle tree root of the group.
+    function getMerkleTreeRoot(bytes32 groupName) external view returns (uint256);
 
-    /// @dev Returns the merkle tree depth of an off-chain group.
+    /// @dev Returns the Merkle tree depth of an off-chain group.
     /// @param groupName: Name of the off-chain group.
-    /// @return merkleTreeDepth: merkle tree Depth of the group.
-    function getOffchainDepth(bytes32 groupName) external view returns (uint256);
+    /// @return merkleTreeDepth: Merkle tree depth of the group.
+    function getMerkleTreeDepth(bytes32 groupName) external view returns (uint256);
 }
