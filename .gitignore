@@ -45,7 +45,6 @@ build
 cache
 artifacts
 
-coverage
 coverage.json
 typechain
 typechain-types
