@@ -1,10 +1,11 @@
 import "@nomicfoundation/hardhat-toolbox"
-import "@semaphore-protocol/hardhat"
+import "@nomicfoundation/hardhat-chai-matchers"
 import { config as dotenvConfig } from "dotenv"
+import "hardhat-dependency-compiler"
 import { HardhatUserConfig } from "hardhat/config"
 import { NetworksUserConfig } from "hardhat/types"
 import { resolve } from "path"
-import "./tasks/deploy-zk-groups"
+import "./tasks/deploy"
 
 dotenvConfig({ path: resolve(__dirname, "../.env") })
 
@@ -34,12 +35,6 @@ const hardhatConfig: HardhatUserConfig = {
     solidity: {
         version: "0.8.4"
     },
-    paths: {
-        sources: "./contracts",
-        tests: "./test",
-        cache: "./cache",
-        artifacts: "./build/contracts"
-    },
     networks: {
         hardhat: {
             chainId: 1337,
@@ -47,13 +42,18 @@ const hardhatConfig: HardhatUserConfig = {
         },
         ...getNetworks()
     },
+    dependencyCompiler: {
+        paths: [
+            "@semaphore-protocol/contracts/base/Pairing.sol",
+            "@semaphore-protocol/contracts/base/SemaphoreVerifier.sol"
+        ]
+    },
     gasReporter: {
         currency: "USD",
         enabled: process.env.REPORT_GAS === "true",
         coinmarketcap: process.env.COINMARKETCAP_API_KEY
     },
     typechain: {
-        outDir: "./build/typechain",
         target: "ethers-v5"
     },
     etherscan: {
