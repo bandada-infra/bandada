@@ -2,7 +2,7 @@
     <h1 align="center">
         ZK-Groups contracts
     </h1>
-    <p align="center">Zk-groups smart contracts to manage off-chain/on-chain groups and verify their zero-knowledge proofs.</p>
+    <p align="center">Zk-groups smart contracts to manage off-chain groups and verify their zero-knowledge proofs.</p>
 </p>
 
 ---
