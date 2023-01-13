@@ -13,6 +13,8 @@ RUN yarn build:all
 
 # Create image for the app by copying build artifacts from builder
 FROM nginx:stable-alpine as runner
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d
 COPY --from=builder /builder/dist/apps/dashboard /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
