@@ -51,6 +51,7 @@
         "passport-jwt": "^4.0.0",
         "passport-oauth2": "^1.6.1",
         "passport-twitter": "^1.0.4",
+        "pg": "^8.8.0",
         "react": "18.1.0",
         "react-cookie": "^4.1.1",
         "react-dom": "18.1.0",
