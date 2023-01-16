@@ -8,7 +8,7 @@ interface IZKGroups {
     error ZKGroups__MerkleTreeDepthIsNotSupported();
     error ZKGroups__ParametersMustHaveTheSameLength();
 
-    struct Group {
+    struct GroupData {
         uint256 merkleTreeRoot;
         uint256 merkleTreeDepth;
     }
@@ -39,8 +39,8 @@ interface IZKGroups {
 
     /// @dev Updates the off-chain groups.
     /// @param groupNames: List of off-chain group names.
-    /// @param groups: List of off-chain group parameters.
-    function updateGroups(bytes32[] calldata groupNames, Group[] calldata groups) external;
+    /// @param groupData: List of off-chain group data.
+    function updateGroups(bytes32[] calldata groupNames, GroupData[] calldata groupData) external;
 
     /// @dev Saves the nullifier hash to avoid double signaling and emits an event
     /// if the zero-knowledge proof is valid.

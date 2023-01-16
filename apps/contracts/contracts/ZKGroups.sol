@@ -10,8 +10,8 @@ import "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
 contract ZKGroups is IZKGroups, Ownable {
     ISemaphoreVerifier public verifier;
 
-    /// @dev Gets a group name and returns the off-chain group parameters.
-    mapping(bytes32 => Group) public groups;
+    /// @dev Gets a group name and returns the off-chain group data.
+    mapping(bytes32 => GroupData) public groups;
 
     /// @dev Gets a group name and a nullifier hash and returns true if it has already been used.
     mapping(bytes32 => mapping(uint256 => bool)) internal nullifierHashes;
@@ -23,13 +23,13 @@ contract ZKGroups is IZKGroups, Ownable {
     }
 
     /// @dev See {IZKGroups-updateGroups}.
-    function updateGroups(bytes32[] calldata groupNames, Group[] calldata _groups) external override onlyOwner {
-        if (groupNames.length != _groups.length) {
+    function updateGroups(bytes32[] calldata groupNames, GroupData[] calldata groupData) external override onlyOwner {
+        if (groupNames.length != groupData.length) {
             revert ZKGroups__ParametersMustHaveTheSameLength();
         }
 
         for (uint256 i = 0; i < groupNames.length; ){
-            _updateGroup(groupNames[i], _groups[i]);
+            _updateGroup(groupNames[i], groupData[i]);
 
             unchecked {
                 ++i;
@@ -76,17 +76,17 @@ contract ZKGroups is IZKGroups, Ownable {
 
     /// @dev Updates an off-chain group.
     /// @param groupName: Name of the off-chain group.
-    /// @param group: Off-chain group parameters.
+    /// @param groupData: Off-chain group data.
     function _updateGroup(
         bytes32 groupName,
-        Group calldata group
+        GroupData calldata groupData
     ) private {
-        if (group.merkleTreeDepth < 16 || group.merkleTreeDepth > 32) {
+        if (groupData.merkleTreeDepth < 16 || groupData.merkleTreeDepth > 32) {
             revert ZKGroups__MerkleTreeDepthIsNotSupported();
         }
 
-        groups[groupName] = group;
+        groups[groupName] = groupData;
 
-        emit GroupUpdated(groupName, group.merkleTreeRoot, group.merkleTreeDepth);
+        emit GroupUpdated(groupName, groupData.merkleTreeRoot, groupData.merkleTreeDepth);
     }
 }
