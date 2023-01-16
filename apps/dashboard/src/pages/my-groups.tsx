@@ -32,7 +32,6 @@ export default function MyGroups(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const navigate = useNavigate()
 
-    const [jwtInCookies, setJwtInCookies] = useState(false)
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
     const [_groupList, setGroupList] = useState<Group[] | null>()
     const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
@@ -41,26 +40,23 @@ export default function MyGroups(): JSX.Element {
 
     useEffect(() => {
         ;(async () => {
+            // If metamask is already connected, assume on-chain group
+            if (account) {
+                setIsOffchainGroup(false)
+                return
+            }
+
+            // Set as off-chain group is user logged in via SSP
             await request(`${environment.apiUrl}/auth/getUser`)
                 .then((res) => {
-                    setJwtInCookies(true)
+                    setIsOffchainGroup(true)
                 })
                 .catch((e) => {
-                    console.log("no jwt")
-                    setJwtInCookies(false)
+                    // Failure - Redirect to login page
+                    navigate("/sso")
                 })
         })()
-    }, [])
-
-    useEffect(() => {
-        if (jwtInCookies) {
-            setIsOffchainGroup(true)
-        } else if (account) {
-            setIsOffchainGroup(false)
-        } else {
-            navigate("/sso")
-        }
-    }, [account, navigate, jwtInCookies])
+    }, [navigate, account])
 
     useEffect(() => {
         ;(async () => {
