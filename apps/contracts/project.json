@@ -20,21 +20,21 @@
         "deploy": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "hardhat deploy:zk-groups",
+                "command": "hardhat deploy",
                 "cwd": "apps/contracts"
             }
         },
         "deploy-arbitrum": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "hardhat deploy:zk-groups --network arbitrum",
+                "command": "hardhat deploy --network arbitrum",
                 "cwd": "apps/contracts"
             }
         },
         "deploy-goerli": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "hardhat deploy:zk-groups --network goerli",
+                "command": "hardhat deploy --network goerli",
                 "cwd": "apps/contracts"
             }
         },
