@@ -9,7 +9,7 @@ import {
 import { expect } from "chai"
 import { BigNumber, utils } from "ethers"
 import { run } from "hardhat"
-import { ZKGroups } from "../build/typechain"
+import { ZKGroups } from "../typechain-types"
 
 describe("ZKGroups", () => {
     let contract: ZKGroups
