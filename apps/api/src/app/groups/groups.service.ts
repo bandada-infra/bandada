@@ -1,3 +1,4 @@
+import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
     forwardRef,
@@ -7,8 +8,10 @@ import {
     NotFoundException,
     UnauthorizedException
 } from "@nestjs/common"
+import { SchedulerRegistry } from "@nestjs/schedule"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
+import { updateOffchainGroups } from "@zk-groups/onchain"
 import { Repository } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
 import { AddMemberDto } from "./dto/add-member.dto"
@@ -16,8 +19,7 @@ import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { MerkleProof } from "./types"
-import { SchedulerRegistry } from "@nestjs/schedule"
-import { updateOffchainGroups } from "@zk-groups/onchain"
+
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
@@ -36,7 +38,8 @@ export class GroupsService {
 
             /* istanbul ignore next */
             for (const group of groups) {
-                const cachedGroup = new CachedGroup(group.treeDepth)
+                const groupId = BigInt(id(group.name))
+                const cachedGroup = new CachedGroup(groupId, group.treeDepth)
 
                 cachedGroup.addMembers(group.members)
 
@@ -259,6 +262,6 @@ export class GroupsService {
         const cachedGroup = this.cachedGroups.get(groupName)
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
-        return cachedGroup.generateProofOfMembership(memberIndex)
+        return cachedGroup.generateMerkleProof(memberIndex)
     }
 }
