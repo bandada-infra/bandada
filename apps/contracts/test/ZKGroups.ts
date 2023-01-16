@@ -44,6 +44,23 @@ describe("ZKGroups", () => {
             )
         })
 
+        it("Should not update groups if the parameters don't have the same length", async () => {
+            const transaction = contract.updateGroups(
+                [groupName, groupName],
+                [
+                    {
+                        merkleTreeRoot: 123,
+                        merkleTreeDepth: 10
+                    }
+                ]
+            )
+
+            await expect(transaction).to.be.revertedWithCustomError(
+                contract,
+                "ZKGroups__ParametersMustHaveTheSameLength"
+            )
+        })
+
         it("Should update groups", async () => {
             const transaction = contract.updateGroups(
                 [groupName],

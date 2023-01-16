@@ -6,6 +6,7 @@ interface IZKGroups {
     error ZKGroups__GroupDoesNotExist();
     error ZKGroups__YouAreUsingTheSameNullifierTwice();
     error ZKGroups__MerkleTreeDepthIsNotSupported();
+    error ZKGroups__ParametersMustHaveTheSameLength();
 
     struct Group {
         uint256 merkleTreeRoot;

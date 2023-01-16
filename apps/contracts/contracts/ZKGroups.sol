@@ -24,6 +24,10 @@ contract ZKGroups is IZKGroups, Ownable {
 
     /// @dev See {IZKGroups-updateGroups}.
     function updateGroups(bytes32[] calldata groupNames, Group[] calldata _groups) external override onlyOwner {
+        if (groupNames.length != _groups.length) {
+            revert ZKGroups__ParametersMustHaveTheSameLength();
+        }
+
         for (uint256 i = 0; i < groupNames.length; ){
             _updateGroup(groupNames[i], _groups[i]);
 
