@@ -6,7 +6,7 @@ import { AuthModule } from "./auth/auth.module"
 import { GroupsModule } from "./groups/groups.module"
 import { InvitesModule } from "./invites/invites.module"
 
-type DB_TYPE = 'mysql' | 'sqlite' | 'postgres';
+type DB_TYPE = "mysql" | "sqlite" | "postgres"
 
 @Module({
     imports: [
@@ -15,13 +15,14 @@ type DB_TYPE = 'mysql' | 'sqlite' | 'postgres';
         InvitesModule,
         GroupsModule,
         TypeOrmModule.forRoot({
-            type: process.env.DB_TYPE as DB_TYPE || 'postgres',
+            type: (process.env.DB_TYPE as DB_TYPE) || "postgres",
             url: process.env.DB_URL,
-            ...process.env.DB_TYPE === 'sqlite' && { database: process.env.DB_URL },
+            ...(process.env.DB_TYPE === "sqlite" && {
+                database: process.env.DB_URL
+            }),
             autoLoadEntities: true,
             synchronize: process.env.NODE_ENV === "production" ? false : true
         })
     ]
 })
-
 export class AppModule {}

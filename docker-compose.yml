@@ -1,86 +1,86 @@
 version: "3.9"
 
 services:
-  postgres:
-    container_name: postgres
-    image: postgres
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: helloworld
-      POSTGRES_DB: zk-groups
-      PGDATA: /data/postgres
-    volumes:
-       - postgres:/data/postgres
-       - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
-    command: postgres -c listen_addresses='*'
-    networks:
-      - zk-groups
+    postgres:
+        container_name: postgres
+        image: postgres
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: helloworld
+            POSTGRES_DB: zk-groups
+            PGDATA: /data/postgres
+        volumes:
+            - postgres:/data/postgres
+            - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+        ports:
+            - "5432:5432"
+        restart: unless-stopped
+        command: postgres -c listen_addresses='*'
+        networks:
+            - zk-groups
 
-  api:
-      container_name: api
-      build:
-          context: ./
-          dockerfile: ./apps/api/Dockerfile
-      image: ${DOMAIN}-api:latest
-      restart: unless-stopped
-      environment:
-          - NODE_ENV=production
-          - DB_TYPE=postgres
-          - DB_URL=postgres://root:helloworld@postgres:5432/zk-groups
-          - JWT_SECRET_KEY=zk_groups_jwt_secret
-          - SESSION_SECRET=keyboard cat
-          - GITHUB_CLIENT_ID=sample
-          - GITHUB_CLIENT_SECRET=sample
-          - TWITTER_CONSUMER_KEY=sample
-          - TWITTER_CONSUMER_SECRET=sample
-          - REDDIT_CLIENT_ID=sample
-          - REDDIT_CLIENT_SECRET=sample
-          - BACKEND_PRIVATE_KEY=
-          - INFURA_API_KEY=
-          - COINMARKETCAP_API_KEY=
-          - ETHERSCAN_API_KEY=
-          - ZKGROUPS_GOERLI_ADDRESS=
-      ports:
-          - "3000:3333"
-      networks:
-          - zk-groups
-      depends_on:
-          - postgres
+    api:
+        container_name: api
+        build:
+            context: ./
+            dockerfile: ./apps/api/Dockerfile
+        image: ${DOMAIN}-api:latest
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=production
+            - DB_TYPE=postgres
+            - DB_URL=postgres://root:helloworld@postgres:5432/zk-groups
+            - JWT_SECRET_KEY=zk_groups_jwt_secret
+            - SESSION_SECRET=keyboard cat
+            - GITHUB_CLIENT_ID=sample
+            - GITHUB_CLIENT_SECRET=sample
+            - TWITTER_CONSUMER_KEY=sample
+            - TWITTER_CONSUMER_SECRET=sample
+            - REDDIT_CLIENT_ID=sample
+            - REDDIT_CLIENT_SECRET=sample
+            - BACKEND_PRIVATE_KEY=
+            - INFURA_API_KEY=
+            - COINMARKETCAP_API_KEY=
+            - ETHERSCAN_API_KEY=
+            - ZKGROUPS_GOERLI_ADDRESS=
+        ports:
+            - "3000:3333"
+        networks:
+            - zk-groups
+        depends_on:
+            - postgres
 
-  client:
-      container_name: client
-      build:
-          context: ./
-          dockerfile: ./apps/client/Dockerfile
-      image: ${DOMAIN}-client:latest
-      restart: unless-stopped
-      environment:
-          - NODE_ENV=production
-      ports:
-          - "3002:80"
-      networks:
-          - zk-groups
-      depends_on:
-          - api
+    client:
+        container_name: client
+        build:
+            context: ./
+            dockerfile: ./apps/client/Dockerfile
+        image: ${DOMAIN}-client:latest
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=production
+        ports:
+            - "3002:80"
+        networks:
+            - zk-groups
+        depends_on:
+            - api
 
-  dashboard:
-      container_name: dashboard
-      build:
-          context: ./
-          dockerfile: ./apps/dashboard/Dockerfile
-      image: ${DOMAIN}-dashboard:latest
-      restart: unless-stopped
-      environment:
-          - NODE_ENV=production
-      ports:
-          - "3001:80"
-      networks:
-          - zk-groups
-      depends_on:
-          - api
+    dashboard:
+        container_name: dashboard
+        build:
+            context: ./
+            dockerfile: ./apps/dashboard/Dockerfile
+        image: ${DOMAIN}-dashboard:latest
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=production
+        ports:
+            - "3001:80"
+        networks:
+            - zk-groups
+        depends_on:
+            - api
 
 networks:
     zk-groups:
