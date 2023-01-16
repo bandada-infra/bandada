@@ -4,7 +4,7 @@ pragma solidity ^0.8.4;
 /// @title ZKGroups contract interface.
 interface IZKGroups {
     error ZKGroups__GroupDoesNotExist();
-    error ZKGroups__YouAreUsingTheSameNillifierTwice();
+    error ZKGroups__YouAreUsingTheSameNullifierTwice();
     error ZKGroups__MerkleTreeDepthIsNotSupported();
 
     struct Group {

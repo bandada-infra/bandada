@@ -48,7 +48,7 @@ contract ZKGroups is IZKGroups, Ownable {
         }
 
         if (nullifierHashes[groupName][nullifierHash]) {
-            revert ZKGroups__YouAreUsingTheSameNillifierTwice();
+            revert ZKGroups__YouAreUsingTheSameNullifierTwice();
         }
 
         uint256 merkleTreeRoot = getMerkleTreeRoot(groupName);

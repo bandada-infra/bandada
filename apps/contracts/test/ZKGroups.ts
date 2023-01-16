@@ -156,7 +156,7 @@ describe("ZKGroups", () => {
 
             await expect(transaction).to.be.revertedWithCustomError(
                 contract,
-                "ZKGroups__YouAreUsingTheSameNillifierTwice"
+                "ZKGroups__YouAreUsingTheSameNullifierTwice"
             )
         })
     })
