@@ -10,17 +10,20 @@ export async function updateOffchainGroups(
     const contractInstance = getContractInstance("ZKGroups").connect(signer)
 
     const offchainGroups = []
+    const groupNames = []
 
     for (const [name, merkleTreeInfo] of updatedGroups) {
+        groupNames.push(utils.formatBytes32String(name))
         offchainGroups.push({
-            groupName: utils.formatBytes32String(name),
             merkleTreeRoot: merkleTreeInfo[0],
             merkleTreeDepth: merkleTreeInfo[1]
         })
     }
 
-    const transaction = await contractInstance["updateOffchainGroups"](
+    const transaction = await contractInstance["updatedGroups"](
+        groupNames,
         offchainGroups
     )
+
     return transaction.wait(1)
 }

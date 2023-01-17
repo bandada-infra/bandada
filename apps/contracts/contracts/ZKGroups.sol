@@ -3,39 +3,33 @@ pragma solidity ^0.8.4;
 
 import "./IZKGroups.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@semaphore-protocol/contracts/base/SemaphoreCore.sol";
-import "@semaphore-protocol/contracts/base/SemaphoreConstants.sol";
-import "@semaphore-protocol/contracts/interfaces/IVerifier.sol";
+import "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
 
-/// @title zk-groups
-/// @dev Zk-groups is a semaphore group infrastructure that can create both off-chain and on-chain groups.
-/// zk-groups dashboard allow admins to create on-chain groups by directly connect to official Semaphore contract.
-/// A Zk-groups contract save the Merkle tree roots of the other off-chain groups(i.e. reputation and permissioned groups),
-/// which will then allow members of off-chain groups to verify their zero-knowledge proofs in that contract.
-contract ZKGroups is IZKGroups, SemaphoreCore, Ownable {
-    /// @dev Gets a merkle tree depth and returns its verifier address.
-    mapping(uint256 => IVerifier) public verifiers;
+/// @title ZKGroups
+/// @dev This contract is used to save the Merkle roots of the off-chain groups.
+contract ZKGroups is IZKGroups, Ownable {
+    ISemaphoreVerifier public verifier;
 
-    /// @dev Gets a group id and returns the off-chain group parameters.
-    mapping(bytes32 => OffchainGroup) public offchainGroups;
+    /// @dev Gets a group name and returns the off-chain group data.
+    mapping(bytes32 => GroupData) public groups;
 
-    /// @dev Gets a group id and returns boolean about nullifierHashes used.
+    /// @dev Gets a group name and a nullifier hash and returns true if it has already been used.
     mapping(bytes32 => mapping(uint256 => bool)) internal nullifierHashes;
 
-    /// @dev Checks if there is a verifier for the given merkle tree depth.
-    /// @param merkleTreeDepth: Depth of the merkle tree.
-    modifier onlySupportedMerkleTreeDepth(uint256 merkleTreeDepth) {
-        if (address(verifiers[merkleTreeDepth]) == address(0)) {
-            revert("MerkleTreeDepth is not supported");
-        }
-        _;
+    /// @dev Initializes the Semaphore verifier used to verify the user's ZK proofs.
+    /// @param _verifier: Semaphore verifier address.
+    constructor(ISemaphoreVerifier _verifier) {
+        verifier = _verifier;
     }
 
-    /// @dev Initializes the Semaphore verifiers used to verify the user's ZK proofs.
-    /// @param _verifiers: List of Semaphore verifiers (address and related Merkle tree depth).
-    constructor(Verifier[] memory _verifiers) {
-        for (uint8 i = 0; i < _verifiers.length; ) {
-            verifiers[_verifiers[i].merkleTreeDepth] = IVerifier(_verifiers[i].contractAddress);
+    /// @dev See {IZKGroups-updateGroups}.
+    function updateGroups(bytes32[] calldata groupNames, GroupData[] calldata groupData) external override onlyOwner {
+        if (groupNames.length != groupData.length) {
+            revert ZKGroups__ParametersMustHaveTheSameLength();
+        }
+
+        for (uint256 i = 0; i < groupNames.length; ){
+            _updateGroup(groupNames[i], groupData[i]);
 
             unchecked {
                 ++i;
@@ -43,68 +37,56 @@ contract ZKGroups is IZKGroups, SemaphoreCore, Ownable {
         }
     }
 
-    /// @dev See {IZKGroups-updateOffchainGroups}.
-    function updateOffchainGroups(OffchainGroup[] calldata _offchainGroups) external override onlyOwner {
-        for (uint8 i = 0; i < _offchainGroups.length; ){
-            _updateOffchainGroup(_offchainGroups[i].groupName, _offchainGroups[i]);
-
-            unchecked {
-                ++i;
-            }
-        }
-    }
-
-    /// @dev See {IZKGroups-verifyOffchainGroupProof}.
-    function verifyOffchainGroupProof(
+    /// @dev See {IZKGroups-verifyProof}.
+    function verifyProof(
         bytes32 groupName,
-        bytes32 signal,
+        uint256 signal,
         uint256 nullifierHash,
         uint256 externalNullifier,
         uint256[8] calldata proof
     ) external override {
-        uint256 merkleTreeRoot = getOffchainRoot(groupName);
+        uint256 merkleTreeDepth = getMerkleTreeDepth(groupName);
 
-        require(merkleTreeRoot != 0, "Offchain group does not exist");
+        if (merkleTreeDepth == 0) {
+            revert ZKGroups__GroupDoesNotExist();
+        }
 
-        require(!nullifierHashes[groupName][nullifierHash], "you cannot use the same nullifier twice");
+        if (nullifierHashes[groupName][nullifierHash]) {
+            revert ZKGroups__YouAreUsingTheSameNullifierTwice();
+        }
 
-        uint256 merkleTreeDepth = getOffchainDepth(groupName);
+        uint256 merkleTreeRoot = getMerkleTreeRoot(groupName);
 
-        IVerifier verifier = verifiers[merkleTreeDepth];
+        verifier.verifyProof(merkleTreeRoot, nullifierHash, signal, externalNullifier, proof, merkleTreeDepth);
 
-        _verifyProof(signal, merkleTreeRoot, nullifierHash, externalNullifier, proof, verifier);
+        nullifierHashes[groupName][nullifierHash] = true;
 
-        _saveNullifierHash(groupName, nullifierHash);
-
-        emit ProofVerified(groupName, nullifierHash, externalNullifier, signal);
+        emit ProofVerified(groupName, merkleTreeRoot, nullifierHash, externalNullifier, signal);
     }
 
-    /// @dev See {IZKGroups-getOffchainRoot}.
-    function getOffchainRoot(bytes32 groupName) public view override returns (uint256) {
-        return offchainGroups[groupName].merkleTreeRoot;
+    /// @dev See {IZKGroups-getMerkleTreeRoot}.
+    function getMerkleTreeRoot(bytes32 groupName) public view override returns (uint256) {
+        return groups[groupName].merkleTreeRoot;
     }
 
-    /// @dev See {IZKGroups-getOffchainDepth}.
-    function getOffchainDepth(bytes32 groupName) public view override returns (uint256) {
-        return offchainGroups[groupName].merkleTreeDepth;
+    /// @dev See {IZKGroups-getMerkleTreeDepth}.
+    function getMerkleTreeDepth(bytes32 groupName) public view override returns (uint256) {
+        return groups[groupName].merkleTreeDepth;
     }
 
     /// @dev Updates an off-chain group.
     /// @param groupName: Name of the off-chain group.
-    /// @param offchainGroup: off-chain group data.
-    function _updateOffchainGroup(
+    /// @param groupData: Off-chain group data.
+    function _updateGroup(
         bytes32 groupName,
-        OffchainGroup calldata offchainGroup
-    ) private onlySupportedMerkleTreeDepth(offchainGroup.merkleTreeDepth){
-        offchainGroups[groupName] = offchainGroup;
+        GroupData calldata groupData
+    ) private {
+        if (groupData.merkleTreeDepth < 16 || groupData.merkleTreeDepth > 32) {
+            revert ZKGroups__MerkleTreeDepthIsNotSupported();
+        }
 
-        emit OffchainGroupUpdated(offchainGroup.groupName, offchainGroup.merkleTreeRoot, offchainGroup.merkleTreeDepth);
-    }
+        groups[groupName] = groupData;
 
-    /// @dev Save nullifier hash to avoid double signaling.
-    /// @param groupName: Name of the off-chain group.
-    /// @param nullifierHash: Nullifier hash.
-    function _saveNullifierHash(bytes32 groupName, uint256 nullifierHash) internal {
-        nullifierHashes[groupName][nullifierHash] = true;
+        emit GroupUpdated(groupName, groupData.merkleTreeRoot, groupData.merkleTreeDepth);
     }
 }

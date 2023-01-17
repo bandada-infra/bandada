@@ -6,18 +6,25 @@ import { Contract } from "ethers"
 export default function getContractInstance(contractName: string): Contract {
     switch (contractName) {
         case "ZKGroups":
-            if (!process.env["ZKGROUPS_GOERLI_ADDRESS"]) {
+            if (!process.env["NX_ZKGROUPS_GOERLI_ADDRESS"]) {
                 throw new Error(
-                    "Please set your ZKGROUPS_GOERLI_ADDRESS in a .env file"
+                    "Please set your NX_ZKGROUPS_GOERLI_ADDRESS in a .env file"
                 )
             }
+
             return new Contract(
-                process.env["ZKGROUPS_GOERLI_ADDRESS"],
+                process.env["NX_ZKGROUPS_GOERLI_ADDRESS"],
                 ZKGroups.abi
             )
         case "Semaphore":
+            if (!process.env["NX_SEMAPHORE_GOERLI_ADDRESS"]) {
+                throw new Error(
+                    "Please set your NX_SEMAPHORE_GOERLI_ADDRESS in a .env file"
+                )
+            }
+
             return new Contract(
-                "0x5259d32659F1806ccAfcE593ED5a89eBAb85262f",
+                process.env["NX_SEMAPHORE_GOERLI_ADDRESS"],
                 Semaphore.abi
             )
         default:

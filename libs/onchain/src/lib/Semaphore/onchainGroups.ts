@@ -1,24 +1,10 @@
 /* istanbul ignore file */
-import { ContractReceipt, Signer } from "ethers"
-import { toUtf8Bytes, concat, hexlify } from "ethers/lib/utils"
+import { BigNumber, ContractReceipt, Signer } from "ethers"
+import { formatBytes32String } from "ethers/lib/utils"
 import getContractInstance from "../../getContractInstance"
-import { HashZero } from "@ethersproject/constants"
-import { Bytes31 } from "soltypes"
 
-export function formatUint248String(groupName: string): string {
-    const uint8_arr = toUtf8Bytes(groupName)
-
-    if (uint8_arr.length > 30) {
-        throw new Error(
-            "groupName should be less than 31 bytes - To not exceed the snake field"
-        )
-    }
-
-    const bytes = new Bytes31(
-        hexlify(concat([uint8_arr, HashZero]).slice(0, 31))
-    )
-
-    return bytes.toUint().toString()
+export function formatUint256String(text: string): BigInt {
+    return BigNumber.from(formatBytes32String(text)).toBigInt()
 }
 
 export async function createGroup(
@@ -27,12 +13,12 @@ export async function createGroup(
     merkleTreeDepth: number
 ): Promise<any> {
     const admin = signer
-    const groupId = formatUint248String(groupName)
+    const groupId = formatUint256String(groupName)
     const contractInstance = getContractInstance("Semaphore").connect(admin)
 
     const transaction = await contractInstance[
-        "createGroup(uint256,uint256,uint256,address)"
-    ](groupId, merkleTreeDepth, 0, admin.getAddress())
+        "createGroup(uint256,uint256,address)"
+    ](groupId, merkleTreeDepth, await admin.getAddress())
 
     return transaction.wait(1)
 }
@@ -43,7 +29,7 @@ export async function updateGroupAdmin(
     newAdmin: string
 ): Promise<ContractReceipt> {
     const admin = signer
-    const groupId = formatUint248String(groupName)
+    const groupId = formatUint256String(groupName)
     const contractInstance = getContractInstance("Semaphore").connect(admin)
 
     const transaction = await contractInstance[
@@ -59,7 +45,7 @@ export async function addMember(
     member: string
 ): Promise<ContractReceipt> {
     const admin = signer
-    const groupId = formatUint248String(groupName)
+    const groupId = formatUint256String(groupName)
     const contractInstance = getContractInstance("Semaphore").connect(admin)
 
     const transaction = await contractInstance["addMember(uint256,uint256)"](
@@ -76,7 +62,7 @@ export async function addMembers(
     members: string[]
 ): Promise<ContractReceipt> {
     const admin = signer
-    const groupId = formatUint248String(groupName)
+    const groupId = formatUint256String(groupName)
     const contractInstance = getContractInstance("Semaphore").connect(admin)
 
     const transaction = await contractInstance["addMembers(uint256,uint256[])"](
