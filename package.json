@@ -64,8 +64,6 @@
         "webpack": "^5.74.0"
     },
     "devDependencies": {
-        "@commitlint/cli": "^17.0.0",
-        "@commitlint/config-conventional": "^17.0.0",
         "@nestjs/schematics": "^8.0.0",
         "@nestjs/testing": "^8.0.0",
         "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
