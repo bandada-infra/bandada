@@ -7,18 +7,14 @@
 
 ---
 
-### Install / Compile
+## 📜 Usage
 
-`Contracts` is a NX project, and installation/building can be done by running below commands in the project root.
+### Compile contracts
+
+Compile the smart contracts with [Hardhat](https://hardhat.org/) by running the following commands in the project root:
 
 ```bash
-# in project root
-yarn
-
-nx run contracts:build
-
-# or build all projects together
-yarn build:all
+yarn build contracts
 ```
 
 ### Testing
@@ -26,14 +22,12 @@ yarn build:all
 Run [Mocha](https://mochajs.org/) to test the contracts:
 
 ```bash
-# in project root
-nx run contracts:test
+yarn test contracts
 ```
 
 You can also generate a test coverage report:
 
 ```bash
-# in project root
 nx run contracts:coverage
 ```
 
@@ -41,7 +35,7 @@ Or a test gas report:
 
 ```bash
 # in project root
-REPORT_GAS=true nx run contracts:test
+REPORT_GAS=true yarn test contracts
 ```
 
 ### Deploy contracts
@@ -49,7 +43,6 @@ REPORT_GAS=true nx run contracts:test
 Deploy a zk-groups contract with Semaphore-supported networks:
 
 ```bash
-# in project root
 nx run contracts:deploy
 # or
 nx run contracts:deploy-arbitrum
