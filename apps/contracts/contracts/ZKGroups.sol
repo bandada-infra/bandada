@@ -23,12 +23,15 @@ contract ZKGroups is IZKGroups, Ownable {
     }
 
     /// @dev See {IZKGroups-updateGroups}.
-    function updateGroups(bytes32[] calldata groupNames, GroupData[] calldata groupData) external override onlyOwner {
+    function updateGroups(
+        bytes32[] calldata groupNames,
+        GroupData[] calldata groupData
+    ) external override onlyOwner {
         if (groupNames.length != groupData.length) {
             revert ZKGroups__ParametersMustHaveTheSameLength();
         }
 
-        for (uint256 i = 0; i < groupNames.length; ){
+        for (uint256 i = 0; i < groupNames.length; ) {
             _updateGroup(groupNames[i], groupData[i]);
 
             unchecked {
@@ -57,20 +60,37 @@ contract ZKGroups is IZKGroups, Ownable {
 
         uint256 merkleTreeRoot = getMerkleTreeRoot(groupName);
 
-        verifier.verifyProof(merkleTreeRoot, nullifierHash, signal, externalNullifier, proof, merkleTreeDepth);
+        verifier.verifyProof(
+            merkleTreeRoot,
+            nullifierHash,
+            signal,
+            externalNullifier,
+            proof,
+            merkleTreeDepth
+        );
 
         nullifierHashes[groupName][nullifierHash] = true;
 
-        emit ProofVerified(groupName, merkleTreeRoot, nullifierHash, externalNullifier, signal);
+        emit ProofVerified(
+            groupName,
+            merkleTreeRoot,
+            nullifierHash,
+            externalNullifier,
+            signal
+        );
     }
 
     /// @dev See {IZKGroups-getMerkleTreeRoot}.
-    function getMerkleTreeRoot(bytes32 groupName) public view override returns (uint256) {
+    function getMerkleTreeRoot(
+        bytes32 groupName
+    ) public view override returns (uint256) {
         return groups[groupName].merkleTreeRoot;
     }
 
     /// @dev See {IZKGroups-getMerkleTreeDepth}.
-    function getMerkleTreeDepth(bytes32 groupName) public view override returns (uint256) {
+    function getMerkleTreeDepth(
+        bytes32 groupName
+    ) public view override returns (uint256) {
         return groups[groupName].merkleTreeDepth;
     }
 
@@ -87,6 +107,10 @@ contract ZKGroups is IZKGroups, Ownable {
 
         groups[groupName] = groupData;
 
-        emit GroupUpdated(groupName, groupData.merkleTreeRoot, groupData.merkleTreeDepth);
+        emit GroupUpdated(
+            groupName,
+            groupData.merkleTreeRoot,
+            groupData.merkleTreeDepth
+        );
     }
 }

@@ -40,7 +40,10 @@ interface IZKGroups {
     /// @dev Updates the off-chain groups.
     /// @param groupNames: List of off-chain group names.
     /// @param groupData: List of off-chain group data.
-    function updateGroups(bytes32[] calldata groupNames, GroupData[] calldata groupData) external;
+    function updateGroups(
+        bytes32[] calldata groupNames,
+        GroupData[] calldata groupData
+    ) external;
 
     /// @dev Saves the nullifier hash to avoid double signaling and emits an event
     /// if the zero-knowledge proof is valid.
@@ -50,20 +53,24 @@ interface IZKGroups {
     /// @param externalNullifier: External nullifier.
     /// @param proof: Zero-knowledge proof.
     function verifyProof(
-            bytes32 groupName,
-            uint256 signal,
-            uint256 nullifierHash,
-            uint256 externalNullifier,
-            uint256[8] calldata proof
-        ) external;
+        bytes32 groupName,
+        uint256 signal,
+        uint256 nullifierHash,
+        uint256 externalNullifier,
+        uint256[8] calldata proof
+    ) external;
 
     /// @dev Returns the Merkle tree root of an off-chain group.
     /// @param groupName: Name of the off-chain group.
     /// @return merkleTreeRoot: Merkle tree root of the group.
-    function getMerkleTreeRoot(bytes32 groupName) external view returns (uint256);
+    function getMerkleTreeRoot(
+        bytes32 groupName
+    ) external view returns (uint256);
 
     /// @dev Returns the Merkle tree depth of an off-chain group.
     /// @param groupName: Name of the off-chain group.
     /// @return merkleTreeDepth: Merkle tree depth of the group.
-    function getMerkleTreeDepth(bytes32 groupName) external view returns (uint256);
+    function getMerkleTreeDepth(
+        bytes32 groupName
+    ) external view returns (uint256);
 }
