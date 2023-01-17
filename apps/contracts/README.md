@@ -7,11 +7,14 @@
 
 ---
 
+> **Warning**  
+> Run the following commands in the project root!
+
 ## 📜 Usage
 
 ### Compile contracts
 
-Compile the smart contracts with [Hardhat](https://hardhat.org/) by running the following commands in the project root:
+Compile the smart contracts with [Hardhat](https://hardhat.org/):
 
 ```bash
 yarn build contracts
