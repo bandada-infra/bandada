@@ -56,6 +56,13 @@
                 "command": "hardhat coverage",
                 "cwd": "apps/contracts"
             }
+        },
+        "lint": {
+            "executor": "nx:run-commands",
+            "options": {
+                "command": "solhint './contracts/**/*.sol'",
+                "cwd": "apps/contracts"
+            }
         }
     },
     "tags": []
