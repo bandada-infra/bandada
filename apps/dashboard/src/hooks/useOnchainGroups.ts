@@ -10,7 +10,7 @@ type ReturnParameters = {
 }
 
 function formatGroupName(groupNameInt: string) {
-    return parseBytes32String(BigNumber.from(groupNameInt).toHexString());
+    return parseBytes32String(BigNumber.from(groupNameInt).toHexString())
 }
 
 export default function useOnchainGroups(): ReturnParameters {
