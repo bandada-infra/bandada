@@ -104,7 +104,7 @@ A `dist` folder will be created.
 You can also run `zk-groups` using docker by running below command in the project root:
 
 ```sh
-docker-compose up -d
+docker-compose up -d # or docker compose up -d
 ```
 
 ### Testing
@@ -124,7 +124,11 @@ yarn test <app-name> # For specific apps
 Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
 
 ```bash
-yarn lint
+yarn lint:all
+```
+
+```bash
+yarn lint <app-name> # For specific apps
 ```
 
 Run [Prettier](https://prettier.io/) to check formatting rules:
