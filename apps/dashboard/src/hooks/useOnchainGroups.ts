@@ -1,11 +1,16 @@
 import { Subgraph } from "@semaphore-protocol/subgraph"
-import { getAddress } from "ethers/lib/utils"
+import { BigNumber } from "ethers"
+import { getAddress, parseBytes32String } from "ethers/lib/utils"
 import { useCallback } from "react"
 import { Group } from "../types/groups"
 
 type ReturnParameters = {
     getOnchainGroupList: (admin: string) => Promise<Group[] | null>
     getOnchainGroup: (groupName: string) => Promise<Group | null>
+}
+
+function formatGroupName(groupNameInt: string) {
+    return parseBytes32String(BigNumber.from(groupNameInt).toHexString());
 }
 
 export default function useOnchainGroups(): ReturnParameters {
@@ -21,9 +26,11 @@ export default function useOnchainGroups(): ReturnParameters {
                         (group) => getAddress(group.admin) === getAddress(admin)
                     )
                     .map((group) => {
+                        const groupName = formatGroupName(group.id)
+
                         return {
-                            name: group.id, // TODO: convert to string
-                            description: `${group.id} on-chain group`,
+                            name: groupName,
+                            description: `${groupName} on-chain group`,
                             treeDepth: group.merkleTree.depth,
                             members: group.members,
                             admin: group.admin
