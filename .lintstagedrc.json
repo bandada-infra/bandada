@@ -1,4 +1,6 @@
 {
-    "**/*.{.js,.ts,.jsx,.tsx}": "nx affected:lint --fix --files=",
-    "*": "prettier -w"
+    "**/*.{.js,.ts,.jsx,.tsx}": [
+        "prettier -w",
+        "nx affected:lint --fix --files="
+    ]
 }
