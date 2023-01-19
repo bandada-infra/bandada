@@ -45,17 +45,6 @@ export default function CreatGroupModal({
         setStep(_step - 1)
     }
 
-    function submitGroupInfo() {
-        if (!_groupName || !_groupDescription) {
-            alert("Please fill out the Name and Description")
-        } else if (_groupDescription && _groupDescription.length < 10) {
-            alert("Please write the description of 10 characters or more")
-        } else if (_groupName && _groupName.length > 50) {
-            alert("Please write the group name in 50 characters or less")
-        } else {
-            nextStep()
-        }
-    }
     function submitGroupSize() {
         if (_groupSize) {
             nextStep()
@@ -145,40 +134,46 @@ export default function CreatGroupModal({
                 <ModalCloseButton />
                 <ModalBody>
                     {_step === 0 ? (
-                        <Flex
-                            h="300px"
-                            flexDir="column"
-                            justifyContent="space-around"
-                        >
-                            <FormControl>
-                                <FormLabel>Name</FormLabel>
-                                <Input
-                                    value={_groupName}
-                                    onChange={(e) =>
-                                        setGroupName(e.target.value)
-                                    }
-                                    placeholder="Give your group a title"
-                                />
-                            </FormControl>
-                            <FormControl>
-                                <FormLabel>Description</FormLabel>
-                                <Input
-                                    value={_groupDescription}
-                                    onChange={(e) =>
-                                        setGroupDescription(e.target.value)
-                                    }
-                                    placeholder="Enter details that will help you differentiate this group"
-                                />
-                            </FormControl>
-                            <Button
-                                onClick={submitGroupInfo}
-                                fontSize="lg"
-                                variant="solid"
-                                colorScheme="primary"
+                        <form onSubmit={nextStep}>
+                            <Flex
+                                h="300px"
+                                flexDir="column"
+                                justifyContent="space-around"
                             >
-                                Continue
-                            </Button>
-                        </Flex>
+                                <FormControl>
+                                    <FormLabel>Name</FormLabel>
+                                    <Input
+                                        value={_groupName}
+                                        maxLength={31}
+                                        onChange={(e) =>
+                                            setGroupName(e.target.value)
+                                        }
+                                        isRequired
+                                        placeholder="Give your group a title"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <FormLabel>Description</FormLabel>
+                                    <Input
+                                        value={_groupDescription}
+                                        minLength={10}
+                                        isRequired
+                                        onChange={(e) =>
+                                            setGroupDescription(e.target.value)
+                                        }
+                                        placeholder="Enter details that will help you differentiate this group"
+                                    />
+                                </FormControl>
+                                <Button
+                                    type="submit"
+                                    fontSize="lg"
+                                    variant="solid"
+                                    colorScheme="primary"
+                                >
+                                    Continue
+                                </Button>
+                            </Flex>
+                        </form>
                     ) : _step === 1 ? (
                         <Box>
                             <Flex justifyContent="space-between">
