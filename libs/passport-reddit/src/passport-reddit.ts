@@ -6,7 +6,7 @@ import {
 } from "passport-oauth2"
 import { stringify } from "querystring"
 
-export class Strategy extends OAuth2Strategy {
+export default class Strategy extends OAuth2Strategy {
     public name = "reddit"
 
     private _userProfileURL = "https://oauth.reddit.com/api/v1/me"

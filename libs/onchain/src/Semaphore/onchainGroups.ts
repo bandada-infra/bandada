@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { BigNumber, ContractReceipt, Signer } from "ethers"
 import { formatBytes32String } from "ethers/lib/utils"
-import getContractInstance from "../../getContractInstance"
+import getContractInstance from "../getContractInstance"
 
 export function formatUint256String(text: string): BigInt {
     return BigNumber.from(formatBytes32String(text)).toBigInt()
