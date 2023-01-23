@@ -1,2 +1,4 @@
-export * from "./lib/passport-reddit"
-export * from "./lib/types"
+import Strategy from "./passport-reddit"
+import { Profile } from "./types"
+
+export { Strategy, Profile }

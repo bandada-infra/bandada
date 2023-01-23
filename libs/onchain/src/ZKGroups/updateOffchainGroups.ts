@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { ContractReceipt, utils } from "ethers"
-import getSigner from "../../getBackendSigner"
-import getContractInstance from "../../getContractInstance"
+import getSigner from "../getBackendSigner"
+import getContractInstance from "../getContractInstance"
 
 export async function updateOffchainGroups(
     updatedGroups: Map<string, any[]>

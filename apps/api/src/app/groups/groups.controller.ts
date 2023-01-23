@@ -9,7 +9,7 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
-import { mapEntity, stringifyJSON } from "../common/utils"
+import { mapEntity, stringifyJSON } from "@zk-groups/utils"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
