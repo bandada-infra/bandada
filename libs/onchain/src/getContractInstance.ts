@@ -2,8 +2,11 @@
 import ZKGroups from "contract-artifacts/ZKGroups.json"
 import Semaphore from "contract-artifacts/Semaphore.json"
 import { Contract } from "ethers"
+import { ContractName } from "./types"
 
-export default function getContractInstance(contractName: string): Contract {
+export default function getContractInstance(
+    contractName: ContractName
+): Contract {
     switch (contractName) {
         case "ZKGroups":
             if (!process.env["NX_ZKGROUPS_GOERLI_ADDRESS"]) {
@@ -28,6 +31,6 @@ export default function getContractInstance(contractName: string): Contract {
                 Semaphore.abi
             )
         default:
-            throw new TypeError(`${contractName} contract does not exist`)
+            throw new TypeError(`'${contractName}' contract does not exist`)
     }
 }

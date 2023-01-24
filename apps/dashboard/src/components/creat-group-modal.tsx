@@ -21,7 +21,7 @@ import { useEffect, useState } from "react"
 import { groupSizeInfo } from "../types/groups"
 import useOffchainGroups from "../hooks/useOffchainGroups"
 import { useSearchParams } from "react-router-dom"
-import { createGroup as createOnchainGroup } from "@zk-groups/onchain"
+import { semaphore } from "@zk-groups/onchain"
 import useSigner from "../hooks/useSigner"
 
 export default function CreatGroupModal({
@@ -63,7 +63,7 @@ export default function CreatGroupModal({
             try {
                 const transaction =
                     _signer &&
-                    (await createOnchainGroup(_signer, groupName, treeDepth))
+                    (await semaphore.createGroup(_signer, groupName, treeDepth))
                 setLoading(false)
                 transaction && onClose && onClose()
             } catch (error) {
