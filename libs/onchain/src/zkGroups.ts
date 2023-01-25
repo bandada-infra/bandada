@@ -1,12 +1,14 @@
 /* istanbul ignore file */
 import { ContractReceipt, utils } from "ethers"
-import getSigner from "../getBackendSigner"
-import getContractInstance from "../getContractInstance"
+import getSigner from "./getSigner"
+import getContractInstance from "./getContractInstance"
+import { Network } from "./types"
 
-export async function updateOffchainGroups(
-    updatedGroups: Map<string, any[]>
+export async function updateGroups(
+    updatedGroups: Map<string, any[]>,
+    network: Network = process.env.NX_DEFAULT_NETWORK as Network
 ): Promise<ContractReceipt> {
-    const signer = await getSigner()
+    const signer = await getSigner(network)
     const contractInstance = getContractInstance("ZKGroups").connect(signer)
 
     const offchainGroups = []

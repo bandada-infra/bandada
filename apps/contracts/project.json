@@ -7,9 +7,9 @@
             "executor": "nx:run-commands",
             "options": {
                 "commands": [
-                  "hardhat compile",
-                  "hardhat deploy",
-                  "hardhat node"
+                    "hardhat compile",
+                    "hardhat deploy",
+                    "hardhat node"
                 ],
                 "parallel": false,
                 "cwd": "apps/contracts"
