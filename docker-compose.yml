@@ -31,18 +31,16 @@ services:
             - DB_TYPE=postgres
             - DB_URL=postgres://root:helloworld@postgres:5432/zk-groups
             - JWT_SECRET_KEY=zk_groups_jwt_secret
-            - SESSION_SECRET=keyboard cat
+            - SESSION_SECRET=s3cret
             - GITHUB_CLIENT_ID=sample
             - GITHUB_CLIENT_SECRET=sample
             - TWITTER_CONSUMER_KEY=sample
             - TWITTER_CONSUMER_SECRET=sample
             - REDDIT_CLIENT_ID=sample
             - REDDIT_CLIENT_SECRET=sample
+            - NX_DEFAULT_NETWORK=localhost
             - BACKEND_PRIVATE_KEY=
             - INFURA_API_KEY=
-            - COINMARKETCAP_API_KEY=
-            - ETHERSCAN_API_KEY=
-            - ZKGROUPS_GOERLI_ADDRESS=
         ports:
             - "3000:3333"
         networks:

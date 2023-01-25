@@ -3,7 +3,7 @@
     "sourceRoot": "apps/contracts",
     "projectType": "application",
     "targets": {
-        "start": {
+        "serve": {
             "executor": "nx:run-commands",
             "options": {
                 "commands": [

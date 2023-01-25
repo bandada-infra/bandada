@@ -20,7 +20,7 @@ export async function updateOffchainGroups(
         })
     }
 
-    const transaction = await contractInstance["updatedGroups"](
+    const transaction = await contractInstance["updateGroups"](
         groupNames,
         offchainGroups
     )
