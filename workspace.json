@@ -8,7 +8,7 @@
         "contracts": "apps/contracts",
         "dashboard": "apps/dashboard",
         "dashboard-e2e": "apps/dashboard-e2e",
-        "onchain": "libs/onchain",
+        "contract-utils": "libs/contract-utils",
         "passport-reddit": "libs/passport-reddit",
         "utils": "libs/utils"
     }

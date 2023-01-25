@@ -15,7 +15,7 @@ import {
     Text
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { semaphore } from "@zk-groups/onchain"
+import { semaphore } from "@zk-groups/contract-utils"
 import useSigner from "../hooks/useSigner"
 
 export default function AddMemberModal({

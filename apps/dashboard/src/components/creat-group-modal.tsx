@@ -21,7 +21,7 @@ import { useEffect, useState } from "react"
 import { groupSizeInfo } from "../types/groups"
 import useOffchainGroups from "../hooks/useOffchainGroups"
 import { useSearchParams } from "react-router-dom"
-import { semaphore } from "@zk-groups/onchain"
+import { semaphore } from "@zk-groups/contract-utils"
 import useSigner from "../hooks/useSigner"
 
 export default function CreatGroupModal({
