@@ -2,7 +2,6 @@ import { Identity } from "@semaphore-protocol/identity"
 import { request } from "@zk-groups/utils"
 import { Signer } from "ethers"
 import { useCallback, useState } from "react"
-import { environment } from "../environments/environment"
 import { Invite } from "../types/invite"
 
 type ReturnParameters = {
@@ -27,7 +26,7 @@ export default function usePermissionedGroups(): ReturnParameters {
     const getInvite = useCallback(
         async (inviteCode: string | undefined): Promise<Invite> => {
             const codeInfo = await request(
-                `${environment.apiUrl}/invites/${inviteCode}`
+                `${process.env.NX_API_URL}/invites/${inviteCode}`
             )
 
             return codeInfo
@@ -43,7 +42,7 @@ export default function usePermissionedGroups(): ReturnParameters {
             const identity = new Identity(await signer.signMessage(message))
             const identityCommitment = identity.getCommitment().toString()
             const hasJoined = await request(
-                `${environment.apiUrl}/groups/${groupName}/${identityCommitment}`
+                `${process.env.NX_API_URL}/groups/${groupName}/${identityCommitment}`
             )
             setHasjoined(hasJoined)
             setLoading(false)
@@ -59,7 +58,7 @@ export default function usePermissionedGroups(): ReturnParameters {
             inviteCode: string
         ): Promise<void> => {
             await request(
-                `${environment.apiUrl}/groups/${groupName}/${idCommitment}`,
+                `${process.env.NX_API_URL}/groups/${groupName}/${idCommitment}`,
                 {
                     method: "post",
                     data: {
