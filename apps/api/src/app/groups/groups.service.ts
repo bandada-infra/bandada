@@ -11,7 +11,7 @@ import {
 import { SchedulerRegistry } from "@nestjs/schedule"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
-import { zkGroups } from "@zk-groups/onchain"
+import { zkGroups } from "@zk-groups/contract-utils"
 import { Repository } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
 import { AddMemberDto } from "./dto/add-member.dto"
