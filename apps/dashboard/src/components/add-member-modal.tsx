@@ -15,7 +15,7 @@ import {
     Text
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { addMember } from "@zk-groups/onchain"
+import { semaphore } from "@zk-groups/contract-utils"
 import useSigner from "../hooks/useSigner"
 
 export default function AddMemberModal({
@@ -36,7 +36,11 @@ export default function AddMemberModal({
         try {
             const transaction =
                 _signer &&
-                (await addMember(_signer, groupName, identityCommitment))
+                (await semaphore.addMember(
+                    _signer,
+                    groupName,
+                    identityCommitment
+                ))
             setLoading(false)
             transaction && onClose && onClose()
             return
