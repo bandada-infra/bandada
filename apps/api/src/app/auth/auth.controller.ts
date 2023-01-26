@@ -9,7 +9,6 @@ import {
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
 import { Request, Response } from "express"
-import { environment } from "../../environments/environment"
 
 @Controller("auth")
 export class AuthController {
@@ -30,7 +29,7 @@ export class AuthController {
             })
         }
 
-        res.redirect(`${environment.dashboardUrl}/my-groups`)
+        res.redirect(`${process.env.NX_DASHBOARD_URL}/my-groups`)
     }
 
     @Get("twitter")
@@ -50,7 +49,7 @@ export class AuthController {
             })
         }
 
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
+        res.redirect(`${process.env.NX_DASHBOARD_URL}/my-groups`)
     }
 
     @Get("reddit")
@@ -70,7 +69,7 @@ export class AuthController {
             })
         }
 
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
+        res.redirect(`${process.env.NX_DASHBOARD_URL}/my-groups`)
     }
 
     @Get("getUser")
@@ -86,6 +85,6 @@ export class AuthController {
             httpOnly: true,
             maxAge: 0
         })
-        res.redirect(`${environment.dashboardUrl}`)
+        res.redirect(`${process.env.NX_DASHBOARD_URL}`)
     }
 }

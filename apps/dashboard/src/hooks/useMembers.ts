@@ -1,6 +1,5 @@
 import { request } from "@zk-groups/utils"
 import { useCallback } from "react"
-import { environment } from "../environments/environment"
 import { Group } from "../types/groups"
 
 type ReturnParameters = {
@@ -13,7 +12,7 @@ export default function useMembers(): ReturnParameters {
         async (groupName: string): Promise<Group | null> => {
             try {
                 const groupList = await request(
-                    `${environment.apiUrl}/groups/${groupName}`
+                    `${process.env.NX_API_URL}/groups/${groupName}`
                 )
                 return groupList
             } catch (e) {

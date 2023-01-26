@@ -1,7 +1,6 @@
 import { Button, Icon, Link } from "@chakra-ui/react"
 import { FaGithub, FaRedditAlien, FaTwitter } from "react-icons/fa"
 import { IconType } from "react-icons/lib"
-import { environment } from "../environments/environment"
 
 const SsoIcons: Record<string, IconType> = {
     Twitter: FaTwitter,
@@ -11,7 +10,10 @@ const SsoIcons: Record<string, IconType> = {
 
 export default function SsoButton(prop: { provider: string }): JSX.Element {
     return (
-        <Link href={`${environment.apiUrl}/auth/${prop.provider}`} mb="24px">
+        <Link
+            href={`${process.env.NX_API_URL}/auth/${prop.provider}`}
+            mb="24px"
+        >
             <Button
                 h="44px"
                 bgColor="#FFFFFF"

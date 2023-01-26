@@ -31,12 +31,6 @@
                     "vendorChunk": true
                 },
                 "production": {
-                    "fileReplacements": [
-                        {
-                            "replace": "apps/dashboard/src/environments/environment.ts",
-                            "with": "apps/dashboard/src/environments/environment.prod.ts"
-                        }
-                    ],
                     "optimization": true,
                     "outputHashing": "all",
                     "sourceMap": false,

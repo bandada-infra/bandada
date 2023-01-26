@@ -1,7 +1,6 @@
 import { request } from "@zk-groups/utils"
 import { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
-import { environment } from "../environments/environment"
 import { Group } from "../types/groups"
 
 type ReturnParameters = {
@@ -19,7 +18,7 @@ export default function useOffchainGroups(): ReturnParameters {
     > => {
         try {
             const groupList = await request(
-                `${environment.apiUrl}/groups/admin-groups`
+                `${process.env.NX_API_URL}/groups/admin-groups`
             )
             return groupList
         } catch (e) {
@@ -41,7 +40,7 @@ export default function useOffchainGroups(): ReturnParameters {
                     treeDepth: groupTreeDepth
                 }
             }
-            await request(`${environment.apiUrl}/groups`, config)
+            await request(`${process.env.NX_API_URL}/groups`, config)
 
             return true
         },

@@ -13,7 +13,6 @@ import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import useEthereumWallet from "../hooks/useEthereumWallet"
 import { request, shortenAddress } from "@zk-groups/utils"
-import { environment } from "../environments/environment"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
@@ -24,11 +23,11 @@ export default function NavBar(): JSX.Element {
     const [_account, setAccount] = useState<string>()
 
     function logOut() {
-        request(`${environment.apiUrl}/auth/log-out`, { method: "post" }).catch(
-            (e) => {
-                console.log("no jwt")
-            }
-        )
+        request(`${process.env.NX_API_URL}/auth/log-out`, {
+            method: "post"
+        }).catch((e) => {
+            console.log("no jwt")
+        })
         navigate("/")
         window.location.reload()
     }
@@ -45,7 +44,7 @@ export default function NavBar(): JSX.Element {
 
     useEffect(() => {
         ;(async () => {
-            await request(`${environment.apiUrl}/auth/getUser`)
+            await request(`${process.env.NX_API_URL}/auth/getUser`)
                 .then((res) => {
                     setJwtInCookies(true)
                 })

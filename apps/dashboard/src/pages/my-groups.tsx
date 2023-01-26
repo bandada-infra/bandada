@@ -21,7 +21,6 @@ import { Group } from "../types/groups"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import useEthereumWallet from "../hooks/useEthereumWallet"
 import { request } from "@zk-groups/utils"
-import { environment } from "../environments/environment"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
@@ -47,7 +46,7 @@ export default function MyGroups(): JSX.Element {
             }
 
             // Set as off-chain group is user logged in via SSP
-            await request(`${environment.apiUrl}/auth/getUser`)
+            await request(`${process.env.NX_API_URL}/auth/getUser`)
                 .then((res) => {
                     setIsOffchainGroup(true)
                 })

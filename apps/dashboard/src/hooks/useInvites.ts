@@ -1,6 +1,5 @@
 import { request } from "@zk-groups/utils"
 import { useCallback } from "react"
-import { environment } from "../environments/environment"
 
 type ReturnParameters = {
     generateMagicLink: (groupName: string) => Promise<string>
@@ -9,14 +8,14 @@ type ReturnParameters = {
 export default function useInvites(): ReturnParameters {
     const generateMagicLink = useCallback(
         async (groupName: string): Promise<string> => {
-            const code = await request(`${environment.apiUrl}/invites`, {
+            const code = await request(`${process.env.NX_API_URL}/invites`, {
                 method: "post",
                 data: {
                     groupName
                 }
             })
 
-            return `${environment.clientUrl}/invites/${code}`
+            return `${process.env.NX_CLIENT_URL}/invites/${code}`
         },
         []
     )

@@ -2,7 +2,6 @@ import { Injectable, Logger } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
 import { Profile, Strategy } from "passport-twitter"
 import { AuthService } from "../auth.service"
-import { environment } from "../../../environments/environment"
 
 @Injectable()
 export class TwitterStrategy extends PassportStrategy(Strategy, "twitter") {
@@ -12,7 +11,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy, "twitter") {
         super({
             consumerKey: process.env.TWITTER_CONSUMER_KEY,
             consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-            callbackURL: `${environment.apiUrl}/api/auth/twitter/callback`
+            callbackURL: `${process.env.NX_API_URL}/auth/twitter/callback`
         })
     }
 
