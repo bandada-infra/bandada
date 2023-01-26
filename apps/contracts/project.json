@@ -7,11 +7,10 @@
             "executor": "nx:run-commands",
             "options": {
                 "commands": [
-                    "hardhat compile",
-                    "hardhat deploy",
-                    "hardhat node"
+                    "hardhat node",
+                    "hardhat compile && hardhat deploy --network localhost"
                 ],
-                "parallel": false,
+                "parallel": true,
                 "cwd": "apps/contracts"
             }
         },
