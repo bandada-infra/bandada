@@ -3,6 +3,17 @@
     "sourceRoot": "apps/contracts",
     "projectType": "application",
     "targets": {
+        "serve": {
+            "executor": "nx:run-commands",
+            "options": {
+                "commands": [
+                    "hardhat node",
+                    "hardhat compile && hardhat deploy --network localhost"
+                ],
+                "parallel": true,
+                "cwd": "apps/contracts"
+            }
+        },
         "node": {
             "executor": "nx:run-commands",
             "options": {

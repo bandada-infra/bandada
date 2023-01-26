@@ -6,7 +6,7 @@ import { Network } from "./types"
 
 export async function updateGroups(
     updatedGroups: Map<string, any[]>,
-    network: Network = "goerli"
+    network: Network = process.env.NX_DEFAULT_NETWORK as Network
 ): Promise<ContractReceipt> {
     const signer = await getSigner(network)
     const contractInstance = getContractInstance("ZKGroups").connect(signer)
@@ -22,7 +22,7 @@ export async function updateGroups(
         })
     }
 
-    const transaction = await contractInstance["updatedGroups"](
+    const transaction = await contractInstance["updateGroups"](
         groupNames,
         offchainGroups
     )
