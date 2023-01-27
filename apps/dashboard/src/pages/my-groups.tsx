@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-import CreatGroupModal from "../components/creat-group-modal"
+import CreateGroupModal from "../components/create-group-modal"
 import GroupBox from "../components/group-box"
 import GroupFolder from "../components/group-folder"
 import useOffchainGroups from "../hooks/useOffchainGroups"
@@ -172,7 +172,7 @@ export default function MyGroups(): JSX.Element {
             ) : (
                 <GroupFolder />
             )}
-            <CreatGroupModal isOpen={isOpen} onClose={onClose} />
+            <CreateGroupModal isOpen={isOpen} onClose={onClose} />
         </Container>
     )
 }

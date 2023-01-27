@@ -8,7 +8,7 @@ import {
     Text,
     useDisclosure
 } from "@chakra-ui/react"
-import CreatGroupModal from "../../components/creat-group-modal"
+import CreateGroupModal from "../create-group-modal"
 import { Group } from "../../types/groups"
 import GroupCard from "./group-card"
 
@@ -62,7 +62,7 @@ export default function GroupBox({ groupList }: GroupList): JSX.Element {
                                 Get Started!
                             </Button>
                         </Center>
-                        <CreatGroupModal isOpen={isOpen} onClose={onClose} />
+                        <CreateGroupModal isOpen={isOpen} onClose={onClose} />
                     </Flex>
                 </Center>
             )}
