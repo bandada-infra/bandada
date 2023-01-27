@@ -20,11 +20,12 @@ export default function Manage(): JSX.Element {
     const [_membersList, setMembersList] = useState<string[] | null>()
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
+    const isOnChainGroup = pageOption === "on-chain"
 
     useEffect(() => {
         ;(async () => {
             try {
-                if (pageOption === "on-chain") {
+                if (isOnChainGroup) {
                     const onchainGroup = await getOnchainGroup(groupName || "")
                     setGroup(onchainGroup)
                     setMembersList(onchainGroup?.members)
@@ -49,7 +50,7 @@ export default function Manage(): JSX.Element {
         getMembersList,
         navigate,
         getOnchainGroup,
-        pageOption
+        isOnChainGroup
     ])
 
     return (
@@ -64,7 +65,7 @@ export default function Manage(): JSX.Element {
                         fontSize="16px"
                         border="1px solid #373A3E"
                     >
-                        New Invite
+                        {isOnChainGroup ? "Add Member" : "New Invite"}
                     </Button>
                 </Flex>
                 <Text mt="16px" mb="29px">
@@ -89,11 +90,9 @@ export default function Manage(): JSX.Element {
                             </Text>
                         </Box>
                     ) : (
-                        <Text mt="5">
-                            No members in the group yet.
-                        </Text>
+                        <Text mt="5">No members in the group yet.</Text>
                     )}
-                    
+
                     {_membersList?.map((member) => (
                         <Flex
                             borderBottom="1px"
@@ -125,7 +124,9 @@ export default function Manage(): JSX.Element {
                             </Box>
                         )}
                         <Box>
-                            <Text mt="5">{_group?.members.length || 'No'} members</Text>
+                            <Text mt="5">
+                                Members: {_group?.members.length || "0"}
+                            </Text>
                             <Text mt="5">
                                 {_group?.treeDepth === 30
                                     ? "Capacity: 1 Billion"
@@ -148,7 +149,7 @@ export default function Manage(): JSX.Element {
                     </Flex>
                 </Box>
             </Flex>
-            {pageOption === "on-chain" ? (
+            {isOnChainGroup ? (
                 <AddMemberModal
                     isOpen={isOpen}
                     onClose={onClose}

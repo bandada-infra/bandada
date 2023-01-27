@@ -38,7 +38,7 @@ export default function CreateGroupModal({
     const { createOffchainGroup } = useOffchainGroups()
     const _signer = useSigner()
 
-    const isOnChainGroup = pageOption === "on-chain";
+    const isOnChainGroup = pageOption === "on-chain"
 
     function nextStep() {
         setStep(_step + 1)
@@ -162,7 +162,9 @@ export default function CreateGroupModal({
                                             minLength={10}
                                             isRequired
                                             onChange={(e) =>
-                                                setGroupDescription(e.target.value)
+                                                setGroupDescription(
+                                                    e.target.value
+                                                )
                                             }
                                             placeholder="Enter details that will help you differentiate this group"
                                         />
