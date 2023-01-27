@@ -23,11 +23,9 @@ export default function SSO(): JSX.Element {
     const { connectWallet, account } = useEthereumWallet()
 
     useEffect(() => {
-        ;(async () => {
-            if (account) {
-                navigate("/my-groups?type=on-chain")
-            }
-        })()
+        if (account) {
+            navigate("/my-groups?type=on-chain")
+        }
     }, [account, navigate])
 
     return (
@@ -57,7 +55,7 @@ export default function SSO(): JSX.Element {
                         }}
                     >
                         <Icon as={FaEthereum} mr="13px" />
-                        Connect Meta Mask
+                        Connect MetaMask
                     </Button>
                 </Box>
                 <Divider orientation="horizontal" my="24px" w="500px" />
