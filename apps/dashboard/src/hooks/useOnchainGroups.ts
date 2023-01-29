@@ -10,7 +10,12 @@ type ReturnParameters = {
 }
 
 function formatGroupName(groupNameInt: string) {
-    return parseBytes32String(BigNumber.from(groupNameInt).toHexString())
+    try {
+        return parseBytes32String(BigNumber.from(groupNameInt).toHexString())
+    } catch (error) {
+        // If not parse-able as String, return original value
+        return groupNameInt
+    }
 }
 
 export default function useOnchainGroups(): ReturnParameters {
@@ -30,7 +35,7 @@ export default function useOnchainGroups(): ReturnParameters {
 
                         return {
                             name: groupName,
-                            description: `${groupName} on-chain group`,
+                            description: "",
                             treeDepth: group.merkleTree.depth,
                             members: group.members,
                             admin: group.admin

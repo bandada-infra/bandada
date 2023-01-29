@@ -20,11 +20,12 @@ export default function Manage(): JSX.Element {
     const [_membersList, setMembersList] = useState<string[] | null>()
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
+    const isOnChainGroup = pageOption === "on-chain"
 
     useEffect(() => {
         ;(async () => {
             try {
-                if (pageOption === "on-chain") {
+                if (isOnChainGroup) {
                     const onchainGroup = await getOnchainGroup(groupName || "")
                     setGroup(onchainGroup)
                     setMembersList(onchainGroup?.members)
@@ -49,7 +50,7 @@ export default function Manage(): JSX.Element {
         getMembersList,
         navigate,
         getOnchainGroup,
-        pageOption
+        isOnChainGroup
     ])
 
     return (
@@ -64,7 +65,7 @@ export default function Manage(): JSX.Element {
                         fontSize="16px"
                         border="1px solid #373A3E"
                     >
-                        New Invite
+                        {isOnChainGroup ? "Add Member" : "New Invite"}
                     </Button>
                 </Flex>
                 <Text mt="16px" mb="29px">
@@ -82,11 +83,16 @@ export default function Manage(): JSX.Element {
                     <Text fontWeight="bold" fontSize="lg">
                         Members
                     </Text>
-                    <Box borderBottom="1px" borderColor="gray.200" p="16px">
-                        <Text fontWeight="bold" fontSize="16px">
-                            Identity Commitment
-                        </Text>
-                    </Box>
+                    {_membersList?.length ? (
+                        <Box borderBottom="1px" borderColor="gray.200" p="16px">
+                            <Text fontWeight="bold" fontSize="16px">
+                                Identity Commitment
+                            </Text>
+                        </Box>
+                    ) : (
+                        <Text mt="5">No members in the group yet.</Text>
+                    )}
+
                     {_membersList?.map((member) => (
                         <Flex
                             borderBottom="1px"
@@ -112,39 +118,38 @@ export default function Manage(): JSX.Element {
                         justifyContent="space-between"
                         mt="23px"
                     >
+                        {_group?.description && (
+                            <Box>
+                                <Text mb="10">{_group?.description}</Text>
+                            </Box>
+                        )}
                         <Box>
-                            <Text>{_group?.description}</Text>
-                        </Box>
-                        <Box>
-                            <Text>{_group?.members.length} members</Text>
-                            <Text mt="10">
-                                {_group?.treeDepth === 30
-                                    ? "Capacity 1 Billion"
-                                    : _group?.treeDepth === 25
-                                    ? "Capacity 30 Million"
-                                    : _group?.treeDepth === 20
-                                    ? "Capacity 500 Thousand"
-                                    : "Capacity 30 Thousand"}
+                            <Text mt="5">
+                                Members: {_group?.members.length || "0"}
                             </Text>
-                        </Box>
-                        <Box>
-                            <Text>
+                            <Text mt="5">
                                 {_group?.treeDepth === 30
-                                    ? "Tree depth 30"
+                                    ? "Capacity: 1 Billion"
                                     : _group?.treeDepth === 25
-                                    ? "Tree depth 25"
+                                    ? "CapacityL 30 Million"
                                     : _group?.treeDepth === 20
-                                    ? "Tree depth 20"
-                                    : "Tree depth 16"}
+                                    ? "Capacity: 500 Thousand"
+                                    : "Capacity: 30 Thousand"}
                             </Text>
-                            <Text mt="10">
-                                What is treedepth? Merkle trees are used to....
+                            <Text mt="5">
+                                {_group?.treeDepth === 30
+                                    ? "Tree depth: 30"
+                                    : _group?.treeDepth === 25
+                                    ? "Tree depth: 25"
+                                    : _group?.treeDepth === 20
+                                    ? "Tree depth: 20"
+                                    : "Tree depth: 16"}
                             </Text>
                         </Box>
                     </Flex>
                 </Box>
             </Flex>
-            {pageOption === "on-chain" ? (
+            {isOnChainGroup ? (
                 <AddMemberModal
                     isOpen={isOpen}
                     onClose={onClose}

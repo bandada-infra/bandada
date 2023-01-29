@@ -24,7 +24,7 @@ import { useSearchParams } from "react-router-dom"
 import { semaphore } from "@zk-groups/contract-utils"
 import useSigner from "../hooks/useSigner"
 
-export default function CreatGroupModal({
+export default function CreateGroupModal({
     isOpen,
     onClose
 }: UseDisclosureProps): JSX.Element {
@@ -37,6 +37,8 @@ export default function CreatGroupModal({
     const [_loading, setLoading] = useState<boolean>()
     const { createOffchainGroup } = useOffchainGroups()
     const _signer = useSigner()
+
+    const isOnChainGroup = pageOption === "on-chain"
 
     function nextStep() {
         setStep(_step + 1)
@@ -58,7 +60,7 @@ export default function CreatGroupModal({
         groupDescription: string,
         treeDepth: number
     ) {
-        if (pageOption === "on-chain") {
+        if (isOnChainGroup) {
             setLoading(true)
             try {
                 const transaction =
@@ -136,7 +138,7 @@ export default function CreatGroupModal({
                     {_step === 0 ? (
                         <form onSubmit={nextStep}>
                             <Flex
-                                h="300px"
+                                h={isOnChainGroup ? "250px" : "300px"}
                                 flexDir="column"
                                 justifyContent="space-around"
                             >
@@ -152,18 +154,22 @@ export default function CreatGroupModal({
                                         placeholder="Give your group a title"
                                     />
                                 </FormControl>
-                                <FormControl>
-                                    <FormLabel>Description</FormLabel>
-                                    <Input
-                                        value={_groupDescription}
-                                        minLength={10}
-                                        isRequired
-                                        onChange={(e) =>
-                                            setGroupDescription(e.target.value)
-                                        }
-                                        placeholder="Enter details that will help you differentiate this group"
-                                    />
-                                </FormControl>
+                                {!isOnChainGroup && (
+                                    <FormControl>
+                                        <FormLabel>Description</FormLabel>
+                                        <Input
+                                            value={_groupDescription}
+                                            minLength={10}
+                                            isRequired
+                                            onChange={(e) =>
+                                                setGroupDescription(
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Enter details that will help you differentiate this group"
+                                        />
+                                    </FormControl>
+                                )}
                                 <Button
                                     type="submit"
                                     fontSize="lg"

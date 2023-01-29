@@ -80,7 +80,7 @@ export default function AddMemberModal({
                                     onChange={(e) =>
                                         setIdentityCommitment(e.target.value)
                                     }
-                                    placeholder="Give your group a title"
+                                    placeholder="Identity Commitment"
                                 />
                                 <Button
                                     variant="solid"
