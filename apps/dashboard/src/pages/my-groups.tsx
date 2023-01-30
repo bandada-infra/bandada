@@ -52,7 +52,13 @@ export default function MyGroups(): JSX.Element {
                 setIsLoading(false)
             }
         })()
-    }, [getOnchainGroupList, getOffchainGroupList, navigate, account, groupsUpdateTime])
+    }, [
+        getOnchainGroupList,
+        getOffchainGroupList,
+        navigate,
+        account,
+        groupsUpdateTime
+    ])
 
     useEffect(() => {
         _groupList &&
@@ -152,12 +158,15 @@ export default function MyGroups(): JSX.Element {
             ) : (
                 <GroupFolder />
             )}
-            <CreateGroupModal isOpen={isOpen} onClose={(created) => {
-                if (created) {
-                    setGroupsUpdateTime(new Date());
-                }
-                onClose();
-            }} />
+            <CreateGroupModal
+                isOpen={isOpen}
+                onClose={(created) => {
+                    if (created) {
+                        setGroupsUpdateTime(new Date())
+                    }
+                    onClose()
+                }}
+            />
         </Container>
     )
 }

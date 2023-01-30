@@ -14,7 +14,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Spinner,
-    Text,
+    Text
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { groupSizeInfo } from "../types/groups"
@@ -26,7 +26,10 @@ import useSigner from "../hooks/useSigner"
 export default function CreateGroupModal({
     isOpen,
     onClose
-}: { isOpen: boolean, onClose: (created: boolean) => void}): JSX.Element {
+}: {
+    isOpen: boolean
+    onClose: (created: boolean) => void
+}): JSX.Element {
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const [_step, setStep] = useState<number>(0)
@@ -245,12 +248,20 @@ export default function CreateGroupModal({
                             </Container>
                             {_loading ? (
                                 <Flex
-                                    flexDir="row"
-                                    justifyContent="center"
+                                    flexDir="column"
+                                    alignItems="center"
                                     marginY="20px"
+                                    textAlign="center"
                                 >
                                     <Spinner size="md" />
-                                    <Text ml="5">Pending transaction</Text>
+                                    <Text mr="5">
+                                        Transaction is being executed.
+                                    </Text>
+                                    <Text mr="5">
+                                        It might take a couple of minutes for
+                                        the new group to appear on the Groups
+                                        list
+                                    </Text>
                                 </Flex>
                             ) : (
                                 <Flex

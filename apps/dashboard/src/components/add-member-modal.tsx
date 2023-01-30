@@ -125,7 +125,8 @@ export default function AddMemberModal({
                     {_status === "failure" && (
                         <Box textAlign="center" margin="0 auto">
                             <Text mb="20px">
-                                Error ocurred while executing the transaction. Please try again later.
+                                Error ocurred while executing the transaction.
+                                Please try again later.
                             </Text>
                             <Button
                                 mb="20px"
