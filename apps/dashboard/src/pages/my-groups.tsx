@@ -18,17 +18,16 @@ import GroupFolder from "../components/group-folder"
 import useOffchainGroups from "../hooks/useOffchainGroups"
 import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
-import { useNavigate, useSearchParams } from "react-router-dom"
-import useEthereumWallet from "../hooks/useEthereumWallet"
+import { useSearchParams } from "react-router-dom"
+import { useAccount } from "wagmi"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const { getOffchainGroupList } = useOffchainGroups()
     const { getOnchainGroupList } = useOnchainGroups()
-    const { account } = useEthereumWallet()
+    const { address } = useAccount()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const navigate = useNavigate()
 
     const [isLoading, setIsLoading] = useState(false)
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
@@ -41,8 +40,8 @@ export default function MyGroups(): JSX.Element {
         ;(async () => {
             setIsLoading(true)
             try {
-                if (account) {
-                    const onchainGroupList = await getOnchainGroupList(account)
+                if (address) {
+                    const onchainGroupList = await getOnchainGroupList(address)
                     setGroupList(onchainGroupList)
                 } else {
                     const offchainGroupList = await getOffchainGroupList()
@@ -52,13 +51,8 @@ export default function MyGroups(): JSX.Element {
                 setIsLoading(false)
             }
         })()
-    }, [
-        getOnchainGroupList,
-        getOffchainGroupList,
-        navigate,
-        account,
-        groupsUpdateTime
-    ])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [groupsUpdateTime])
 
     useEffect(() => {
         _groupList &&

@@ -19,7 +19,7 @@
                     "apps/dashboard/src/favicon.ico",
                     "apps/dashboard/src/assets"
                 ],
-                "styles": [],
+                "styles": ["node_modules/@rainbow-me/rainbowkit/styles.css"],
                 "scripts": [],
                 "webpackConfig": "@nrwl/react/plugins/webpack"
             },
