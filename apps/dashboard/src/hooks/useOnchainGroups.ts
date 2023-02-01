@@ -59,7 +59,7 @@ export default function useOnchainGroups(): ReturnParameters {
 
                 return {
                     name: groupName,
-                    description: `${groupName} on-chain group`,
+                    description: "",
                     treeDepth: group.merkleTree.depth,
                     members: group.members,
                     admin: group.admin

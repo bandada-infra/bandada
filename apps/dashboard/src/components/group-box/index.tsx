@@ -5,6 +5,7 @@ import {
     Flex,
     Grid,
     GridItem,
+    Spinner,
     Text,
     useDisclosure
 } from "@chakra-ui/react"
@@ -14,13 +15,24 @@ import GroupCard from "./group-card"
 
 interface GroupList {
     groupList: Array<Group>
+    isLoading: boolean
 }
 
-export default function GroupBox({ groupList }: GroupList): JSX.Element {
+export default function GroupBox({
+    groupList,
+    isLoading
+}: GroupList): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
     return (
         <Box>
-            {groupList.length > 0 ? (
+            {isLoading && (
+                <Box p="10" textAlign="center" w="100%">
+                    <Spinner />
+                </Box>
+            )}
+
+            {!isLoading && groupList.length > 0 && (
                 <Grid
                     templateColumns="repeat(4, 1fr)"
                     gap={10}
@@ -39,7 +51,9 @@ export default function GroupBox({ groupList }: GroupList): JSX.Element {
                         </GridItem>
                     ))}
                 </Grid>
-            ) : (
+            )}
+
+            {!isLoading && groupList.length === 0 && (
                 <Center
                     minH="400px"
                     mt="70px"

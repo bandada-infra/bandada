@@ -16,44 +16,46 @@ import { request, shortenAddress } from "@zk-groups/utils"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
-    const [jwtInCookies, setJwtInCookies] = useState(false)
     const { disconnect, isWalletConnected, account } = useEthereumWallet()
     const { hasCopied, onCopy } = useClipboard(account || "")
+
+    const [isSignedIn, setIsSignedIn] = useState(false)
     const [_isWalletConnected, setIsWalletConnected] = useState<boolean>()
-    const [_account, setAccount] = useState<string>()
 
     function logOut() {
         request(`${process.env.NX_API_URL}/auth/log-out`, {
             method: "post"
         }).catch((e) => {
-            console.log("no jwt")
+            // Ignore
         })
-        navigate("/")
+        navigate("/sso")
         window.location.reload()
     }
 
     useEffect(() => {
         ;(async () => {
-            const isConnected = await isWalletConnected()
-            if (isConnected && account) {
-                setIsWalletConnected(isConnected)
-                setAccount(account)
+            // If we are on the login route, no need to check for the logged-in user
+            if (window.location.toString().includes("/sso")) {
+                return
             }
-        })()
-    }, [isWalletConnected, account])
 
-    useEffect(() => {
-        ;(async () => {
+            // Check if wallet is connected
+            if ((await isWalletConnected()) && account) {
+                setIsWalletConnected(true)
+                return
+            }
+
+            // Check if user logged in via SSO
             await request(`${process.env.NX_API_URL}/auth/getUser`)
                 .then((res) => {
-                    setJwtInCookies(true)
+                    setIsSignedIn(true)
                 })
                 .catch((e) => {
-                    console.log("no jwt")
-                    setJwtInCookies(false)
+                    // Redirect to login page
+                    navigate("/sso")
                 })
         })()
-    }, [])
+    }, [account, isWalletConnected, navigate])
 
     return (
         <Box bgColor="#F8F9FF" borderBottom="1px" borderColor="gray.200">
@@ -68,19 +70,36 @@ export default function NavBar(): JSX.Element {
                     </Center>
 
                     <Spacer />
-                    {jwtInCookies ? (
+
+                    {isSignedIn && (
                         <Center>
-                            <Button variant="solid" mr="10px" onClick={logOut}>
-                                Log out
-                            </Button>
                             <Link to="/my-groups?type=off-chain">
-                                <Button variant="solid" colorScheme="primary">
+                                <Button
+                                    variant="solid"
+                                    mr="10px"
+                                    colorScheme="primary"
+                                >
                                     My Groups
                                 </Button>
                             </Link>
+
+                            <Button variant="solid" onClick={logOut}>
+                                Log out
+                            </Button>
                         </Center>
-                    ) : _isWalletConnected ? (
+                    )}
+
+                    {_isWalletConnected && (
                         <Center>
+                            <Link to="/my-groups?type=on-chain">
+                                <Button
+                                    variant="solid"
+                                    colorScheme="primary"
+                                    mr="10"
+                                >
+                                    My Groups
+                                </Button>
+                            </Link>
                             <Tooltip
                                 label={hasCopied ? "Copied" : "Copy"}
                                 closeOnClick={false}
@@ -90,15 +109,15 @@ export default function NavBar(): JSX.Element {
                                     variant="outlined"
                                     color="primary"
                                     onClick={onCopy}
-                                    sx={{ marginRight: 10 }}
                                 >
-                                    {_account ? shortenAddress(_account) : ""}
+                                    {account ? shortenAddress(account) : ""}
                                 </Button>
                             </Tooltip>
                             <Button
-                                variant="solid"
+                                variant="outline"
                                 colorScheme="primary"
                                 onClick={() => {
+                                    setIsWalletConnected(false)
                                     disconnect()
                                     navigate("/sso")
                                     window.location.reload()
@@ -106,19 +125,6 @@ export default function NavBar(): JSX.Element {
                             >
                                 Disconnect
                             </Button>
-                        </Center>
-                    ) : (
-                        <Center>
-                            <Link to="/sso?opt=login">
-                                <Button mr="10px" variant="solid">
-                                    Log in
-                                </Button>
-                            </Link>
-                            <Link to="/sso?opt=get-started">
-                                <Button variant="solid" colorScheme="primary">
-                                    Get started
-                                </Button>
-                            </Link>
                         </Center>
                     )}
                 </Flex>

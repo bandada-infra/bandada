@@ -20,7 +20,6 @@ import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import useEthereumWallet from "../hooks/useEthereumWallet"
-import { request } from "@zk-groups/utils"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
@@ -31,49 +30,28 @@ export default function MyGroups(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const navigate = useNavigate()
 
+    const [isLoading, setIsLoading] = useState(false)
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
     const [_groupList, setGroupList] = useState<Group[] | null>()
     const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
-    const [_isOffchainGroup, setIsOffchainGroup] = useState<boolean>()
 
     useEffect(() => {
         ;(async () => {
-            // If metamask is already connected, assume on-chain group
-            if (account) {
-                setIsOffchainGroup(false)
-                return
-            }
-
-            // Set as off-chain group is user logged in via SSP
-            await request(`${process.env.NX_API_URL}/auth/getUser`)
-                .then((res) => {
-                    setIsOffchainGroup(true)
-                })
-                .catch((e) => {
-                    // Failure - Redirect to login page
-                    navigate("/sso")
-                })
-        })()
-    }, [navigate, account])
-
-    useEffect(() => {
-        ;(async () => {
-            if (_isOffchainGroup) {
-                const offchainGroupList = await getOffchainGroupList()
-                setGroupList(offchainGroupList)
-            } else {
-                const onchainGroupList = await getOnchainGroupList(account)
-                setGroupList(onchainGroupList)
+            setIsLoading(true)
+            try {
+                if (account) {
+                    const onchainGroupList = await getOnchainGroupList(account)
+                    setGroupList(onchainGroupList)
+                } else {
+                    const offchainGroupList = await getOffchainGroupList()
+                    setGroupList(offchainGroupList)
+                }
+            } finally {
+                setIsLoading(false)
             }
         })()
-    }, [
-        getOnchainGroupList,
-        getOffchainGroupList,
-        _isOffchainGroup,
-        navigate,
-        account
-    ])
+    }, [getOnchainGroupList, getOffchainGroupList, navigate, account])
 
     useEffect(() => {
         _groupList &&
@@ -167,6 +145,7 @@ export default function MyGroups(): JSX.Element {
             </Flex>
             {_selectedForm === "groups" ? (
                 <GroupBox
+                    isLoading={isLoading}
                     groupList={_searchedGroupList ? _searchedGroupList : []}
                 />
             ) : (

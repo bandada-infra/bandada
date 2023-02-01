@@ -83,7 +83,7 @@ export class AuthController {
     logOut(@Req() req: Request, @Res() res: Response) {
         res.cookie("jwt", "", {
             httpOnly: true,
-            maxAge: 0
+            expires: new Date()
         })
         res.redirect(`${process.env.NX_DASHBOARD_URL}`)
     }
