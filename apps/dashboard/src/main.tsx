@@ -21,7 +21,10 @@ import {
 import App from "./app/app"
 import theme from "./styles"
 
-const { chains, provider, webSocketProvider } = configureChains([goerli], [publicProvider()])
+const { chains, provider, webSocketProvider } = configureChains(
+    [goerli],
+    [publicProvider()]
+)
 
 const connectors = connectorsForWallets([
     {
@@ -29,7 +32,7 @@ const connectors = connectorsForWallets([
         wallets: [
             injectedWallet({ chains }),
             metaMaskWallet({ chains }),
-            coinbaseWallet({ appName: "ZK Groups", chains }),
+            coinbaseWallet({ appName: "Zk Groups", chains }),
             walletConnectWallet({ chains }),
             trustWallet({ chains }),
             ledgerWallet({ chains })
@@ -47,7 +50,7 @@ const wagmiClient = createClient({
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
     <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider chains={chains} initialChain={goerli}>
             <StrictMode>
                 <CookiesProvider>
                     <ChakraProvider theme={theme}>

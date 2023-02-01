@@ -14,7 +14,7 @@ import SsoButton from "../components/sso-button"
 import { FaEthereum } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
-import { useAccount } from "wagmi"
+import { goerli, useAccount, useSwitchNetwork } from "wagmi"
 import { useEffect } from "react"
 
 export default function SSO(): JSX.Element {
@@ -22,13 +22,16 @@ export default function SSO(): JSX.Element {
     const pageOption = searchParams.get("opt")
     const navigate = useNavigate()
     const { openConnectModal } = useConnectModal()
+    const { switchNetwork } = useSwitchNetwork()
 
     const { isConnected } = useAccount()
 
     useEffect(() => {
         if (isConnected) {
+            switchNetwork?.(goerli.id)
             navigate("/my-groups?type=on-chain")
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigate, isConnected])
 
     return (
