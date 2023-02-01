@@ -12,7 +12,8 @@ import {
     ModalOverlay,
     UseDisclosureProps,
     Spinner,
-    Text
+    Text,
+    Box
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { semaphore } from "@zk-groups/contract-utils"
@@ -24,7 +25,9 @@ export default function AddMemberModal({
     groupName
 }: UseDisclosureProps & any): JSX.Element {
     const [_identityCommitment, setIdentityCommitment] = useState<string>("")
-    const [_loading, setLoading] = useState<boolean>()
+    const [_status, setStatus] = useState<
+        "default" | "loading" | "success" | "failure"
+    >("default")
     const _signer = useSigner()
 
     async function addNewMember(groupName: string, identityCommitment: string) {
@@ -32,7 +35,7 @@ export default function AddMemberModal({
             alert("Please enter Identity commitment of the member")
             return
         }
-        setLoading(true)
+        setStatus("loading")
         try {
             const transaction =
                 _signer &&
@@ -41,10 +44,10 @@ export default function AddMemberModal({
                     groupName,
                     identityCommitment
                 ))
-            setLoading(false)
-            transaction && onClose && onClose()
+            transaction && setStatus("success")
             return
         } catch (error) {
+            setStatus("failure")
             console.error(error)
         }
     }
@@ -58,16 +61,7 @@ export default function AddMemberModal({
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {_loading ? (
-                        <Flex
-                            flexDir="row"
-                            justifyContent="center"
-                            marginY="10px"
-                        >
-                            <Spinner size="md" />
-                            <Text ml="5">Pending transaction</Text>
-                        </Flex>
-                    ) : (
+                    {_status === "default" && (
                         <FormControl marginY="10px">
                             <FormLabel color="gray.500" fontWeight="700">
                                 Enter Identity Commitment
@@ -97,6 +91,52 @@ export default function AddMemberModal({
                                 </Button>
                             </Flex>
                         </FormControl>
+                    )}
+
+                    {_status === "loading" && (
+                        <Flex
+                            flexDir="row"
+                            justifyContent="center"
+                            marginY="10px"
+                        >
+                            <Spinner size="md" />
+                            <Text ml="5">Pending transaction</Text>
+                        </Flex>
+                    )}
+
+                    {_status === "success" && (
+                        <Box textAlign="center" margin="0 auto">
+                            <Text mb="20px">
+                                Member added successfully. It might take a
+                                couple of minutes for the new member to appear
+                                on the list.
+                            </Text>
+                            <Button
+                                mb="20px"
+                                variant="solid"
+                                colorScheme="primary"
+                                onClick={onClose}
+                            >
+                                Close
+                            </Button>
+                        </Box>
+                    )}
+
+                    {_status === "failure" && (
+                        <Box textAlign="center" margin="0 auto">
+                            <Text mb="20px">
+                                Error ocurred while executing the transaction.
+                                Please try again later.
+                            </Text>
+                            <Button
+                                mb="20px"
+                                variant="solid"
+                                colorScheme="primary"
+                                onClick={onClose}
+                            >
+                                Close
+                            </Button>
+                        </Box>
                     )}
                 </ModalBody>
             </ModalContent>

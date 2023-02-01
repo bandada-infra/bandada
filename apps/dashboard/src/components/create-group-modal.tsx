@@ -14,8 +14,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Spinner,
-    Text,
-    UseDisclosureProps
+    Text
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { groupSizeInfo } from "../types/groups"
@@ -27,7 +26,10 @@ import useSigner from "../hooks/useSigner"
 export default function CreateGroupModal({
     isOpen,
     onClose
-}: UseDisclosureProps): JSX.Element {
+}: {
+    isOpen: boolean
+    onClose: (created: boolean) => void
+}): JSX.Element {
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const [_step, setStep] = useState<number>(0)
@@ -67,13 +69,13 @@ export default function CreateGroupModal({
                     _signer &&
                     (await semaphore.createGroup(_signer, groupName, treeDepth))
                 setLoading(false)
-                transaction && onClose && onClose()
+                transaction && onClose && onClose(true)
             } catch (error) {
                 console.error(error)
             }
         } else {
             createOffchainGroup(groupName, groupDescription, treeDepth)
-            onClose && onClose()
+            onClose && onClose(true)
         }
     }
 
@@ -123,7 +125,7 @@ export default function CreateGroupModal({
     }, [isOpen])
 
     return (
-        <Modal isOpen={!!isOpen} onClose={onClose ? onClose : console.error}>
+        <Modal isOpen={!!isOpen} onClose={() => onClose(false)}>
             <ModalOverlay />
             <ModalContent maxW={_step === 1 ? "1200px" : "600px"}>
                 <ModalHeader borderBottom="1px" borderColor="gray.200">
@@ -246,12 +248,20 @@ export default function CreateGroupModal({
                             </Container>
                             {_loading ? (
                                 <Flex
-                                    flexDir="row"
-                                    justifyContent="center"
+                                    flexDir="column"
+                                    alignItems="center"
                                     marginY="20px"
+                                    textAlign="center"
                                 >
                                     <Spinner size="md" />
-                                    <Text ml="5">Pending transaction</Text>
+                                    <Text mr="5">
+                                        Transaction is being executed.
+                                    </Text>
+                                    <Text mr="5">
+                                        It might take a couple of minutes for
+                                        the new group to appear on the Groups
+                                        list
+                                    </Text>
                                 </Flex>
                             ) : (
                                 <Flex

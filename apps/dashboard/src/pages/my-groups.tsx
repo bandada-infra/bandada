@@ -35,6 +35,7 @@ export default function MyGroups(): JSX.Element {
     const [_groupList, setGroupList] = useState<Group[] | null>()
     const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
+    const [groupsUpdateTime, setGroupsUpdateTime] = useState(new Date())
 
     useEffect(() => {
         ;(async () => {
@@ -51,7 +52,13 @@ export default function MyGroups(): JSX.Element {
                 setIsLoading(false)
             }
         })()
-    }, [getOnchainGroupList, getOffchainGroupList, navigate, account])
+    }, [
+        getOnchainGroupList,
+        getOffchainGroupList,
+        navigate,
+        account,
+        groupsUpdateTime
+    ])
 
     useEffect(() => {
         _groupList &&
@@ -151,7 +158,15 @@ export default function MyGroups(): JSX.Element {
             ) : (
                 <GroupFolder />
             )}
-            <CreateGroupModal isOpen={isOpen} onClose={onClose} />
+            <CreateGroupModal
+                isOpen={isOpen}
+                onClose={(created) => {
+                    if (created) {
+                        setGroupsUpdateTime(new Date())
+                    }
+                    onClose()
+                }}
+            />
         </Container>
     )
 }
