@@ -29,6 +29,7 @@
         "@nestjs/schedule": "^2.1.0",
         "@nestjs/typeorm": "^9.0.0",
         "@openzeppelin/contracts": "^4.7.3",
+        "@rainbow-me/rainbowkit": "^0.8.1",
         "@semaphore-protocol/contracts": "3.0.0-beta.7",
         "@semaphore-protocol/group": "3.0.0-beta.7",
         "@semaphore-protocol/identity": "3.0.0-beta.7",
@@ -62,6 +63,7 @@
         "soltypes": "^2.0.0",
         "sqlite3": "^5.1.2",
         "typeorm": "^0.3.7",
+        "wagmi": "^0.11.2",
         "webpack": "^5.74.0"
     },
     "devDependencies": {

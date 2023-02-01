@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { semaphore } from "@zk-groups/contract-utils"
-import useSigner from "../hooks/useSigner"
+import { useSigner } from "wagmi"
 
 export default function AddMemberModal({
     isOpen,
@@ -28,7 +28,7 @@ export default function AddMemberModal({
     const [_status, setStatus] = useState<
         "default" | "loading" | "success" | "failure"
     >("default")
-    const _signer = useSigner()
+    const { data: signer } = useSigner()
 
     async function addNewMember(groupName: string, identityCommitment: string) {
         if (!identityCommitment) {
@@ -38,9 +38,9 @@ export default function AddMemberModal({
         setStatus("loading")
         try {
             const transaction =
-                _signer &&
+                signer &&
                 (await semaphore.addMember(
-                    _signer,
+                    signer,
                     groupName,
                     identityCommitment
                 ))

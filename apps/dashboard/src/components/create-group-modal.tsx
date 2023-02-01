@@ -21,7 +21,7 @@ import { groupSizeInfo } from "../types/groups"
 import useOffchainGroups from "../hooks/useOffchainGroups"
 import { useSearchParams } from "react-router-dom"
 import { semaphore } from "@zk-groups/contract-utils"
-import useSigner from "../hooks/useSigner"
+import { useSigner } from "wagmi"
 
 export default function CreateGroupModal({
     isOpen,
@@ -38,7 +38,7 @@ export default function CreateGroupModal({
     const [_groupSize, setGroupSize] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>()
     const { createOffchainGroup } = useOffchainGroups()
-    const _signer = useSigner()
+    const { data: signer } = useSigner()
 
     const isOnChainGroup = pageOption === "on-chain"
 
@@ -66,8 +66,8 @@ export default function CreateGroupModal({
             setLoading(true)
             try {
                 const transaction =
-                    _signer &&
-                    (await semaphore.createGroup(_signer, groupName, treeDepth))
+                    signer &&
+                    (await semaphore.createGroup(signer, groupName, treeDepth))
                 setLoading(false)
                 transaction && onClose && onClose(true)
             } catch (error) {

@@ -13,20 +13,26 @@ import { useSearchParams } from "react-router-dom"
 import SsoButton from "../components/sso-button"
 import { FaEthereum } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
+import { useConnectModal } from "@rainbow-me/rainbowkit"
+import { goerli, useAccount, useSwitchNetwork } from "wagmi"
 import { useEffect } from "react"
-import useEthereumWallet from "../hooks/useEthereumWallet"
 
 export default function SSO(): JSX.Element {
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("opt")
     const navigate = useNavigate()
-    const { connectWallet, account } = useEthereumWallet()
+    const { openConnectModal } = useConnectModal()
+    const { switchNetwork } = useSwitchNetwork()
+
+    const { isConnected } = useAccount()
 
     useEffect(() => {
-        if (account) {
+        if (isConnected) {
+            switchNetwork?.(goerli.id)
             navigate("/my-groups?type=on-chain")
         }
-    }, [account, navigate])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigate, isConnected])
 
     return (
         <Container maxW="500px">
@@ -50,12 +56,10 @@ export default function SSO(): JSX.Element {
                         border="1px solid #D0D1D2"
                         fontSize="18px"
                         w="500px"
-                        onClick={() => {
-                            connectWallet()
-                        }}
+                        onClick={openConnectModal}
                     >
                         <Icon as={FaEthereum} mr="13px" />
-                        Connect MetaMask
+                        Connect Wallet
                     </Button>
                 </Box>
                 <Divider orientation="horizontal" my="24px" w="500px" />

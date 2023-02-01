@@ -11,37 +11,40 @@ import {
 } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import useEthereumWallet from "../hooks/useEthereumWallet"
 import { request, shortenAddress } from "@zk-groups/utils"
+import { useAccount, useDisconnect } from "wagmi"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
-    const { disconnect, isWalletConnected, account } = useEthereumWallet()
-    const { hasCopied, onCopy } = useClipboard(account || "")
-
+    const { isConnected, address } = useAccount()
+    const { hasCopied, onCopy } = useClipboard(address || "")
     const [isSignedIn, setIsSignedIn] = useState(false)
-    const [_isWalletConnected, setIsWalletConnected] = useState<boolean>()
+
+    const { disconnect } = useDisconnect({
+        onSuccess: () => {
+            navigate("/sso")
+            window.location.reload()
+        }
+    })
 
     function logOut() {
         request(`${process.env.NX_API_URL}/auth/log-out`, {
             method: "post"
-        }).catch((e) => {
-            // Ignore
+        }).finally(() => {
+            navigate("/sso")
+            window.location.reload()
         })
-        navigate("/sso")
-        window.location.reload()
     }
 
     useEffect(() => {
         ;(async () => {
             // If we are on the login route, no need to check for the logged-in user
-            if (window.location.toString().includes("/sso")) {
+            if (["/sso", "/"].includes(window.location.pathname)) {
                 return
             }
 
-            // Check if wallet is connected
-            if ((await isWalletConnected()) && account) {
-                setIsWalletConnected(true)
+            // No need to get logged in user if wallet is already connected (on-chain mode)
+            if (isConnected) {
                 return
             }
 
@@ -55,7 +58,8 @@ export default function NavBar(): JSX.Element {
                     navigate("/sso")
                 })
         })()
-    }, [account, isWalletConnected, navigate])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Box bgColor="#F8F9FF" borderBottom="1px" borderColor="gray.200">
@@ -89,7 +93,7 @@ export default function NavBar(): JSX.Element {
                         </Center>
                     )}
 
-                    {_isWalletConnected && (
+                    {isConnected && (
                         <Center>
                             <Link to="/my-groups?type=on-chain">
                                 <Button
@@ -110,18 +114,13 @@ export default function NavBar(): JSX.Element {
                                     color="primary"
                                     onClick={onCopy}
                                 >
-                                    {account ? shortenAddress(account) : ""}
+                                    {address ? shortenAddress(address) : ""}
                                 </Button>
                             </Tooltip>
                             <Button
                                 variant="outline"
                                 colorScheme="primary"
-                                onClick={() => {
-                                    setIsWalletConnected(false)
-                                    disconnect()
-                                    navigate("/sso")
-                                    window.location.reload()
-                                }}
+                                onClick={() => disconnect()}
                             >
                                 Disconnect
                             </Button>
