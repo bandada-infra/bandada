@@ -8,7 +8,7 @@
             "options": {
                 "commands": [
                     "hardhat node",
-                    "hardhat node hardhat compile && hardhat deploy-zkgroups --network localhost"
+                    "sleep 3 && hardhat compile && hardhat deploy-zkgroups --network localhost"
                 ],
                 "parallel": true,
                 "cwd": "apps/contracts"
