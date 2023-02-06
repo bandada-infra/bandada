@@ -8,7 +8,7 @@ import {
     NotFoundException,
     UnauthorizedException
 } from "@nestjs/common"
-import { SchedulerRegistry } from "@nestjs/schedule"
+import { SchedulerRegistry, Timeout } from "@nestjs/schedule"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { zkGroups } from "@zk-groups/contract-utils"
@@ -52,47 +52,6 @@ export class GroupsService {
                 `GroupsService: ${groups.length} groups have been cached`
             )
         })()
-    }
-
-    /**
-     * Save the updated group's merkle root in the ZKGroups contract.
-     */
-    /* istanbul ignore next */
-    addTimeout() {
-        const period = 60 * 1000 //1 minute
-
-        const callback = async () => {
-            Logger.log(`GroupsService: (Task) Save off-chain group roots start`)
-
-            if (this.updatedGroups.length > 0) {
-                const transaction = await zkGroups.updateGroups(
-                    this.updatedGroups
-                )
-
-                this.updatedGroups = []
-
-                if (transaction.status) {
-                    Logger.log(
-                        `GroupsService: (Task) Merkle roots of ${transaction.events.length} groups have been published on-chain`
-                    )
-                } else {
-                    Logger.error(
-                        `GroupsService: (Task) Failed to save merkle roots on-chain`
-                    )
-                }
-            }
-
-            this.schedulerRegistry.deleteTimeout("Save off-chain group roots")
-        }
-
-        const timeout = setTimeout(callback, period)
-        this.schedulerRegistry.addTimeout("Save off-chain group roots", timeout)
-
-        Logger.log(
-            `GroupsService: (Task) Off-chain roots update after ${
-                period / 1000
-            } seconds`
-        )
     }
 
     /**
@@ -196,7 +155,7 @@ export class GroupsService {
         })
 
         if (this.schedulerRegistry.getTimeouts().length === 0) {
-            this.addTimeout()
+            this.updateContractGroups()
         }
 
         return group
@@ -265,5 +224,28 @@ export class GroupsService {
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)
+    }
+
+    /**
+     * Updates the contract groups.
+     */
+    /* istanbul ignore next */
+    @Timeout(60 * 1000) // 1 minute
+    private async updateContractGroups() {
+        if (this.updatedGroups.length > 0) {
+            const tx = await zkGroups.updateGroups(this.updatedGroups)
+
+            this.updatedGroups = []
+
+            if (tx.status) {
+                Logger.log(
+                    `GroupsService: ${tx.events.length} ${
+                        tx.events.length === 1 ? "group" : "groups"
+                    } have been updated in the contract`
+                )
+            } else {
+                Logger.error(`GroupsService: failed to update contract groups`)
+            }
+        }
     }
 }
