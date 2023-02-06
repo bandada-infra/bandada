@@ -154,9 +154,7 @@ export class GroupsService {
             fingerprint: BigInt(cachedGroup.root)
         })
 
-        if (this.schedulerRegistry.getTimeouts().length === 0) {
-            this.updateContractGroups()
-        }
+        this.updateContractGroups()
 
         return group
     }
@@ -227,25 +225,36 @@ export class GroupsService {
     }
 
     /**
-     * Updates the contract groups.
+     * Updates the contract groups after a certain period of time.
+     * @param period Period of time in seconds.
      */
     /* istanbul ignore next */
-    @Timeout(60 * 1000) // 1 minute
-    private async updateContractGroups() {
-        if (this.updatedGroups.length > 0) {
-            const tx = await zkGroups.updateGroups(this.updatedGroups)
+    private async updateContractGroups(period = 60): Promise<void> {
+        if (this.schedulerRegistry.getTimeouts().length === 0) {
+            const callback = async () => {
+                const tx = await zkGroups.updateGroups(this.updatedGroups)
 
-            this.updatedGroups = []
+                this.updatedGroups = []
 
-            if (tx.status) {
-                Logger.log(
-                    `GroupsService: ${tx.events.length} ${
-                        tx.events.length === 1 ? "group" : "groups"
-                    } have been updated in the contract`
-                )
-            } else {
-                Logger.error(`GroupsService: failed to update contract groups`)
+                if (tx.status) {
+                    Logger.log(
+                        `GroupsService: ${tx.events.length} ${
+                            tx.events.length === 1 ? "group" : "groups"
+                        } have been updated in the contract`
+                    )
+                } else {
+                    Logger.error(
+                        `GroupsService: failed to update contract groups`
+                    )
+                }
             }
+            const timeout = setTimeout(callback, period * 1000)
+
+            Logger.log(
+                `GroupsService: contract groups are going to be updated in ${period} seconds`
+            )
+
+            this.schedulerRegistry.addTimeout("update-contract-groups", timeout)
         }
     }
 }
