@@ -16,7 +16,7 @@ interface IZKGroups {
     /// @dev Gets a group id and returns its current fingerprint.
     /// @param groupId: Id of the off-chain group.
     /// @return fingerprint: Current fingerprint of the group.
-    function groups(uint256 groupId) external view returns(uint256);
+    function groups(uint256 groupId) external view returns (uint256);
 
     /// @dev Updates the off-chain groups.
     /// @param _groups: List of off-chain group data.
