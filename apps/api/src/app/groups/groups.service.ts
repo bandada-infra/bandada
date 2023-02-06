@@ -23,7 +23,7 @@ import { MerkleProof } from "./types"
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
-    private updatedGroups: Map<string, any[]>
+    private updatedGroups: zkGroups.Group[]
 
     constructor(
         @InjectRepository(Group)
@@ -34,6 +34,8 @@ export class GroupsService {
     ) {
         ;(async () => {
             this.cachedGroups = new Map()
+            this.updatedGroups = []
+
             const groups = await this.getAllGroups()
 
             /* istanbul ignore next */
@@ -62,11 +64,12 @@ export class GroupsService {
         const callback = async () => {
             Logger.log(`GroupsService: (Task) Save off-chain group roots start`)
 
-            if (this.updatedGroups.size > 0) {
-                const groups = new Map(this.updatedGroups)
-                this.updatedGroups.clear()
+            if (this.updatedGroups.length > 0) {
+                const transaction = await zkGroups.updateGroups(
+                    this.updatedGroups
+                )
 
-                const transaction = await zkGroups.updateGroups(groups)
+                this.updatedGroups = []
 
                 if (transaction.status) {
                     Logger.log(
@@ -187,11 +190,10 @@ export class GroupsService {
             `GroupsService: member '${member}' has been added to the group '${group.name}'`
         )
 
-        if (this.updatedGroups === undefined) {
-            this.updatedGroups = new Map()
-        }
-
-        this.updatedGroups.set(groupName, [cachedGroup.root, cachedGroup.depth])
+        this.updatedGroups.push({
+            id: BigInt(id(group.name)),
+            fingerprint: BigInt(cachedGroup.root)
+        })
 
         if (this.schedulerRegistry.getTimeouts().length === 0) {
             this.addTimeout()
