@@ -1,8 +1,14 @@
 import { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
-task("deploy", "Deploy a ZKGroups contract")
+task("deploy-zkgroups-semaphore", "Deploy a ZKGroupsSemaphore contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
+    .addOptionalParam(
+        "zkGroups",
+        "ZKGroups contract address",
+        undefined,
+        types.string
+    )
     .addOptionalParam(
         "semaphoreVerifier",
         "SemaphoreVerifier contract address",
@@ -11,8 +17,12 @@ task("deploy", "Deploy a ZKGroups contract")
     )
     .setAction(
         async (
-            { logs, semaphoreVerifier: semaphoreVerifierAddress },
-            { ethers }
+            {
+                logs,
+                zkGroups: zkGroupsAddress,
+                semaphoreVerifier: semaphoreVerifierAddress
+            },
+            { ethers, run }
         ): Promise<Contract> => {
             if (!semaphoreVerifierAddress) {
                 const PairingFactory = await ethers.getContractFactory(
@@ -49,17 +59,28 @@ task("deploy", "Deploy a ZKGroups contract")
                 semaphoreVerifierAddress = semaphoreVerifier.address
             }
 
-            const ContractFactory = await ethers.getContractFactory("ZKGroups")
+            if (!zkGroupsAddress) {
+                const zkGroups = await run("deploy", {
+                    logs
+                })
+
+                zkGroupsAddress = zkGroups.address
+            }
+
+            const ContractFactory = await ethers.getContractFactory(
+                "ZKGroupsSemaphore"
+            )
 
             const contract = await ContractFactory.deploy(
-                semaphoreVerifierAddress
+                semaphoreVerifierAddress,
+                zkGroupsAddress
             )
 
             await contract.deployed()
 
             if (logs) {
                 console.info(
-                    `ZKGroups contract has been deployed to: ${contract.address}`
+                    `ZKGroupsSemaphore contract has been deployed to: ${contract.address}`
                 )
             }
 

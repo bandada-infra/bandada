@@ -5,7 +5,8 @@ import "hardhat-dependency-compiler"
 import { HardhatUserConfig } from "hardhat/config"
 import { NetworksUserConfig } from "hardhat/types"
 import { resolve } from "path"
-import "./tasks/deploy"
+import "./tasks/deploy-zkgroups"
+import "./tasks/deploy-zkgroups-semaphore"
 
 dotenvConfig({ path: resolve(__dirname, "../.env") })
 
