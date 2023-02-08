@@ -1,6 +1,6 @@
 {
     "name": "@zk-groups/contracts",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Zk-groups smart contracts to manage off-chain groups and verify their zero-knowledge proofs.",
     "license": "MIT",
     "files": [
