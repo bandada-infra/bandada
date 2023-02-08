@@ -55,47 +55,6 @@ export class GroupsService {
     }
 
     /**
-     * Save the updated group's merkle root in the ZKGroups contract.
-     */
-    /* istanbul ignore next */
-    addTimeout() {
-        const period = 60 * 1000 //1 minute
-
-        const callback = async () => {
-            Logger.log(`GroupsService: (Task) Save off-chain group roots start`)
-
-            if (this.updatedGroups.length > 0) {
-                const transaction = await zkGroups.updateGroups(
-                    this.updatedGroups
-                )
-
-                this.updatedGroups = []
-
-                if (transaction.status) {
-                    Logger.log(
-                        `GroupsService: (Task) Merkle roots of ${transaction.events.length} groups have been published on-chain`
-                    )
-                } else {
-                    Logger.error(
-                        `GroupsService: (Task) Failed to save merkle roots on-chain`
-                    )
-                }
-            }
-
-            this.schedulerRegistry.deleteTimeout("Save off-chain group roots")
-        }
-
-        const timeout = setTimeout(callback, period)
-        this.schedulerRegistry.addTimeout("Save off-chain group roots", timeout)
-
-        Logger.log(
-            `GroupsService: (Task) Off-chain roots update after ${
-                period / 1000
-            } seconds`
-        )
-    }
-
-    /**
      * Creates a new group.
      * @param dto External parameters used to create a new group.
      * @param admin Admin username.
@@ -195,9 +154,7 @@ export class GroupsService {
             fingerprint: BigInt(cachedGroup.root)
         })
 
-        if (this.schedulerRegistry.getTimeouts().length === 0) {
-            this.addTimeout()
-        }
+        this.updateContractGroups()
 
         return group
     }
@@ -265,5 +222,39 @@ export class GroupsService {
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)
+    }
+
+    /**
+     * Updates the contract groups after a certain period of time.
+     * @param period Period of time in seconds.
+     */
+    /* istanbul ignore next */
+    private async updateContractGroups(period = 60): Promise<void> {
+        if (this.schedulerRegistry.getTimeouts().length === 0) {
+            const callback = async () => {
+                const tx = await zkGroups.updateGroups(this.updatedGroups)
+
+                this.updatedGroups = []
+
+                if (tx.status) {
+                    Logger.log(
+                        `GroupsService: ${tx.events.length} ${
+                            tx.events.length === 1 ? "group" : "groups"
+                        } have been updated in the contract`
+                    )
+                } else {
+                    Logger.error(
+                        `GroupsService: failed to update contract groups`
+                    )
+                }
+            }
+            const timeout = setTimeout(callback, period * 1000)
+
+            Logger.log(
+                `GroupsService: contract groups are going to be updated in ${period} seconds`
+            )
+
+            this.schedulerRegistry.addTimeout("update-contract-groups", timeout)
+        }
     }
 }
