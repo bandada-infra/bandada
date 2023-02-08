@@ -8,7 +8,7 @@ import {
     NotFoundException,
     UnauthorizedException
 } from "@nestjs/common"
-import { SchedulerRegistry, Timeout } from "@nestjs/schedule"
+import { SchedulerRegistry } from "@nestjs/schedule"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { zkGroups } from "@zk-groups/contract-utils"
