@@ -28,6 +28,6 @@
     },
     "dependencies": {
         "@openzeppelin/contracts": "4.7.3",
-        "@semaphore-protocol/contract": "3.0.0"
+        "@semaphore-protocol/contracts": "3.0.0"
     }
 }
