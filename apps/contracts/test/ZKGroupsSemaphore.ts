@@ -60,22 +60,6 @@ describe("ZKGroupsSemaphore", () => {
             solidityProof = packToSolidityProof(fullProof.proof)
         })
 
-        it("Should not verify a Semaphore proof if the Merkle tree depth is not supported", async () => {
-            const transaction = zkGroupsSemaphore.verifyProof(
-                groupId,
-                10,
-                signal,
-                0,
-                0,
-                [0, 0, 0, 0, 0, 0, 0, 0]
-            )
-
-            await expect(transaction).to.be.revertedWithCustomError(
-                zkGroupsSemaphore,
-                "ZKGroupsSemaphore__MerkleTreeDepthIsNotSupported"
-            )
-        })
-
         it("Should throw an exception if the proof is not valid", async () => {
             const transaction = zkGroupsSemaphore.verifyProof(
                 groupId,

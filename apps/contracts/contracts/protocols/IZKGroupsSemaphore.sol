@@ -3,7 +3,6 @@ pragma solidity ^0.8.4;
 
 /// @title IZKGroupsSemaphore contract interface.
 interface IZKGroupsSemaphore {
-    error ZKGroupsSemaphore__MerkleTreeDepthIsNotSupported();
     error ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice();
 
     /// @dev Emitted when a Semaphore proof is correctly verified.

@@ -31,10 +31,6 @@ contract ZKGroupsSemaphore is IZKGroupsSemaphore {
         uint256 externalNullifier,
         uint256[8] calldata proof
     ) external override {
-        if (merkleTreeDepth < 16 || merkleTreeDepth > 32) {
-            revert ZKGroupsSemaphore__MerkleTreeDepthIsNotSupported();
-        }
-
         uint256 merkleTreeRoot = zkGroups.groups(groupId);
 
         if (nullifierHashes[groupId][nullifierHash]) {
