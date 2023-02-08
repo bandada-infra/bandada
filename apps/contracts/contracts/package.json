@@ -1,0 +1,33 @@
+{
+    "name": "@zk-groups/contracts",
+    "version": "0.1.0",
+    "description": "Zk-groups smart contracts to manage off-chain groups and verify their zero-knowledge proofs.",
+    "license": "MIT",
+    "files": [
+        "**/*.sol"
+    ],
+    "keywords": [
+        "blockchain",
+        "ethereum",
+        "hardhat",
+        "smart-contracts",
+        "zk-groups",
+        "solidity",
+        "zero-knowledge",
+        "zk-snarks",
+        "zero-knowledge-proofs",
+        "proof-of-membership"
+    ],
+    "repository": "https://github.com/privacy-scaling-explorations/zk-groups",
+    "homepage": "https://github.com/privacy-scaling-explorations/zk-groups/tree/main/packages/contracts",
+    "bugs": {
+        "url": "https://github.com/privacy-scaling-explorations/zk-groups.git/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@openzeppelin/contracts": "4.7.3",
+        "@semaphore-protocol/contract": "3.0.0"
+    }
+}
