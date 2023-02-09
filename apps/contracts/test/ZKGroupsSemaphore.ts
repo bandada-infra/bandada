@@ -1,11 +1,6 @@
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
-import {
-    FullProof,
-    generateProof,
-    packToSolidityProof,
-    SolidityProof
-} from "@semaphore-protocol/proof"
+import { FullProof, generateProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
 import { BigNumber, utils } from "ethers"
 import { run } from "hardhat"
@@ -46,7 +41,6 @@ describe("ZKGroupsSemaphore", () => {
         const signal = utils.formatBytes32String("Hello World")
 
         let fullProof: FullProof
-        let solidityProof: SolidityProof
 
         before(async () => {
             fullProof = await generateProof(
@@ -56,8 +50,6 @@ describe("ZKGroupsSemaphore", () => {
                 signal,
                 { wasmFilePath, zkeyFilePath }
             )
-
-            solidityProof = packToSolidityProof(fullProof.proof)
         })
 
         it("Should throw an exception if the proof is not valid", async () => {
@@ -65,9 +57,9 @@ describe("ZKGroupsSemaphore", () => {
                 groupId,
                 group.depth,
                 signal,
-                fullProof.publicSignals.nullifierHash,
+                fullProof.nullifierHash,
                 0,
-                solidityProof
+                fullProof.proof
             )
 
             await expect(transaction).to.be.reverted
@@ -78,9 +70,9 @@ describe("ZKGroupsSemaphore", () => {
                 groupId,
                 group.depth,
                 signal,
-                fullProof.publicSignals.nullifierHash,
+                fullProof.nullifierHash,
                 group.root,
-                solidityProof
+                fullProof.proof
             )
 
             await expect(transaction)
@@ -88,7 +80,7 @@ describe("ZKGroupsSemaphore", () => {
                 .withArgs(
                     groupId,
                     group.root,
-                    fullProof.publicSignals.nullifierHash,
+                    fullProof.nullifierHash,
                     group.root,
                     signal
                 )
@@ -99,9 +91,9 @@ describe("ZKGroupsSemaphore", () => {
                 groupId,
                 group.depth,
                 signal,
-                fullProof.publicSignals.nullifierHash,
+                fullProof.nullifierHash,
                 group.root,
-                solidityProof
+                fullProof.proof
             )
 
             await expect(transaction).to.be.revertedWithCustomError(

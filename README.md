@@ -1,29 +1,24 @@
 <p align="center">
     <h1 align="center">
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon-dark.svg">
-        <source media="(prefers-color-scheme: light)" srcset="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
-        <img width="40" alt="Semaphore icon." src="https://github.com/semaphore-protocol/website/blob/main/static/img/semaphore-icon.svg">
-      </picture>
       ZK-Groups
     </h1>
 </p>
 
 <p align="center">
-    <a href="https://github.com/semaphore-protocol" target="_blank">
-        <img src="https://img.shields.io/badge/project-Semaphore-blue.svg?style=flat-square">
+    <a href="https://github.com/privacy-scaling-explorations" target="_blank">
+        <img src="https://img.shields.io/badge/project-ZKGroups-blue.svg?style=flat-square">
     </a>
-    <a href="https://github.com/semaphore-protocol/zk-groups/blob/main/LICENSE">
-        <img alt="Github license" src="https://img.shields.io/github/license/semaphore-protocol/zk-groups.svg?style=flat-square">
+    <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/LICENSE">
+        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/zk-groups.svg?style=flat-square">
     </a>
-    <a href="https://github.com/semaphore-protocol/zk-groups/actions?query=workflow%3Atest">
-        <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/semaphore-protocol/zk-groups/test.yml?branch=main&label=test&style=flat-square&logo=github">
+    <a href="https://github.com/privacy-scaling-explorations/zk-groups/actions?query=workflow%3Atest">
+        <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/zk-groups/test.yml?branch=main&label=test&style=flat-square&logo=github">
     </a>
-    <a href="https://github.com/semaphore-protocol/zk-groups/actions?query=workflow%3Astyle">
-        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/semaphore-protocol/zk-groups/style.yml?branch=main&label=style&style=flat-square&logo=github">
+    <a href="https://github.com/privacy-scaling-explorations/zk-groups/actions?query=workflow%3Astyle">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/zk-groups/style.yml?branch=main&label=style&style=flat-square&logo=github">
     </a>
-    <a href="https://coveralls.io/github/semaphore-protocol/zk-groups">
-        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/semaphore-protocol/zk-groups?label=coverage (ts)&style=flat-square&logo=coveralls">
+    <a href="https://coveralls.io/github/privacy-scaling-explorations/zk-groups">
+        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/privacy-scaling-explorations/zk-groups?label=coverage (ts)&style=flat-square&logo=coveralls">
     </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
@@ -44,11 +39,11 @@
             🤝 Code of conduct
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://github.com/semaphore-protocol/zk-groups/contribute">
+        <a href="https://github.com/privacy-scaling-explorations/zk-groups/contribute">
             🔎 Issues
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://t.me/joinchat/B-PQx1U3GtAh--Z4Fwo56A">
+        <a href="https://discord.gg/sF5CT5rzrR">
             🗣️ Chat &amp; Support
         </a>
     </h4>
@@ -62,7 +57,7 @@
 Clone this repository:
 
 ```bash
-git clone https://github.com/semaphore-protocol/zk-groups.git
+git clone https://github.com/privacy-scaling-explorations/zk-groups.git
 ```
 
 and install the dependencies:

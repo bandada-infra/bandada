@@ -5,10 +5,11 @@
         "api": "apps/api",
         "client": "apps/client",
         "client-e2e": "apps/client-e2e",
+        "contract-utils": "libs/contract-utils",
         "contracts": "apps/contracts",
         "dashboard": "apps/dashboard",
         "dashboard-e2e": "apps/dashboard-e2e",
-        "contract-utils": "libs/contract-utils",
+        "hardhat": "libs/hardhat",
         "passport-reddit": "libs/passport-reddit",
         "utils": "libs/utils"
     }

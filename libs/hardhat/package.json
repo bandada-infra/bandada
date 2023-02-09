@@ -1,0 +1,23 @@
+{
+    "name": "@zk-groups/hardhat",
+    "version": "0.1.1",
+    "description": "A Hardhat plugin which provide tasks to deploy ZKGroups contracts.",
+    "license": "MIT",
+    "repository": "https://github.com/privacy-scaling-explorations/zk-groups",
+    "homepage": "https://github.com/privacy-scaling-explorations/zk-groups/tree/main/libs/hardhat",
+    "bugs": {
+        "url": "https://github.com/privacy-scaling-explorations/zk-groups.git/issues"
+    },
+    "engines": {
+        "node": ">=14.16"
+    },
+    "peerDependencies": {
+        "@semaphore-protocol/contracts": "3.0.0",
+        "@zk-groups/contracts": "0.1.1",
+        "ethers": "^5.7.2",
+        "hardhat": "^2.12.5"
+    },
+    "dependencies": {
+        "hardhat-dependency-compiler": "^1.1.3"
+    }
+}

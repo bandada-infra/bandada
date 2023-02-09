@@ -18,6 +18,7 @@
         "baseUrl": ".",
         "paths": {
             "@zk-groups/contract-utils": ["libs/contract-utils/src/index.ts"],
+            "@zk-groups/hardhat": ["libs/hardhat/src/index.ts"],
             "@zk-groups/passport-reddit": ["libs/passport-reddit/src/index.ts"],
             "@zk-groups/utils": ["libs/utils/src/index.ts"]
         }
