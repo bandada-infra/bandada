@@ -9,6 +9,8 @@ import "./tasks/deploy-zk-groups-semaphore"
 extendConfig(
     (config: HardhatConfig, userConfig: Readonly<HardhatUserConfig>) => {
         config.dependencyCompiler.paths = [
+            "@zk-groups/contracts/ZKGroups.sol",
+            "@zk-groups/contracts/protocols/ZKGroupsSemaphore.sol",
             "@semaphore-protocol/contracts/base/Pairing.sol",
             "@semaphore-protocol/contracts/base/SemaphoreVerifier.sol"
         ]
