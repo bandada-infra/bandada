@@ -5,6 +5,7 @@
 
 import { readCachedProjectGraph } from "@nrwl/devkit"
 import chalk from "chalk"
+import { execSync } from "child_process"
 import { readFileSync, writeFileSync } from "fs"
 
 function invariant(condition, message) {
@@ -27,14 +28,17 @@ invariant(
 
 // Search for the package.json files.
 const graph = readCachedProjectGraph()
+const packageJsonPaths = []
 
 for (const node of Object.values(graph.nodes)) {
-    const packageJsonPath = node.data.files.find(({ file }) =>
+    const file = node.data.files.find(({ file }) =>
         file.endsWith("package.json")
     )
 
-    if (packageJsonPath) {
-        const { file: path } = packageJsonPath
+    if (file) {
+        const { file: path } = file
+
+        packageJsonPaths.push(path)
 
         try {
             const json = JSON.parse(readFileSync(path).toString())
@@ -47,3 +51,9 @@ for (const node of Object.values(graph.nodes)) {
         }
     }
 }
+
+// Execute "git add" and "git commit" to commit the changes.
+execSync(`git add ${packageJsonPaths.join(" ")}`)
+execSync(`git commit -m "chore(zk-groups): v${version}"`)
+// Execute "git tag" to tag the commit.
+execSync(`git tag v${version}`)
