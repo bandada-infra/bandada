@@ -19,7 +19,7 @@ ARG PORT=3333
 ENV NODE_ENV=production
 
 WORKDIR /home/node/api
-COPY --chown=node:node  --from=builder /builder/dist/apps/api ./
+COPY --chown=node:node  --from=builder /builder/dist/api ./
 
 RUN yarn
 # TODO: Fix the issue with NX not adding these packages to package.json automatically

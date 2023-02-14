@@ -9,7 +9,7 @@
             "outputs": ["{options.outputPath}"],
             "options": {
                 "compiler": "babel",
-                "outputPath": "dist/apps/dashboard",
+                "outputPath": "dist/dashboard",
                 "index": "apps/dashboard/src/index.html",
                 "baseHref": "/",
                 "main": "apps/dashboard/src/main.tsx",
