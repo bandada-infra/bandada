@@ -12,7 +12,7 @@
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/libs/passport-reddit"],
+            "outputs": ["coverage/passport-reddit"],
             "options": {
                 "jestConfig": "libs/passport-reddit/jest.config.ts",
                 "passWithNoTests": true

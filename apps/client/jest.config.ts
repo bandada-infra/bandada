@@ -7,5 +7,14 @@ export default {
         "^.+\\.[tj]sx?$": "babel-jest"
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-    coverageDirectory: "../../coverage/apps/client"
+    coverageDirectory: "../../coverage/client",
+    coverageReporters: ["lcov"],
+    coverageThreshold: {
+        global: {
+            branches: 90,
+            functions: 95,
+            lines: 95,
+            statements: 95
+        }
+    }
 }
