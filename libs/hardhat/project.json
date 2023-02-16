@@ -7,24 +7,12 @@
             "executor": "@nrwl/js:tsc",
             "outputs": ["{options.outputPath}"],
             "options": {
-                "outputPath": "dist/libs/hardhat",
+                "outputPath": "dist/hardhat",
                 "tsConfig": "libs/hardhat/tsconfig.lib.json",
                 "packageJson": "libs/hardhat/package.json",
                 "main": "libs/hardhat/src/index.ts",
                 "assets": ["libs/hardhat/*.md"]
             }
-        },
-        "publish": {
-            "executor": "@nrwl/workspace:run-commands",
-            "options": {
-                "command": "node tools/scripts/publish.mjs hardhat {args.v}"
-            },
-            "dependsOn": [
-                {
-                    "projects": "self",
-                    "target": "build"
-                }
-            ]
         },
         "lint": {
             "executor": "@nrwl/linter:eslint",

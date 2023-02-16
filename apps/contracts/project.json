@@ -24,7 +24,13 @@
         "build": {
             "executor": "nx:run-commands",
             "options": {
-                "command": "hardhat compile",
+                "commands": [
+                    "hardhat compile",
+                    "shx mkdir -p ../../dist",
+                    "shx rm -fr ../../dist/contracts",
+                    "shx cp -r contracts ../../dist/contracts"
+                ],
+                "parallel": false,
                 "cwd": "apps/contracts"
             }
         },

@@ -1,5 +1,6 @@
 {
     "name": "@zk-groups/hardhat",
+    "version": "0.1.7",
     "description": "A Hardhat plugin which provide tasks to deploy ZKGroups contracts.",
     "license": "MIT",
     "repository": "https://github.com/privacy-scaling-explorations/zk-groups",
