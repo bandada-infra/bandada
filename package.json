@@ -13,7 +13,7 @@
         "prettier": "prettier -c .",
         "prettier:write": "prettier -w .",
         "version:bump": "node tools/scripts/bump-version.mjs",
-        "version:publish": "npm run build:all && node tools/scripts/publish-version.mjs",
+        "version:publish": "npm run build:all --skip-nx-cache && node tools/scripts/publish-version.mjs",
         "commit": "cz",
         "precommit": "lint-staged",
         "prepare": "husky install"
