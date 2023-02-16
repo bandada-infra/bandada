@@ -1,6 +1,6 @@
 import { Subgraph } from "@semaphore-protocol/subgraph"
 import { BigNumber } from "ethers"
-import { getAddress, parseBytes32String } from "ethers/lib/utils"
+import { parseBytes32String } from "ethers/lib/utils"
 import { useCallback } from "react"
 import { Group } from "../types/groups"
 
@@ -22,25 +22,24 @@ export default function useOnchainGroups(): ReturnParameters {
     const getOnchainGroupList = useCallback(
         async (admin: string): Promise<Group[] | null> => {
             try {
-                const subgraph = new Subgraph()
+                const subgraph = new Subgraph("goerli")
 
-                const groups = await subgraph.getGroups({ members: true })
+                const groups = await subgraph.getGroups({
+                    members: true,
+                    filters: { admin }
+                })
 
-                return groups
-                    .filter(
-                        (group) => getAddress(group.admin) === getAddress(admin)
-                    )
-                    .map((group) => {
-                        const groupName = formatGroupName(group.id)
+                return groups.map((group) => {
+                    const groupName = formatGroupName(group.id)
 
-                        return {
-                            name: groupName,
-                            description: "",
-                            treeDepth: group.merkleTree.depth,
-                            members: group.members,
-                            admin: group.admin
-                        }
-                    })
+                    return {
+                        name: groupName,
+                        description: "",
+                        treeDepth: group.merkleTree.depth,
+                        members: group.members,
+                        admin: group.admin
+                    }
+                })
             } catch (error) {
                 console.log(error)
                 return null
