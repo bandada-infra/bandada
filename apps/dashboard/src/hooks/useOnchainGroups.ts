@@ -36,7 +36,7 @@ export default function useOnchainGroups(): ReturnParameters {
                         name: groupName,
                         description: "",
                         treeDepth: group.merkleTree.depth,
-                        members: group.members,
+                        members: group.members as string[],
                         admin: group.admin
                     }
                 })
@@ -60,7 +60,7 @@ export default function useOnchainGroups(): ReturnParameters {
                     name: groupName,
                     description: "",
                     treeDepth: group.merkleTree.depth,
-                    members: group.members,
+                    members: group.members as string[],
                     admin: group.admin
                 }
             } catch (error) {
