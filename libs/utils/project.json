@@ -12,7 +12,7 @@
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/libs/utils"],
+            "outputs": ["coverage/utils"],
             "options": {
                 "jestConfig": "libs/utils/jest.config.ts",
                 "passWithNoTests": true

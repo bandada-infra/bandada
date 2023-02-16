@@ -67,7 +67,7 @@
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/apps/dashboard"],
+            "outputs": ["coverage/dashboard"],
             "options": {
                 "jestConfig": "apps/dashboard/jest.config.ts",
                 "passWithNoTests": true

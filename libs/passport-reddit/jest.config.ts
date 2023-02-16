@@ -12,5 +12,14 @@ export default {
         "^.+\\.[tj]sx?$": "ts-jest"
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
-    coverageDirectory: "../../coverage/libs/passport-reddit"
+    coverageDirectory: "../../coverage/passport-reddit",
+    coverageReporters: ["lcov"],
+    coverageThreshold: {
+        global: {
+            branches: 90,
+            functions: 95,
+            lines: 95,
+            statements: 95
+        }
+    }
 }

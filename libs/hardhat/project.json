@@ -23,7 +23,7 @@
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["coverage/libs/hardhat"],
+            "outputs": ["coverage/hardhat"],
             "options": {
                 "jestConfig": "libs/hardhat/jest.config.ts",
                 "passWithNoTests": true

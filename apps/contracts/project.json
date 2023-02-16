@@ -46,7 +46,7 @@
             "options": {
                 "commands": [
                     {
-                        "command": "hardhat test",
+                        "command": "hardhat coverage",
                         "forwardAllArgs": false
                     }
                 ],
