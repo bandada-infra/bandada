@@ -6,7 +6,8 @@
 import { readCachedProjectGraph } from "@nrwl/devkit"
 import chalk from "chalk"
 import { execSync } from "child_process"
-import { readFileSync, writeFileSync } from "fs"
+import { readFileSync, writeFileSync, appendFileSync } from "fs"
+import { EOL } from "os"
 
 function invariant(condition, message) {
     if (!condition) {
@@ -46,6 +47,7 @@ for (const node of Object.values(graph.nodes)) {
             json.version = version
 
             writeFileSync(path, JSON.stringify(json, null, 4))
+            appendFileSync(path, EOL, "utf8")
         } catch (e) {
             console.error(chalk.bold.red(`Error reading '${path}' file`))
         }
