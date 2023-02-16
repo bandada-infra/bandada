@@ -26,6 +26,7 @@
             "options": {
                 "commands": [
                     "hardhat compile",
+                    "shx mkdir -p ../../dist",
                     "shx cp -r contracts ../../dist/contracts"
                 ],
                 "cwd": "apps/contracts"
