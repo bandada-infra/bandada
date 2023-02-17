@@ -31,7 +31,6 @@ services:
             - DB_TYPE=postgres
             - DB_URL=postgres://root:helloworld@postgres:5432/zk-groups
             - JWT_SECRET_KEY=zk_groups_jwt_secret
-            - SESSION_SECRET=s3cret
             - GITHUB_CLIENT_ID=sample
             - GITHUB_CLIENT_SECRET=sample
             - TWITTER_CONSUMER_KEY=sample
