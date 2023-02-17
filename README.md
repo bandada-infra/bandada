@@ -146,7 +146,6 @@ Below are the ENV variables used by the `api`
 | DB_TYPE                 | Type of the SQL database - `postgres` / `sqlite`.                        |
 | DB_URL                  | Connection string for the database. Path to DB file in case of `sqlite`. |
 | JWT_SECRET_KEY          | Secret key used for signing JWT auth tokens.                             |
-| SESSION_SECRET          | Secret used for maintaining session.                                     |
 | GITHUB_CLIENT_ID        | Credentials required for sign in with Github.                            |
 | GITHUB_CLIENT_SECRET    | Credentials required for sign in with Github.                            |
 | TWITTER_CONSUMER_KEY    | Credentials required for sign in with Twitter.                           |
