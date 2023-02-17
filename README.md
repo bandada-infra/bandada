@@ -102,7 +102,7 @@ Once applications have been built, you can run the dist files like this:
 [ENV_VARS] node dist/api/main.js  # Start API
 ```
 
-`dashboard` and `client` are frontend applications can be served using any http server.
+`dashboard` and `client` are frontend applications that can be served using any http server.
 Note that you have to redirect all requests to /index.html as they are single page applications.
 
 ```bash
@@ -111,9 +111,9 @@ npx http-server -p 3001 --proxy http://localhost:3001\? dist/dashboard/ # Run da
 
 ### Database
 
-Zk-groups require a SQL database to work, which used by the `api` application.
-Zk-groups could work with Postgres and SQLite. Other SQL flavours should work but are not tested.
-You can pass the connection URL to the database using environment variable (see below)
+Zk-groups require a SQL database to work, which is used by the `api` application.
+Zk-groups could work with Postgres and SQLite. Other SQL flavors should work but are not tested.
+You can pass the connection URL to the database using environment variable (see below).
 
 ### Testing
 
@@ -141,20 +141,20 @@ docker-compose up -d # or docker compose up -d
 
 Below are the ENV variables used by the `api`
 
-| Key                     | Description                                                             |
-| ----------------------- | ----------------------------------------------------------------------- |
-| DB_TYPE                 | Type of the SQL database - `postgres` / `sqlite`                        |
-| DB_URL                  | Connection string for the database. Path to DB file in case of `sqlite` |
-| JWT_SECRET_KEY          | Secret key used for signing JWT auth tokens                             |
-| SESSION_SECRET          | Secret used for maintaining session                                     |
-| GITHUB_CLIENT_ID        | Credentials required for sign in with Github                            |
-| GITHUB_CLIENT_SECRET    | Credentials required for sign in with Github                            |
-| TWITTER_CONSUMER_KEY    | Credentials required for sign in with Twitter                           |
-| TWITTER_CONSUMER_SECRET | Credentials required for sign in with Twitter                           |
-| REDDIT_CLIENT_ID        | Credentials required for sign in with Reddit                            |
-| REDDIT_CLIENT_SECRET    | Credentials required for sign in with Reddit                            |
-| INFURA_API_KEY          | API Key for Infura. This is used for executing blockchain transactions  |
-| BACKEND_PRIVATE_KEY     | Ethereum wallet private key used for making blockchain transactions     |
+| Key                     | Description                                                              |
+| ----------------------- | ------------------------------------------------------------------------ |
+| DB_TYPE                 | Type of the SQL database - `postgres` / `sqlite`.                        |
+| DB_URL                  | Connection string for the database. Path to DB file in case of `sqlite`. |
+| JWT_SECRET_KEY          | Secret key used for signing JWT auth tokens.                             |
+| SESSION_SECRET          | Secret used for maintaining session.                                     |
+| GITHUB_CLIENT_ID        | Credentials required for sign in with Github.                            |
+| GITHUB_CLIENT_SECRET    | Credentials required for sign in with Github.                            |
+| TWITTER_CONSUMER_KEY    | Credentials required for sign in with Twitter.                           |
+| TWITTER_CONSUMER_SECRET | Credentials required for sign in with Twitter.                           |
+| REDDIT_CLIENT_ID        | Credentials required for sign in with Reddit.                            |
+| REDDIT_CLIENT_SECRET    | Credentials required for sign in with Reddit.                            |
+| INFURA_API_KEY          | API Key for Infura. This is used for executing blockchain transactions.  |
+| BACKEND_PRIVATE_KEY     | Ethereum wallet private key used for making blockchain transactions.     |
 
 <hr />
 
