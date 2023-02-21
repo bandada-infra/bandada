@@ -5,6 +5,8 @@
 # Copy source code and build the project
 FROM node:18-alpine as builder
 WORKDIR /builder
+RUN apk add --no-cache git
+
 COPY package.json yarn.lock ./
 RUN yarn
 COPY ./ ./
