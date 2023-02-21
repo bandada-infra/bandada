@@ -2,7 +2,6 @@ import { StrictMode } from "react"
 import * as ReactDOM from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
 import { ChakraProvider } from "@chakra-ui/react"
-import { CookiesProvider } from "react-cookie"
 import {
     connectorsForWallets,
     RainbowKitProvider
@@ -14,8 +13,6 @@ import {
     metaMaskWallet,
     coinbaseWallet,
     walletConnectWallet,
-    trustWallet,
-    ledgerWallet,
     injectedWallet
 } from "@rainbow-me/rainbowkit/wallets"
 import App from "./app/app"
@@ -50,13 +47,11 @@ root.render(
     <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains} initialChain={goerli}>
             <StrictMode>
-                <CookiesProvider>
-                    <ChakraProvider theme={theme}>
-                        <BrowserRouter>
-                            <App />
-                        </BrowserRouter>
-                    </ChakraProvider>
-                </CookiesProvider>
+                <ChakraProvider theme={theme}>
+                    <BrowserRouter>
+                        <App />
+                    </BrowserRouter>
+                </ChakraProvider>
             </StrictMode>
         </RainbowKitProvider>
     </WagmiConfig>
