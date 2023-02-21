@@ -37,7 +37,8 @@ export class InvitesController {
     ): Promise<Omit<Invite, "id">> {
         const invite = (await this.invitesService.getInvite(inviteCode)) as any
 
-        invite.group = invite.group.name
+        invite.groupName = invite.group.name
+        invite.groupId = invite.group.id
 
         return mapEntity(invite)
     }

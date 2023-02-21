@@ -22,7 +22,7 @@ export default function PermissionedGroup(): JSX.Element {
             const invite = await getInvite(inviteCode)
 
             if (invite) {
-                setGroupName(invite.group)
+                setGroupName(invite.groupName)
                 setIsRedeemed(invite.redeemed)
             }
         })()
