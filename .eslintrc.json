@@ -1,37 +1,25 @@
 {
     "root": true,
-    "ignorePatterns": ["**/*"],
-    "plugins": ["@nrwl/nx"],
-    "overrides": [
-        {
-            "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-            "rules": {
-                "@nrwl/nx/enforce-module-boundaries": [
-                    "error",
-                    {
-                        "enforceBuildableLibDependency": true,
-                        "allow": [],
-                        "depConstraints": [
-                            {
-                                "sourceTag": "*",
-                                "onlyDependOnLibsWithTags": ["*"]
-                            }
-                        ]
-                    }
-                ]
-            }
-        },
-        {
-            "files": ["*.ts", "*.tsx"],
-            "extends": ["plugin:@nrwl/nx/typescript"],
-            "rules": {
-                "@typescript-eslint/no-explicit-any": "off"
-            }
-        },
-        {
-            "files": ["*.js", "*.jsx"],
-            "extends": ["plugin:@nrwl/nx/javascript"],
-            "rules": {}
-        }
-    ]
+    "env": {
+        "es6": true
+    },
+    "extends": [
+        "airbnb",
+        "airbnb/hooks",
+        "airbnb-typescript",
+        "plugin:jest/recommended",
+        "plugin:jest/style",
+        "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "project": [
+            "./tsconfig.json",
+            "./libs/**/tsconfig.json",
+            "./apps/**/tsconfig.json"
+        ]
+    },
+    "plugins": ["@typescript-eslint", "jest"]
 }
