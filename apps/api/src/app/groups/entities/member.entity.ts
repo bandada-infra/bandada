@@ -1,9 +1,4 @@
-import {
-    PrimaryColumn,
-    CreateDateColumn,
-    Entity,
-    ManyToOne,
-} from "typeorm"
+import { PrimaryColumn, CreateDateColumn, Entity, ManyToOne } from "typeorm"
 
 import { Group } from "./group.entity"
 

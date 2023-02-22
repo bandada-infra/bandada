@@ -44,7 +44,7 @@ export class GroupsService {
                 const groupId = BigInt(id(group.name))
                 const cachedGroup = new CachedGroup(groupId, group.treeDepth)
 
-                cachedGroup.addMembers(group.members.map(m => m.id))
+                cachedGroup.addMembers(group.members.map((m) => m.id))
 
                 this.cachedGroups.set(group.name, cachedGroup)
             }
@@ -137,9 +137,9 @@ export class GroupsService {
         await this.invitesService.redeemInvite(inviteCode, groupName)
 
         const group = await this.getGroup(groupName)
-        const member = new Member();
-        member.group = group;
-        member.id = memberId;
+        const member = new Member()
+        member.group = group
+        member.id = memberId
 
         group.members.push(member)
 
@@ -168,7 +168,7 @@ export class GroupsService {
      * @returns List of existing groups.
      */
     async getAllGroups(): Promise<Group[]> {
-        return await this.groupRepository.find({ 
+        return await this.groupRepository.find({
             relations: { members: true }
         })
     }
@@ -179,10 +179,10 @@ export class GroupsService {
      * @returns List of admin's existing groups.
      */
     async getGroupsByAdmin(admin: string): Promise<Group[]> {
-        return await this.groupRepository.find({ 
+        return await this.groupRepository.find({
             relations: { members: true },
             where: { admin }
-         })
+        })
     }
 
     /**

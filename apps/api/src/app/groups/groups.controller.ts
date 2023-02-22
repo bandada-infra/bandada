@@ -29,11 +29,11 @@ export class GroupsController {
 
     @Post()
     @UseGuards(AuthGuard("jwt"))
-    async createGroup(
-        @Req() req: Request,
-        @Body() dto: CreateGroupDto
-    ) {
-        const group = await this.groupsService.createGroup(dto, req["user"].username)
+    async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
+        const group = await this.groupsService.createGroup(
+            dto,
+            req["user"].username
+        )
 
         return mapGroupToResponseDTO(group)
     }
@@ -74,9 +74,7 @@ export class GroupsController {
     }
 
     @Get(":name")
-    async getGroup(
-        @Param("name") groupName: string
-    ) {
+    async getGroup(@Param("name") groupName: string) {
         const group = await this.groupsService.getGroup(groupName)
 
         return mapGroupToResponseDTO(group)
