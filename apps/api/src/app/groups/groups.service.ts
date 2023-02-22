@@ -18,6 +18,7 @@ import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
+import { Member } from "./entities/member.entity"
 import { MerkleProof } from "./types"
 
 @Injectable()
@@ -43,7 +44,7 @@ export class GroupsService {
                 const groupId = BigInt(id(group.name))
                 const cachedGroup = new CachedGroup(groupId, group.treeDepth)
 
-                cachedGroup.addMembers(group.members)
+                cachedGroup.addMembers(group.members.map(m => m.id))
 
                 this.cachedGroups.set(group.name, cachedGroup)
             }
@@ -119,23 +120,26 @@ export class GroupsService {
      * If a member does not exist in the group, they is added.
      * @param dto Parameters used to add a group member.
      * @param groupName Group name.
-     * @param member Member's identity commitment.
+     * @param memberId Member's identity commitment.
      * @returns Group data with added member.
      */
     async addMember(
         { inviteCode }: AddMemberDto,
         groupName: string,
-        member: string
+        memberId: string
     ): Promise<Group> {
-        if (this.isGroupMember(groupName, member)) {
+        if (this.isGroupMember(groupName, memberId)) {
             throw new BadRequestException(
-                `Member '${member}' already exists in the group '${groupName}'`
+                `Member '${memberId}' already exists in the group '${groupName}'`
             )
         }
 
         await this.invitesService.redeemInvite(inviteCode, groupName)
 
         const group = await this.getGroup(groupName)
+        const member = new Member();
+        member.group = group;
+        member.id = memberId;
 
         group.members.push(member)
 
@@ -143,10 +147,10 @@ export class GroupsService {
 
         const cachedGroup = this.cachedGroups.get(groupName)
 
-        cachedGroup.addMember(member)
+        cachedGroup.addMember(memberId)
 
         Logger.log(
-            `GroupsService: member '${member}' has been added to the group '${group.name}'`
+            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
         )
 
         this.updatedGroups.push({
@@ -164,7 +168,9 @@ export class GroupsService {
      * @returns List of existing groups.
      */
     async getAllGroups(): Promise<Group[]> {
-        return await this.groupRepository.find()
+        return await this.groupRepository.find({ 
+            relations: { members: true }
+        })
     }
 
     /**
@@ -173,7 +179,10 @@ export class GroupsService {
      * @returns List of admin's existing groups.
      */
     async getGroupsByAdmin(admin: string): Promise<Group[]> {
-        return await this.groupRepository.findBy({ admin })
+        return await this.groupRepository.find({ 
+            relations: { members: true },
+            where: { admin }
+         })
     }
 
     /**
@@ -182,8 +191,9 @@ export class GroupsService {
      * @returns Specific group.
      */
     async getGroup(groupName: string): Promise<Group> {
-        const group = await this.groupRepository.findOneBy({
-            name: groupName
+        const group = await this.groupRepository.findOne({
+            relations: { members: true },
+            where: { name: groupName }
         })
 
         if (!group) {

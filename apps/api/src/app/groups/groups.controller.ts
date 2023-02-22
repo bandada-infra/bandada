@@ -9,11 +9,11 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
-import { mapEntity, stringifyJSON } from "@zk-groups/utils"
+import { stringifyJSON } from "@zk-groups/utils"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
-import { Group } from "./entities/group.entity"
+import { mapGroupToResponseDTO } from "./group.utils"
 import { GroupsService } from "./groups.service"
 
 @Controller("groups")
@@ -21,10 +21,10 @@ export class GroupsController {
     constructor(private readonly groupsService: GroupsService) {}
 
     @Get()
-    async getAllGroups(): Promise<Omit<Group, "id">[]> {
+    async getAllGroups() {
         const groups = await this.groupsService.getAllGroups()
 
-        return groups.map(mapEntity)
+        return groups.map(mapGroupToResponseDTO)
     }
 
     @Post()
@@ -32,10 +32,10 @@ export class GroupsController {
     async createGroup(
         @Req() req: Request,
         @Body() dto: CreateGroupDto
-    ): Promise<Omit<Group, "id">> {
-        const group = this.groupsService.createGroup(dto, req["user"].username)
+    ) {
+        const group = await this.groupsService.createGroup(dto, req["user"].username)
 
-        return mapEntity(group)
+        return mapGroupToResponseDTO(group)
     }
 
     @Put(":name")
@@ -44,14 +44,14 @@ export class GroupsController {
         @Req() req: Request,
         @Param("name") groupName: string,
         @Body() dto: UpdateGroupDto
-    ): Promise<Omit<Group, "id">> {
+    ) {
         const group = await this.groupsService.updateGroup(
             dto,
             groupName,
             req["user"].username
         )
 
-        return group
+        return mapGroupToResponseDTO(group)
     }
 
     @Post(":name/:member")
@@ -65,21 +65,21 @@ export class GroupsController {
 
     @Get("admin-groups")
     @UseGuards(AuthGuard("jwt"))
-    async getGroupsByAdmin(@Req() req: Request): Promise<Omit<Group, "id">[]> {
+    async getGroupsByAdmin(@Req() req: Request) {
         const groups = await this.groupsService.getGroupsByAdmin(
             req["user"].username
         )
 
-        return groups.map(mapEntity)
+        return groups.map(mapGroupToResponseDTO)
     }
 
     @Get(":name")
     async getGroup(
         @Param("name") groupName: string
-    ): Promise<Omit<Group, "id">> {
+    ) {
         const group = await this.groupsService.getGroup(groupName)
 
-        return mapEntity(group)
+        return mapGroupToResponseDTO(group)
     }
 
     @Get(":name/:member")
