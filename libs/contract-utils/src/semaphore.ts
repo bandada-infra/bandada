@@ -1,10 +1,10 @@
 /* istanbul ignore file */
-import { BigNumber, ContractReceipt, Signer } from "ethers"
+import { Signer, TransactionReceipt } from "ethers"
 import { formatBytes32String } from "ethers/lib/utils"
 import getContractInstance from "./getContractInstance"
 
 export function formatUint256String(text: string): BigInt {
-    return BigNumber.from(formatBytes32String(text)).toBigInt()
+    return BigInt(formatBytes32String(text))
 }
 
 export async function createGroup(
@@ -27,7 +27,7 @@ export async function updateGroupAdmin(
     signer: Signer,
     groupName: string,
     newAdmin: string
-): Promise<ContractReceipt> {
+): Promise<TransactionReceipt> {
     const admin = signer
     const groupId = formatUint256String(groupName)
     const contractInstance = getContractInstance("Semaphore").connect(admin)
@@ -43,7 +43,7 @@ export async function addMember(
     signer: Signer,
     groupName: string,
     member: string
-): Promise<ContractReceipt> {
+): Promise<TransactionReceipt> {
     const admin = signer
     const groupId = formatUint256String(groupName)
     const contractInstance = getContractInstance("Semaphore").connect(admin)
@@ -60,7 +60,7 @@ export async function addMembers(
     signer: Signer,
     groupName: string,
     members: string[]
-): Promise<ContractReceipt> {
+): Promise<TransactionReceipt> {
     const admin = signer
     const groupId = formatUint256String(groupName)
     const contractInstance = getContractInstance("Semaphore").connect(admin)

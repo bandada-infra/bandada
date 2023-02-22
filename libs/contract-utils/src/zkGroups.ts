@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { ContractReceipt } from "ethers"
+import { TransactionReceipt } from "ethers"
 import getContractInstance from "./getContractInstance"
 import getSigner from "./getSigner"
 import { Network } from "./types"
@@ -12,9 +12,11 @@ export type Group = {
 export async function updateGroups(
     groups: Group[],
     network: Network = process.env.NX_DEFAULT_NETWORK as Network
-): Promise<ContractReceipt> {
+): Promise<TransactionReceipt> {
     const signer = await getSigner(network)
-    const contractInstance = getContractInstance("ZKGroups").connect(signer)
+    const contractInstance = getContractInstance("ZKGroups").connect(
+        signer
+    ) as any
 
     const transaction = await contractInstance.updateGroups(groups)
 
