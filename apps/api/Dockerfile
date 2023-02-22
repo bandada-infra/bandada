@@ -4,6 +4,8 @@
 
 # Copy source code and build the project
 FROM node:18-alpine as builder
+RUN apk add --no-cache git
+
 WORKDIR /builder
 COPY package.json yarn.lock ./
 RUN yarn
@@ -15,7 +17,7 @@ RUN yarn build:all
 FROM node:18-alpine as runner
 USER node
 
-ARG PORT=3333
+ARG PORT=3000
 ENV NODE_ENV=production
 
 WORKDIR /home/node/api

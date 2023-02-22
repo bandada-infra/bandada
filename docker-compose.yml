@@ -24,7 +24,7 @@ services:
         build:
             context: ./
             dockerfile: ./apps/api/Dockerfile
-        image: ${DOMAIN}-api:latest
+        image: zk-groups-api:latest
         restart: unless-stopped
         environment:
             - NODE_ENV=production
@@ -43,7 +43,7 @@ services:
             - BACKEND_PRIVATE_KEY=
             - INFURA_API_KEY=
         ports:
-            - "3000:3333"
+            - "3000:3000"
         networks:
             - zk-groups
         depends_on:
@@ -54,7 +54,7 @@ services:
         build:
             context: ./
             dockerfile: ./apps/client/Dockerfile
-        image: ${DOMAIN}-client:latest
+        image: zk-groups-client:latest
         restart: unless-stopped
         environment:
             - NODE_ENV=production
@@ -70,7 +70,7 @@ services:
         build:
             context: ./
             dockerfile: ./apps/dashboard/Dockerfile
-        image: ${DOMAIN}-dashboard:latest
+        image: zk-groups-dashboard:latest
         restart: unless-stopped
         environment:
             - NODE_ENV=production
