@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./IZKGroupsSemaphore.sol";
-import "../IZKGroups.sol";
-import "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
+import {IZKGroupsSemaphore} from "./IZKGroupsSemaphore.sol";
+import {IZKGroups} from "../IZKGroups.sol";
+import {ISemaphoreVerifier} from "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
 
 /// @title ZKGroupsSemaphore
 /// @dev This contract is used to verify Semaphore proofs.
