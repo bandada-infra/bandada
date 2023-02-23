@@ -1,4 +1,4 @@
-import typescript from "rollup-plugin-typescript2"
+import typescript from "@rollup/plugin-typescript"
 import * as fs from "fs"
 import cleanup from "rollup-plugin-cleanup"
 
@@ -24,8 +24,7 @@ export default {
     ],
     plugins: [
         typescript({
-            tsconfig: "./build.tsconfig.json",
-            useTsconfigDeclarationDir: true
+            tsconfig: "./build.tsconfig.json"
         }),
         cleanup({ comments: "jsdoc" })
     ]
