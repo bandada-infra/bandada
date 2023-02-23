@@ -3,8 +3,10 @@ import {
     CreateDateColumn,
     Entity,
     Index,
+    OneToMany,
     PrimaryGeneratedColumn
 } from "typeorm"
+import { Member } from "./member.entity"
 
 @Entity("groups")
 export class Group {
@@ -24,8 +26,10 @@ export class Group {
     @Column()
     treeDepth: number
 
-    @Column("simple-array")
-    members: string[]
+    @OneToMany(() => Member, (member) => member.group, {
+        cascade: true
+    })
+    members: Member[]
 
     @CreateDateColumn()
     createdAt: Date

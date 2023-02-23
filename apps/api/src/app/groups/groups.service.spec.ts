@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { Invite } from "../invites/entities/invite.entity"
 import { InvitesService } from "../invites/invites.service"
 import { Group } from "./entities/group.entity"
+import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
 
 describe("GroupsService", () => {
@@ -18,12 +19,11 @@ describe("GroupsService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [Group, Invite],
+                        entities: [Group, Invite, Member],
                         synchronize: true
                     })
                 }),
-                TypeOrmModule.forFeature([Group]),
-                TypeOrmModule.forFeature([Invite]),
+                TypeOrmModule.forFeature([Group, Invite, Member]),
                 ScheduleModule.forRoot()
             ],
             providers: [GroupsService, InvitesService]
