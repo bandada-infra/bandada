@@ -148,7 +148,7 @@ export default function CreateGroupModal({
                                     <FormLabel>Name</FormLabel>
                                     <Input
                                         value={_groupName}
-                                        maxLength={31}
+                                        maxLength={isOnChainGroup ? 31 : 100}
                                         onChange={(e) =>
                                             setGroupName(e.target.value)
                                         }

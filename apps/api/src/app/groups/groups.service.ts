@@ -64,10 +64,14 @@ export class GroupsService {
         { id: groupId, name, description, treeDepth, tag }: CreateGroupDto,
         admin: string
     ): Promise<Group> {
-        const _groupId = groupId || BigInt((id(name + admin))).toString().slice(0, 32)
+        const _groupId =
+            groupId ||
+            BigInt(id(name + admin))
+                .toString()
+                .slice(0, 32)
 
         const group = this.groupRepository.create({
-            id : _groupId,
+            id: _groupId,
             name,
             description,
             treeDepth,
@@ -242,7 +246,6 @@ export class GroupsService {
      */
     /* istanbul ignore next */
     private async updateContractGroups(period = 60): Promise<void> {
-        console.log("updateContractGroups", this.schedulerRegistry.getTimeouts().length)
         if (this.schedulerRegistry.getTimeouts().length === 0) {
             const callback = async () => {
                 const tx = await zkGroups.updateGroups(this.updatedGroups)
