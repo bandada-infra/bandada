@@ -6,10 +6,17 @@ import {
     Length,
     Min,
     MinLength,
-    NotContains
+    NotContains,
+    IsNumberString
 } from "class-validator"
 
 export class CreateGroupDto {
+    @IsString()
+    @IsOptional()
+    @Length(32)
+    @IsNumberString()
+    readonly id?: string
+
     @IsString()
     @Length(1, 50)
     @NotContains("admin-groups")

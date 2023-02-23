@@ -4,17 +4,17 @@ import {
     Entity,
     Index,
     OneToMany,
-    PrimaryGeneratedColumn
+    PrimaryColumn,
 } from "typeorm"
 import { Member } from "./member.entity"
 
 @Entity("groups")
 export class Group {
-    @PrimaryGeneratedColumn()
-    id: number
+    @PrimaryColumn({ type: 'numeric', precision: 32, scale: 0 })
+    @Index({ unique: true })
+    id: string
 
     @Column()
-    @Index({ unique: true })
     name: string
 
     @Column()
