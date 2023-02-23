@@ -12,16 +12,16 @@ describe("ZKGroupsSemaphore", () => {
 
     const groupId = utils.formatBytes32String("Name")
     const identities = [0, 1].map((i) => new Identity(i.toString()))
-    const group = new Group(BigNumber.from(groupId).toBigInt(), 20)
+    const group = new Group(BigNumber.from(groupId).toBigInt())
 
     group.addMembers(identities.map(({ commitment }) => commitment))
 
     before(async () => {
-        zkGroups = await run("deploy-zkgroups", {
+        zkGroups = await run("deploy:zkgroups", {
             logs: false
         })
 
-        zkGroupsSemaphore = await run("deploy-zkgroups-semaphore", {
+        zkGroupsSemaphore = await run("deploy:zkgroups-semaphore", {
             logs: false,
             zkGroups: zkGroups.address
         })

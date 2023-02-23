@@ -15,7 +15,7 @@ describe("ZKGroups", () => {
     group.addMembers(identities.map(({ commitment }) => commitment))
 
     before(async () => {
-        zkGroups = await run("deploy-zkgroups", {
+        zkGroups = await run("deploy:zkgroups", {
             logs: false
         })
     })
