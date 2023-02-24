@@ -7,7 +7,7 @@ const banner = `/**
  * @module ${pkg.name}
  * @version ${pkg.version}
  * @file ${pkg.description}
- * @copyright Ethereum Foundation 2022
+ * @copyright Ethereum Foundation 2023
  * @license ${pkg.license}
  * @see [Github]{@link ${pkg.homepage}}
 */`
@@ -24,7 +24,7 @@ export default {
     ],
     plugins: [
         typescript({
-            tsconfig: "./build.tsconfig.json"
+            tsconfig: "./tsconfig.build.json"
         }),
         cleanup({ comments: "jsdoc" })
     ]

@@ -16,7 +16,7 @@
         "README.md"
     ],
     "repository": "https://github.com/privacy-scaling-explorations/zk-groups",
-    "homepage": "https://github.com/privacy-scaling-explorations/zk-groups/tree/main/libs/hardhat",
+    "homepage": "https://github.com/privacy-scaling-explorations/zk-groups/tree/main/libs/utils",
     "bugs": {
         "url": "https://github.com/privacy-scaling-explorations/zk-groups.git/issues"
     },
