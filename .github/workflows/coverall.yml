@@ -11,7 +11,7 @@ jobs:
         strategy:
             matrix:
                 app:
-                    - api
+                    - jest
                     - contracts
 
         steps:
