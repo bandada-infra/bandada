@@ -21,5 +21,16 @@
             "./apps/**/tsconfig.json"
         ]
     },
-    "plugins": ["@typescript-eslint", "jest"]
+    "plugins": ["@typescript-eslint", "jest"],
+    "rules": {
+        "import/prefer-default-export": "off",
+        "import/no-cycle": "off",
+        "@typescript-eslint/lines-between-class-members": "off",
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/naming-convention": "off",
+        "no-restricted-syntax": "off",
+        "no-param-reassign": "off",
+        "no-underscore-dangle": "off",
+        "consistent-return": "off"
+    }
 }

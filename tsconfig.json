@@ -1,25 +1,23 @@
 {
-    "compileOnSave": false,
     "compilerOptions": {
         "baseUrl": ".",
-        "rootDir": ".",
-        "sourceMap": true,
-        "esModuleInterop": true,
-        "declaration": true,
-        "declarationDir": "types",
+        "strict": true,
+        "target": "ES5",
+        "module": "ES6",
+        "noImplicitAny": false,
         "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "preserveConstEnums": true,
         "resolveJsonModule": true,
-        "experimentalDecorators": true,
-        "importHelpers": true,
-        "target": "es2015",
-        "module": "esnext",
         "lib": ["es2017", "dom"],
         "skipLibCheck": true,
-        "skipDefaultLibCheck": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
+        "declarationDir": "types",
         "paths": {
             "@zk-groups/*": ["libs/*/src"]
         }
-    },
-    "exclude": ["node_modules", "tmp"]
+    }
 }
