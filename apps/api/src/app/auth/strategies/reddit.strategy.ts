@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
-import { Profile, Strategy } from "@zk-groups/passport-reddit"
+import Strategy, { Profile } from "../../utils/passport-reddit"
 import { AuthService } from "../auth.service"
 
 @Injectable()
