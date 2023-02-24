@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
     InternalOAuthError,
     Strategy as OAuth2Strategy,
@@ -5,6 +6,15 @@ import {
     VerifyFunction
 } from "passport-oauth2"
 import { stringify } from "querystring"
+
+export type Profile = {
+    id: string
+    name: string
+    icon_img: string
+    subreddit: {
+        title: string
+    }
+}
 
 export default class Strategy extends OAuth2Strategy {
     public name = "reddit"
@@ -26,7 +36,7 @@ export default class Strategy extends OAuth2Strategy {
                 options.scope = options.scope
                     .split(",")
                     .reduce(
-                        function (previousValue, currentValue) {
+                        (previousValue, currentValue) => {
                             if (currentValue !== "")
                                 previousValue.push(currentValue)
                             return previousValue
@@ -62,12 +72,10 @@ export default class Strategy extends OAuth2Strategy {
             params[codeParam] = code
 
             const post_data = stringify(params)
-            const authorization =
-                "Basic " +
-                Buffer.from(
-                    "" + this._clientId + ":" + this._clientSecret,
-                    "utf8"
-                ).toString("base64")
+            const authorization = `Basic ${Buffer.from(
+                `${this._clientId}:${this._clientSecret}`,
+                "utf8"
+            ).toString("base64")}`
             const post_headers = {
                 "Content-Type": "application/x-www-form-urlencoded",
                 Authorization: authorization
@@ -79,13 +87,13 @@ export default class Strategy extends OAuth2Strategy {
                 post_headers,
                 post_data,
                 null,
-                function (error: any, data: any) {
+                (error: any, data: any) => {
                     if (error) {
                         callback(error)
                     } else {
                         const results = JSON.parse(data)
-                        const access_token = results.access_token
-                        const refresh_token = results.refresh_token
+                        const { access_token } = results
+                        const { refresh_token } = results
 
                         delete results.refresh_token
 
@@ -103,7 +111,7 @@ export default class Strategy extends OAuth2Strategy {
         this._oauth2.get(
             this._userProfileURL,
             accessToken,
-            function (err: { statusCode: number; data?: any }, result: string) {
+            (err: { statusCode: number; data?: any }, result: string) => {
                 if (err) {
                     return done(
                         new InternalOAuthError(

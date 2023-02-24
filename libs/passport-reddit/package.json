@@ -1,8 +1,0 @@
-{
-    "name": "@zk-groups/passport-reddit",
-    "private": true,
-    "dependencies": {
-        "passport-oauth2": "^1.6.1",
-        "querystring": "^0.2.1"
-    }
-}
