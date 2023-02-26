@@ -1,3 +1,4 @@
+import { Signer } from "@ethersproject/abstract-signer"
 import { Contract, ContractReceipt } from "@ethersproject/contracts"
 import getContract from "./getContract"
 import { Network, OnchainZKGroup } from "./types"
@@ -18,9 +19,9 @@ export class ZKGroupsContract {
 
 export default function getZKGroupsContract(
     network: Network,
-    privateKey: string
+    privateKeyOrSigner?: string | Signer
 ): ZKGroupsContract {
-    const contract = getContract("ZKGroups", network, privateKey)
+    const contract = getContract("ZKGroups", network, privateKeyOrSigner)
 
     return new ZKGroupsContract(contract)
 }

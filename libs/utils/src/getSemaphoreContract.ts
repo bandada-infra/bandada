@@ -1,3 +1,4 @@
+import { Signer } from "@ethersproject/abstract-signer"
 import { Contract, ContractReceipt } from "@ethersproject/contracts"
 import { formatBytes32String } from "@ethersproject/strings"
 import getContract from "./getContract"
@@ -65,9 +66,9 @@ export class SemaphoreContract {
 
 export default function getSemaphoreContract(
     network: Network,
-    privateKey: string
+    privateKeyOrSigner?: string | Signer
 ): SemaphoreContract {
-    const contract = getContract("Semaphore", network, privateKey)
+    const contract = getContract("Semaphore", network, privateKeyOrSigner)
 
     return new SemaphoreContract(contract)
 }
