@@ -29,7 +29,7 @@ export class AuthController {
             })
         }
 
-        res.redirect(`${process.env.NX_DASHBOARD_URL}/my-groups`)
+        res.redirect(`${process.env.VITE_DASHBOARD_URL}/my-groups`)
     }
 
     @Get("twitter")
@@ -49,7 +49,7 @@ export class AuthController {
             })
         }
 
-        res.redirect(`${process.env.NX_DASHBOARD_URL}/my-groups`)
+        res.redirect(`${process.env.VITE_DASHBOARD_URL}/my-groups`)
     }
 
     @Get("reddit")
@@ -69,7 +69,7 @@ export class AuthController {
             })
         }
 
-        res.redirect(`${process.env.NX_DASHBOARD_URL}/my-groups`)
+        res.redirect(`${process.env.VITE_DASHBOARD_URL}/my-groups`)
     }
 
     @Get("getUser")
@@ -85,6 +85,6 @@ export class AuthController {
             httpOnly: true,
             expires: new Date()
         })
-        res.redirect(`${process.env.NX_DASHBOARD_URL}`)
+        res.redirect(`${process.env.VITE_DASHBOARD_URL}`)
     }
 }
