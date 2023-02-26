@@ -1,7 +1,0 @@
-{
-    "name": "@zk-groups/contract-utils",
-    "private": true,
-    "dependencies": {
-        "ethers": "^6.0.5"
-    }
-}

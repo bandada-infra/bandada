@@ -1,4 +1,5 @@
 import typescript from "@rollup/plugin-typescript"
+import json from "@rollup/plugin-json"
 import * as fs from "fs"
 import cleanup from "rollup-plugin-cleanup"
 
@@ -20,6 +21,7 @@ export default {
     ],
     external: Object.keys(pkg.dependencies),
     plugins: [
+        json(),
         typescript({
             tsconfig: "./tsconfig.build.json"
         }),
