@@ -3,11 +3,9 @@
     "private": true,
     "license": "MIT",
     "scripts": {
-        "start": "nest start",
-        "build": "nest build",
-        "start:dev": "nest start --watch",
-        "start:debug": "nest start --debug --watch",
-        "start:prod": "node dist/main"
+        "dev": "nest start --watch",
+        "start": "node dist/main",
+        "build": "nest build"
     },
     "dependencies": {
         "@ethersproject/hash": "^5.7.0",
