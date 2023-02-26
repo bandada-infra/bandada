@@ -41,8 +41,7 @@ export class GroupsService {
 
             /* istanbul ignore next */
             for (const group of groups) {
-                const groupId = BigInt(id(group.name))
-                const cachedGroup = new CachedGroup(groupId, group.treeDepth)
+                const cachedGroup = new CachedGroup(group.id, group.treeDepth)
 
                 cachedGroup.addMembers(group.members.map((m) => m.id))
 
@@ -62,10 +61,17 @@ export class GroupsService {
      * @returns Created group.
      */
     async createGroup(
-        { name, description, treeDepth, tag }: CreateGroupDto,
+        { id: groupId, name, description, treeDepth, tag }: CreateGroupDto,
         admin: string
     ): Promise<Group> {
+        const _groupId =
+            groupId ||
+            BigInt(id(name + admin))
+                .toString()
+                .slice(0, 32)
+
         const group = this.groupRepository.create({
+            id: _groupId,
             name,
             description,
             treeDepth,
@@ -154,7 +160,7 @@ export class GroupsService {
         )
 
         this.updatedGroups.push({
-            id: BigInt(id(group.name)),
+            id: BigInt(group.id),
             fingerprint: BigInt(cachedGroup.root)
         })
 
