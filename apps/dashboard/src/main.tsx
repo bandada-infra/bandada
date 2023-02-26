@@ -1,20 +1,20 @@
-import { StrictMode } from "react"
-import * as ReactDOM from "react-dom/client"
-import { BrowserRouter } from "react-router-dom"
 import { ChakraProvider } from "@chakra-ui/react"
 import {
     connectorsForWallets,
     RainbowKitProvider
 } from "@rainbow-me/rainbowkit"
+import {
+    coinbaseWallet,
+    injectedWallet,
+    metaMaskWallet,
+    walletConnectWallet
+} from "@rainbow-me/rainbowkit/wallets"
+import { StrictMode } from "react"
+import * as ReactDOM from "react-dom/client"
+import { BrowserRouter } from "react-router-dom"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
-import {
-    metaMaskWallet,
-    coinbaseWallet,
-    walletConnectWallet,
-    injectedWallet
-} from "@rainbow-me/rainbowkit/wallets"
 import App from "./app/app"
 import theme from "./styles"
 

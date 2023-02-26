@@ -1,0 +1,28 @@
+{
+    "name": "dashboard",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite --port 3001",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@chakra-ui/react": "^2.5.1",
+        "@rainbow-me/rainbowkit": "^0.11.0",
+        "@semaphore-protocol/subgraph": "^3.1.0",
+        "@zk-groups/utils": "workspace:^",
+        "ethers": "^5.5.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.8.1",
+        "wagmi": "^0.11.7"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.27",
+        "@types/react-dom": "^18.0.10",
+        "@vitejs/plugin-react": "^3.1.0",
+        "typescript": "^4.9.3",
+        "vite": "^4.1.0"
+    }
+}

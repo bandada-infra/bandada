@@ -18,7 +18,7 @@ export default function useOffchainGroups(): ReturnParameters {
     > => {
         try {
             const groupList = await request(
-                `${process.env.NX_API_URL}/groups/admin-groups`
+                `${import.meta.env.VITE_API_URL}/groups/admin-groups`
             )
             return groupList
         } catch (e) {
@@ -40,7 +40,7 @@ export default function useOffchainGroups(): ReturnParameters {
                     treeDepth: groupTreeDepth
                 }
             }
-            await request(`${process.env.NX_API_URL}/groups`, config)
+            await request(`${import.meta.env.VITE_API_URL}/groups`, config)
 
             return true
         },

@@ -12,7 +12,7 @@ export default function useMembers(): ReturnParameters {
         async (groupName: string): Promise<Group | null> => {
             try {
                 const groupList = await request(
-                    `${process.env.NX_API_URL}/groups/${groupName}`
+                    `${import.meta.env.VITE_API_URL}/groups/${groupName}`
                 )
                 return groupList
             } catch (e) {

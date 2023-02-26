@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     Flex,
     FormControl,
@@ -10,13 +11,12 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
-    UseDisclosureProps,
     Spinner,
     Text,
-    Box
+    UseDisclosureProps
 } from "@chakra-ui/react"
+import { getSemaphoreContract } from "@zk-groups/utils"
 import { useState } from "react"
-import { semaphore } from "@zk-groups/contract-utils"
 import { useSigner } from "wagmi"
 
 export default function AddMemberModal({
@@ -37,13 +37,11 @@ export default function AddMemberModal({
         }
         setStatus("loading")
         try {
+            const semaphore = getSemaphoreContract("goerli", signer as any)
+
             const transaction =
                 signer &&
-                (await semaphore.addMember(
-                    signer,
-                    groupName,
-                    identityCommitment
-                ))
+                (await semaphore.addMember(groupName, identityCommitment))
             transaction && setStatus("success")
             return
         } catch (error) {
