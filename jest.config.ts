@@ -7,6 +7,7 @@ const libs: any = fs
     .map(({ name }) => ({
         displayName: name,
         rootDir: `libs/${name}/src`,
+        testRegex: ".*\\.test\\.ts$",
         moduleNameMapper: {
             "@zk-groups/(.*)": "<rootDir>/../$1/src/index.ts"
         },
@@ -22,10 +23,11 @@ export default async (): Promise<Config.InitialOptions> => ({
         {
             displayName: "api",
             rootDir: "apps/api/src",
-            moduleFileExtensions: ["js", "ts", "json"],
+            testRegex: ".*\\.test\\.ts$",
             moduleNameMapper: {
                 "@zk-groups/(.*)": "<rootDir>/../../../libs/$1/src/index.ts"
             },
+            moduleFileExtensions: ["js", "ts", "json"],
             transform: {
                 "^.+\\.(t|j)s$": "ts-jest"
             },
@@ -33,12 +35,12 @@ export default async (): Promise<Config.InitialOptions> => ({
         }
     ],
     verbose: true,
-    coverageReporters: ["lcov"],
+    coverageReporters: ["lcov", "html"],
     coverageDirectory: "./coverage/jest",
     collectCoverageFrom: [
-        "<rootDir>/src/**/*.ts",
-        "!<rootDir>/src/**/index.ts",
-        "!<rootDir>/src/**/*.d.ts"
+        "<rootDir>/**/*.ts",
+        "!<rootDir>/**/index.ts",
+        "!<rootDir>/**/*.d.ts"
     ],
     coverageThreshold: {
         global: {

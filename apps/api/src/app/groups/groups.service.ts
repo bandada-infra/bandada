@@ -1,4 +1,4 @@
-import {id} from "@ethersproject/hash"
+import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
     forwardRef,
@@ -8,23 +8,23 @@ import {
     NotFoundException,
     UnauthorizedException
 } from "@nestjs/common"
-import {SchedulerRegistry} from "@nestjs/schedule"
-import {InjectRepository} from "@nestjs/typeorm"
-import {Group as CachedGroup} from "@semaphore-protocol/group"
+import { SchedulerRegistry } from "@nestjs/schedule"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Group as CachedGroup } from "@semaphore-protocol/group"
 import {
     getZKGroupsContract,
     Network,
     OnchainZKGroup,
     ZKGroupsContract
 } from "@zk-groups/utils"
-import {Repository} from "typeorm"
-import {InvitesService} from "../invites/invites.service"
-import {AddMemberDto} from "./dto/add-member.dto"
-import {CreateGroupDto} from "./dto/create-group.dto"
-import {UpdateGroupDto} from "./dto/update-group.dto"
-import {Group} from "./entities/group.entity"
-import {Member} from "./entities/member.entity"
-import {MerkleProof} from "./types"
+import { Repository } from "typeorm"
+import { InvitesService } from "../invites/invites.service"
+import { AddMemberDto } from "./dto/add-member.dto"
+import { CreateGroupDto } from "./dto/create-group.dto"
+import { UpdateGroupDto } from "./dto/update-group.dto"
+import { Group } from "./entities/group.entity"
+import { Member } from "./entities/member.entity"
+import { MerkleProof } from "./types"
 
 @Injectable()
 export class GroupsService {
@@ -184,13 +184,9 @@ export class GroupsService {
      * @returns List of existing groups.
      */
     async getAllGroups(): Promise<Group[]> {
-<<<<<<< HEAD
-        return await this.groupRepository.find({
+        return this.groupRepository.find({
             relations: { members: true }
         })
-=======
-        return this.groupRepository.find()
->>>>>>> 6c40be3 (chore(api): create nestjs project)
     }
 
     /**
@@ -199,14 +195,10 @@ export class GroupsService {
      * @returns List of admin's existing groups.
      */
     async getGroupsByAdmin(admin: string): Promise<Group[]> {
-<<<<<<< HEAD
-        return await this.groupRepository.find({
+        return this.groupRepository.find({
             relations: { members: true },
             where: { admin }
         })
-=======
-        return this.groupRepository.findBy({ admin })
->>>>>>> 6c40be3 (chore(api): create nestjs project)
     }
 
     /**
