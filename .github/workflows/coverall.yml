@@ -5,6 +5,9 @@ on:
         branches:
             - main
 
+env:
+    DEFAULT_NETWORK: localhost
+
 jobs:
     test:
         runs-on: ubuntu-latest
@@ -37,6 +40,9 @@ jobs:
 
             - name: Install dependencies
               run: yarn
+
+            - name: Build libraries
+              run: yarn workspaces foreach --no-private run build
 
             - name: Test code
               run: yarn test:${{ matrix.tests }}:coverage

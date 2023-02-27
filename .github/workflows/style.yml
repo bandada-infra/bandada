@@ -34,11 +34,11 @@ jobs:
             - name: Install dependencies
               run: yarn
 
+            - name: Build
+              run: yarn build
+
             - name: Run Prettier
               run: yarn prettier
 
             - name: Run Eslint
               run: yarn lint
-
-            - name: Build
-              run: yarn build
