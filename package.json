@@ -13,7 +13,7 @@
         "test:coverage": "yarn test:jest:coverage && yarn test:contracts:coverage",
         "test:jest:coverage": "jest --coverage",
         "test:contracts:coverage": "yarn workspace contracts test:coverage",
-        "build": "yarn workspaces foreach run build && yarn workspace contracts compile",
+        "build": "yarn workspaces foreach -t run build && yarn workspace contracts compile",
         "lint": "eslint . --ext .js,.ts && yarn workspace contracts lint",
         "prettier": "prettier -c .",
         "prettier:write": "prettier -w .",
