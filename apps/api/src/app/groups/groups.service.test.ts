@@ -31,6 +31,8 @@ describe("GroupsService", () => {
 
         groupsService = await module.resolve(GroupsService)
         invitesService = await module.resolve(InvitesService)
+
+        groupsService.updateContractInterval = 0
     })
 
     describe("# createGroup", () => {

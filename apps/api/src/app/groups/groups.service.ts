@@ -31,6 +31,7 @@ export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
     private updatedGroups: OnchainZKGroup[]
     private zkGroupsContract: ZKGroupsContract
+    updateContractInterval: number
 
     constructor(
         @InjectRepository(Group)
@@ -255,8 +256,11 @@ export class GroupsService {
      * @param period Period of time in seconds.
      */
     /* istanbul ignore next */
-    private async updateContractGroups(period = 60): Promise<void> {
-        if (this.schedulerRegistry.getTimeouts().length === 0) {
+    private async updateContractGroups(): Promise<void> {
+        if (
+            this.schedulerRegistry.getTimeouts().length === 0 &&
+            this.updateContractInterval > 0
+        ) {
             const callback = async () => {
                 const tx = await this.zkGroupsContract.updateGroups(
                     this.updatedGroups
@@ -276,10 +280,13 @@ export class GroupsService {
                     )
                 }
             }
-            const timeout = setTimeout(callback, period * 1000)
+            const timeout = setTimeout(
+                callback,
+                this.updateContractInterval * 1000
+            )
 
             Logger.log(
-                `GroupsService: contract groups are going to be updated in ${period} seconds`
+                `GroupsService: contract groups are going to be updated in ${this.updateContractInterval} seconds`
             )
 
             this.schedulerRegistry.addTimeout("update-contract-groups", timeout)
