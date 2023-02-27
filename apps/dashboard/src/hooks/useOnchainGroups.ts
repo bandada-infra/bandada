@@ -40,7 +40,7 @@ export default function useOnchainGroups(): ReturnParameters {
                     }
                 })
             } catch (error) {
-                console.log(error)
+                console.error(error)
 
                 return null
             }
@@ -64,7 +64,7 @@ export default function useOnchainGroups(): ReturnParameters {
                     admin: group.admin
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error)
 
                 return null
             }

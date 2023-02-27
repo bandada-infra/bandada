@@ -60,7 +60,7 @@ export default class Strategy extends OAuth2Strategy {
 
         this._oauth2.useAuthorizationHeaderforGET(true)
 
-        this._oauth2.getOAuthAccessToken = function (
+        this._oauth2.getOAuthAccessToken = function getOAuthAccessToken(
             code: string,
             params: any,
             callback: any

@@ -91,10 +91,7 @@ describe("InvitesService", () => {
         let invite: Invite
         const groupName = "Group1"
         beforeAll(async () => {
-            invite = await invitesService.createInvite(
-                { groupName: groupName },
-                "admin"
-            )
+            invite = await invitesService.createInvite({ groupName }, "admin")
         })
 
         it("Should not redeem an invite if group name does not match", async () => {

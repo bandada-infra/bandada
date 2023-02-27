@@ -28,9 +28,9 @@ export default function useMembers(): ReturnParameters {
             const membersList = group?.members
             if (membersList) {
                 return membersList
-            } else {
-                return null
             }
+
+            return null
         },
         [getGroup]
     )

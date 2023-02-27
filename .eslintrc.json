@@ -31,6 +31,9 @@
         "no-restricted-syntax": "off",
         "no-param-reassign": "off",
         "no-underscore-dangle": "off",
-        "consistent-return": "off"
+        "consistent-return": "off",
+        "class-methods-use-this": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-console": ["warn", { "allow": ["info", "warn", "error"] }]
     }
 }

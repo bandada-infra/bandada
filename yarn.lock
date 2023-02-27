@@ -1866,7 +1866,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chakra-ui/theme-tools@npm:2.0.17":
+"@chakra-ui/theme-tools@npm:2.0.17, @chakra-ui/theme-tools@npm:^2.0.16":
   version: 2.0.17
   resolution: "@chakra-ui/theme-tools@npm:2.0.17"
   dependencies:
@@ -5300,7 +5300,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:9.0.1":
+"@types/jsonwebtoken@npm:*, @types/jsonwebtoken@npm:9.0.1":
   version: 9.0.1
   resolution: "@types/jsonwebtoken@npm:9.0.1"
   dependencies:
@@ -5436,6 +5436,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/passport-jwt@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "@types/passport-jwt@npm:3.0.8"
+  dependencies:
+    "@types/express": "*"
+    "@types/jsonwebtoken": "*"
+    "@types/passport-strategy": "*"
+  checksum: 321eca319eff51c87a5ddebf590937b24ed7fa6c8cc2465cecb4edf49f839b7770e57a4ed009f323c66ade6c0f1d9b6a51033d82dd392270b17976380893af2f
+  languageName: node
+  linkType: hard
+
 "@types/passport-oauth2@npm:*":
   version: 1.4.11
   resolution: "@types/passport-oauth2@npm:1.4.11"
@@ -5444,6 +5455,16 @@ __metadata:
     "@types/oauth": "*"
     "@types/passport": "*"
   checksum: 09d047a6c09a05c036f7db0cf8f8c09bf5878fdd15949bb1baa09a35f439929d471048fa6595f09ea4a4ea25396ce3918b362136579cf4a2b2ee29a92c0dd1ce
+  languageName: node
+  linkType: hard
+
+"@types/passport-strategy@npm:*":
+  version: 0.2.35
+  resolution: "@types/passport-strategy@npm:0.2.35"
+  dependencies:
+    "@types/express": "*"
+    "@types/passport": "*"
+  checksum: e5949063ad8977ce1f7cf2a5df6bc379c4d43a959c9946bfed6570ef379c6c12d1713212a29b3b5aafc631c5ebe9bfe082116f3e75ca1bf45d79dd889671532d
   languageName: node
   linkType: hard
 
@@ -7067,6 +7088,7 @@ __metadata:
     "@types/node": 18.11.18
     "@types/passport": ^1.0.12
     "@types/passport-github": ^1.1.7
+    "@types/passport-jwt": ^3.0.8
     "@types/passport-twitter": ^1.0.37
     "@zk-groups/utils": "workspace:^"
     class-transformer: ^0.5.1
@@ -8498,16 +8520,19 @@ __metadata:
     "@chakra-ui/react": ^2.5.1
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
+    "@semaphore-protocol/identity": 3.1.0
     "@types/react": ^18.0.27
     "@types/react-dom": ^18.0.10
     "@vitejs/plugin-react": ^3.1.0
     "@web3-react/core": ^6.1.9
     "@web3-react/injected-connector": ^6.0.7
     "@zk-groups/utils": "workspace:^"
+    ethers: ^5.4.7
     framer-motion: ^10.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router-dom: ^6.8.1
+    regenerator-runtime: ^0.13.11
     typescript: ^4.9.3
     vite: ^4.1.0
   languageName: unknown
@@ -8858,6 +8883,7 @@ __metadata:
     "@types/mocha": ">=9.1.0"
     "@types/node": ">=12.0.0"
     chai: ^4.2.0
+    dotenv: ^16.0.3
     ethers: ^5.4.7
     hardhat: ^2.11.0
     hardhat-dependency-compiler: ^1.1.3
@@ -9257,6 +9283,7 @@ __metadata:
   resolution: "dashboard@workspace:apps/dashboard"
   dependencies:
     "@chakra-ui/react": ^2.5.1
+    "@chakra-ui/theme-tools": ^2.0.16
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
     "@rainbow-me/rainbowkit": ^0.11.0

@@ -1,5 +1,4 @@
 import { request } from "@zk-groups/utils"
-import { AxiosRequestConfig } from "axios"
 import { useCallback } from "react"
 import { Group } from "../types/groups"
 
@@ -32,15 +31,14 @@ export default function useOffchainGroups(): ReturnParameters {
             groupDescription: string,
             groupTreeDepth: number
         ): Promise<true | null> => {
-            const config: AxiosRequestConfig = {
+            await request(`${import.meta.env.VITE_API_URL}/groups`, {
                 method: "post",
                 data: {
                     name: groupName,
                     description: groupDescription,
                     treeDepth: groupTreeDepth
                 }
-            }
-            await request(`${import.meta.env.VITE_API_URL}/groups`, config)
+            })
 
             return true
         },
