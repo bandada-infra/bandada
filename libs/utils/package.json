@@ -1,6 +1,6 @@
 {
     "name": "@zk-groups/utils",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "description": "General ZKGroups utility functions.",
     "license": "MIT",
     "main": "dist/index.node.js",
