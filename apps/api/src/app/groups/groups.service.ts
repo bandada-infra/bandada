@@ -31,7 +31,8 @@ export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
     private updatedGroups: OnchainZKGroup[]
     private zkGroupsContract: ZKGroupsContract
-    updateContractInterval: number
+
+    updateContractInterval: number = 60
 
     constructor(
         @InjectRepository(Group)
