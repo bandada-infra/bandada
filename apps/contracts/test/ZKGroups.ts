@@ -3,6 +3,8 @@ import { Identity } from "@semaphore-protocol/identity"
 import { expect } from "chai"
 import { BigNumber, utils } from "ethers"
 import { run } from "hardhat"
+// @ts-ignore: typechain folder will be generated after contracts compilation.
+// eslint-disable-next-line import/extensions
 import { ZKGroups } from "../typechain-types"
 
 describe("ZKGroups", () => {
