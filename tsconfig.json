@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "strict": true,
+        "target": "ES5",
+        "module": "ES6",
+        "noImplicitAny": false,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "preserveConstEnums": true,
+        "resolveJsonModule": true,
+        "lib": ["es2017", "dom"],
+        "skipLibCheck": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
+        "declarationDir": "types",
+        "paths": {
+            "@zk-groups/*": ["libs/*/src"]
+        }
+    }
+}

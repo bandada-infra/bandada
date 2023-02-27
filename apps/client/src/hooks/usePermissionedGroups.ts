@@ -26,7 +26,7 @@ export default function usePermissionedGroups(): ReturnParameters {
     const getInvite = useCallback(
         async (inviteCode: string | undefined): Promise<Invite> => {
             const codeInfo = await request(
-                `${process.env.NX_API_URL}/invites/${inviteCode}`
+                `${import.meta.env.VITE_API_URL}/invites/${inviteCode}`
             )
 
             return codeInfo
@@ -42,7 +42,9 @@ export default function usePermissionedGroups(): ReturnParameters {
             const identity = new Identity(await signer.signMessage(message))
             const identityCommitment = identity.getCommitment().toString()
             const hasJoined = await request(
-                `${process.env.NX_API_URL}/groups/${groupName}/${identityCommitment}`
+                `${
+                    import.meta.env.VITE_API_URL
+                }/groups/${groupName}/${identityCommitment}`
             )
             setHasjoined(hasJoined)
             setLoading(false)
@@ -58,7 +60,9 @@ export default function usePermissionedGroups(): ReturnParameters {
             inviteCode: string
         ): Promise<void> => {
             await request(
-                `${process.env.NX_API_URL}/groups/${groupName}/${idCommitment}`,
+                `${
+                    import.meta.env.VITE_API_URL
+                }/groups/${groupName}/${idCommitment}`,
                 {
                     method: "post",
                     data: {

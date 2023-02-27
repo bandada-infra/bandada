@@ -3,6 +3,8 @@ import { Identity } from "@semaphore-protocol/identity"
 import { expect } from "chai"
 import { BigNumber, utils } from "ethers"
 import { run } from "hardhat"
+// @ts-ignore: typechain folder will be generated after contracts compilation.
+// eslint-disable-next-line import/extensions
 import { ZKGroups } from "../typechain-types"
 
 describe("ZKGroups", () => {
@@ -15,7 +17,7 @@ describe("ZKGroups", () => {
     group.addMembers(identities.map(({ commitment }) => commitment))
 
     before(async () => {
-        zkGroups = await run("deploy-zkgroups", {
+        zkGroups = await run("deploy:zkgroups", {
             logs: false
         })
     })

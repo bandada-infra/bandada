@@ -26,18 +26,18 @@ export class AccountService {
         return this.accountRepository.findOneBy(payload)
     }
 
-    //public async findAll(): Promise<Account[]> {
-    //return this.accountRepository.find()
-    //}
+    // public async findAll(): Promise<Account[]> {
+    // return this.accountRepository.find()
+    // }
 
-    //public async update(
-    //id: number,
-    //payload: UpdateAccountDTO
-    //): Promise<UpdateResult> {
-    //return this.accountRepository.update(id, payload)
-    //}
+    // public async update(
+    // id: number,
+    // payload: UpdateAccountDTO
+    // ): Promise<UpdateResult> {
+    // return this.accountRepository.update(id, payload)
+    // }
 
-    //public async remove(id: number): Promise<DeleteResult> {
-    //return this.accountRepository.delete(id)
-    //}
+    // public async remove(id: number): Promise<DeleteResult> {
+    // return this.accountRepository.delete(id)
+    // }
 }

@@ -11,7 +11,12 @@ import {
 import { SchedulerRegistry } from "@nestjs/schedule"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
-import { zkGroups } from "@zk-groups/contract-utils"
+import {
+    getZKGroupsContract,
+    Network,
+    OnchainZKGroup,
+    ZKGroupsContract
+} from "@zk-groups/utils"
 import { Repository } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
 import { AddMemberDto } from "./dto/add-member.dto"
@@ -24,7 +29,10 @@ import { MerkleProof } from "./types"
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
-    private updatedGroups: zkGroups.Group[]
+    private updatedGroups: OnchainZKGroup[]
+    private zkGroupsContract: ZKGroupsContract
+
+    updateContractInterval: number = 60
 
     constructor(
         @InjectRepository(Group)
@@ -36,6 +44,10 @@ export class GroupsService {
         ;(async () => {
             this.cachedGroups = new Map()
             this.updatedGroups = []
+            this.zkGroupsContract = getZKGroupsContract(
+                process.env.DEFAULT_NETWORK as Network,
+                process.env.BACKEND_PRIVATE_KEY as string
+            )
 
             const groups = await this.getAllGroups()
 
@@ -76,7 +88,7 @@ export class GroupsService {
             description,
             treeDepth,
             tag,
-            admin: admin,
+            admin,
             members: []
         })
 
@@ -174,7 +186,7 @@ export class GroupsService {
      * @returns List of existing groups.
      */
     async getAllGroups(): Promise<Group[]> {
-        return await this.groupRepository.find({
+        return this.groupRepository.find({
             relations: { members: true }
         })
     }
@@ -185,7 +197,7 @@ export class GroupsService {
      * @returns List of admin's existing groups.
      */
     async getGroupsByAdmin(admin: string): Promise<Group[]> {
-        return await this.groupRepository.find({
+        return this.groupRepository.find({
             relations: { members: true },
             where: { admin }
         })
@@ -245,17 +257,22 @@ export class GroupsService {
      * @param period Period of time in seconds.
      */
     /* istanbul ignore next */
-    private async updateContractGroups(period = 60): Promise<void> {
-        if (this.schedulerRegistry.getTimeouts().length === 0) {
+    private async updateContractGroups(): Promise<void> {
+        if (
+            this.schedulerRegistry.getTimeouts().length === 0 &&
+            this.updateContractInterval > 0
+        ) {
             const callback = async () => {
-                const tx = await zkGroups.updateGroups(this.updatedGroups)
+                const tx = await this.zkGroupsContract.updateGroups(
+                    this.updatedGroups
+                )
 
                 this.updatedGroups = []
 
                 if (tx.status) {
                     Logger.log(
-                        `GroupsService: ${tx.events.length} ${
-                            tx.events.length === 1 ? "group" : "groups"
+                        `GroupsService: ${tx.logs.length} ${
+                            tx.logs.length === 1 ? "group" : "groups"
                         } have been updated in the contract`
                     )
                 } else {
@@ -264,10 +281,13 @@ export class GroupsService {
                     )
                 }
             }
-            const timeout = setTimeout(callback, period * 1000)
+            const timeout = setTimeout(
+                callback,
+                this.updateContractInterval * 1000
+            )
 
             Logger.log(
-                `GroupsService: contract groups are going to be updated in ${period} seconds`
+                `GroupsService: contract groups are going to be updated in ${this.updateContractInterval} seconds`
             )
 
             this.schedulerRegistry.addTimeout("update-contract-groups", timeout)

@@ -28,7 +28,7 @@ export default function NavBar(): JSX.Element {
     })
 
     function logOut() {
-        request(`${process.env.NX_API_URL}/auth/log-out`, {
+        request(`${import.meta.env.VITE_API_URL}/auth/log-out`, {
             method: "post"
         }).finally(() => {
             navigate("/sso")
@@ -49,7 +49,7 @@ export default function NavBar(): JSX.Element {
             }
 
             // Check if user logged in via SSO
-            await request(`${process.env.NX_API_URL}/auth/getUser`)
+            await request(`${import.meta.env.VITE_API_URL}/auth/getUser`)
                 .then((res) => {
                     setIsSignedIn(true)
                 })

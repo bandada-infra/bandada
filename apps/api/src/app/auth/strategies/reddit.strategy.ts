@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
-import { Profile, Strategy } from "@zk-groups/passport-reddit"
+import Strategy, { Profile } from "../../utils/passport-reddit"
 import { AuthService } from "../auth.service"
 
 @Injectable()
@@ -11,7 +11,7 @@ export class RedditStrategy extends PassportStrategy(Strategy, "reddit") {
         super({
             clientID: process.env.REDDIT_CLIENT_ID,
             clientSecret: process.env.REDDIT_CLIENT_SECRET,
-            callbackURL: `${process.env.NX_API_URL}/auth/reddit/callback`
+            callbackURL: `${process.env.VITE_API_URL}/auth/reddit/callback`
         })
     }
 

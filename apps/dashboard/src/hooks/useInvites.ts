@@ -8,14 +8,17 @@ type ReturnParameters = {
 export default function useInvites(): ReturnParameters {
     const generateMagicLink = useCallback(
         async (groupName: string): Promise<string> => {
-            const code = await request(`${process.env.NX_API_URL}/invites`, {
-                method: "post",
-                data: {
-                    groupName
+            const code = await request(
+                `${import.meta.env.VITE_API_URL}/invites`,
+                {
+                    method: "post",
+                    data: {
+                        groupName
+                    }
                 }
-            })
+            )
 
-            return `${process.env.NX_CLIENT_URL}/invites/${code}`
+            return `${import.meta.env.VITE_CLIENT_URL}/invites/${code}`
         },
         []
     )

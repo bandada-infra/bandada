@@ -1,7 +1,7 @@
 import { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
-task("deploy-zkgroups", "Deploy a ZKGroups contract")
+task("deploy:zkgroups", "Deploy a ZKGroups contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
 
     .setAction(async ({ logs }, { ethers }): Promise<Contract> => {

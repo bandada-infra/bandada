@@ -9,13 +9,12 @@ import {
     Icon,
     Text
 } from "@chakra-ui/react"
-import { useSearchParams } from "react-router-dom"
-import SsoButton from "../components/sso-button"
-import { FaEthereum } from "react-icons/fa"
-import { useNavigate } from "react-router-dom"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
-import { goerli, useAccount, useSwitchNetwork } from "wagmi"
 import { useEffect } from "react"
+import { FaEthereum } from "react-icons/fa"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { goerli, useAccount, useSwitchNetwork } from "wagmi"
+import SsoButton from "../components/sso-button"
 
 export default function SSO(): JSX.Element {
     const [searchParams] = useSearchParams()

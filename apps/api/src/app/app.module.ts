@@ -1,6 +1,18 @@
+/* eslint-disable import/first */
+import { config as dotenvConfig } from "dotenv"
+import { resolve } from "path"
+
+dotenvConfig({ path: resolve(process.cwd(), ".env") })
+dotenvConfig({ path: resolve(process.cwd(), "../../.env") })
+
+if (process.env.NODE_ENV !== "production") {
+    dotenvConfig({ path: resolve(process.cwd(), "../../.env.local") })
+} else {
+    dotenvConfig({ path: resolve(process.cwd(), "../../.env.production") })
+}
+
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import "pg" // This is required for NX to include pg in api package.json during build
 import { AccountModule } from "./accounts/account.module"
 import { AuthModule } from "./auth/auth.module"
 import { GroupsModule } from "./groups/groups.module"
@@ -21,7 +33,7 @@ type DB_TYPE = "mysql" | "sqlite" | "postgres"
                 database: process.env.DB_URL
             }),
             autoLoadEntities: true,
-            synchronize: process.env.NODE_ENV === "production" ? false : true
+            synchronize: process.env.NODE_ENV !== "production"
         })
     ]
 })

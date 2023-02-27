@@ -49,8 +49,58 @@
     </h4>
 </div>
 
-| Groups are an important concept when we speak about privacy and zero knowledge technologies. They can be thought of as anonymity sets, and are a way to establish necessary trust between a set of participants while letting users keep control over how their identities are stored and used. The goal of this project is to provide a comprehensive infrastructure to allow anyone to create and manage their own groups. |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Groups are an important concept when we speak about privacy and zero knowledge technologies. They can be thought of as anonymity sets, and are a way to establish necessary trust between a set of participants. The goal of this project is to provide a comprehensive infrastructure to allow anyone to create and manage their own groups. |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
+---
+
+## 📦 Packages
+
+<table>
+    <th>Package</th>
+    <th>Version</th>
+    <th>Downloads</th>
+    <tbody>
+        <tr>
+            <td>
+                <a href="/libs/hardhat">
+                    @zk-groups/hardhat
+                </a>
+            </td>
+            <td>
+                <!-- NPM version -->
+                <a href="https://npmjs.org/package/@zk-groups/hardhat">
+                    <img src="https://img.shields.io/npm/v/@zk-groups/hardhat.svg?style=flat-square" alt="NPM version" />
+                </a>
+            </td>
+            <td>
+                <!-- Downloads -->
+                <a href="https://npmjs.org/package/@zk-groups/hardhat">
+                    <img src="https://img.shields.io/npm/dm/@zk-groups/hardhat.svg?style=flat-square" alt="Downloads" />
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/apps/contracts/contracts">
+                    @zk-groups/contracts
+                </a>
+            </td>
+            <td>
+                <!-- NPM version -->
+                <a href="https://npmjs.org/package/@zk-groups/contracts">
+                    <img src="https://img.shields.io/npm/v/@zk-groups/contracts.svg?style=flat-square" alt="NPM version" />
+                </a>
+            </td>
+            <td>
+                <!-- Downloads -->
+                <a href="https://npmjs.org/package/@zk-groups/contracts">
+                    <img src="https://img.shields.io/npm/dm/@zk-groups/contracts.svg?style=flat-square" alt="Downloads" />
+                </a>
+            </td>
+        </tr>
+    <tbody>
+</table>
 
 ## 🛠 Install
 
@@ -68,105 +118,36 @@ cd zk-groups && yarn
 
 ## 📜 Usage
 
-### Starting dev-server
+### Starting applications
 
-Run the following commands to start the applications in a development server:
-
-```bash
-yarn start:all # To start all the applications
-```
+Run the following command to start the applications in a development environment:
 
 ```bash
-yarn start <app-name> # For specific apps
+yarn dev
 ```
 
-### Building applications
-
-Run [Webpack](https://webpack.js.org/) to build the applications:
+or the following command to start the applications in production mode:
 
 ```bash
-yarn build:all
+yarn start
 ```
+
+### Building libraries/applications
+
+Run the following command to build the libraries/applications:
 
 ```bash
-yarn build <app-name> # For specific apps
+yarn build
 ```
 
-A `dist` folder will be created.
-
-### Starting in production mode
-
-Once applications have been built, you can run the dist files like this:
-
-```bash
-[ENV_VARS] node dist/api/main.js  # Start API
-```
-
-`dashboard` and `client` are frontend applications that can be served using any http server.
-Note that you have to redirect all requests to /index.html as they are single page applications.
-
-```bash
-npx http-server -p 3001 --proxy http://localhost:3001\? dist/dashboard/ # Run dashboard on port 3001
-```
-
-### Database
-
-Zk-groups require a SQL database to work, which is used by the `api` application.
-Zk-groups could work with Postgres and SQLite. Other SQL flavors should work but are not tested.
-You can pass the connection URL to the database using environment variable (see below).
-
-### Testing
-
-Run [Jest](https://jestjs.io/) to test the code with coverage:
-
-```bash
-yarn test:all
-```
-
-```bash
-yarn test <app-name> # For specific apps
-```
-
-### Running in Docker
-
-You can also run the entire `zk-groups` using docker by running below command in the project root:
-
-```sh
-docker-compose up -d # or docker compose up -d
-```
-
-<hr />
-
-## Environment Variables
-
-Below are the ENV variables used by the `api`
-
-| Key                     | Description                                                              |
-| ----------------------- | ------------------------------------------------------------------------ |
-| DB_TYPE                 | Type of the SQL database - `postgres` / `sqlite`.                        |
-| DB_URL                  | Connection string for the database. Path to DB file in case of `sqlite`. |
-| JWT_SECRET_KEY          | Secret key used for signing JWT auth tokens.                             |
-| GITHUB_CLIENT_ID        | Credentials required for sign in with Github.                            |
-| GITHUB_CLIENT_SECRET    | Credentials required for sign in with Github.                            |
-| TWITTER_CONSUMER_KEY    | Credentials required for sign in with Twitter.                           |
-| TWITTER_CONSUMER_SECRET | Credentials required for sign in with Twitter.                           |
-| REDDIT_CLIENT_ID        | Credentials required for sign in with Reddit.                            |
-| REDDIT_CLIENT_SECRET    | Credentials required for sign in with Reddit.                            |
-| INFURA_API_KEY          | API Key for Infura. This is used for executing blockchain transactions.  |
-| BACKEND_PRIVATE_KEY     | Ethereum wallet private key used for making blockchain transactions.     |
-
-<hr />
+A `dist` folder will be created in each library/application.
 
 ### Code quality and formatting
 
 Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
 
 ```bash
-yarn lint:all
-```
-
-```bash
-yarn lint <app-name> # For specific apps
+yarn lint
 ```
 
 Run [Prettier](https://prettier.io/) to check formatting rules:
@@ -190,3 +171,43 @@ yarn commit
 ```
 
 It will also automatically check that the modified files comply with ESLint and Prettier rules.
+
+### Database
+
+ZKGroups require a SQL database to work, which is used by the `api` application.
+ZKGroups can work with Postgres and SQLite. Other SQL flavors should work but are not tested.
+You can pass the connection URL to the database using environment variable (see below).
+
+### Testing
+
+Run [Jest](https://jestjs.io/) to test the code with coverage:
+
+```bash
+yarn test
+```
+
+### Running in Docker
+
+You can also run the entire `zk-groups` using docker by running below command in the project root:
+
+```sh
+docker-compose up -d # or docker compose up -d
+```
+
+## Environment Variables
+
+Below are the ENV variables used by the `api`:
+
+| Key                     | Description                                                              |
+| ----------------------- | ------------------------------------------------------------------------ |
+| DB_TYPE                 | Type of the SQL database - `postgres`/`sqlite`.                          |
+| DB_URL                  | Connection string for the database. Path to DB file in case of `sqlite`. |
+| JWT_SECRET_KEY          | Secret key used for signing JWT auth tokens.                             |
+| GITHUB_CLIENT_ID        | Credentials required for sign in with Github.                            |
+| GITHUB_CLIENT_SECRET    | Credentials required for sign in with Github.                            |
+| TWITTER_CONSUMER_KEY    | Credentials required for sign in with Twitter.                           |
+| TWITTER_CONSUMER_SECRET | Credentials required for sign in with Twitter.                           |
+| REDDIT_CLIENT_ID        | Credentials required for sign in with Reddit.                            |
+| REDDIT_CLIENT_SECRET    | Credentials required for sign in with Reddit.                            |
+| INFURA_API_KEY          | API Key for Infura. This is used for executing blockchain transactions.  |
+| BACKEND_PRIVATE_KEY     | Ethereum wallet private key used for making blockchain transactions.     |

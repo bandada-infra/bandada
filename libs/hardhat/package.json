@@ -1,21 +1,49 @@
 {
     "name": "@zk-groups/hardhat",
-    "version": "0.1.7",
-    "description": "A Hardhat plugin which provide tasks to deploy ZKGroups contracts.",
+    "version": "0.2.0",
+    "description": "A Hardhat plugin which provides tasks to deploy ZKGroups contracts.",
     "license": "MIT",
+    "main": "dist/index.node.js",
+    "exports": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.node.js"
+    },
+    "types": "dist/types/index.d.ts",
+    "files": [
+        "dist/",
+        "src/",
+        "LICENSE",
+        "README.md"
+    ],
     "repository": "https://github.com/privacy-scaling-explorations/zk-groups",
     "homepage": "https://github.com/privacy-scaling-explorations/zk-groups/tree/main/libs/hardhat",
     "bugs": {
         "url": "https://github.com/privacy-scaling-explorations/zk-groups.git/issues"
     },
-    "engines": {
-        "node": ">=14.16"
+    "scripts": {
+        "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",
+        "build": "rimraf dist && rollup -c rollup.config.ts --configPlugin typescript",
+        "prepublishOnly": "yarn build"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "@nomiclabs/hardhat-ethers": "^2.0.0",
+        "@rollup/plugin-typescript": "^11.0.0",
+        "ethers": "^5.4.7",
+        "hardhat": "^2.11.0",
+        "rimraf": "^4.1.2",
+        "rollup": "^3.17.2",
+        "rollup-plugin-cleanup": "^3.2.1",
+        "typescript": "^4.9.5"
     },
     "peerDependencies": {
-        "@semaphore-protocol/contracts": "3.0.0",
-        "@zk-groups/contracts": "0.1.1",
-        "ethers": "^5.7.2",
-        "hardhat": "^2.12.5"
+        "@nomiclabs/hardhat-ethers": "^2.0.0",
+        "@semaphore-protocol/contracts": "3.1.0",
+        "@zk-groups/contracts": "0.2.0",
+        "ethers": "^5.4.7",
+        "hardhat": "^2.11.0"
     },
     "dependencies": {
         "hardhat-dependency-compiler": "^1.1.3"

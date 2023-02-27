@@ -16,12 +16,12 @@ import {
     Spinner,
     Text
 } from "@chakra-ui/react"
+import { getSemaphoreContract } from "@zk-groups/utils"
 import { useEffect, useState } from "react"
-import { groupSizeInfo } from "../types/groups"
-import useOffchainGroups from "../hooks/useOffchainGroups"
 import { useSearchParams } from "react-router-dom"
-import { semaphore } from "@zk-groups/contract-utils"
 import { useSigner } from "wagmi"
+import useOffchainGroups from "../hooks/useOffchainGroups"
+import { groupSizeInfo } from "../types/groups"
 
 export default function CreateGroupModal({
     isOpen,
@@ -62,12 +62,15 @@ export default function CreateGroupModal({
         groupDescription: string,
         treeDepth: number
     ) {
-        if (isOnChainGroup) {
+        if (isOnChainGroup && signer) {
             setLoading(true)
             try {
+                const semaphore = getSemaphoreContract("goerli", signer as any)
+                const admin = await signer.getAddress()
+
                 const transaction =
                     signer &&
-                    (await semaphore.createGroup(signer, groupName, treeDepth))
+                    (await semaphore.createGroup(groupName, treeDepth, admin))
                 setLoading(false)
                 transaction && onClose && onClose(true)
             } catch (error) {

@@ -1,6 +1,5 @@
 import { Subgraph } from "@semaphore-protocol/subgraph"
-import { BigNumber } from "ethers"
-import { parseBytes32String } from "ethers/lib/utils"
+import { utils } from "ethers"
 import { useCallback } from "react"
 import { Group } from "../types/groups"
 
@@ -11,7 +10,7 @@ type ReturnParameters = {
 
 function formatGroupName(groupNameInt: string) {
     try {
-        return parseBytes32String(BigNumber.from(groupNameInt).toHexString())
+        return utils.toUtf8String(groupNameInt)
     } catch (error) {
         // If not parse-able as String, return original value
         return groupNameInt
@@ -41,7 +40,8 @@ export default function useOnchainGroups(): ReturnParameters {
                     }
                 })
             } catch (error) {
-                console.log(error)
+                console.error(error)
+
                 return null
             }
         },
@@ -50,7 +50,7 @@ export default function useOnchainGroups(): ReturnParameters {
     const getOnchainGroup = useCallback(
         async (groupName: string): Promise<Group | null> => {
             try {
-                const subgraph = new Subgraph()
+                const subgraph = new Subgraph("goerli")
 
                 const group = await subgraph.getGroup(groupName, {
                     members: true
@@ -64,7 +64,8 @@ export default function useOnchainGroups(): ReturnParameters {
                     admin: group.admin
                 }
             } catch (error) {
-                console.log(error)
+                console.error(error)
+
                 return null
             }
         },

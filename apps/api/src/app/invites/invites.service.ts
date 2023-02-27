@@ -110,7 +110,7 @@ export class InvitesService {
         const keys = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
         let code = ""
 
-        for (let i = 0; i < length; i++) {
+        for (let i = 0; i < length; i += 1) {
             code += keys.charAt(Math.floor(Math.random() * keys.length))
         }
 

@@ -1,7 +1,66 @@
-# utils
+<p align="center">
+    <h1 align="center">
+        ZKGroups utils
+    </h1>
+    <p align="center">General ZKGroups utility functions.</p>
+</p>
 
-This library was generated with [Nx](https://nx.dev).
+<p align="center">
+    <a href="https://github.com/privacy-scaling-explorations/zk-groups">
+        <img src="https://img.shields.io/badge/project-ZKGroups-blue.svg?style=flat-square">
+    </a>
+    <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/LICENSE">
+        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/zk-groups.svg?style=flat-square">
+    </a>
+    <a href="https://www.npmjs.com/package/@zk-groups/utils">
+        <img alt="NPM version" src="https://img.shields.io/npm/v/@zk-groups/utils?style=flat-square" />
+    </a>
+    <a href="https://npmjs.org/package/@zk-groups/utils">
+        <img alt="Downloads" src="https://img.shields.io/npm/dm/@zk-groups/utils.svg?style=flat-square" />
+    </a>
+    <a href="https://eslint.org/">
+        <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint" />
+    </a>
+    <a href="https://prettier.io/">
+        <img alt="Code style prettier" src="https://img.shields.io/badge/code%20style-prettier-f8bc45?style=flat-square&logo=prettier" />
+    </a>
+</p>
 
-## Running unit tests
+<div align="center">
+    <h4>
+        <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/CONTRIBUTING.md">
+            👥 Contributing
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/CODE_OF_CONDUCT.md">
+            🤝 Code of conduct
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="https://github.com/privacy-scaling-explorations/zk-groups/contribute">
+            🔎 Issues
+        </a>
+        <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+        <a href="https://appliedzkp.org/discord">
+            🗣️ Chat &amp; Support
+        </a>
+    </h4>
+</div>
 
-Run `nx test utils` to execute the unit tests via [Jest](https://jestjs.io).
+| This package provides simple utility functions that can be used by ZKGroups itself or externals. |
+| ------------------------------------------------------------------------------------------------ |
+
+## 🛠 Install
+
+### npm or yarn
+
+Install the `@zk-groups/utils` package with npm:
+
+```bash
+npm i @zk-groups/utils
+```
+
+or yarn:
+
+```bash
+yarn add @zk-groups/utils
+```

@@ -6,10 +6,11 @@ import {
     Post,
     Put,
     Req,
+    Request,
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
-import { stringifyJSON } from "@zk-groups/utils"
+import stringifyJSON from "../utils/stringifyJSON"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"

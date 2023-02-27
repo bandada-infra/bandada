@@ -1,7 +1,7 @@
 import { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
-task("deploy-zkgroups-semaphore", "Deploy a ZKGroupsSemaphore contract")
+task("deploy:zkgroups-semaphore", "Deploy a ZKGroupsSemaphore contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
     .addOptionalParam(
         "zkGroups",
@@ -60,7 +60,7 @@ task("deploy-zkgroups-semaphore", "Deploy a ZKGroupsSemaphore contract")
             }
 
             if (!zkGroupsAddress) {
-                const zkGroups = await run("deploy", {
+                const zkGroups = await run("deploy:zkgroups", {
                     logs
                 })
 
