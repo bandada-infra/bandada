@@ -2,10 +2,9 @@ import { Button, Center, Container, Heading } from "@chakra-ui/react"
 import { useWeb3React } from "@web3-react/core"
 import { providers } from "ethers"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import usePermissionedGroups from "../hooks/usePermissionedGroups"
 import useSigner from "../hooks/useSigner"
-import { useNavigate } from "react-router-dom"
 
 export default function PermissionedGroup(): JSX.Element {
     const { account } = useWeb3React<providers.Web3Provider>()
@@ -33,7 +32,7 @@ export default function PermissionedGroup(): JSX.Element {
     useEffect(() => {
         ;(async () => {
             if (!account) {
-                console.log("Connect your wallet to join the group")
+                console.info("Connect your wallet to join the group")
             }
         })()
     }, [account])

@@ -15,7 +15,7 @@ import { BrowserRouter } from "react-router-dom"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
-import App from "./app/app"
+import App from "./app"
 import theme from "./styles"
 
 const { chains, provider, webSocketProvider } = configureChains(

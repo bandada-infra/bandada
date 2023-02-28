@@ -8,10 +8,14 @@ const SsoIcons: Record<string, IconType> = {
     Reddit: FaRedditAlien
 }
 
-export default function SsoButton(prop: { provider: string }): JSX.Element {
+export default function SsoButton({
+    provider
+}: {
+    provider: string
+}): JSX.Element {
     return (
         <Link
-            href={`${import.meta.env.VITE_API_URL}/auth/${prop.provider}`}
+            href={`${import.meta.env.VITE_API_URL}/auth/${provider}`}
             mb="24px"
         >
             <Button
@@ -21,8 +25,8 @@ export default function SsoButton(prop: { provider: string }): JSX.Element {
                 fontSize="18px"
                 w="500px"
             >
-                <Icon as={SsoIcons[prop.provider]} mr="8px" />
-                Continue with {prop.provider}
+                <Icon as={SsoIcons[provider]} mr="8px" />
+                Continue with {provider}
             </Button>
         </Link>
     )

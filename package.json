@@ -14,7 +14,7 @@
         "test:jest:coverage": "jest --coverage",
         "test:contracts:coverage": "yarn workspace contracts test:coverage",
         "build": "yarn workspaces foreach -t run build && yarn workspace contracts compile",
-        "lint": "eslint . --ext .js,.ts && yarn workspace contracts lint",
+        "lint": "eslint . --ext .js,.jsx,.ts,.tsx && yarn workspace contracts lint",
         "prettier": "prettier -c .",
         "prettier:write": "prettier -w .",
         "version:bump": "yarn workspaces foreach --no-private version -d ${0} && yarn version apply --all && git commit -am \"chore: v${0}\" && git tag v${0}",

@@ -12,14 +12,14 @@ import {
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
+import { useSearchParams } from "react-router-dom"
+import { useAccount } from "wagmi"
 import CreateGroupModal from "../components/create-group-modal"
 import GroupBox from "../components/group-box"
 import GroupFolder from "../components/group-folder"
 import useOffchainGroups from "../hooks/useOffchainGroups"
 import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
-import { useSearchParams } from "react-router-dom"
-import { useAccount } from "wagmi"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
@@ -55,7 +55,7 @@ export default function MyGroups(): JSX.Element {
     }, [groupsUpdateTime])
 
     useEffect(() => {
-        _groupList &&
+        if (_groupList) {
             setSearchedGroupList(
                 _groupList.filter((group) =>
                     group.name
@@ -63,6 +63,7 @@ export default function MyGroups(): JSX.Element {
                         .includes(_searchField.toLowerCase())
                 )
             )
+        }
     }, [_searchField, _groupList])
 
     return (
@@ -126,10 +127,9 @@ export default function MyGroups(): JSX.Element {
             </Flex>
             <Flex justifyContent="space-between" mt="16px">
                 <InputGroup w="200px">
-                    <InputLeftElement
-                        pointerEvents="none"
-                        children={<FiSearch />}
-                    />
+                    <InputLeftElement pointerEvents="none">
+                        <FiSearch />
+                    </InputLeftElement>
                     <Input
                         placeholder="Search groups"
                         onChange={(e) => {
@@ -147,7 +147,7 @@ export default function MyGroups(): JSX.Element {
             {_selectedForm === "groups" ? (
                 <GroupBox
                     isLoading={isLoading}
-                    groupList={_searchedGroupList ? _searchedGroupList : []}
+                    groupList={_searchedGroupList || []}
                 />
             ) : (
                 <GroupFolder />

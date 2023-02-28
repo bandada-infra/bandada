@@ -1,14 +1,20 @@
-import { Box, Button, Container, Flex, Heading, Text } from "@chakra-ui/react"
+import {
+    Box,
+    Button,
+    Container,
+    Flex,
+    Heading,
+    Text,
+    useDisclosure
+} from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import useMembers from "../hooks/useMembers"
-import { Group } from "../types/groups"
 import { CgProfile } from "react-icons/cg"
-import { useDisclosure } from "@chakra-ui/react"
-import InviteModal from "../components/invite-modal"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import AddMemberModal from "../components/add-member-modal"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import InviteModal from "../components/invite-modal"
+import useMembers from "../hooks/useMembers"
 import useOnchainGroups from "../hooks/useOnchainGroups"
+import { Group } from "../types/groups"
 
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()

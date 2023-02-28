@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom"
-import NavBar from "../components/navbar"
-import NotFoundPage from "../pages/404"
-import Home from "../pages/home"
-import Manage from "../pages/manage"
-import MyGroups from "../pages/my-groups"
-import SSO from "../pages/sso"
+import NavBar from "./components/navbar"
+import NotFoundPage from "./pages/404"
+import Home from "./pages/home"
+import Manage from "./pages/manage"
+import MyGroups from "./pages/my-groups"
+import SSO from "./pages/sso"
 
-export function App() {
+export default function App(): JSX.Element {
     return (
         <>
             <NavBar />
@@ -20,5 +20,3 @@ export function App() {
         </>
     )
 }
-
-export default App

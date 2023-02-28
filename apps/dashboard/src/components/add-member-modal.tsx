@@ -16,7 +16,7 @@ import {
     UseDisclosureProps
 } from "@chakra-ui/react"
 import { getSemaphoreContract } from "@zk-groups/utils"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useSigner } from "wagmi"
 
 export default function AddMemberModal({
@@ -30,25 +30,33 @@ export default function AddMemberModal({
     >("default")
     const { data: signer } = useSigner()
 
-    async function addNewMember(groupName: string, identityCommitment: string) {
-        if (!identityCommitment) {
-            alert("Please enter Identity commitment of the member")
-            return
-        }
-        setStatus("loading")
-        try {
-            const semaphore = getSemaphoreContract("goerli", signer as any)
+    const addMember = useCallback(
+        async (identityCommitment: string) => {
+            if (!identityCommitment) {
+                alert("Please enter Identity commitment of the member")
 
-            const transaction =
-                signer &&
-                (await semaphore.addMember(groupName, identityCommitment))
-            transaction && setStatus("success")
-            return
-        } catch (error) {
-            setStatus("failure")
-            console.error(error)
-        }
-    }
+                return
+            }
+            setStatus("loading")
+            try {
+                const semaphore = getSemaphoreContract("goerli", signer as any)
+
+                const transaction =
+                    signer &&
+                    (await semaphore.addMember(groupName, identityCommitment))
+
+                if (transaction) {
+                    setStatus("success")
+                }
+
+                return
+            } catch (error) {
+                setStatus("failure")
+                console.error(error)
+            }
+        },
+        [groupName, signer]
+    )
 
     return (
         <Modal isOpen={!!isOpen} onClose={onClose}>
@@ -79,10 +87,7 @@ export default function AddMemberModal({
                                     colorScheme="primary"
                                     ml="10px"
                                     onClick={() =>
-                                        addNewMember(
-                                            groupName,
-                                            _identityCommitment
-                                        )
+                                        addMember(_identityCommitment)
                                     }
                                 >
                                     Add Member
