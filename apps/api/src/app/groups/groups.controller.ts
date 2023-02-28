@@ -39,29 +39,29 @@ export class GroupsController {
         return mapGroupToResponseDTO(group)
     }
 
-    @Put(":name")
+    @Put(":id")
     @UseGuards(AuthGuard("jwt"))
     async updateGroup(
         @Req() req: Request,
-        @Param("name") groupName: string,
+        @Param("id") groupId: string,
         @Body() dto: UpdateGroupDto
     ) {
         const group = await this.groupsService.updateGroup(
             dto,
-            groupName,
+            groupId,
             req["user"].username
         )
 
         return mapGroupToResponseDTO(group)
     }
 
-    @Post(":name/:member")
+    @Post(":id/:member")
     async addMember(
-        @Param("name") groupName: string,
+        @Param("id") groupId: string,
         @Param("member") member: string,
         @Body() dto: AddMemberDto
     ): Promise<void> {
-        await this.groupsService.addMember(dto, groupName, member)
+        await this.groupsService.addMember(dto, groupId, member)
     }
 
     @Get("admin-groups")
@@ -74,28 +74,28 @@ export class GroupsController {
         return groups.map(mapGroupToResponseDTO)
     }
 
-    @Get(":name")
-    async getGroup(@Param("name") groupName: string) {
-        const group = await this.groupsService.getGroup(groupName)
+    @Get(":id")
+    async getGroup(@Param("id") groupId: string) {
+        const group = await this.groupsService.getGroup(groupId)
 
         return mapGroupToResponseDTO(group)
     }
 
-    @Get(":name/:member")
+    @Get(":id/:member")
     isGroupMember(
-        @Param("name") groupName: string,
+        @Param("id") groupId: string,
         @Param("member") member: string
     ): boolean {
-        return this.groupsService.isGroupMember(groupName, member)
+        return this.groupsService.isGroupMember(groupId, member)
     }
 
-    @Get(":name/:member/proof")
+    @Get(":id/:member/proof")
     generateMerkleProof(
-        @Param("name") groupName: string,
+        @Param("id") groupId: string,
         @Param("member") member: string
     ): string {
         const merkleProof = this.groupsService.generateMerkleProof(
-            groupName,
+            groupId,
             member
         )
 

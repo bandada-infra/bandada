@@ -14,7 +14,7 @@ export function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/sso" element={<SSO />} />
                 <Route path="/my-groups" element={<MyGroups />} />
-                <Route path="/my-groups/:groupName" element={<Manage />} />
+                <Route path="/my-groups/:groupId" element={<Manage />} />
                 <Route path="/*" element={<NotFoundPage />} />
             </Routes>
         </>

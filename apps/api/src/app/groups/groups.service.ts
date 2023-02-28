@@ -57,7 +57,7 @@ export class GroupsService {
 
                 cachedGroup.addMembers(group.members.map((m) => m.id))
 
-                this.cachedGroups.set(group.name, cachedGroup)
+                this.cachedGroups.set(group.id, cachedGroup)
             }
 
             Logger.log(
@@ -96,9 +96,11 @@ export class GroupsService {
 
         const cachedGroup = new CachedGroup(treeDepth)
 
-        this.cachedGroups.set(name, cachedGroup)
+        this.cachedGroups.set(_groupId, cachedGroup)
 
-        Logger.log(`GroupsService: group '${name}' has been created`)
+        Logger.log(
+            `GroupsService: group '${name}' has been created with id '${_groupId}'`
+        )
 
         return group
     }
@@ -106,20 +108,20 @@ export class GroupsService {
     /**
      * Updates some parameters of the group.
      * @param dto External parameters used to update a group.
-     * @param groupName Group name.
+     * @param groupId Group id.
      * @param admin Admin username.
      * @returns Updated group.
      */
     async updateGroup(
         { description, treeDepth, tag }: UpdateGroupDto,
-        groupName: string,
+        groupId: string,
         admin: string
     ): Promise<Group> {
-        const group = await this.getGroup(groupName)
+        const group = await this.getGroup(groupId)
 
         if (group.admin !== admin) {
             throw new UnauthorizedException(
-                `You are not the admin of the group '${groupName}'`
+                `You are not the admin of the group '${groupId}'`
             )
         }
 
@@ -137,24 +139,24 @@ export class GroupsService {
     /**
      * If a member does not exist in the group, they is added.
      * @param dto Parameters used to add a group member.
-     * @param groupName Group name.
+     * @param groupId Group name.
      * @param memberId Member's identity commitment.
      * @returns Group data with added member.
      */
     async addMember(
         { inviteCode }: AddMemberDto,
-        groupName: string,
+        groupId: string,
         memberId: string
     ): Promise<Group> {
-        if (this.isGroupMember(groupName, memberId)) {
+        if (this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(
-                `Member '${memberId}' already exists in the group '${groupName}'`
+                `Member '${memberId}' already exists in the group '${groupId}'`
             )
         }
 
-        await this.invitesService.redeemInvite(inviteCode, groupName)
+        await this.invitesService.redeemInvite(inviteCode, groupId)
 
-        const group = await this.getGroup(groupName)
+        const group = await this.getGroup(groupId)
         const member = new Member()
         member.group = group
         member.id = memberId
@@ -163,7 +165,7 @@ export class GroupsService {
 
         await this.groupRepository.save(group)
 
-        const cachedGroup = this.cachedGroups.get(groupName)
+        const cachedGroup = this.cachedGroups.get(groupId)
 
         cachedGroup.addMember(memberId)
 
@@ -205,17 +207,19 @@ export class GroupsService {
 
     /**
      * Returns a specific group.
-     * @param groupName Group name.
+     * @param groupId Group name.
      * @returns Specific group.
      */
-    async getGroup(groupName: string): Promise<Group> {
+    async getGroup(groupId: string): Promise<Group> {
         const group = await this.groupRepository.findOne({
             relations: { members: true },
-            where: { name: groupName }
+            where: { id: groupId }
         })
 
         if (!group) {
-            throw new NotFoundException(`Group '${groupName}' does not exist`)
+            throw new NotFoundException(
+                `Group with id '${groupId}' does not exist`
+            )
         }
 
         return group
@@ -223,30 +227,30 @@ export class GroupsService {
 
     /**
      * Checks if a member belongs to a group.
-     * @param groupName Group name.
+     * @param groupId Group id.
      * @param member Member's identity commitment.
      * @returns True or false.
      */
-    isGroupMember(groupName: string, member: string): boolean {
-        const cachedGroup = this.cachedGroups.get(groupName)
+    isGroupMember(groupId: string, member: string): boolean {
+        const cachedGroup = this.cachedGroups.get(groupId)
 
         return cachedGroup.indexOf(BigInt(member)) !== -1
     }
 
     /**
      * Generates a proof of membership.
-     * @param groupName Group name.
+     * @param groupId Group id.
      * @param member Member's identity commitment.
      * @returns Merkle proof.
      */
-    generateMerkleProof(groupName: string, member: string): MerkleProof {
-        if (!this.isGroupMember(groupName, member)) {
+    generateMerkleProof(groupId: string, member: string): MerkleProof {
+        if (!this.isGroupMember(groupId, member)) {
             throw new BadRequestException(
-                `Member '${member}' does not exist in the group '${groupName}'`
+                `Member '${member}' does not exist in the group '${groupId}'`
             )
         }
 
-        const cachedGroup = this.cachedGroups.get(groupName)
+        const cachedGroup = this.cachedGroups.get(groupId)
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)

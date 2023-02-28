@@ -2,18 +2,18 @@ import { request } from "@zk-groups/utils"
 import { useCallback } from "react"
 
 type ReturnParameters = {
-    generateMagicLink: (groupName: string) => Promise<string>
+    generateMagicLink: (groupId: string) => Promise<string>
 }
 
 export default function useInvites(): ReturnParameters {
     const generateMagicLink = useCallback(
-        async (groupName: string): Promise<string> => {
+        async (groupId: string): Promise<string> => {
             const code = await request(
                 `${import.meta.env.VITE_API_URL}/invites`,
                 {
                     method: "post",
                     data: {
-                        groupName
+                        groupId
                     }
                 }
             )

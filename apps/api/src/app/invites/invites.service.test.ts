@@ -10,6 +10,7 @@ import { InvitesService } from "./invites.service"
 describe("InvitesService", () => {
     let invitesService: InvitesService
     let groupsService: GroupsService
+    let groupId: string
 
     beforeAll(async () => {
         const module = await Test.createTestingModule({
@@ -31,23 +32,22 @@ describe("InvitesService", () => {
 
         invitesService = await module.resolve(InvitesService)
         groupsService = await module.resolve(GroupsService)
+
+        const createdGroup = await groupsService.createGroup(
+            {
+                name: "Group1",
+                description: "This is a description",
+                treeDepth: 16
+            },
+            "admin"
+        )
+        groupId = createdGroup.id
     })
 
     describe("# createInvite", () => {
-        beforeAll(async () => {
-            await groupsService.createGroup(
-                {
-                    name: "Group1",
-                    description: "This is a description",
-                    treeDepth: 16
-                },
-                "admin"
-            )
-        })
-
         it("Should create an invite", async () => {
             const { group, code, redeemed } = await invitesService.createInvite(
-                { groupName: "Group1" },
+                { groupId },
                 "admin"
             )
 
@@ -57,10 +57,7 @@ describe("InvitesService", () => {
         })
 
         it("Should not create an invite if the admin is the wrong one", async () => {
-            const fun = invitesService.createInvite(
-                { groupName: "Group1" },
-                "wrong-admin"
-            )
+            const fun = invitesService.createInvite({ groupId }, "wrong-admin")
 
             await expect(fun).rejects.toThrow("You are not the admin")
         })
@@ -69,7 +66,7 @@ describe("InvitesService", () => {
     describe("# getInvite", () => {
         it("Should get an invite", async () => {
             const { code } = await invitesService.createInvite(
-                { groupName: "Group1" },
+                { groupId },
                 "admin"
             )
 
@@ -89,9 +86,9 @@ describe("InvitesService", () => {
 
     describe("# redeemInvite", () => {
         let invite: Invite
-        const groupName = "Group1"
+
         beforeAll(async () => {
-            invite = await invitesService.createInvite({ groupName }, "admin")
+            invite = await invitesService.createInvite({ groupId }, "admin")
         })
 
         it("Should not redeem an invite if group name does not match", async () => {
@@ -103,20 +100,20 @@ describe("InvitesService", () => {
         it("Should redeem an invite", async () => {
             const { redeemed } = await invitesService.redeemInvite(
                 invite.code,
-                groupName
+                groupId
             )
 
             expect(redeemed).toBeTruthy()
         })
 
         it("Should not redeem an invite if it has already been redeemed", async () => {
-            const fun = invitesService.redeemInvite(invite.code, groupName)
+            const fun = invitesService.redeemInvite(invite.code, groupId)
 
             await expect(fun).rejects.toThrow("has already been redeemed")
         })
 
         it("Should not redeem an invite if it does not exist", async () => {
-            const fun = invitesService.redeemInvite("12345", groupName)
+            const fun = invitesService.redeemInvite("12345", groupId)
 
             await expect(fun).rejects.toThrow("does not exist")
         })
