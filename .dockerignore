@@ -2,8 +2,14 @@
 
 .vscode
 
+Dockerfile
+
+**/node_modules
+**/.env*
+
 # compiled output
-/dist
+**/dist
+**/build
 /tmp
 /out-tsc
 
@@ -51,3 +57,6 @@ coverage
 coverage.json
 typechain
 typechain-types
+
+
+.yarn/cache
