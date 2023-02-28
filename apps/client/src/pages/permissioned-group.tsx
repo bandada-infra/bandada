@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom"
 export default function PermissionedGroup(): JSX.Element {
     const { account } = useWeb3React<providers.Web3Provider>()
     const { inviteCode } = useParams()
+    const [_groupId, setGroupId] = useState<string>()
     const [_groupName, setGroupName] = useState<string>()
     const [_isRedeemed, setIsRedeemed] = useState<boolean>()
     const _signer = useSigner()
@@ -22,6 +23,7 @@ export default function PermissionedGroup(): JSX.Element {
             const invite = await getInvite(inviteCode)
 
             if (invite) {
+                setGroupId(invite.groupId)
                 setGroupName(invite.groupName)
                 setIsRedeemed(invite.redeemed)
             }
@@ -41,7 +43,12 @@ export default function PermissionedGroup(): JSX.Element {
             const identityCommitment =
                 _signer &&
                 _groupName &&
-                (await generateIdentityCommitment(_signer, _groupName))
+                _groupId &&
+                (await generateIdentityCommitment(
+                    _signer,
+                    _groupId,
+                    _groupName
+                ))
 
             if (hasjoined) {
                 alert("You have already joined")
@@ -49,7 +56,7 @@ export default function PermissionedGroup(): JSX.Element {
                 return
             }
             if (_groupName && identityCommitment && inviteCode) {
-                addMember(_groupName, identityCommitment, inviteCode)
+                addMember(_groupId, identityCommitment, inviteCode)
                 navigate("/")
                 return
             }

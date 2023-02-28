@@ -13,9 +13,10 @@ import useOnchainGroups from "../hooks/useOnchainGroups"
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { groupName } = useParams()
+    const { groupId } = useParams()
     const { getGroup, getMembersList } = useMembers()
     const { getOnchainGroup } = useOnchainGroups()
+
     const [_group, setGroup] = useState<Group | null>()
     const [_membersList, setMembersList] = useState<string[] | null>()
     const [searchParams] = useSearchParams()
@@ -26,38 +27,40 @@ export default function Manage(): JSX.Element {
         ;(async () => {
             try {
                 if (isOnChainGroup) {
-                    const onchainGroup = await getOnchainGroup(groupName || "")
+                    const onchainGroup = await getOnchainGroup(groupId || "")
                     setGroup(onchainGroup)
                     setMembersList(onchainGroup?.members)
                 } else {
-                    const group = await getGroup(groupName || "")
+                    const group = await getGroup(groupId || "")
                     if (group) {
                         setGroup(group)
-                        const membersList = await getMembersList(
-                            groupName || ""
-                        )
+                        const membersList = await getMembersList(groupId || "")
                         setMembersList(membersList)
                     }
                 }
             } catch (error) {
                 console.error(error)
-                navigate(`/group-not-found/${groupName}`)
+                navigate(`/group-not-found/${groupId}`)
             }
         })()
     }, [
         getGroup,
-        groupName,
+        groupId,
         getMembersList,
         navigate,
         getOnchainGroup,
         isOnChainGroup
     ])
 
+    if (!_group) {
+        return <div />
+    }
+
     return (
         <Container maxW="container.xl">
             <Box borderBottom="1px" borderColor="gray.200">
                 <Flex mt="40px" justifyContent="space-between">
-                    <Heading fontSize="32px">{groupName}</Heading>
+                    <Heading fontSize="32px">{_group.name}</Heading>
                     <Button
                         onClick={onOpen}
                         variant="solid"
@@ -153,13 +156,13 @@ export default function Manage(): JSX.Element {
                 <AddMemberModal
                     isOpen={isOpen}
                     onClose={onClose}
-                    groupName={groupName}
+                    groupName={_group.name}
                 />
             ) : (
                 <InviteModal
                     isOpen={isOpen}
                     onClose={onClose}
-                    groupName={groupName}
+                    groupId={_group.id}
                 />
             )}
         </Container>

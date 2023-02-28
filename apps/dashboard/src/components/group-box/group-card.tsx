@@ -15,7 +15,7 @@ export default function GroupCard(group: Group): JSX.Element {
             <Text mt="30px" mb="28px" color="gray.500">
                 {group.description}
             </Text>
-            <Link to={`/my-groups/${group.name}?type=${pageOption}`}>
+            <Link to={`/my-groups/${group.id}?type=${pageOption}`}>
                 <Text fontWeight="bold" color="#5867BC">
                     Manage
                 </Text>

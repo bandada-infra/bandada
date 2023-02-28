@@ -77,7 +77,7 @@ export default function CreateGroupModal({
                 console.error(error)
             }
         } else {
-            createOffchainGroup(groupName, groupDescription, treeDepth)
+            await createOffchainGroup(groupName, groupDescription, treeDepth)
             onClose && onClose(true)
         }
     }

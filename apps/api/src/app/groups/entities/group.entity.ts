@@ -10,7 +10,7 @@ import { Member } from "./member.entity"
 
 @Entity("groups")
 export class Group {
-    @PrimaryColumn({ type: "numeric", precision: 32, scale: 0 })
+    @PrimaryColumn({ length: 32 })
     @Index({ unique: true })
     id: string
 

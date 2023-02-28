@@ -29,14 +29,14 @@ export class InvitesService {
      * @returns The created invite.
      */
     async createInvite(
-        { groupName }: CreateInviteDto,
+        { groupId }: CreateInviteDto,
         groupAdmin: string
     ): Promise<Invite> {
-        const group = await this.groupsService.getGroup(groupName)
+        const group = await this.groupsService.getGroup(groupId)
 
         if (group.admin !== groupAdmin) {
             throw new UnauthorizedException(
-                `You are not the admin of the group '${groupName}'`
+                `You are not the admin of the group '${groupId}'`
             )
         }
 
@@ -74,7 +74,7 @@ export class InvitesService {
      * @param inviteCode Invite code to be redeemed.
      * @returns The updated invite.
      */
-    async redeemInvite(inviteCode: string, groupName: string): Promise<Invite> {
+    async redeemInvite(inviteCode: string, groupId: string): Promise<Invite> {
         const invite = await this.getInvite(inviteCode)
 
         if (invite === null) {
@@ -89,9 +89,9 @@ export class InvitesService {
             )
         }
 
-        if (invite.group.name !== groupName) {
+        if (invite.group.id !== groupId) {
             throw new BadRequestException(
-                `Invite code '${inviteCode}' is not for '${groupName}'`
+                `Invite code '${inviteCode}' is not for '${groupId}'`
             )
         }
 

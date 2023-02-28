@@ -32,6 +32,7 @@ export default function useOnchainGroups(): ReturnParameters {
                     const groupName = formatGroupName(group.id)
 
                     return {
+                        id: group.id,
                         name: groupName,
                         description: "",
                         treeDepth: group.merkleTree.depth,
@@ -57,6 +58,7 @@ export default function useOnchainGroups(): ReturnParameters {
                 })
 
                 return {
+                    id: group.id,
                     name: groupName,
                     description: "",
                     treeDepth: group.merkleTree.depth,

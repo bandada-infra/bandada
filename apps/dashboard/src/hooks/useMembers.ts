@@ -3,16 +3,16 @@ import { useCallback } from "react"
 import { Group } from "../types/groups"
 
 type ReturnParameters = {
-    getGroup: (groupName: string) => Promise<Group | null>
-    getMembersList: (groupName: string) => Promise<string[] | null>
+    getGroup: (groupId: string) => Promise<Group | null>
+    getMembersList: (groupId: string) => Promise<string[] | null>
 }
 
 export default function useMembers(): ReturnParameters {
     const getGroup = useCallback(
-        async (groupName: string): Promise<Group | null> => {
+        async (groupId: string): Promise<Group | null> => {
             try {
                 const groupList = await request(
-                    `${import.meta.env.VITE_API_URL}/groups/${groupName}`
+                    `${import.meta.env.VITE_API_URL}/groups/${groupId}`
                 )
                 return groupList
             } catch (e) {
@@ -23,8 +23,8 @@ export default function useMembers(): ReturnParameters {
     )
 
     const getMembersList = useCallback(
-        async (groupName: string): Promise<string[] | null> => {
-            const group = await getGroup(groupName)
+        async (groupId: string): Promise<string[] | null> => {
+            const group = await getGroup(groupId)
             const membersList = group?.members
             if (membersList) {
                 return membersList

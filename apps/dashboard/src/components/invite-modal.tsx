@@ -22,7 +22,7 @@ import useInvites from "../hooks/useInvites"
 export default function InviteModal({
     isOpen,
     onClose,
-    groupName
+    groupId
 }: UseDisclosureProps & any): JSX.Element {
     const { generateMagicLink } = useInvites()
     const [_magicLink, setMagicLink] = useState<string>("")
@@ -67,7 +67,7 @@ export default function InviteModal({
                                 ml="10px"
                                 onClick={async () =>
                                     setMagicLink(
-                                        await generateMagicLink(groupName)
+                                        await generateMagicLink(groupId)
                                     )
                                 }
                             >

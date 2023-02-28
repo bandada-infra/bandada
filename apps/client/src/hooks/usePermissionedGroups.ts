@@ -8,10 +8,11 @@ type ReturnParameters = {
     getInvite: (inviteCode: string | undefined) => Promise<Invite>
     generateIdentityCommitment: (
         signer: Signer,
+        groupId: string,
         groupName: string
     ) => Promise<string | null>
     addMember: (
-        groupName: string,
+        groupId: string,
         idCommitment: string,
         inviteCode: string
     ) => Promise<void>
@@ -35,7 +36,11 @@ export default function usePermissionedGroups(): ReturnParameters {
     )
 
     const generateIdentityCommitment = useCallback(
-        async (signer: Signer, groupName: string): Promise<string | null> => {
+        async (
+            signer: Signer,
+            groupId: string,
+            groupName: string
+        ): Promise<string | null> => {
             setLoading(true)
             const nonce = 0
             const message = `Sign this message to generate your ${groupName} Semaphore identity with key nonce: ${nonce}.`
@@ -44,7 +49,7 @@ export default function usePermissionedGroups(): ReturnParameters {
             const hasJoined = await request(
                 `${
                     import.meta.env.VITE_API_URL
-                }/groups/${groupName}/${identityCommitment}`
+                }/groups/${groupId}/${identityCommitment}`
             )
             setHasjoined(hasJoined)
             setLoading(false)
@@ -55,14 +60,14 @@ export default function usePermissionedGroups(): ReturnParameters {
 
     const addMember = useCallback(
         async (
-            groupName: string,
+            groupId: string,
             idCommitment: string,
             inviteCode: string
         ): Promise<void> => {
             await request(
                 `${
                     import.meta.env.VITE_API_URL
-                }/groups/${groupName}/${idCommitment}`,
+                }/groups/${groupId}/${idCommitment}`,
                 {
                     method: "post",
                     data: {
