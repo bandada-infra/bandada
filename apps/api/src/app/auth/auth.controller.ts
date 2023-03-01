@@ -80,11 +80,12 @@ export class AuthController {
 
     @Post("log-out")
     @UseGuards(AuthGuard("jwt"))
-    logOut(@Req() req: Request, @Res() res: Response) {
+    logOut(@Req() _req: Request, @Res() res: Response) {
         res.cookie("jwt", "", {
             httpOnly: true,
             expires: new Date()
         })
+
         res.redirect(`${process.env.VITE_DASHBOARD_URL}`)
     }
 }

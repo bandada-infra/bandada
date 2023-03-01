@@ -20,8 +20,8 @@ import { getSemaphoreContract } from "@zk-groups/utils"
 import { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useSigner } from "wagmi"
-import useOffchainGroups from "../hooks/useOffchainGroups"
 import { groupSizeInfo } from "../types/groups"
+import { createGroup as createOffchainGroup } from "../utils/zkGroupsAPI"
 
 export default function CreateGroupModal({
     isOpen,
@@ -37,7 +37,6 @@ export default function CreateGroupModal({
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>()
-    const { createOffchainGroup } = useOffchainGroups()
     const { data: signer } = useSigner()
 
     const isOnChainGroup = pageOption === "on-chain"
@@ -58,7 +57,7 @@ export default function CreateGroupModal({
         }
     }, [_groupSize, nextStep])
 
-    async function createGroup(
+    async function createOnchainGroup(
         groupName: string,
         groupDescription: string,
         treeDepth: number
@@ -287,7 +286,7 @@ export default function CreateGroupModal({
                                         colorScheme="primary"
                                         onClick={() => {
                                             try {
-                                                createGroup(
+                                                createOnchainGroup(
                                                     _groupName,
                                                     _groupDescription,
                                                     groupSizeInfo[_groupSize]

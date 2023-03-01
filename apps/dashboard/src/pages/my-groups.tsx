@@ -17,18 +17,15 @@ import { useAccount } from "wagmi"
 import CreateGroupModal from "../components/create-group-modal"
 import GroupBox from "../components/group-box"
 import GroupFolder from "../components/group-folder"
-import useOffchainGroups from "../hooks/useOffchainGroups"
-import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
+import { getGroups as getOnchainGroups } from "../utils/semaphoreAPI"
+import { getGroups as getOffchainGroups } from "../utils/zkGroupsAPI"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
-    const { getOffchainGroupList } = useOffchainGroups()
-    const { getOnchainGroupList } = useOnchainGroups()
     const { address } = useAccount()
     const { isOpen, onOpen, onClose } = useDisclosure()
-
     const [isLoading, setIsLoading] = useState(false)
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
     const [_groupList, setGroupList] = useState<Group[] | null>()
@@ -41,18 +38,15 @@ export default function MyGroups(): JSX.Element {
             setIsLoading(true)
             try {
                 if (address) {
-                    const onchainGroupList = await getOnchainGroupList(address)
-                    setGroupList(onchainGroupList)
+                    setGroupList(await getOnchainGroups(address))
                 } else {
-                    const offchainGroupList = await getOffchainGroupList()
-                    setGroupList(offchainGroupList)
+                    setGroupList(await getOffchainGroups())
                 }
             } finally {
                 setIsLoading(false)
             }
         })()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [groupsUpdateTime])
+    }, [groupsUpdateTime, address])
 
     useEffect(() => {
         if (_groupList) {
