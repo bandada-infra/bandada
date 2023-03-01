@@ -10,7 +10,7 @@ import {
     useClipboard
 } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { request, shortenAddress } from "@zk-groups/utils"
 import { useAccount, useDisconnect } from "wagmi"
 
@@ -27,14 +27,14 @@ export default function NavBar(): JSX.Element {
         }
     })
 
-    function logOut() {
+    const logOut = useCallback(() => {
         request(`${import.meta.env.VITE_API_URL}/auth/log-out`, {
             method: "post"
         }).finally(() => {
             navigate("/sso")
             window.location.reload()
         })
-    }
+    }, [navigate])
 
     useEffect(() => {
         ;(async () => {
@@ -50,10 +50,10 @@ export default function NavBar(): JSX.Element {
 
             // Check if user logged in via SSO
             await request(`${import.meta.env.VITE_API_URL}/auth/getUser`)
-                .then((res) => {
+                .then(() => {
                     setIsSignedIn(true)
                 })
-                .catch((e) => {
+                .catch(() => {
                     // Redirect to login page
                     navigate("/sso")
                 })

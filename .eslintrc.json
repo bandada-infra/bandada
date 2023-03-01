@@ -34,6 +34,10 @@
         "consistent-return": "off",
         "class-methods-use-this": "off",
         "import/no-extraneous-dependencies": "off",
-        "no-console": ["warn", { "allow": ["info", "warn", "error"] }]
+        "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
+        "react/react-in-jsx-scope": "off",
+        "no-nested-ternary": "off",
+        "react/jsx-props-no-spreading": "off",
+        "no-alert": "off"
     }
 }
