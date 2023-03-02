@@ -57,36 +57,38 @@ export default function CreateGroupModal({
         }
     }, [_groupSize, nextStep])
 
-    async function createOnchainGroup(
-        groupName: string,
-        groupDescription: string,
-        treeDepth: number
-    ) {
-        if (isOnChainGroup && signer) {
-            setLoading(true)
-            try {
-                const semaphore = getSemaphoreContract("goerli", signer as any)
-                const admin = await signer.getAddress()
+    const createGroup = useCallback(
+        async (name: string, description: string, treeDepth: number) => {
+            if (isOnChainGroup && signer) {
+                setLoading(true)
+                try {
+                    const semaphore = getSemaphoreContract(
+                        "goerli",
+                        signer as any
+                    )
+                    const admin = await signer.getAddress()
 
-                const transaction =
-                    signer &&
-                    (await semaphore.createGroup(groupName, treeDepth, admin))
-                setLoading(false)
+                    const transaction =
+                        signer &&
+                        (await semaphore.createGroup(name, treeDepth, admin))
+                    setLoading(false)
 
-                if (transaction && onClose) {
+                    if (transaction && onClose) {
+                        onClose(true)
+                    }
+                } catch (error) {
+                    console.error(error)
+                }
+            } else {
+                await createOffchainGroup(name, description, treeDepth)
+
+                if (onClose) {
                     onClose(true)
                 }
-            } catch (error) {
-                console.error(error)
             }
-        } else {
-            await createOffchainGroup(groupName, groupDescription, treeDepth)
-
-            if (onClose) {
-                onClose(true)
-            }
-        }
-    }
+        },
+        [isOnChainGroup, signer, onClose]
+    )
 
     // eslint-disable-next-line react/no-unstable-nested-components
     function GroupSizeComponent({ size }: { size: string }) {
@@ -286,7 +288,7 @@ export default function CreateGroupModal({
                                         colorScheme="primary"
                                         onClick={() => {
                                             try {
-                                                createOnchainGroup(
+                                                createGroup(
                                                     _groupName,
                                                     _groupDescription,
                                                     groupSizeInfo[_groupSize]
