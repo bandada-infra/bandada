@@ -18,8 +18,8 @@ import CreateGroupModal from "../components/create-group-modal"
 import GroupBox from "../components/group-box"
 import GroupFolder from "../components/group-folder"
 import { Group } from "../types/groups"
-import { getGroups as getOnchainGroups } from "../utils/semaphoreAPI"
-import { getGroups as getOffchainGroups } from "../utils/zkGroupsAPI"
+import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
+import { getGroups as getOffchainGroups } from "../api/zkGroupsAPI"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()

@@ -14,7 +14,7 @@ import { shortenAddress } from "@zk-groups/utils"
 import { useCallback } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAccount, useDisconnect } from "wagmi"
-import { logOut as _logOut } from "../utils/zkGroupsAPI"
+import { logOut as _logOut } from "../api/zkGroupsAPI"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()

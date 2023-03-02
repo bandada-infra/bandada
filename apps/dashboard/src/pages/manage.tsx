@@ -13,8 +13,8 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import AddMemberModal from "../components/add-member-modal"
 import InviteModal from "../components/invite-modal"
 import { Group } from "../types/groups"
-import { getGroup as getOnchainGroup } from "../utils/semaphoreAPI"
-import { getGroup as getOffchainGroup } from "../utils/zkGroupsAPI"
+import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
+import { getGroup as getOffchainGroup } from "../api/zkGroupsAPI"
 
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()

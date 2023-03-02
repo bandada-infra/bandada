@@ -21,7 +21,7 @@ import Manage from "./pages/manage"
 import MyGroups from "./pages/my-groups"
 import SSO from "./pages/sso"
 import theme from "./styles"
-import { isLoggedIn } from "./utils/zkGroupsAPI"
+import { isLoggedIn } from "./api/zkGroupsAPI"
 
 const { chains, provider, webSocketProvider } = configureChains(
     [goerli],
