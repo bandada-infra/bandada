@@ -12,13 +12,11 @@ import {
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { useEffect } from "react"
 import { FaEthereum } from "react-icons/fa"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { goerli, useAccount, useSwitchNetwork } from "wagmi"
 import SsoButton from "../components/sso-button"
 
 export default function SSO(): JSX.Element {
-    const [searchParams] = useSearchParams()
-    const pageOption = searchParams.get("opt")
     const navigate = useNavigate()
     const { openConnectModal } = useConnectModal()
     const { switchNetwork } = useSwitchNetwork()
@@ -28,18 +26,16 @@ export default function SSO(): JSX.Element {
     useEffect(() => {
         if (isConnected) {
             switchNetwork?.(goerli.id)
+
             navigate("/my-groups?type=on-chain")
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigate, isConnected])
+    }, [navigate, isConnected, switchNetwork])
 
     return (
         <Container maxW="500px">
             <Center mt="80px" mb="50px">
                 <Heading fontSize="56px" textAlign="center">
-                    {pageOption === "get-started"
-                        ? "Create your first zk group"
-                        : "Welcome back"}
+                    Welcome to ZKGroups
                 </Heading>
             </Center>
             <Flex

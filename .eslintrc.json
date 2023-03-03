@@ -28,6 +28,7 @@
         "@typescript-eslint/lines-between-class-members": "off",
         "@typescript-eslint/dot-notation": "off",
         "@typescript-eslint/naming-convention": "off",
+        "@typescript-eslint/no-throw-literal": "off",
         "no-restricted-syntax": "off",
         "no-param-reassign": "off",
         "no-underscore-dangle": "off",

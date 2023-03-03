@@ -20,8 +20,8 @@ import { getSemaphoreContract } from "@zk-groups/utils"
 import { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useSigner } from "wagmi"
-import useOffchainGroups from "../hooks/useOffchainGroups"
 import { groupSizeInfo } from "../types/groups"
+import { createGroup as createOffchainGroup } from "../api/zkGroupsAPI"
 
 export default function CreateGroupModal({
     isOpen,
@@ -37,7 +37,6 @@ export default function CreateGroupModal({
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>()
-    const { createOffchainGroup } = useOffchainGroups()
     const { data: signer } = useSigner()
 
     const isOnChainGroup = pageOption === "on-chain"
@@ -58,36 +57,38 @@ export default function CreateGroupModal({
         }
     }, [_groupSize, nextStep])
 
-    async function createGroup(
-        groupName: string,
-        groupDescription: string,
-        treeDepth: number
-    ) {
-        if (isOnChainGroup && signer) {
-            setLoading(true)
-            try {
-                const semaphore = getSemaphoreContract("goerli", signer as any)
-                const admin = await signer.getAddress()
+    const createGroup = useCallback(
+        async (name: string, description: string, treeDepth: number) => {
+            if (isOnChainGroup && signer) {
+                setLoading(true)
+                try {
+                    const semaphore = getSemaphoreContract(
+                        "goerli",
+                        signer as any
+                    )
+                    const admin = await signer.getAddress()
 
-                const transaction =
-                    signer &&
-                    (await semaphore.createGroup(groupName, treeDepth, admin))
-                setLoading(false)
+                    const transaction =
+                        signer &&
+                        (await semaphore.createGroup(name, treeDepth, admin))
+                    setLoading(false)
 
-                if (transaction && onClose) {
+                    if (transaction && onClose) {
+                        onClose(true)
+                    }
+                } catch (error) {
+                    console.error(error)
+                }
+            } else {
+                await createOffchainGroup(name, description, treeDepth)
+
+                if (onClose) {
                     onClose(true)
                 }
-            } catch (error) {
-                console.error(error)
             }
-        } else {
-            await createOffchainGroup(groupName, groupDescription, treeDepth)
-
-            if (onClose) {
-                onClose(true)
-            }
-        }
-    }
+        },
+        [isOnChainGroup, signer, onClose]
+    )
 
     // eslint-disable-next-line react/no-unstable-nested-components
     function GroupSizeComponent({ size }: { size: string }) {

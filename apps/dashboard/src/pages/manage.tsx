@@ -12,51 +12,43 @@ import { CgProfile } from "react-icons/cg"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import AddMemberModal from "../components/add-member-modal"
 import InviteModal from "../components/invite-modal"
-import useMembers from "../hooks/useMembers"
-import useOnchainGroups from "../hooks/useOnchainGroups"
 import { Group } from "../types/groups"
+import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
+import { getGroup as getOffchainGroup } from "../api/zkGroupsAPI"
 
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { groupId } = useParams()
-    const { getGroup, getMembersList } = useMembers()
-    const { getOnchainGroup } = useOnchainGroups()
-
     const [_group, setGroup] = useState<Group | null>()
-    const [_membersList, setMembersList] = useState<string[] | null>()
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const isOnChainGroup = pageOption === "on-chain"
 
     useEffect(() => {
         ;(async () => {
-            try {
-                if (isOnChainGroup) {
-                    const onchainGroup = await getOnchainGroup(groupId || "")
-                    setGroup(onchainGroup)
-                    setMembersList(onchainGroup?.members)
-                } else {
-                    const group = await getGroup(groupId || "")
-                    if (group) {
-                        setGroup(group)
-                        const membersList = await getMembersList(groupId || "")
-                        setMembersList(membersList)
+            if (groupId) {
+                try {
+                    if (isOnChainGroup) {
+                        const onchainGroup = await getOnchainGroup(groupId)
+
+                        if (onchainGroup) {
+                            setGroup(onchainGroup)
+                        }
+                    } else {
+                        const group = await getOffchainGroup(groupId || "")
+
+                        if (group) {
+                            setGroup(group)
+                        }
                     }
+                } catch (error) {
+                    console.error(error)
+                    navigate(`/group-not-found/${groupId}`)
                 }
-            } catch (error) {
-                console.error(error)
-                navigate(`/group-not-found/${groupId}`)
             }
         })()
-    }, [
-        getGroup,
-        groupId,
-        getMembersList,
-        navigate,
-        getOnchainGroup,
-        isOnChainGroup
-    ])
+    }, [groupId, navigate, isOnChainGroup])
 
     if (!_group) {
         return <div />
@@ -92,7 +84,7 @@ export default function Manage(): JSX.Element {
                     <Text fontWeight="bold" fontSize="lg">
                         Members
                     </Text>
-                    {_membersList?.length ? (
+                    {_group.members?.length ? (
                         <Box borderBottom="1px" borderColor="gray.200" p="16px">
                             <Text fontWeight="bold" fontSize="16px">
                                 Identity Commitment
@@ -102,7 +94,7 @@ export default function Manage(): JSX.Element {
                         <Text mt="5">No members in the group yet.</Text>
                     )}
 
-                    {_membersList?.map((member) => (
+                    {_group.members?.map((member) => (
                         <Flex
                             borderBottom="1px"
                             borderColor="gray.200"

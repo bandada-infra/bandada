@@ -4,69 +4,41 @@ import {
     Center,
     Container,
     Flex,
+    Link,
     Spacer,
     Text,
     Tooltip,
     useClipboard
 } from "@chakra-ui/react"
-import { Link, useNavigate } from "react-router-dom"
-import { useCallback, useEffect, useState } from "react"
-import { request, shortenAddress } from "@zk-groups/utils"
+import { shortenAddress } from "@zk-groups/utils"
+import { useCallback } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useAccount, useDisconnect } from "wagmi"
+import { logOut as _logOut } from "../api/zkGroupsAPI"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
+    const location = useLocation()
     const { isConnected, address } = useAccount()
     const { hasCopied, onCopy } = useClipboard(address || "")
-    const [isSignedIn, setIsSignedIn] = useState(false)
-
     const { disconnect } = useDisconnect({
         onSuccess: () => {
             navigate("/sso")
-            window.location.reload()
         }
     })
 
-    const logOut = useCallback(() => {
-        request(`${import.meta.env.VITE_API_URL}/auth/log-out`, {
-            method: "post"
-        }).finally(() => {
-            navigate("/sso")
-            window.location.reload()
-        })
+    const logOut = useCallback(async () => {
+        await _logOut()
+
+        navigate("/sso")
     }, [navigate])
-
-    useEffect(() => {
-        ;(async () => {
-            // If we are on the login route, no need to check for the logged-in user
-            if (["/sso", "/"].includes(window.location.pathname)) {
-                return
-            }
-
-            // No need to get logged in user if wallet is already connected (on-chain mode)
-            if (isConnected) {
-                return
-            }
-
-            // Check if user logged in via SSO
-            await request(`${import.meta.env.VITE_API_URL}/auth/getUser`)
-                .then(() => {
-                    setIsSignedIn(true)
-                })
-                .catch(() => {
-                    // Redirect to login page
-                    navigate("/sso")
-                })
-        })()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     return (
         <Box bgColor="#F8F9FF" borderBottom="1px" borderColor="gray.200">
             <Container maxWidth="container.xl">
                 <Flex h="100px">
                     <Center>
-                        <Link to="/">
+                        <Link href="/">
                             <Text fontSize="lg" fontWeight="bold">
                                 ZK Groups
                             </Text>
@@ -75,9 +47,9 @@ export default function NavBar(): JSX.Element {
 
                     <Spacer />
 
-                    {isSignedIn && (
+                    {location.pathname.includes("/my-groups") && (
                         <Center>
-                            <Link to="/my-groups?type=off-chain">
+                            <Link href="/my-groups?type=off-chain">
                                 <Button
                                     variant="solid"
                                     mr="10px"
@@ -95,7 +67,7 @@ export default function NavBar(): JSX.Element {
 
                     {isConnected && (
                         <Center>
-                            <Link to="/my-groups?type=on-chain">
+                            <Link href="/my-groups?type=on-chain">
                                 <Button
                                     variant="solid"
                                     colorScheme="primary"
