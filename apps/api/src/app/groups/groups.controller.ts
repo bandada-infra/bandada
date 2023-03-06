@@ -88,10 +88,13 @@ export class GroupsController {
     ) {
         const isGroupMember = this.groupsService.isGroupMember(groupId, member)
 
-        let proof;
+        let proof
 
         if (isGroupMember) {
-            const _proof = this.groupsService.generateMerkleProof(groupId, member)
+            const _proof = this.groupsService.generateMerkleProof(
+                groupId,
+                member
+            )
             proof = {
                 root: _proof.root.toString(),
                 leaf: _proof.leaf.toString(),
