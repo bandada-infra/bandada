@@ -1,24 +1,6 @@
 version: "3.9"
 
 services:
-    postgres:
-        container_name: postgres
-        image: postgres
-        environment:
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: helloworld
-            POSTGRES_DB: zk-groups
-            PGDATA: /data/postgres
-        volumes:
-            - postgres:/data/postgres
-            - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
-        ports:
-            - "5432:5432"
-        restart: unless-stopped
-        command: postgres -c listen_addresses='*'
-        networks:
-            - zk-groups
-
     api:
         container_name: api
         build:
@@ -29,14 +11,14 @@ services:
         environment:
             - NODE_ENV=production
             - DB_TYPE=postgres
-            - DB_URL=postgres://root:helloworld@postgres:5432/zk-groups
-            - JWT_SECRET_KEY=zk_groups_jwt_secret
-            - GITHUB_CLIENT_ID=sample
-            - GITHUB_CLIENT_SECRET=sample
-            - TWITTER_CONSUMER_KEY=sample
-            - TWITTER_CONSUMER_SECRET=sample
-            - REDDIT_CLIENT_ID=sample
-            - REDDIT_CLIENT_SECRET=sample
+            - DB_URL=
+            - JWT_SECRET_KEY=
+            - GITHUB_CLIENT_ID=
+            - GITHUB_CLIENT_SECRET=
+            - TWITTER_CONSUMER_KEY=
+            - TWITTER_CONSUMER_SECRET=
+            - REDDIT_CLIENT_ID=
+            - REDDIT_CLIENT_SECRET=
             - NX_DEFAULT_NETWORK=localhost
             - NX_API_URL=http://localhost:3000/api
             - NX_DASHBOARD_URL=http://localhost:3001
@@ -46,8 +28,6 @@ services:
             - "3000:3000"
         networks:
             - zk-groups
-        depends_on:
-            - postgres
 
     client:
         container_name: client
@@ -80,6 +60,26 @@ services:
             - zk-groups
         depends_on:
             - api
+
+
+#    postgres:
+#         container_name: postgres
+#         image: postgres
+#         environment:
+#             POSTGRES_USER: root
+#             POSTGRES_PASSWORD: helloworld
+#             POSTGRES_DB: zk-groups
+#             PGDATA: /data/postgres
+#         volumes:
+#             - postgres:/data/postgres
+#             - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+#         ports:
+#             - "5432:5432"
+#         restart: unless-stopped
+#         command: postgres -c listen_addresses='*'
+#         networks:
+#             - zk-groups
+
 
 networks:
     zk-groups:
