@@ -85,8 +85,25 @@ export class GroupsController {
     isGroupMember(
         @Param("id") groupId: string,
         @Param("member") member: string
-    ): boolean {
-        return this.groupsService.isGroupMember(groupId, member)
+    ) {
+        const isGroupMember = this.groupsService.isGroupMember(groupId, member)
+
+        let proof;
+
+        if (isGroupMember) {
+            const _proof = this.groupsService.generateMerkleProof(groupId, member)
+            proof = {
+                root: _proof.root.toString(),
+                leaf: _proof.leaf.toString(),
+                siblings: _proof.siblings.map((sibling) => sibling.toString()),
+                pathIndices: _proof.pathIndices
+            }
+        }
+
+        return {
+            isGroupMember,
+            proof
+        }
     }
 
     @Get(":id/:member/proof")

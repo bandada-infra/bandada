@@ -46,12 +46,12 @@ export default function usePermissionedGroups(): ReturnParameters {
             const message = `Sign this message to generate your ${groupName} Semaphore identity with key nonce: ${nonce}.`
             const identity = new Identity(await signer.signMessage(message))
             const identityCommitment = identity.getCommitment().toString()
-            const hasJoined = await request(
+            const membershipProof = await request(
                 `${
                     import.meta.env.VITE_API_URL
                 }/groups/${groupId}/${identityCommitment}`
             )
-            setHasjoined(hasJoined)
+            setHasjoined(membershipProof.isGroupMember)
             setLoading(false)
             return identityCommitment
         },
