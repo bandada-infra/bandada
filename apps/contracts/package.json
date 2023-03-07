@@ -2,7 +2,6 @@
     "name": "contracts",
     "private": true,
     "scripts": {
-        "dev": "yarn compile && hardhat node & yarn deploy:zkgroups --network localhost",
         "compile": "hardhat compile",
         "deploy:zkgroups": "hardhat deploy:zkgroups",
         "deploy:zkgroups-semaphore": "hardhat deploy:zkgroups-semaphore",
