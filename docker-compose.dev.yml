@@ -1,0 +1,68 @@
+# Compose file to run a local Eth network (ganache) and TheGraph Node
+
+version: "3.9"
+
+services:
+    ganache:
+        image: node:18-alpine
+        ports:
+            - "8545:8545"
+        volumes:
+            - ./.data/ganache:/ganache
+        working_dir: /ganache
+        command: ["sh", "-c", "npm install ganache-cli && npx ganache-cli  -h  0.0.0.0 -i 1337 -l 8000000 --account 0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d,1000000000000000000 -p 8545"]
+        networks:
+            - zk-groups-dev
+
+    graph-node:
+        image: graphprotocol/graph-node
+        ports:
+            - "8000:8000"
+            - "8001:8001"
+            - "8020:8020"
+            - "8030:8030"
+            - "8040:8040"
+        depends_on:
+            - ipfs
+            - postgres
+        environment:
+            postgres_host: postgres
+            postgres_user: graph-node
+            postgres_pass: let-me-in
+            postgres_db: graph-node
+            postgres_port: 5432
+            ipfs: "ipfs:5001"
+            ethereum: "goerli:http://host.docker.internal:8545" # Should use the same network name in subgraph.yml
+            # ethereum: 'goerli:https://goerli.infura.io/v3/YOUR-API-KEY'
+            GRAPH_LOG: info
+            GRAPH_ALLOW_NON_DETERMINISTIC_IPFS: 1
+        networks:
+            - zk-groups-dev
+
+    ipfs:
+        image: ipfs/go-ipfs:v0.4.23
+        ports:
+            - "5001:5001"
+        volumes:
+            - ./.data/ipfs:/data/ipfs
+        networks:
+            - zk-groups-dev
+
+    postgres:
+        image: postgres
+        ports:
+            - "5433:5432"
+        command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+        environment:
+            POSTGRES_USER: graph-node
+            POSTGRES_PASSWORD: let-me-in
+            POSTGRES_DB: graph-node
+        networks:
+            - zk-groups-dev
+        volumes:
+            - ./.data/postgres:/var/lib/postgresql/data
+
+networks:
+    zk-groups-dev:
+        internal: false
+        driver: bridge
