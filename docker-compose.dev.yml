@@ -14,7 +14,7 @@ services:
             [
                 "sh",
                 "-c",
-                "npm install ganache-cli && npx ganache-cli  -h  0.0.0.0 -i 1337 -l 8000000 --account 0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d,1000000000000000000 -p 8545"
+                "npm install ganache-cli && npx ganache-cli  -h  0.0.0.0 -i 1337 -l 8000000 --account 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80,100000000000000000000 -p 8545"
             ]
         networks:
             - zk-groups-dev
