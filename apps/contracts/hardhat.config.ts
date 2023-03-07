@@ -13,7 +13,7 @@ dotenvConfig({ path: resolve(__dirname, "../../.env") })
 
 function getNetworks(): NetworksUserConfig {
     if (!process.env.BACKEND_PRIVATE_KEY) {
-        return {};
+        return {}
     }
 
     const infuraApiKey = process.env.INFURA_API_KEY
@@ -23,7 +23,7 @@ function getNetworks(): NetworksUserConfig {
         local: {
             url: "http://localhost:8545",
             chainId: 1337,
-            accounts,
+            accounts
         },
         goerli: {
             url: `https://goerli.infura.io/v3/${infuraApiKey}`,

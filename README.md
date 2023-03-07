@@ -215,21 +215,21 @@ Deploy the contracts to the local network using the below command:
 
 ```sh
 #PWD /apps/contracts
-yarn deploy:zkgroups-semaphore --network local 
+yarn deploy:zkgroups-semaphore --network local
 ```
 
 The addresses of contracts deployed in a fresh local network would be:
+
 ```sh
 Pairing library has been deployed to:               0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab
 SemaphoreVerifier contract has been deployed to:    0x5b1869D9A4C187F2EAa108f3062412ecf0526b24
 ZKGroups contract has been deployed to:             0xCfEB869F69431e42cdB54A4F4f105C19C080A601
 ZKGroupsSemaphore contract has been deployed to:    0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B
 ```
+
 These values are set as defaults in `libs/utils/src/contract-addresses.ts`. If you change the contract and deploy again, new address need to be set here.
- 
 
 To reset the local network or TheGraph node, you can stop the docker containers, and delete the respective folders inside `./.data`.
-
 
 ## Environment Variables
 

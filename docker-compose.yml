@@ -61,7 +61,6 @@ services:
         depends_on:
             - api
 
-
 #    postgres:
 #         container_name: postgres
 #         image: postgres
@@ -79,7 +78,6 @@ services:
 #         command: postgres -c listen_addresses='*'
 #         networks:
 #             - zk-groups
-
 
 networks:
     zk-groups:
