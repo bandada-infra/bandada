@@ -47,6 +47,14 @@ const wagmiClient = createClient({
     webSocketProvider
 })
 
+async function requireAuth() {
+    if (!(await isLoggedIn())) {
+        throw redirect("/sso")
+    }
+
+    return null
+}
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -71,19 +79,12 @@ const router = createBrowserRouter([
             {
                 path: "my-groups",
                 element: <MyGroups />,
-                children: [
-                    {
-                        path: ":groupId",
-                        element: <Manage />
-                    }
-                ],
-                loader: async () => {
-                    if (!(await isLoggedIn())) {
-                        throw redirect("/sso")
-                    }
-
-                    return null
-                }
+                loader: requireAuth
+            },
+            {
+                path: "my-groups/:groupId",
+                element: <Manage />,
+                loader: requireAuth
             },
             {
                 path: "*",

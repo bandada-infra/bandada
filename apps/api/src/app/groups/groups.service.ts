@@ -284,6 +284,8 @@ export class GroupsService {
                         `GroupsService: failed to update contract groups`
                     )
                 }
+
+                this.schedulerRegistry.deleteTimeout("update-contract-groups")
             }
             const timeout = setTimeout(
                 callback,
