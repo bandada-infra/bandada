@@ -58,7 +58,14 @@ export class GroupsService {
                 cachedGroup.addMembers(group.members.map((m) => m.id))
 
                 this.cachedGroups.set(group.id, cachedGroup)
+
+                this.updatedGroups.push({
+                    id: BigInt(group.id),
+                    fingerprint: BigInt(cachedGroup.root)
+                })
             }
+
+            this.updateContractGroups()
 
             Logger.log(
                 `GroupsService: ${groups.length} groups have been cached`
@@ -267,6 +274,13 @@ export class GroupsService {
             this.updateContractInterval > 0
         ) {
             const callback = async () => {
+                if (this.updatedGroups.length === 0) {
+                    Logger.log(
+                        "GroupsService: no groups to update in the contract"
+                    )
+                    return
+                }
+
                 const tx = await this.zkGroupsContract.updateGroups(
                     this.updatedGroups
                 )
