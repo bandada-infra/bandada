@@ -22,7 +22,7 @@
         "version:release": "changelogithub",
         "commit": "cz",
         "precommit": "lint-staged",
-        "prepare": "husky install && yarn build"
+        "postinstall": "husky install && yarn build"
     },
     "workspaces": [
         "libs/*",
