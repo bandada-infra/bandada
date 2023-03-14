@@ -1,6 +1,6 @@
 {
     "name": "@zk-groups/contracts",
-    "version": "0.2.0",
+    "version": "1.0.0-beta.1",
     "description": "Zk-groups smart contracts to manage off-chain groups and verify their zero-knowledge proofs.",
     "license": "MIT",
     "files": [
@@ -31,5 +31,6 @@
     "dependencies": {
         "@openzeppelin/contracts": "4.7.3",
         "@semaphore-protocol/contracts": "3.1.0"
-    }
+    },
+    "stableVersion": "0.2.0"
 }

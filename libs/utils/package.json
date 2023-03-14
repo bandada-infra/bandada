@@ -1,6 +1,6 @@
 {
     "name": "@zk-groups/utils",
-    "version": "0.2.0",
+    "version": "1.0.0-beta.1",
     "description": "General ZKGroups utility functions.",
     "license": "MIT",
     "main": "dist/index.node.js",
@@ -44,5 +44,6 @@
         "@ethersproject/strings": "^5.7.0",
         "@ethersproject/wallet": "^5.7.0",
         "axios": "^1.3.3"
-    }
+    },
+    "stableVersion": "0.2.0"
 }
