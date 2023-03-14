@@ -6634,13 +6634,13 @@ __metadata:
   peerDependencies:
     "@nomiclabs/hardhat-ethers": ^2.0.0
     "@semaphore-protocol/contracts": 3.1.0
-    "@zk-groups/contracts": 1.0.0-beta.1
+    "@zk-groups/contracts": 0.2.1-0
     ethers: ^5.4.7
     hardhat: ^2.11.0
   languageName: unknown
   linkType: soft
 
-"@zk-groups/utils@1.0.0-beta.1, @zk-groups/utils@workspace:libs/utils":
+"@zk-groups/utils@0.2.1-0, @zk-groups/utils@workspace:libs/utils":
   version: 0.0.0-use.local
   resolution: "@zk-groups/utils@workspace:libs/utils"
   dependencies:
@@ -7090,7 +7090,7 @@ __metadata:
     "@types/passport-github": ^1.1.7
     "@types/passport-jwt": ^3.0.8
     "@types/passport-twitter": ^1.0.37
-    "@zk-groups/utils": 1.0.0-beta.1
+    "@zk-groups/utils": 0.2.1-0
     class-transformer: ^0.5.1
     class-validator: ^0.14.0
     cookie-parser: ^1.4.6
@@ -8534,7 +8534,7 @@ __metadata:
     "@vitejs/plugin-react": ^3.1.0
     "@web3-react/core": ^6.1.9
     "@web3-react/injected-connector": ^6.0.7
-    "@zk-groups/utils": 1.0.0-beta.1
+    "@zk-groups/utils": 0.2.1-0
     ethers: ^5.4.7
     framer-motion: ^10.0.1
     react: ^18.2.0
@@ -9301,7 +9301,7 @@ __metadata:
     "@vitejs/plugin-react": ^3.1.0
     "@web3-react/core": ^6.1.9
     "@web3-react/injected-connector": ^6.0.7
-    "@zk-groups/utils": 1.0.0-beta.1
+    "@zk-groups/utils": 0.2.1-0
     ethers: ^5.4.7
     framer-motion: ^10.0.1
     react: ^18.2.0
