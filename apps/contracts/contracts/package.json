@@ -5,6 +5,7 @@
     "license": "MIT",
     "files": [
         "**/*.sol",
+        "*.sol",
         "LICENSE",
         "README.md"
     ],
