@@ -31,9 +31,10 @@ jobs:
       - name: Build and Push image to ECR
         run: |
           aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 490752553772.dkr.ecr.eu-central-1.amazonaws.com
-          docker build -t zkgroups .
-          docker tag zkgroups:latest 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zkgroups:latest
-          docker push 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zkgroups:latest
+          #docker build -t zkgroups:latest -f apps/api/Dockerfile .
+          #docker build -t zkgroups .
+          #docker tag zkgroups:latest 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zkgroups:latest
+          #docker push 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zkgroups:latest
 
       - name: Create Deployment
         run: |
