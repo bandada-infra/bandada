@@ -6,10 +6,7 @@ FROM node:18-alpine as builder
 RUN apk add --no-cache git
 
 WORKDIR /builder
-COPY ./.yarn ./.yarn
-COPY package.json yarn.lock .yarnrc.yml tsconfig.json nginx.conf ./
-COPY libs ./libs
-COPY apps/client ./apps/client
+COPY . .
 RUN yarn install && yarn workspaces foreach -ptR --from '{client,libs}' run build
 
 

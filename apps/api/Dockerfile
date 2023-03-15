@@ -6,11 +6,8 @@ FROM node:18-alpine as builder
 RUN apk add --no-cache git
 
 WORKDIR /builder
-COPY ./.yarn ./.yarn
-COPY package.json yarn.lock .yarnrc.yml tsconfig.json ./
-COPY libs ./libs
-COPY apps/api ./apps/api
-RUN yarn install && yarn workspaces foreach -ptR --from '{api,libs}' run build
+COPY . .
+RUN yarn install
 
 
 # Create image for the app by copying build artifacts from builder
