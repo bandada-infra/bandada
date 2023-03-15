@@ -1,0 +1,40 @@
+name: Deploy
+on:
+  #push:
+  #  branches: [ master ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:  
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:      
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::490752553772:role/zkgroups-deploy-slc
+          role-duration-seconds: 900
+          aws-region: eu-central-1
+
+      - name: Build and Push image to ECR
+        run: |
+          aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 490752553772.dkr.ecr.eu-central-1.amazonaws.com
+          docker build -t zkgroups .
+          docker tag zkgroups:latest 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zkgroups:latest
+          docker push 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zkgroups:latest
+
+      - name: Create Deployment
+        run: |
+          .github/scripts/deploy.sh
