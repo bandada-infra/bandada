@@ -205,4 +205,41 @@ describe("GroupsService", () => {
             expect(fun).toThrow("does not exist")
         })
     })
+
+
+    describe("# removeMember", () => {
+        it("Should remove a member if they exist in the group", async () => {
+            const { id: _groupId } = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 21
+                },
+                "admin"
+            )
+
+            const invite = await invitesService.createInvite({ groupId: _groupId }, "admin") 
+
+            const { members } = await groupsService.addMember(
+                { inviteCode: invite.code },
+                _groupId,
+                "111000"
+            )
+
+            expect(members).toHaveLength(1)
+
+            const { members: newMembers } = await groupsService.removeMember(_groupId, "111000")
+
+            expect(newMembers).toHaveLength(0)
+        })
+
+        it("Should throw error if member is not part of the group", async () => {
+            const fun = groupsService.removeMember(
+                groupId,
+                "00000"
+            )
+
+            await expect(fun).rejects.toThrow("is not a member of group")
+        })
+    })
 })

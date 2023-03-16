@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     Post,
@@ -101,4 +102,14 @@ export class GroupsController {
 
         return stringifyJSON(merkleProof)
     }
+
+
+    @Delete(":id/:member")
+    async removeMember(
+        @Param("id") groupId: string,
+        @Param("member") member: string,
+    ): Promise<void> {
+        await this.groupsService.removeMember(groupId, member)
+    }
+
 }
