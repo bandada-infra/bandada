@@ -25,10 +25,10 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::490752553772:role/zkgroups-deploy-slc
-          role-duration-seconds: 900
+          role-duration-seconds: 1800
           aws-region: eu-central-1
 
-      - name: Build and Push image to ECR
+      - name: Build and Push images to ECR
         run: |
           aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 490752553772.dkr.ecr.eu-central-1.amazonaws.com
 

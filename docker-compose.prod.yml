@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+    api:
+        container_name: api
+        build:
+            context: ./
+            dockerfile: ./apps/api/Dockerfile
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-api
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        networks:
+            - zk-groups
+
+    client:
+        container_name: client
+        build:
+            context: ./
+            dockerfile: ./apps/client/Dockerfile
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-client
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=production
+        ports:
+            - "3002:80"
+        networks:
+            - zk-groups
+        depends_on:
+            - api
+
+    dashboard:
+        container_name: dashboard
+        build:
+            context: ./
+            dockerfile: ./apps/dashboard/Dockerfile
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-dashboard
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=production
+        ports:
+            - "3001:80"
+        networks:
+            - zk-groups
+        depends_on:
+            - api
+
+networks:
+    zk-groups:
+        internal: false
+        driver: bridge
+
+volumes:
+    postgres:
