@@ -5,7 +5,6 @@
 Dockerfile
 
 **/node_modules
-**/.env*
 
 # compiled output
 **/dist
@@ -45,8 +44,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-.env
 
 #Hardhat files
 build
