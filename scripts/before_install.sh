@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-docker image prune --filter "until=48h" -f
+docker image prune -f
 
 exit 0
