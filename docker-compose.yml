@@ -8,22 +8,8 @@ services:
             dockerfile: ./apps/api/Dockerfile
         image: zk-groups-api:latest
         restart: unless-stopped
-        environment:
-            - NODE_ENV=production
-            - DB_TYPE=postgres
-            - DB_URL=
-            - JWT_SECRET_KEY=
-            - GITHUB_CLIENT_ID=
-            - GITHUB_CLIENT_SECRET=
-            - TWITTER_CONSUMER_KEY=
-            - TWITTER_CONSUMER_SECRET=
-            - REDDIT_CLIENT_ID=
-            - REDDIT_CLIENT_SECRET=
-            - NX_DEFAULT_NETWORK=localhost
-            - NX_API_URL=http://localhost:3000/api
-            - NX_DASHBOARD_URL=http://localhost:3001
-            - BACKEND_PRIVATE_KEY=
-            - INFURA_API_KEY=
+        env_file:
+          - apps/api/.env
         ports:
             - "3000:3000"
         networks:
