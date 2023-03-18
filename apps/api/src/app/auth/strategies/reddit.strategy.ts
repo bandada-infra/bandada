@@ -11,7 +11,7 @@ export class RedditStrategy extends PassportStrategy(Strategy, "reddit") {
         super({
             clientID: process.env.REDDIT_CLIENT_ID,
             clientSecret: process.env.REDDIT_CLIENT_SECRET,
-            callbackURL: `${process.env.VITE_API_URL}/auth/reddit/callback`
+            callbackURL: `${process.env.API_PUBLIC_URL}/auth/reddit/callback`
         })
     }
 

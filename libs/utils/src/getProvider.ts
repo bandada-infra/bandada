@@ -3,7 +3,7 @@ import { Network } from "./types"
 
 export default function getProvider(
     network: Network,
-    apiKey?: string
+    apiKey?: string // TODO: This parameter is not used in any consuming functions
 ): JsonRpcProvider {
     switch (network) {
         case "localhost":
