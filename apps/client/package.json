@@ -4,7 +4,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite --port 3002",
-        "build": "tsc && vite build --mode production",
+        "build": "tsc && vite build --mode production --base=/client",
         "preview": "vite preview"
     },
     "dependencies": {
