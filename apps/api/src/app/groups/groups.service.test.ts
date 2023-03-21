@@ -7,6 +7,16 @@ import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
 
+jest.mock("@zk-groups/utils", () => ({
+    __esModule: true,
+    getZKGroupsContract: () => ({
+        updateGroups: jest.fn(() => ({
+            status: true,
+            logs: ["1"]
+        }))
+    })
+}))
+
 describe("GroupsService", () => {
     let groupsService: GroupsService
     let invitesService: InvitesService
@@ -33,7 +43,6 @@ describe("GroupsService", () => {
         groupsService = await module.resolve(GroupsService)
         invitesService = await module.resolve(InvitesService)
 
-        groupsService.updateContractInterval = 0
         const { id } = await groupsService.createGroup(
             {
                 name: "Group1",
@@ -134,6 +143,24 @@ describe("GroupsService", () => {
             )
 
             expect(members).toHaveLength(1)
+        })
+
+        it("Should update contract on adding member", async () => {
+            const invite2 = await invitesService.createInvite(
+                { groupId },
+                "admin"
+            )
+
+            await groupsService.addMember(
+                { inviteCode: invite2.code },
+                groupId,
+                "124"
+            )
+
+            expect(
+                // @ts-ignore
+                groupsService.zkGroupsContract.updateGroups
+            ).toHaveBeenCalled()
         })
 
         it("Should not add any member if they already exist", async () => {
