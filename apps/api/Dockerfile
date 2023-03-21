@@ -7,7 +7,7 @@ RUN apk add --no-cache git
 
 WORKDIR /builder
 COPY . .
-RUN yarn install
+RUN yarn install --silent
 
 
 # Create image for the app by copying build artifacts from builder

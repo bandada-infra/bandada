@@ -6,7 +6,7 @@ services:
         build:
             context: ./
             dockerfile: ./apps/api/Dockerfile
-        image: zk-groups-api:latest
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-api
         restart: unless-stopped
         env_file:
             - apps/api/.env
@@ -20,7 +20,7 @@ services:
         build:
             context: ./
             dockerfile: ./apps/client/Dockerfile
-        image: zk-groups-client:latest
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-client
         restart: unless-stopped
         environment:
             - NODE_ENV=production
@@ -36,7 +36,7 @@ services:
         build:
             context: ./
             dockerfile: ./apps/dashboard/Dockerfile
-        image: zk-groups-dashboard:latest
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-dashboard
         restart: unless-stopped
         environment:
             - NODE_ENV=production
@@ -46,24 +46,6 @@ services:
             - zk-groups
         depends_on:
             - api
-
-#    postgres:
-#         container_name: postgres
-#         image: postgres
-#         environment:
-#             POSTGRES_USER: root
-#             POSTGRES_PASSWORD: helloworld
-#             POSTGRES_DB: zk-groups
-#             PGDATA: /data/postgres
-#         volumes:
-#             - postgres:/data/postgres
-#             - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
-#         ports:
-#             - "5432:5432"
-#         restart: unless-stopped
-#         command: postgres -c listen_addresses='*'
-#         networks:
-#             - zk-groups
 
 networks:
     zk-groups:

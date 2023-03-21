@@ -1,0 +1,37 @@
+name: Deploy
+on:
+    push:
+        branches: [main]
+    workflow_dispatch: {}
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: read
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  persist-credentials: false
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                  role-to-assume: arn:aws:iam::490752553772:role/zkgroups-deploy-slc
+                  role-duration-seconds: 1800
+                  aws-region: eu-central-1
+
+            - name: Build and Push images to ECR
+              run: |
+                  .github/scripts/build.sh
+
+            - name: Create Deployment
+              run: |
+                  .github/scripts/deploy.sh

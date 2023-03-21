@@ -14,10 +14,8 @@ async function bootstrap() {
         })
     )
 
-    const globalPrefix = "api"
     const port = 3000
 
-    app.setGlobalPrefix(globalPrefix)
     app.use(cookieParser())
     app.enableCors({
         origin: true,
@@ -26,9 +24,7 @@ async function bootstrap() {
 
     await app.listen(port)
 
-    Logger.log(
-        `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-    )
+    Logger.log(`🚀 Application is running on: http://localhost:${port}`)
 }
 
 bootstrap()

@@ -4,12 +4,11 @@ import { config as dotenvConfig } from "dotenv"
 import "hardhat-dependency-compiler"
 import { HardhatUserConfig } from "hardhat/config"
 import { NetworksUserConfig } from "hardhat/types"
-import { resolve } from "path"
 import "solidity-coverage"
 import "./tasks/deploy-zkgroups"
 import "./tasks/deploy-zkgroups-semaphore"
 
-dotenvConfig({ path: resolve(__dirname, "../../.env") })
+dotenvConfig()
 
 function getNetworks(): NetworksUserConfig {
     if (!process.env.BACKEND_PRIVATE_KEY) {
