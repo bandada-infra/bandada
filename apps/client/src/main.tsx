@@ -7,7 +7,7 @@ import App from "./app"
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
     <StrictMode>
-        <BrowserRouter basename={import.meta.env.BASE_URL || ''}>
+        <BrowserRouter basename={import.meta.env.BASE_URL || ""}>
             <ChakraProvider>
                 <App />
             </ChakraProvider>

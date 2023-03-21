@@ -9,7 +9,7 @@ services:
         image: zk-groups-api:latest
         restart: unless-stopped
         env_file:
-          - apps/api/.env
+            - apps/api/.env
         ports:
             - "3000:3000"
         networks:

@@ -9,7 +9,7 @@ services:
         image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-api
         restart: unless-stopped
         env_file:
-          - apps/api/.env
+            - apps/api/.env
         ports:
             - "3000:3000"
         networks:
