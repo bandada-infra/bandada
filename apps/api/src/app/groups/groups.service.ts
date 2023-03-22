@@ -8,13 +8,11 @@ import {
     NotFoundException,
     UnauthorizedException
 } from "@nestjs/common"
-import { SchedulerRegistry } from "@nestjs/schedule"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import {
     getZKGroupsContract,
     Network,
-    OnchainZKGroup,
     ZKGroupsContract
 } from "@zk-groups/utils"
 import { Repository } from "typeorm"
@@ -29,41 +27,36 @@ import { MerkleProof } from "./types"
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
-    private updatedGroups: OnchainZKGroup[]
     private zkGroupsContract: ZKGroupsContract
-
-    updateContractInterval: number = 60
 
     constructor(
         @InjectRepository(Group)
         private readonly groupRepository: Repository<Group>,
         @Inject(forwardRef(() => InvitesService))
-        private readonly invitesService: InvitesService,
-        private schedulerRegistry: SchedulerRegistry
+        private readonly invitesService: InvitesService
     ) {
-        ;(async () => {
-            this.cachedGroups = new Map()
-            this.updatedGroups = []
-            this.zkGroupsContract = getZKGroupsContract(
-                process.env.DEFAULT_NETWORK as Network,
-                process.env.BACKEND_PRIVATE_KEY as string
-            )
+        this.cachedGroups = new Map()
+        this.zkGroupsContract = getZKGroupsContract(
+            process.env.DEFAULT_NETWORK as Network,
+            process.env.BACKEND_PRIVATE_KEY as string
+        )
 
-            const groups = await this.getAllGroups()
+        this._cacheGroups()
+    }
 
-            /* istanbul ignore next */
-            for (const group of groups) {
-                const cachedGroup = new CachedGroup(group.id, group.treeDepth)
+    async _cacheGroups() {
+        const groups = await this.getAllGroups()
 
-                cachedGroup.addMembers(group.members.map((m) => m.id))
+        /* istanbul ignore next */
+        for (const group of groups) {
+            const cachedGroup = new CachedGroup(group.id, group.treeDepth)
 
-                this.cachedGroups.set(group.id, cachedGroup)
-            }
+            cachedGroup.addMembers(group.members.map((m) => m.id))
 
-            Logger.log(
-                `GroupsService: ${groups.length} groups have been cached`
-            )
-        })()
+            this.cachedGroups.set(group.id, cachedGroup)
+        }
+
+        Logger.log(`GroupsService: ${groups.length} groups have been cached`)
     }
 
     /**
@@ -173,12 +166,7 @@ export class GroupsService {
             `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
         )
 
-        this.updatedGroups.push({
-            id: BigInt(group.id),
-            fingerprint: BigInt(cachedGroup.root)
-        })
-
-        this.updateContractGroups()
+        this.updateContractGroups(cachedGroup)
 
         return group
     }
@@ -257,46 +245,25 @@ export class GroupsService {
     }
 
     /**
-     * Updates the contract groups after a certain period of time.
-     * @param period Period of time in seconds.
+     * Update the fingerprint of the group in the contract.
      */
     /* istanbul ignore next */
-    private async updateContractGroups(): Promise<void> {
-        if (
-            this.schedulerRegistry.getTimeouts().length === 0 &&
-            this.updateContractInterval > 0
-        ) {
-            const callback = async () => {
-                const tx = await this.zkGroupsContract.updateGroups(
-                    this.updatedGroups
-                )
-
-                this.updatedGroups = []
-
-                if (tx.status) {
-                    Logger.log(
-                        `GroupsService: ${tx.logs.length} ${
-                            tx.logs.length === 1 ? "group" : "groups"
-                        } have been updated in the contract`
-                    )
-                } else {
-                    Logger.error(
-                        `GroupsService: failed to update contract groups`
-                    )
-                }
-
-                this.schedulerRegistry.deleteTimeout("update-contract-groups")
+    private async updateContractGroups(
+        updatedGroup: CachedGroup
+    ): Promise<void> {
+        const tx = await this.zkGroupsContract.updateGroups([
+            {
+                id: BigInt(updatedGroup.id),
+                fingerprint: BigInt(updatedGroup.root)
             }
-            const timeout = setTimeout(
-                callback,
-                this.updateContractInterval * 1000
-            )
+        ])
 
+        if (tx.status && tx.logs.length === 1) {
             Logger.log(
-                `GroupsService: contract groups are going to be updated in ${this.updateContractInterval} seconds`
+                `GroupsService: group ${updatedGroup.id} have been updated in the contract`
             )
-
-            this.schedulerRegistry.addTimeout("update-contract-groups", timeout)
+        } else {
+            Logger.error(`GroupsService: failed to update contract groups`)
         }
     }
 }

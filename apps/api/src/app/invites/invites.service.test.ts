@@ -7,6 +7,16 @@ import { GroupsService } from "../groups/groups.service"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 
+jest.mock("@zk-groups/utils", () => ({
+    __esModule: true,
+    getZKGroupsContract: () => ({
+        updateGroups: jest.fn(() => ({
+            status: true,
+            logs: ["1"]
+        }))
+    })
+}))
+
 describe("InvitesService", () => {
     let invitesService: InvitesService
     let groupsService: GroupsService
