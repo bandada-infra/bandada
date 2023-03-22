@@ -6,10 +6,14 @@ const Button = {
         _focus: {
             boxShadow: "none"
         },
-        borderRadius: "4px"
+        borderRadius: 0,
+        fontWeight: 500
     },
-    defaultProps: {
-        size: "lg"
+    sizes: {
+        md: {
+            width: "220px",
+            height: "60px"
+        }
     },
     variants: {
         solid: (props: GlobalStyleProps): SystemStyleObject => {

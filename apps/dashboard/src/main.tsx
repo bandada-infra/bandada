@@ -1,4 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react"
+import "@fontsource/ibm-plex-sans"
 import {
     connectorsForWallets,
     RainbowKitProvider
@@ -15,13 +16,13 @@ import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
+import { isLoggedIn } from "./api/zkGroupsAPI"
 import NotFoundPage from "./pages/404"
 import Home from "./pages/home"
 import Manage from "./pages/manage"
 import MyGroups from "./pages/my-groups"
 import SSO from "./pages/sso"
 import theme from "./styles"
-import { isLoggedIn } from "./api/zkGroupsAPI"
 
 const { chains, provider, webSocketProvider } = configureChains(
     [goerli],
@@ -49,7 +50,7 @@ const wagmiClient = createClient({
 
 async function requireAuth() {
     if (!(await isLoggedIn())) {
-        throw redirect("/sso")
+        throw redirect("/")
     }
 
     return null
@@ -63,7 +64,7 @@ const router = createBrowserRouter([
             const { pathname } = new URL(request.url)
 
             if (
-                (pathname === "/" || pathname === "/sso") &&
+                ["/", "/login", "/sign-up"].includes(pathname) &&
                 (await isLoggedIn())
             ) {
                 throw redirect("/my-groups")
@@ -73,7 +74,11 @@ const router = createBrowserRouter([
         },
         children: [
             {
-                path: "sso",
+                path: "login",
+                element: <SSO />
+            },
+            {
+                path: "sign-up",
                 element: <SSO />
             },
             {
