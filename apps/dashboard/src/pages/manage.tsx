@@ -14,13 +14,14 @@ import AddMemberModal from "../components/add-member-modal"
 import InviteModal from "../components/invite-modal"
 import { Group } from "../types/groups"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
-import { getGroup as getOffchainGroup } from "../api/zkGroupsAPI"
+import { getGroup as getOffchainGroup, removeMember } from "../api/zkGroupsAPI"
 
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { groupId } = useParams()
     const [_group, setGroup] = useState<Group | null>()
+    const [updatedTime, setUpdatedTime] = useState(new Date())
     const [searchParams] = useSearchParams()
     const pageOption = searchParams.get("type")
     const isOnChainGroup = pageOption === "on-chain"
@@ -48,7 +49,7 @@ export default function Manage(): JSX.Element {
                 }
             }
         })()
-    }, [groupId, navigate, isOnChainGroup])
+    }, [groupId, navigate, isOnChainGroup, updatedTime])
 
     if (!_group) {
         return <div />
@@ -100,12 +101,31 @@ export default function Manage(): JSX.Element {
                             borderColor="gray.200"
                             p="16px"
                             alignItems="center"
+                            justifyContent="space-between"
                             key={member}
                         >
-                            <CgProfile size="20px" />
-                            <Text fontSize="16px" ml="16px">
-                                {member}
-                            </Text>
+                            <Flex>
+                                <CgProfile size="20px" />
+                                <Text fontSize="16px" ml="16px">
+                                    {member}
+                                </Text>
+                            </Flex>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={async () => {
+                                    if (
+                                        window.confirm(
+                                            "Are you sure you want to remove this member from the group?"
+                                        )
+                                    ) {
+                                        await removeMember(_group.id, member)
+                                        setUpdatedTime(new Date())
+                                    }
+                                }}
+                            >
+                                Remove
+                            </Button>
                         </Flex>
                     ))}
                 </Box>

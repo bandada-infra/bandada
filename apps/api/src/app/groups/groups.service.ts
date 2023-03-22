@@ -172,6 +172,48 @@ export class GroupsService {
     }
 
     /**
+     * Delete a member from group
+     * @param groupId Group name.
+     * @param memberId Member's identity commitment.
+     * @returns Group data with removed member.
+     */
+    async removeMember(
+        groupId: string,
+        memberId: string,
+        loggedInUser: string
+    ): Promise<Group> {
+        if (!this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' is not a member of group '${groupId}'`
+            )
+        }
+
+        const group = await this.getGroup(groupId)
+
+        if (group.admin !== loggedInUser) {
+            throw new BadRequestException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        group.members = group.members.filter((m) => m.id !== memberId)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+        )
+
+        this.updateContractGroups(cachedGroup)
+
+        return group
+    }
+
+    /**
      * Returns a list of groups.
      * @returns List of existing groups.
      */

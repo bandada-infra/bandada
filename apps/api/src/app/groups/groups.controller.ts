@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     Post,
@@ -100,5 +101,19 @@ export class GroupsController {
         )
 
         return stringifyJSON(merkleProof)
+    }
+
+    @Delete(":id/:member")
+    @UseGuards(AuthGuard("jwt"))
+    async removeMember(
+        @Req() req: Request,
+        @Param("id") groupId: string,
+        @Param("member") member: string
+    ): Promise<void> {
+        await this.groupsService.removeMember(
+            groupId,
+            member,
+            req["user"].username
+        )
     }
 }
