@@ -3073,6 +3073,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/ibm-plex-sans@npm:^4.5.13":
+  version: 4.5.13
+  resolution: "@fontsource/ibm-plex-sans@npm:4.5.13"
+  checksum: a2982ea58c79fa8d97993a39f0cd57c19403af9debd7f0df55ada381f20585b92a949f589c04c0a6905b50c383536e0b6afdae361eb15d8a9c50a49420899efb
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.0.1, @gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -9416,6 +9423,7 @@ __metadata:
     "@chakra-ui/theme-tools": ^2.0.16
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
+    "@fontsource/ibm-plex-sans": ^4.5.13
     "@rainbow-me/rainbowkit": ^0.11.0
     "@semaphore-protocol/subgraph": ^3.1.0
     "@types/react": ^18.0.27
