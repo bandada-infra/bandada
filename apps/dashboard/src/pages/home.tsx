@@ -1,37 +1,68 @@
 import {
+    Box,
     Button,
     Container,
     Heading,
+    HStack,
+    Image,
     Link,
     Text,
     VStack
 } from "@chakra-ui/react"
-import { useOutlet } from "react-router-dom"
+import { useLocation, useOutlet } from "react-router-dom"
+import logoUrl from "../assets/logo.svg"
 import NavBar from "../components/navbar"
 
 export default function Home(): JSX.Element {
     const outlet = useOutlet()
+    const { pathname } = useLocation()
 
     return (
         <>
-            <NavBar />
+            {!["/", "/login", "/sign-up"].includes(pathname) && <NavBar />}
 
             {outlet || (
-                <Container maxW="2xl" pt="180px" pb="80px" centerContent>
-                    <VStack spacing="8">
-                        <Heading as="h2" size="2xl" textAlign="center">
-                            Welcome to ZKGroups
-                        </Heading>
-                        <Text fontSize="xl">
-                            A system for managing privacy-preserving groups.
-                        </Text>
+                <Container maxW="container.xl" pt="20" pb="20" px="6">
+                    <HStack spacing="16" align="start">
+                        <VStack spacing="8" align="left" flexBasis="400px">
+                            <Image
+                                src={logoUrl}
+                                htmlWidth="200px"
+                                pb="10"
+                                alt="Bandada logo"
+                            />
 
-                        <Link href="/sso">
-                            <Button colorScheme="primary" variant="solid">
-                                Launch app
-                            </Button>
-                        </Link>
-                    </VStack>
+                            <Heading as="h2" size="2xl">
+                                There’s power
+                                <br /> in groups
+                            </Heading>
+                            <Text fontSize="lg">
+                                Easily manage privacy-preserving groups of
+                                anonymous individuals with our open-source
+                                system.
+                            </Text>
+
+                            <VStack spacing="3" align="left">
+                                <Link href="/sign-up">
+                                    <Button
+                                        colorScheme="primary"
+                                        variant="solid"
+                                    >
+                                        Get Started
+                                    </Button>
+                                </Link>
+                                <Link href="/login">
+                                    <Button
+                                        colorScheme="primary"
+                                        variant="solid"
+                                    >
+                                        Login
+                                    </Button>
+                                </Link>
+                            </VStack>
+                        </VStack>
+                        <Box bg="#C2C2C2" height="600px" flex="1" />
+                    </HStack>
                 </Container>
             )}
         </>

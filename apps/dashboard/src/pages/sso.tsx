@@ -7,19 +7,23 @@ import {
     Flex,
     Heading,
     Icon,
-    Text
+    Image,
+    Text,
+    VStack
 } from "@chakra-ui/react"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { useEffect } from "react"
 import { FaEthereum } from "react-icons/fa"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { goerli, useAccount, useSwitchNetwork } from "wagmi"
+import logoUrl from "../assets/logo.svg"
 import SsoButton from "../components/sso-button"
 
 export default function SSO(): JSX.Element {
     const navigate = useNavigate()
     const { openConnectModal } = useConnectModal()
     const { switchNetwork } = useSwitchNetwork()
+    const { pathname } = useLocation()
 
     const { isConnected } = useAccount()
 
@@ -32,12 +36,22 @@ export default function SSO(): JSX.Element {
     }, [navigate, isConnected, switchNetwork])
 
     return (
-        <Container maxW="500px">
-            <Center mt="80px" mb="50px">
+        <Container maxW="container.xl" pt="20" pb="20" px="6">
+            <VStack pb="16" spacing="8">
+                <Image src={logoUrl} htmlWidth="200px" alt="Bandada logo" />
+
                 <Heading fontSize="56px" textAlign="center">
-                    Welcome to ZKGroups
+                    {pathname === "/login" ? (
+                        <span>Welcome back</span>
+                    ) : (
+                        <span>
+                            Create your first
+                            <br /> ZK group
+                        </span>
+                    )}
                 </Heading>
-            </Center>
+            </VStack>
+
             <Flex
                 flexDir="column"
                 justifyContent="space-between"

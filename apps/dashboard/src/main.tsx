@@ -50,7 +50,7 @@ const wagmiClient = createClient({
 
 async function requireAuth() {
     if (!(await isLoggedIn())) {
-        throw redirect("/sso")
+        throw redirect("/")
     }
 
     return null
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
             const { pathname } = new URL(request.url)
 
             if (
-                (pathname === "/" || pathname === "/sso") &&
+                ["/", "/login", "/sign-up"].includes(pathname) &&
                 (await isLoggedIn())
             ) {
                 throw redirect("/my-groups")
@@ -74,7 +74,11 @@ const router = createBrowserRouter([
         },
         children: [
             {
-                path: "sso",
+                path: "login",
+                element: <SSO />
+            },
+            {
+                path: "sign-up",
                 element: <SSO />
             },
             {
