@@ -62,6 +62,16 @@ export async function createGroup(
     }
 }
 
+export async function removeMember(groupId: string, memberId: string) {
+    try {
+        await request(`${API_URL}/groups/${groupId}/${memberId}`, {
+            method: "delete"
+        })
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 export async function logOut(): Promise<void | null> {
     try {
         // TODO: check if this works properly.
