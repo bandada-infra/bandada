@@ -7,9 +7,13 @@ const Button = {
             boxShadow: "none"
         },
         borderRadius: 0,
-        fontWeight: 500,
-        width: 220,
-        height: 80
+        fontWeight: 500
+    },
+    sizes: {
+        md: {
+            width: "220px",
+            height: "60px"
+        }
     },
     variants: {
         solid: (props: GlobalStyleProps): SystemStyleObject => {

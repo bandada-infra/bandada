@@ -54,7 +54,7 @@ export default function Home(): JSX.Element {
                                 <Link href="/login">
                                     <Button
                                         colorScheme="primary"
-                                        variant="solid"
+                                        variant="outline"
                                     >
                                         Login
                                     </Button>
