@@ -201,12 +201,7 @@ export class GroupsService {
             `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
         )
 
-        this.updatedGroups.push({
-            id: BigInt(group.id),
-            fingerprint: BigInt(cachedGroup.root)
-        })
-
-        this.updateContractGroups()
+        this.updateContractGroups(cachedGroup)
 
         return group
     }
