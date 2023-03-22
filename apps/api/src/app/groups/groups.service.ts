@@ -179,7 +179,8 @@ export class GroupsService {
      */
     async removeMember(
         groupId: string,
-        memberId: string
+        memberId: string,
+        loggedInUser: string
     ): Promise<Group> {
         if (!this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(
@@ -189,7 +190,13 @@ export class GroupsService {
 
         const group = await this.getGroup(groupId)
 
-        group.members = group.members.filter(m => m.id !== memberId)
+        if (group.admin !== loggedInUser) {
+            throw new BadRequestException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        group.members = group.members.filter((m) => m.id !== memberId)
 
         await this.groupRepository.save(group)
 

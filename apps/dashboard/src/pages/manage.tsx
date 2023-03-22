@@ -119,7 +119,7 @@ export default function Manage(): JSX.Element {
                                             "Are you sure you want to remove this member from the group?"
                                         )
                                     ) {
-                                        removeMember(_group.id, member)
+                                        await removeMember(_group.id, member)
                                         setUpdatedTime(new Date())
                                     }
                                 }}
