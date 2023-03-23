@@ -11,7 +11,7 @@
         "@chakra-ui/react": "^2.5.1",
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
-        "@semaphore-protocol/identity": "3.1.0",
+        "@semaphore-protocol/identity": "3.4.0",
         "@web3-react/core": "^6.1.9",
         "@web3-react/injected-connector": "^6.0.7",
         "@zk-groups/utils": "0.3.0",
