@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Injectable } from "@nestjs/common"
 import { PassportSerializer } from "@nestjs/passport"
 

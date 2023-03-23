@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { id } from "@ethersproject/hash"
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"

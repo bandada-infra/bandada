@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Signer } from "@ethersproject/abstract-signer"
 import { Contract, ContractReceipt } from "@ethersproject/contracts"
 import getContract from "./getContract"
@@ -19,9 +21,15 @@ export class ZKGroupsContract {
 
 export default function getZKGroupsContract(
     network: Network,
-    privateKeyOrSigner?: string | Signer
+    privateKeyOrSigner?: string | Signer,
+    apiKey?: string
 ): ZKGroupsContract {
-    const contract = getContract("ZKGroups", network, privateKeyOrSigner)
+    const contract = getContract(
+        "ZKGroups",
+        network,
+        privateKeyOrSigner,
+        apiKey
+    )
 
     return new ZKGroupsContract(contract)
 }

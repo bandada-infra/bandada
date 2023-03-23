@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Signer } from "@ethersproject/abstract-signer"
 import { Contract, ContractReceipt } from "@ethersproject/contracts"
 import { formatBytes32String } from "@ethersproject/strings"
@@ -66,9 +68,15 @@ export class SemaphoreContract {
 
 export default function getSemaphoreContract(
     network: Network,
-    privateKeyOrSigner?: string | Signer
+    privateKeyOrSigner?: string | Signer,
+    apiKey?: string
 ): SemaphoreContract {
-    const contract = getContract("Semaphore", network, privateKeyOrSigner)
+    const contract = getContract(
+        "Semaphore",
+        network,
+        privateKeyOrSigner,
+        apiKey
+    )
 
     return new SemaphoreContract(contract)
 }

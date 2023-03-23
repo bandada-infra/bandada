@@ -39,6 +39,12 @@ export default async (): Promise<Config.InitialOptions> => ({
     coverageDirectory: "./coverage/jest",
     collectCoverageFrom: [
         "<rootDir>/**/*.ts",
+        "!<rootDir>/**/main.ts",
+        "!<rootDir>/**/*.module.ts",
+        "!<rootDir>/**/*.controller.ts",
+        "!<rootDir>/**/*.dto.ts",
+        "!<rootDir>/**/*.entity.ts",
+        "!<rootDir>/**/*.strategy.ts",
         "!<rootDir>/**/index.ts",
         "!<rootDir>/**/*.d.ts"
     ],

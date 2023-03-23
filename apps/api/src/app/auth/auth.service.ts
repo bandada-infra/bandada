@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Injectable } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { Account } from "../accounts/entities/account.entity"

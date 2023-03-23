@@ -11,11 +11,11 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
-import stringifyJSON from "../utils/stringifyJSON"
+import { stringifyJSON } from "../utils"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
-import { mapGroupToResponseDTO } from "./group.utils"
+import { mapGroupToResponseDTO } from "./groups.utils"
 import { GroupsService } from "./groups.service"
 
 @Controller("groups")

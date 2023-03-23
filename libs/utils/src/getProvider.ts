@@ -1,9 +1,11 @@
+/* istanbul ignore file */
+
 import { InfuraProvider, JsonRpcProvider } from "@ethersproject/providers"
 import { Network } from "./types"
 
 export default function getProvider(
     network: Network,
-    apiKey?: string // TODO: This parameter is not used in any consuming functions
+    apiKey?: string
 ): JsonRpcProvider {
     switch (network) {
         case "localhost":

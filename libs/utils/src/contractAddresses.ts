@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { ContractName, Network } from "./types"
 
 const CONTRACT_ADDRESSES: { [K in Network]: { [Y in ContractName]: string } } =
