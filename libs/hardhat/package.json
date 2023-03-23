@@ -40,7 +40,7 @@
     },
     "peerDependencies": {
         "@nomiclabs/hardhat-ethers": "^2.0.0",
-        "@semaphore-protocol/contracts": "3.1.0",
+        "@semaphore-protocol/contracts": "3.4.0",
         "@zk-groups/contracts": "0.3.0",
         "ethers": "^5.4.7",
         "hardhat": "^2.11.0"

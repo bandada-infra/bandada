@@ -3,13 +3,6 @@ import { config as dotenvConfig } from "dotenv"
 import { resolve } from "path"
 
 dotenvConfig({ path: resolve(process.cwd(), ".env") })
-dotenvConfig({ path: resolve(process.cwd(), "../../.env") })
-
-if (process.env.NODE_ENV !== "production") {
-    dotenvConfig({ path: resolve(process.cwd(), "../../.env.local") })
-} else {
-    dotenvConfig({ path: resolve(process.cwd(), "../../.env.production") })
-}
 
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"

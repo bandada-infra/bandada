@@ -37,7 +37,7 @@ export class GroupsService {
     ) {
         this.cachedGroups = new Map()
         this.zkGroupsContract = getZKGroupsContract(
-            process.env.DEFAULT_NETWORK as Network,
+            process.env.ETHEREUM_NETWORK as Network,
             process.env.BACKEND_PRIVATE_KEY as string,
             process.env.INFURA_API_KEY as string
         )
