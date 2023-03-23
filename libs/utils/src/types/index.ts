@@ -11,7 +11,7 @@ export type Network =
 // | "optimism"
 // | "optimism-goerli"
 
-export type ContractName = "ZKGroups" | "Semaphore"
+export type ContractName = "ZKGroups" | "Semaphore" | "ZKGroupsSemaphore"
 
 export type OnchainZKGroup = {
     id: BigInt
