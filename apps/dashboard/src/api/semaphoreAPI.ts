@@ -1,8 +1,10 @@
-import { Subgraph } from "@semaphore-protocol/subgraph"
+import { SemaphoreSubgraph } from "@semaphore-protocol/data"
 import { utils } from "ethers"
 import { Group } from "../types/groups"
 
-const subgraph = new Subgraph("goerli")
+const ETHEREUM_NETWORK = import.meta.env.VITE_ETHEREUM_NETWORK
+
+const subgraph = new SemaphoreSubgraph(ETHEREUM_NETWORK)
 
 function formatGroupName(groupNameInt: string) {
     try {
@@ -29,7 +31,7 @@ export async function getGroups(admin: string): Promise<Group[] | null> {
                 description: "",
                 treeDepth: group.merkleTree.depth,
                 members: group.members as string[],
-                admin: group.admin
+                admin: group.admin as string
             }
         })
     } catch (error) {
@@ -51,7 +53,7 @@ export async function getGroup(groupName: string): Promise<Group | null> {
             description: "",
             treeDepth: group.merkleTree.depth,
             members: group.members as string[],
-            admin: group.admin
+            admin: group.admin as string
         }
     } catch (error) {
         console.error(error)
