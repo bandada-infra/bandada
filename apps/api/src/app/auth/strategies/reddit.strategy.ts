@@ -1,10 +1,13 @@
 import { Injectable, Logger } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
-import Strategy, { Profile } from "../../utils/passport-reddit"
+import { RedditProfile, RedditStrategy as _RedditStrategy } from "../../utils"
 import { AuthService } from "../auth.service"
 
 @Injectable()
-export class RedditStrategy extends PassportStrategy(Strategy, "reddit") {
+export class RedditStrategy extends PassportStrategy(
+    _RedditStrategy,
+    "reddit"
+) {
     logger = new Logger(this.constructor.name)
 
     constructor(private readonly authService: AuthService) {
@@ -18,7 +21,7 @@ export class RedditStrategy extends PassportStrategy(Strategy, "reddit") {
     async validate(
         accessToken: string,
         refreshToken: string,
-        profile: Profile,
+        profile: RedditProfile,
         done: (error: any, user?: any) => void
     ) {
         if (profile) {

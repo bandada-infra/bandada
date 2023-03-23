@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 
 export default async function request(

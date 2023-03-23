@@ -1,9 +1,11 @@
+/* istanbul ignore file */
+
 import { Signer } from "@ethersproject/abstract-signer"
 import { Contract } from "@ethersproject/contracts"
 import { Provider } from "@ethersproject/providers"
-import { getContractAddresses } from "./contract-addresses"
-import { abi as SemaphoreABI } from "./contract-artifacts/Semaphore.json"
-import { abi as ZKGroupsABI } from "./contract-artifacts/ZKGroups.json"
+import { getContractAddresses } from "./contractAddresses"
+import { abi as SemaphoreABI } from "./contractArtifacts/Semaphore.json"
+import { abi as ZKGroupsABI } from "./contractArtifacts/ZKGroups.json"
 import getProvider from "./getProvider"
 import getWallet from "./getWallet"
 import { ContractName, Network } from "./types"
@@ -11,18 +13,19 @@ import { ContractName, Network } from "./types"
 export default function getContract(
     contractName: ContractName,
     network: Network,
-    privateKeyOrSigner?: string | Signer
+    privateKeyOrSigner?: string | Signer,
+    apiKey?: string
 ): Contract {
     let providerOrWallet: Provider | Signer
 
     if (privateKeyOrSigner) {
         if (typeof privateKeyOrSigner === "string") {
-            providerOrWallet = getWallet(privateKeyOrSigner, network)
+            providerOrWallet = getWallet(privateKeyOrSigner, network, apiKey)
         } else {
             providerOrWallet = privateKeyOrSigner
         }
     } else {
-        providerOrWallet = getProvider(network)
+        providerOrWallet = getProvider(network, apiKey)
     }
 
     const contractAddress = getContractAddresses(network)[contractName]

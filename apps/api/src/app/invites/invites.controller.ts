@@ -9,7 +9,7 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
-import mapEntity from "../utils/mapEntity"
+import { mapEntity } from "../utils"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"

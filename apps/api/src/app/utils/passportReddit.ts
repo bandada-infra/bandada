@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+/* istanbul ignore file */
 import {
     InternalOAuthError,
     Strategy as OAuth2Strategy,
@@ -7,7 +8,7 @@ import {
 } from "passport-oauth2"
 import { stringify } from "querystring"
 
-export type Profile = {
+export type RedditProfile = {
     id: string
     name: string
     icon_img: string
