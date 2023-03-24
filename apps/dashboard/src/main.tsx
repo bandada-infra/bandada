@@ -10,6 +10,7 @@ import {
     metaMaskWallet,
     walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets"
+import "@rainbow-me/rainbowkit/styles.css"
 import { StrictMode } from "react"
 import * as ReactDOM from "react-dom/client"
 import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"

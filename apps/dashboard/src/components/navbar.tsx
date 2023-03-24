@@ -23,14 +23,14 @@ export default function NavBar(): JSX.Element {
     const { hasCopied, onCopy } = useClipboard(address || "")
     const { disconnect } = useDisconnect({
         onSuccess: () => {
-            navigate("/sso")
+            navigate("/")
         }
     })
 
     const logOut = useCallback(async () => {
         await _logOut()
 
-        navigate("/sso")
+        navigate("/")
     }, [navigate])
 
     return (
