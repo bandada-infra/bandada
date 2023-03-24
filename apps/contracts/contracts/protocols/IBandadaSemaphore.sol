@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-/// @title IZKGroupsSemaphore contract interface.
-interface IZKGroupsSemaphore {
-    error ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice();
+/// @title IBandadaSemaphore contract interface.
+interface IBandadaSemaphore {
+    error BandadaSemaphore__YouAreUsingTheSameNullifierTwice();
 
     /// @dev Emitted when a Semaphore proof is correctly verified.
     /// @param groupId: Id of the group.

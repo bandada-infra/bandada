@@ -17,7 +17,7 @@
         "allowSyntheticDefaultImports": true,
         "declarationDir": "types",
         "paths": {
-            "@zk-groups/*": ["libs/*/src"]
+            "@bandada/*": ["libs/*/src"]
         }
     }
 }

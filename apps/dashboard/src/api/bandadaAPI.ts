@@ -1,4 +1,4 @@
-import { request } from "@zk-groups/utils"
+import { request } from "@bandada/utils"
 import { Group } from "../types/groups"
 
 const API_URL = import.meta.env.VITE_API_URL

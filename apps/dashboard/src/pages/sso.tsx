@@ -45,7 +45,7 @@ export default function SSO(): JSX.Element {
                     ) : (
                         <span>
                             Create your first
-                            <br /> ZK group
+                            <br /> Bandada group
                         </span>
                     )}
                 </Heading>

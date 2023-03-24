@@ -1,22 +1,22 @@
 <p align="center">
     <h1 align="center">
-        ZKGroups Hardhat plugin
+        Bandada Hardhat plugin
     </h1>
-    <p align="center">A Hardhat plugin which provide tasks to deploy ZKGroups contracts.</p>
+    <p align="center">A Hardhat plugin which provide tasks to deploy Bandada contracts.</p>
 </p>
 
 <p align="center">
-    <a href="https://github.com/privacy-scaling-explorations/zk-groups">
-        <img src="https://img.shields.io/badge/project-ZKGroups-blue.svg?style=flat-square">
+    <a href="https://github.com/privacy-scaling-explorations/bandada">
+        <img src="https://img.shields.io/badge/project-Bandada-blue.svg?style=flat-square">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/LICENSE">
-        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/zk-groups.svg?style=flat-square">
+    <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/LICENSE">
+        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/bandada.svg?style=flat-square">
     </a>
-    <a href="https://www.npmjs.com/package/@zk-groups/hardhat">
-        <img alt="NPM version" src="https://img.shields.io/npm/v/@zk-groups/hardhat?style=flat-square" />
+    <a href="https://www.npmjs.com/package/@bandada/hardhat">
+        <img alt="NPM version" src="https://img.shields.io/npm/v/@bandada/hardhat?style=flat-square" />
     </a>
-    <a href="https://npmjs.org/package/@zk-groups/hardhat">
-        <img alt="Downloads" src="https://img.shields.io/npm/dm/@zk-groups/hardhat.svg?style=flat-square" />
+    <a href="https://npmjs.org/package/@bandada/hardhat">
+        <img alt="Downloads" src="https://img.shields.io/npm/dm/@bandada/hardhat.svg?style=flat-square" />
     </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint" />
@@ -28,15 +28,15 @@
 
 <div align="center">
     <h4>
-        <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/CONTRIBUTING.md">
+        <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/CONTRIBUTING.md">
             👥 Contributing
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/CODE_OF_CONDUCT.md">
+        <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/CODE_OF_CONDUCT.md">
             🤝 Code of conduct
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://github.com/privacy-scaling-explorations/zk-groups/contribute">
+        <a href="https://github.com/privacy-scaling-explorations/bandada/contribute">
             🔎 Issues
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
@@ -46,23 +46,23 @@
     </h4>
 </div>
 
-| This Hardhat plugin provides simple tasks that can be used to deploy the ZKGroups contracts without any additional configuration. |
-| --------------------------------------------------------------------------------------------------------------------------------- |
+| This Hardhat plugin provides simple tasks that can be used to deploy the Bandada contracts without any additional configuration. |
+| -------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
 
 ### npm or yarn
 
-Install the `@zk-groups/hardhat` package with npm:
+Install the `@bandada/hardhat` package with npm:
 
 ```bash
-npm i @zk-groups/hardhat
+npm i @bandada/hardhat
 ```
 
 or yarn:
 
 ```bash
-yarn add @zk-groups/hardhat
+yarn add @bandada/hardhat
 ```
 
 ## 📜 Usage
@@ -70,7 +70,7 @@ yarn add @zk-groups/hardhat
 Import the plugin in your `hardhat.config.ts` file:
 
 ```typescript
-import "@zk-groups/hardhat"
+import "@bandada/hardhat"
 import "./tasks/deploy"
 
 const hardhatConfig: HardhatUserConfig = {
@@ -80,7 +80,7 @@ const hardhatConfig: HardhatUserConfig = {
 export default hardhatConfig
 ```
 
-And use its tasks to create your own `deploy` task and deploy your contract with a ZKGroups address.
+And use its tasks to create your own `deploy` task and deploy your contract with a Bandada address.
 
 ```typescript
 import { task, types } from "hardhat/config"
@@ -88,13 +88,13 @@ import { task, types } from "hardhat/config"
 task("deploy", "Deploy a Greeter contract")
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs }, { ethers, run }) => {
-        const { zkGroups } = await run("deploy:zk-groups", {
+        const { bandada } = await run("deploy:bandada", {
             logs
         })
 
         const Greeter = await ethers.getContractFactory("Greeter")
 
-        const greeter = await Greeter.deploy(zkGroups.address)
+        const greeter = await Greeter.deploy(bandada.address)
 
         await greeter.deployed()
 

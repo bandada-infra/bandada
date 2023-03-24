@@ -1,6 +1,6 @@
 import { task, types } from "hardhat/config"
 
-task("deploy:zk-groups-semaphore", "Deploy a ZKGroupsSemaphore contract")
+task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
     .addOptionalParam<boolean>(
         "pairing",
         "Pairing library address",
@@ -14,8 +14,8 @@ task("deploy:zk-groups-semaphore", "Deploy a ZKGroupsSemaphore contract")
         types.string
     )
     .addOptionalParam<boolean>(
-        "zkGroups",
-        "ZKGroups contract address",
+        "bandada",
+        "Bandada contract address",
         undefined,
         types.string
     )
@@ -26,7 +26,7 @@ task("deploy:zk-groups-semaphore", "Deploy a ZKGroupsSemaphore contract")
                 logs,
                 pairing: pairingAddress,
                 semaphoreVerifier: semaphoreVerifierAddress,
-                zkGroups: zkGroupsAddress
+                bandada: bandadaAddress
             },
             { ethers, run }
         ): Promise<any> => {
@@ -69,29 +69,29 @@ task("deploy:zk-groups-semaphore", "Deploy a ZKGroupsSemaphore contract")
                 semaphoreVerifierAddress = semaphoreVerifier.address
             }
 
-            if (!zkGroupsAddress) {
-                const zkGroups = await run("deploy:zk-groups", { logs })
+            if (!bandadaAddress) {
+                const bandada = await run("deploy:bandada", { logs })
 
-                zkGroupsAddress = zkGroups.address
+                bandadaAddress = bandada.address
             }
 
-            const ZKGroupsSemaphoreFactory = await ethers.getContractFactory(
-                "ZKGroupsSemaphore"
+            const BandadaSemaphoreFactory = await ethers.getContractFactory(
+                "BandadaSemaphore"
             )
 
-            const zkGroupsSemaphore = await ZKGroupsSemaphoreFactory.deploy(
+            const bandadaSemaphore = await BandadaSemaphoreFactory.deploy(
                 semaphoreVerifierAddress,
-                zkGroupsAddress
+                bandadaAddress
             )
 
-            await zkGroupsSemaphore.deployed()
+            await bandadaSemaphore.deployed()
 
             if (logs) {
                 console.info(
-                    `ZKGroupsSemaphore contract has been deployed to: ${zkGroupsSemaphore.address}`
+                    `BandadaSemaphore contract has been deployed to: ${bandadaSemaphore.address}`
                 )
             }
 
-            return zkGroupsSemaphore
+            return bandadaSemaphore
         }
     )

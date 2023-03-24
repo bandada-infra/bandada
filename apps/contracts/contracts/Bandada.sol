@@ -1,16 +1,16 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import {IZKGroups} from "./IZKGroups.sol";
+import {IBandada} from "./IBandada.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-/// @title ZKGroups
+/// @title Bandada
 /// @dev This contract is used to save the groups fingerprints.
-contract ZKGroups is IZKGroups, Ownable {
-    /// @dev See {IZKGroups-groups}.
+contract Bandada is IBandada, Ownable {
+    /// @dev See {IBandada-groups}.
     mapping(uint256 => uint256) public override groups;
 
-    /// @dev See {IZKGroups-updateGroups}.
+    /// @dev See {IBandada-updateGroups}.
     function updateGroups(
         Group[] calldata _groups
     ) external override onlyOwner {

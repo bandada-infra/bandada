@@ -5,7 +5,7 @@ import { Contract } from "@ethersproject/contracts"
 import { Provider } from "@ethersproject/providers"
 import { getContractAddresses } from "./contractAddresses"
 import { abi as SemaphoreABI } from "./contractArtifacts/Semaphore.json"
-import { abi as ZKGroupsABI } from "./contractArtifacts/ZKGroups.json"
+import { abi as BandadaABI } from "./contractArtifacts/Bandada.json"
 import getProvider from "./getProvider"
 import getWallet from "./getWallet"
 import { ContractName, Network } from "./types"
@@ -31,8 +31,8 @@ export default function getContract(
     const contractAddress = getContractAddresses(network)[contractName]
 
     switch (contractName) {
-        case "ZKGroups":
-            return new Contract(contractAddress, ZKGroupsABI, providerOrWallet)
+        case "Bandada":
+            return new Contract(contractAddress, BandadaABI, providerOrWallet)
         case "Semaphore":
             return new Contract(contractAddress, SemaphoreABI, providerOrWallet)
         default:

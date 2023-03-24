@@ -10,11 +10,11 @@ import {
     Tooltip,
     useClipboard
 } from "@chakra-ui/react"
-import { shortenAddress } from "@zk-groups/utils"
+import { shortenAddress } from "@bandada/utils"
 import { useCallback } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAccount, useDisconnect } from "wagmi"
-import { logOut as _logOut } from "../api/zkGroupsAPI"
+import { logOut as _logOut } from "../api/bandadaAPI"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
@@ -40,7 +40,7 @@ export default function NavBar(): JSX.Element {
                     <Center>
                         <Link href="/">
                             <Text fontSize="lg" fontWeight="bold">
-                                ZK Groups
+                                Bandada
                             </Text>
                         </Link>
                     </Center>

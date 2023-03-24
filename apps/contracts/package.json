@@ -3,9 +3,9 @@
     "private": true,
     "scripts": {
         "compile": "hardhat compile",
-        "local-node": "yarn compile && hardhat node & yarn deploy:zkgroups --network localhost",
-        "deploy:zkgroups": "hardhat deploy:zkgroups",
-        "deploy:zkgroups-semaphore": "hardhat deploy:zkgroups-semaphore",
+        "local-node": "yarn compile && hardhat node & yarn deploy:bandada --network localhost",
+        "deploy:bandada": "hardhat deploy:bandada",
+        "deploy:bandada-semaphore": "hardhat deploy:bandada-semaphore",
         "test": "hardhat test",
         "test:report-gas": "REPORT_GAS=true hardhat test",
         "test:coverage": "hardhat coverage",

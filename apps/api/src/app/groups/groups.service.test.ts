@@ -7,9 +7,9 @@ import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
 
-jest.mock("@zk-groups/utils", () => ({
+jest.mock("@bandada/utils", () => ({
     __esModule: true,
-    getZKGroupsContract: () => ({
+    getBandadaContract: () => ({
         updateGroups: jest.fn(() => ({
             status: true,
             logs: ["1"]
@@ -159,7 +159,7 @@ describe("GroupsService", () => {
 
             expect(
                 // @ts-ignore
-                groupsService.zkGroupsContract.updateGroups
+                groupsService.bandadaContract.updateGroups
             ).toHaveBeenCalled()
         })
 

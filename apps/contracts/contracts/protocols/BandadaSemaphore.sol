@@ -1,28 +1,28 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import {IZKGroupsSemaphore} from "./IZKGroupsSemaphore.sol";
-import {IZKGroups} from "../IZKGroups.sol";
+import {IBandadaSemaphore} from "./IBandadaSemaphore.sol";
+import {IBandada} from "../IBandada.sol";
 import {ISemaphoreVerifier} from "@semaphore-protocol/contracts/interfaces/ISemaphoreVerifier.sol";
 
-/// @title ZKGroupsSemaphore
+/// @title BandadaSemaphore
 /// @dev This contract is used to verify Semaphore proofs.
-contract ZKGroupsSemaphore is IZKGroupsSemaphore {
+contract BandadaSemaphore is IBandadaSemaphore {
     ISemaphoreVerifier public verifier;
-    IZKGroups public zkGroups;
+    IBandada public bandada;
 
     /// @dev Gets a group id and a nullifier hash and returns true if it has already been used.
     mapping(uint256 => mapping(uint256 => bool)) internal nullifierHashes;
 
     /// @dev Initializes the Semaphore verifier used to verify the user's ZK proofs.
     /// @param _verifier: Semaphore verifier address.
-    /// @param _zkGroups: ZKGroups address.
-    constructor(ISemaphoreVerifier _verifier, IZKGroups _zkGroups) {
+    /// @param _bandada: Bandada address.
+    constructor(ISemaphoreVerifier _verifier, IBandada _bandada) {
         verifier = _verifier;
-        zkGroups = _zkGroups;
+        bandada = _bandada;
     }
 
-    /// @dev See {IZKGroupsSemaphore-verifyProof}.
+    /// @dev See {IBandadaSemaphore-verifyProof}.
     function verifyProof(
         uint256 groupId,
         uint256 merkleTreeDepth,
@@ -31,10 +31,10 @@ contract ZKGroupsSemaphore is IZKGroupsSemaphore {
         uint256 externalNullifier,
         uint256[8] calldata proof
     ) external override {
-        uint256 merkleTreeRoot = zkGroups.groups(groupId);
+        uint256 merkleTreeRoot = bandada.groups(groupId);
 
         if (nullifierHashes[groupId][nullifierHash]) {
-            revert ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice();
+            revert BandadaSemaphore__YouAreUsingTheSameNullifierTwice();
         }
 
         verifier.verifyProof(

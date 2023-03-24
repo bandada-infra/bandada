@@ -11,9 +11,9 @@ export type Network =
 // | "optimism"
 // | "optimism-goerli"
 
-export type ContractName = "ZKGroups" | "Semaphore" | "ZKGroupsSemaphore"
+export type ContractName = "Bandada" | "Semaphore" | "BandadaSemaphore"
 
-export type OnchainZKGroup = {
+export type OnchainBandadaGroup = {
     id: BigInt
     fingerprint: BigInt
 }

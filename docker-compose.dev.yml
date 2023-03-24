@@ -17,7 +17,7 @@ services:
                 "npm install ganache && npx ganache --database.dbPath /ganache/data  -h  0.0.0.0 -i 1337 -l 8000000 --account 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80,100000000000000000000 -p 8545"
             ]
         networks:
-            - zk-groups-dev
+            - bandada-dev
 
     graph-node:
         image: graphprotocol/graph-node
@@ -42,7 +42,7 @@ services:
             GRAPH_LOG: info
             GRAPH_ALLOW_NON_DETERMINISTIC_IPFS: 1
         networks:
-            - zk-groups-dev
+            - bandada-dev
 
     ipfs:
         image: ipfs/go-ipfs:v0.4.23
@@ -51,7 +51,7 @@ services:
         volumes:
             - ./.data/ipfs:/data/ipfs
         networks:
-            - zk-groups-dev
+            - bandada-dev
 
     postgres:
         image: postgres
@@ -63,11 +63,11 @@ services:
             POSTGRES_PASSWORD: let-me-in
             POSTGRES_DB: graph-node
         networks:
-            - zk-groups-dev
+            - bandada-dev
         volumes:
             - ./.data/postgres:/var/lib/postgresql/data
 
 networks:
-    zk-groups-dev:
+    bandada-dev:
         internal: false
         driver: bridge

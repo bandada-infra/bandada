@@ -6,11 +6,11 @@ import { BigNumber, utils } from "ethers"
 import { run } from "hardhat"
 // @ts-ignore: typechain folder will be generated after contracts compilation.
 // eslint-disable-next-line import/extensions
-import { ZKGroups, ZKGroupsSemaphore } from "../typechain-types"
+import { Bandada, BandadaSemaphore } from "../typechain-types"
 
-describe("ZKGroupsSemaphore", () => {
-    let zkGroups: ZKGroups
-    let zkGroupsSemaphore: ZKGroupsSemaphore
+describe("BandadaSemaphore", () => {
+    let bandada: Bandada
+    let bandadaSemaphore: BandadaSemaphore
 
     const groupId = utils.formatBytes32String("Name")
     const identities = [0, 1].map((i) => new Identity(i.toString()))
@@ -19,16 +19,16 @@ describe("ZKGroupsSemaphore", () => {
     group.addMembers(identities.map(({ commitment }) => commitment))
 
     before(async () => {
-        zkGroups = await run("deploy:zkgroups", {
+        bandada = await run("deploy:bandada", {
             logs: false
         })
 
-        zkGroupsSemaphore = await run("deploy:zkgroups-semaphore", {
+        bandadaSemaphore = await run("deploy:bandada-semaphore", {
             logs: false,
-            zkGroups: zkGroups.address
+            bandada: bandada.address
         })
 
-        await zkGroups.updateGroups([
+        await bandada.updateGroups([
             {
                 id: groupId,
                 fingerprint: group.root
@@ -55,7 +55,7 @@ describe("ZKGroupsSemaphore", () => {
         })
 
         it("Should throw an exception if the proof is not valid", async () => {
-            const transaction = zkGroupsSemaphore.verifyProof(
+            const transaction = bandadaSemaphore.verifyProof(
                 groupId,
                 group.depth,
                 signal,
@@ -68,7 +68,7 @@ describe("ZKGroupsSemaphore", () => {
         })
 
         it("Should verify a proof for an off-chain group correctly", async () => {
-            const transaction = zkGroupsSemaphore.verifyProof(
+            const transaction = bandadaSemaphore.verifyProof(
                 groupId,
                 group.depth,
                 signal,
@@ -78,7 +78,7 @@ describe("ZKGroupsSemaphore", () => {
             )
 
             await expect(transaction)
-                .to.emit(zkGroupsSemaphore, "ProofVerified")
+                .to.emit(bandadaSemaphore, "ProofVerified")
                 .withArgs(
                     groupId,
                     group.root,
@@ -89,7 +89,7 @@ describe("ZKGroupsSemaphore", () => {
         })
 
         it("Should not verify the same proof for an off-chain group twice", async () => {
-            const transaction = zkGroupsSemaphore.verifyProof(
+            const transaction = bandadaSemaphore.verifyProof(
                 groupId,
                 group.depth,
                 signal,
@@ -99,8 +99,8 @@ describe("ZKGroupsSemaphore", () => {
             )
 
             await expect(transaction).to.be.revertedWithCustomError(
-                zkGroupsSemaphore,
-                "ZKGroupsSemaphore__YouAreUsingTheSameNullifierTwice"
+                bandadaSemaphore,
+                "BandadaSemaphore__YouAreUsingTheSameNullifierTwice"
             )
         })
     })

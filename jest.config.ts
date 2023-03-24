@@ -9,7 +9,7 @@ const libs: any = fs
         rootDir: `libs/${name}/src`,
         testRegex: ".*\\.test\\.ts$",
         moduleNameMapper: {
-            "@zk-groups/(.*)": "<rootDir>/../$1/src/index.ts"
+            "@bandada/(.*)": "<rootDir>/../$1/src/index.ts"
         },
         moduleFileExtensions: ["js", "ts", "json"],
         transform: {
@@ -25,7 +25,7 @@ export default async (): Promise<Config.InitialOptions> => ({
             rootDir: "apps/api/src",
             testRegex: ".*\\.test\\.ts$",
             moduleNameMapper: {
-                "@zk-groups/(.*)": "<rootDir>/../../../libs/$1/src/index.ts"
+                "@bandada/(.*)": "<rootDir>/../../../libs/$1/src/index.ts"
             },
             moduleFileExtensions: ["js", "ts", "json"],
             transform: {

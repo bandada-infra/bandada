@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-/// @title ZKGroups contract interface.
-interface IZKGroups {
+/// @title Bandada contract interface.
+interface IBandada {
     struct Group {
         uint256 id;
         uint256 fingerprint;
