@@ -2,9 +2,9 @@ version: 0.0
 os: linux
 files:
     - source: /
-      destination: /home/ubuntu/zk-groups
+      destination: /home/ubuntu/bandada
 permissions:
-    - object: /home/ubuntu/zk-groups
+    - object: /home/ubuntu/bandada
       owner: ubuntu
       group: ubuntu
 hooks:

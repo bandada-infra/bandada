@@ -6,28 +6,30 @@ services:
         build:
             context: ./
             dockerfile: ./apps/api/Dockerfile
-        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-api
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/bandada-api
+        pull_policy: always
         restart: unless-stopped
         env_file:
             - apps/api/.env
         ports:
             - "3000:3000"
         networks:
-            - zk-groups
+            - bandada
 
     client:
         container_name: client
         build:
             context: ./
             dockerfile: ./apps/client/Dockerfile
-        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-client
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/bandada-client
+        pull_policy: always
         restart: unless-stopped
         environment:
             - NODE_ENV=production
         ports:
             - "3002:80"
         networks:
-            - zk-groups
+            - bandada
         depends_on:
             - api
 
@@ -36,19 +38,20 @@ services:
         build:
             context: ./
             dockerfile: ./apps/dashboard/Dockerfile
-        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/zk-groups-dashboard
+        image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/bandada-dashboard
+        pull_policy: always
         restart: unless-stopped
         environment:
             - NODE_ENV=production
         ports:
             - "3001:80"
         networks:
-            - zk-groups
+            - bandada
         depends_on:
             - api
 
 networks:
-    zk-groups:
+    bandada:
         internal: false
         driver: bridge
 
