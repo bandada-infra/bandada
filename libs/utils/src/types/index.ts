@@ -16,5 +16,4 @@ export type ContractName = "Bandada" | "Semaphore" | "BandadaSemaphore"
 export type OnchainBandadaGroup = {
     id: BigInt
     fingerprint: BigInt
-    blockNumber?: number
 }
