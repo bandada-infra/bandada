@@ -1,3 +1,4 @@
+import { BandadaContract, getBandadaContract, Network } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
@@ -10,7 +11,6 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
-import { getBandadaContract, Network, BandadaContract } from "@bandada/utils"
 import { Repository } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
 import { AddMemberDto } from "./dto/add-member.dto"
@@ -39,21 +39,7 @@ export class GroupsService {
         )
 
         this._cacheGroups()
-    }
-
-    async _cacheGroups() {
-        const groups = await this.getAllGroups()
-
-        /* istanbul ignore next */
-        for (const group of groups) {
-            const cachedGroup = new CachedGroup(group.id, group.treeDepth)
-
-            cachedGroup.addMembers(group.members.map((m) => m.id))
-
-            this.cachedGroups.set(group.id, cachedGroup)
-        }
-
-        Logger.log(`GroupsService: ${groups.length} groups have been cached`)
+        this._syncContractGroups()
     }
 
     /**
@@ -163,7 +149,7 @@ export class GroupsService {
             `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
         )
 
-        this.updateContractGroups(cachedGroup)
+        this._updateContractGroup(cachedGroup)
 
         return group
     }
@@ -205,7 +191,7 @@ export class GroupsService {
             `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
         )
 
-        this.updateContractGroups(cachedGroup)
+        this._updateContractGroup(cachedGroup)
 
         return group
     }
@@ -283,23 +269,54 @@ export class GroupsService {
         return cachedGroup.generateMerkleProof(memberIndex)
     }
 
+    private async _cacheGroups() {
+        const groups = await this.getAllGroups()
+
+        /* istanbul ignore next */
+        for (const group of groups) {
+            const cachedGroup = new CachedGroup(group.id, group.treeDepth)
+
+            cachedGroup.addMembers(group.members.map((m) => m.id))
+
+            this.cachedGroups.set(group.id, cachedGroup)
+        }
+
+        Logger.log(`GroupsService: ${groups.length} groups have been cached`)
+    }
+
     /**
-     * Update the fingerprint of the group in the contract.
+     * If the off-chain groups roots don't match the contract's ones, it updates them.
      */
     /* istanbul ignore next */
-    private async updateContractGroups(
-        updatedGroup: CachedGroup
-    ): Promise<void> {
+    private async _syncContractGroups() {
+        const contractGroups = await this.bandadaContract.getGroups()
+        const fingerprints = new Set(
+            contractGroups.map(({ fingerprint }) => fingerprint.toString())
+        )
+
+        for (const [, group] of this.cachedGroups) {
+            if (!fingerprints.has(group.root.toString())) {
+                this._updateContractGroup(group)
+            }
+        }
+    }
+
+    /**
+     * Update the fingerprint of the group in the contract.
+     * @param group Off-chain group.
+     */
+    /* istanbul ignore next */
+    private async _updateContractGroup(group: CachedGroup): Promise<void> {
         const tx = await this.bandadaContract.updateGroups([
             {
-                id: BigInt(updatedGroup.id),
-                fingerprint: BigInt(updatedGroup.root)
+                id: BigInt(group.id),
+                fingerprint: BigInt(group.root)
             }
         ])
 
         if (tx.status && tx.logs.length === 1) {
             Logger.log(
-                `GroupsService: group ${updatedGroup.id} have been updated in the contract`
+                `GroupsService: group '${group.id}' has been updated in the contract`
             )
         } else {
             Logger.error(`GroupsService: failed to update contract groups`)
