@@ -24,7 +24,7 @@ jobs:
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v2
               with:
-                  role-to-assume: arn:aws:iam::490752553772:role/zkgroups-deploy-slc
+                  role-to-assume: arn:aws:iam::490752553772:role/bandada-deploy-slc
                   role-duration-seconds: 1800
                   aws-region: eu-central-1
 

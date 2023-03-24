@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
  
-cp ~/.env ~/zk-groups/apps/api/
+cp ~/.env ~/bandada/apps/api/
  
 exit 0
