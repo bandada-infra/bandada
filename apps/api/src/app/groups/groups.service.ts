@@ -286,7 +286,6 @@ export class GroupsService {
 
     /**
      * If the off-chain groups roots don't match the contract's ones, it updates them.
-     * @param
      */
     /* istanbul ignore next */
     private async _syncContractGroups() {
