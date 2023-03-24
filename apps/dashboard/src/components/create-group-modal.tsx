@@ -16,7 +16,7 @@ import {
     Spinner,
     Text
 } from "@chakra-ui/react"
-import { getSemaphoreContract } from "@zk-groups/utils"
+import { getSemaphoreContract } from "@bandada/utils"
 import { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useSigner } from "wagmi"

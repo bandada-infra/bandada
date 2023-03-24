@@ -1,5 +1,5 @@
 {
-    "name": "@zk-groups/utils",
+    "name": "@bandada/utils",
     "version": "0.4.0",
     "description": "General Bandada utility functions.",
     "license": "MIT",
@@ -15,10 +15,10 @@
         "LICENSE",
         "README.md"
     ],
-    "repository": "https://github.com/privacy-scaling-explorations/zk-groups",
-    "homepage": "https://github.com/privacy-scaling-explorations/zk-groups/tree/main/libs/utils",
+    "repository": "https://github.com/privacy-scaling-explorations/bandada",
+    "homepage": "https://github.com/privacy-scaling-explorations/bandada/tree/main/libs/utils",
     "bugs": {
-        "url": "https://github.com/privacy-scaling-explorations/zk-groups.git/issues"
+        "url": "https://github.com/privacy-scaling-explorations/bandada.git/issues"
     },
     "scripts": {
         "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",

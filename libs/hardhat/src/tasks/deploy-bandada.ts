@@ -1,6 +1,6 @@
 import { task, types } from "hardhat/config"
 
-task("deploy:zk-groups", "Deploy a Bandada contract")
+task("deploy:bandada", "Deploy a Bandada contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs }, { ethers }): Promise<any> => {
         const BandadaFactory = await ethers.getContractFactory("Bandada")

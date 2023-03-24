@@ -1,5 +1,5 @@
 {
-    "name": "@zk-groups/hardhat",
+    "name": "@bandada/hardhat",
     "version": "0.4.0",
     "description": "A Hardhat plugin which provides tasks to deploy Bandada contracts.",
     "license": "MIT",
@@ -15,10 +15,10 @@
         "LICENSE",
         "README.md"
     ],
-    "repository": "https://github.com/privacy-scaling-explorations/zk-groups",
-    "homepage": "https://github.com/privacy-scaling-explorations/zk-groups/tree/main/libs/hardhat",
+    "repository": "https://github.com/privacy-scaling-explorations/bandada",
+    "homepage": "https://github.com/privacy-scaling-explorations/bandada/tree/main/libs/hardhat",
     "bugs": {
-        "url": "https://github.com/privacy-scaling-explorations/zk-groups.git/issues"
+        "url": "https://github.com/privacy-scaling-explorations/bandada.git/issues"
     },
     "scripts": {
         "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",
@@ -39,9 +39,9 @@
         "typescript": "^4.9.5"
     },
     "peerDependencies": {
+        "@bandada/contracts": "0.4.0",
         "@nomiclabs/hardhat-ethers": "^2.0.0",
         "@semaphore-protocol/contracts": "3.4.0",
-        "@zk-groups/contracts": "0.4.0",
         "ethers": "^5.4.7",
         "hardhat": "^2.11.0"
     },

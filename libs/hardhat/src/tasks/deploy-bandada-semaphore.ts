@@ -1,6 +1,6 @@
 import { task, types } from "hardhat/config"
 
-task("deploy:zk-groups-semaphore", "Deploy a BandadaSemaphore contract")
+task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
     .addOptionalParam<boolean>(
         "pairing",
         "Pairing library address",
@@ -70,7 +70,7 @@ task("deploy:zk-groups-semaphore", "Deploy a BandadaSemaphore contract")
             }
 
             if (!bandadaAddress) {
-                const bandada = await run("deploy:zk-groups", { logs })
+                const bandada = await run("deploy:bandada", { logs })
 
                 bandadaAddress = bandada.address
             }

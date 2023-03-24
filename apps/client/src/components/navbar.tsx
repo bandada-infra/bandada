@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react"
 import { useWeb3React } from "@web3-react/core"
 import { InjectedConnector } from "@web3-react/injected-connector"
-import { shortenAddress } from "@zk-groups/utils"
+import { shortenAddress } from "@bandada/utils"
 import { providers } from "ethers"
 import { useEffect } from "react"
 import { Link } from "react-router-dom"

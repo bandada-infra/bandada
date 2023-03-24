@@ -9,8 +9,8 @@ import "./tasks/deploy-bandada-semaphore"
 extendConfig(
     (config: HardhatConfig, userConfig: Readonly<HardhatUserConfig>) => {
         config.dependencyCompiler.paths = [
-            "@zk-groups/contracts/Bandada.sol",
-            "@zk-groups/contracts/protocols/BandadaSemaphore.sol",
+            "@bandada/contracts/Bandada.sol",
+            "@bandada/contracts/protocols/BandadaSemaphore.sol",
             "@semaphore-protocol/contracts/base/Pairing.sol",
             "@semaphore-protocol/contracts/base/SemaphoreVerifier.sol"
         ]

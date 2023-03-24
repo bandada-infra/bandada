@@ -14,7 +14,7 @@ import {
     getBandadaContract,
     Network,
     BandadaContract
-} from "@zk-groups/utils"
+} from "@bandada/utils"
 import { Repository } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
 import { AddMemberDto } from "./dto/add-member.dto"

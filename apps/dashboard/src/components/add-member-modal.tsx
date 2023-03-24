@@ -15,7 +15,7 @@ import {
     Text,
     UseDisclosureProps
 } from "@chakra-ui/react"
-import { getSemaphoreContract } from "@zk-groups/utils"
+import { getSemaphoreContract } from "@bandada/utils"
 import { useCallback, useState } from "react"
 import { useSigner } from "wagmi"
 

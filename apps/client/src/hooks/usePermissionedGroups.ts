@@ -1,5 +1,5 @@
 import { Identity } from "@semaphore-protocol/identity"
-import { request } from "@zk-groups/utils"
+import { request } from "@bandada/utils"
 import { Signer } from "ethers"
 import { useCallback, useState } from "react"
 import { Invite } from "../types/invite"

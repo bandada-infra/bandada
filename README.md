@@ -1,6 +1,6 @@
 <p align="center">
     <h1 align="center">
-      ZK-Groups
+      Bandada
     </h1>
 </p>
 
@@ -8,17 +8,17 @@
     <a href="https://github.com/privacy-scaling-explorations" target="_blank">
         <img src="https://img.shields.io/badge/project-ZKGroups-blue.svg?style=flat-square">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/zk-groups/blob/main/LICENSE">
-        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/zk-groups.svg?style=flat-square">
+    <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/LICENSE">
+        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/bandada.svg?style=flat-square">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/zk-groups/actions?query=workflow%3Atest">
-        <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/zk-groups/test.yml?branch=main&label=test&style=flat-square&logo=github">
+    <a href="https://github.com/privacy-scaling-explorations/bandada/actions?query=workflow%3Atest">
+        <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/bandada/test.yml?branch=main&label=test&style=flat-square&logo=github">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/zk-groups/actions?query=workflow%3Astyle">
-        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/zk-groups/style.yml?branch=main&label=style&style=flat-square&logo=github">
+    <a href="https://github.com/privacy-scaling-explorations/bandada/actions?query=workflow%3Astyle">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/bandada/style.yml?branch=main&label=style&style=flat-square&logo=github">
     </a>
-    <a href="https://coveralls.io/github/privacy-scaling-explorations/zk-groups">
-        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/privacy-scaling-explorations/zk-groups?label=coverage (ts)&style=flat-square&logo=coveralls">
+    <a href="https://coveralls.io/github/privacy-scaling-explorations/bandada">
+        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/privacy-scaling-explorations/bandada?label=coverage (ts)&style=flat-square&logo=coveralls">
     </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
@@ -39,7 +39,7 @@
             🤝 Code of conduct
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://github.com/privacy-scaling-explorations/zk-groups/contribute">
+        <a href="https://github.com/privacy-scaling-explorations/bandada/contribute">
             🔎 Issues
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
@@ -64,57 +64,57 @@
         <tr>
             <td>
                 <a href="/libs/hardhat">
-                    @zk-groups/hardhat
+                    @bandada/hardhat
                 </a>
             </td>
             <td>
                 <!-- NPM version -->
-                <a href="https://npmjs.org/package/@zk-groups/hardhat">
-                    <img src="https://img.shields.io/npm/v/@zk-groups/hardhat.svg?style=flat-square" alt="NPM version" />
+                <a href="https://npmjs.org/package/@bandada/hardhat">
+                    <img src="https://img.shields.io/npm/v/@bandada/hardhat.svg?style=flat-square" alt="NPM version" />
                 </a>
             </td>
             <td>
                 <!-- Downloads -->
-                <a href="https://npmjs.org/package/@zk-groups/hardhat">
-                    <img src="https://img.shields.io/npm/dm/@zk-groups/hardhat.svg?style=flat-square" alt="Downloads" />
+                <a href="https://npmjs.org/package/@bandada/hardhat">
+                    <img src="https://img.shields.io/npm/dm/@bandada/hardhat.svg?style=flat-square" alt="Downloads" />
                 </a>
             </td>
         </tr>
         <tr>
             <td>
                 <a href="/apps/contracts/contracts">
-                    @zk-groups/contracts
+                    @bandada/contracts
                 </a>
             </td>
             <td>
                 <!-- NPM version -->
-                <a href="https://npmjs.org/package/@zk-groups/contracts">
-                    <img src="https://img.shields.io/npm/v/@zk-groups/contracts.svg?style=flat-square" alt="NPM version" />
+                <a href="https://npmjs.org/package/@bandada/contracts">
+                    <img src="https://img.shields.io/npm/v/@bandada/contracts.svg?style=flat-square" alt="NPM version" />
                 </a>
             </td>
             <td>
                 <!-- Downloads -->
-                <a href="https://npmjs.org/package/@zk-groups/contracts">
-                    <img src="https://img.shields.io/npm/dm/@zk-groups/contracts.svg?style=flat-square" alt="Downloads" />
+                <a href="https://npmjs.org/package/@bandada/contracts">
+                    <img src="https://img.shields.io/npm/dm/@bandada/contracts.svg?style=flat-square" alt="Downloads" />
                 </a>
             </td>
         </tr>
         <tr>
             <td>
                 <a href="/libs/utils">
-                    @zk-groups/utils
+                    @bandada/utils
                 </a>
             </td>
             <td>
                 <!-- NPM version -->
-                <a href="https://npmjs.org/package/@zk-groups/utils">
-                    <img src="https://img.shields.io/npm/v/@zk-groups/utils.svg?style=flat-square" alt="NPM version" />
+                <a href="https://npmjs.org/package/@bandada/utils">
+                    <img src="https://img.shields.io/npm/v/@bandada/utils.svg?style=flat-square" alt="NPM version" />
                 </a>
             </td>
             <td>
                 <!-- Downloads -->
-                <a href="https://npmjs.org/package/@zk-groups/utils">
-                    <img src="https://img.shields.io/npm/dm/@zk-groups/utils.svg?style=flat-square" alt="Downloads" />
+                <a href="https://npmjs.org/package/@bandada/utils">
+                    <img src="https://img.shields.io/npm/dm/@bandada/utils.svg?style=flat-square" alt="Downloads" />
                 </a>
             </td>
         </tr>
@@ -126,13 +126,13 @@
 Clone this repository:
 
 ```bash
-git clone https://github.com/privacy-scaling-explorations/zk-groups.git
+git clone https://github.com/privacy-scaling-explorations/bandada.git
 ```
 
 and install the dependencies:
 
 ```bash
-cd zk-groups && yarn
+cd bandada && yarn
 ```
 
 ## 📜 Usage
@@ -207,7 +207,7 @@ yarn test
 
 ### Running in Docker
 
-You can also run the entire `zk-groups` using docker by running below command in the project root:
+You can also run the entire `bandada` using docker by running below command in the project root:
 
 ```sh
 docker-compose up -d

@@ -10,7 +10,7 @@ import {
     Tooltip,
     useClipboard
 } from "@chakra-ui/react"
-import { shortenAddress } from "@zk-groups/utils"
+import { shortenAddress } from "@bandada/utils"
 import { useCallback } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAccount, useDisconnect } from "wagmi"

@@ -1,10 +1,10 @@
 {
-    "name": "zk-groups",
+    "name": "bandada",
     "description": "A system for managing privacy-preserving groups.",
     "license": "MIT",
-    "repository": "git@github.com:privacy-scaling-explorations/zk-groups.git",
-    "homepage": "https://github.com/privacy-scaling-explorations/zk-groups",
-    "bugs": "https://github.com/privacy-scaling-explorations/zk-groups/issues",
+    "repository": "git@github.com:privacy-scaling-explorations/bandada.git",
+    "homepage": "https://github.com/privacy-scaling-explorations/bandada",
+    "bugs": "https://github.com/privacy-scaling-explorations/bandada/issues",
     "private": true,
     "scripts": {
         "start": "yarn workspaces foreach -pi run start",

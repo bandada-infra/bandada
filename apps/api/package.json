@@ -8,6 +8,7 @@
         "build": "nest build"
     },
     "dependencies": {
+        "@bandada/utils": "0.4.0",
         "@ethersproject/hash": "^5.7.0",
         "@nestjs/common": "^9.0.0",
         "@nestjs/core": "^9.0.0",
@@ -18,7 +19,6 @@
         "@nestjs/schedule": "^2.2.0",
         "@nestjs/typeorm": "^9.0.1",
         "@semaphore-protocol/group": "3.4.0",
-        "@zk-groups/utils": "0.4.0",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.0",
         "cookie-parser": "^1.4.6",
