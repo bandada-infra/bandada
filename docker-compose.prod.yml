@@ -7,6 +7,7 @@ services:
             context: ./
             dockerfile: ./apps/api/Dockerfile
         image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/bandada-api
+        pull_policy: always
         restart: unless-stopped
         env_file:
             - apps/api/.env
@@ -21,6 +22,7 @@ services:
             context: ./
             dockerfile: ./apps/client/Dockerfile
         image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/bandada-client
+        pull_policy: always
         restart: unless-stopped
         environment:
             - NODE_ENV=production
@@ -37,6 +39,7 @@ services:
             context: ./
             dockerfile: ./apps/dashboard/Dockerfile
         image: 490752553772.dkr.ecr.eu-central-1.amazonaws.com/bandada-dashboard
+        pull_policy: always
         restart: unless-stopped
         environment:
             - NODE_ENV=production
