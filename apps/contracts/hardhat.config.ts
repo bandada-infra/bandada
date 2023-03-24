@@ -6,7 +6,9 @@ import { HardhatUserConfig } from "hardhat/config"
 import { NetworksUserConfig } from "hardhat/types"
 import "solidity-coverage"
 import "./tasks/deploy-bandada"
+import "./tasks/verify-bandada"
 import "./tasks/deploy-bandada-semaphore"
+import "./tasks/verify-bandada-semaphore"
 
 dotenvConfig()
 
