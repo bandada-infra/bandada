@@ -16,9 +16,7 @@ import { providers } from "ethers"
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 
-const injectedConnector = new InjectedConnector({
-    supportedChainIds: [1, 3, 4, 5, 42]
-})
+const injectedConnector = new InjectedConnector({})
 
 export default function NavBar(): JSX.Element {
     const { activate, account } = useWeb3React<providers.Web3Provider>()
