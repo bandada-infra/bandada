@@ -7,7 +7,7 @@ import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
 
-jest.mock("@zbandada/utils", () => ({
+jest.mock("@bandada/utils", () => ({
     __esModule: true,
     getBandadaContract: () => ({
         updateGroups: jest.fn(() => ({

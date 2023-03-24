@@ -12,7 +12,9 @@ export class BandadaContract {
         this.contract = contract
     }
 
-    async updateGroups(groups: OnchainBandadaGroup[]): Promise<ContractReceipt> {
+    async updateGroups(
+        groups: OnchainBandadaGroup[]
+    ): Promise<ContractReceipt> {
         const transaction = await this.contract.updateGroups(groups)
 
         return transaction.wait(1)
@@ -24,12 +26,7 @@ export default function getBandadaContract(
     privateKeyOrSigner?: string | Signer,
     apiKey?: string
 ): BandadaContract {
-    const contract = getContract(
-        "Bandada",
-        network,
-        privateKeyOrSigner,
-        apiKey
-    )
+    const contract = getContract("Bandada", network, privateKeyOrSigner, apiKey)
 
     return new BandadaContract(contract)
 }
