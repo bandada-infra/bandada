@@ -266,3 +266,6 @@ Below are the ENV variables used by the `api`:
 | REDDIT_CLIENT_SECRET    | Credentials required for sign in with Reddit.                            |
 | INFURA_API_KEY          | API Key for Infura. This is used for executing blockchain transactions.  |
 | BACKEND_PRIVATE_KEY     | Ethereum wallet private key used for making blockchain transactions.     |
+| API_URL | Public URL of the api
+| DASHBOARD_URL   | Public URL of the dashboard
+| ETHEREUM_NETWORK    | Ethereum network where the contract is deployed
