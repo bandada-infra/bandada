@@ -1,8 +1,8 @@
 <p align="center">
     <h1 align="center">
-        ZKGroups Hardhat plugin
+        Bandada Hardhat plugin
     </h1>
-    <p align="center">A Hardhat plugin which provide tasks to deploy ZKGroups contracts.</p>
+    <p align="center">A Hardhat plugin which provide tasks to deploy Bandada contracts.</p>
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@
     </h4>
 </div>
 
-| This Hardhat plugin provides simple tasks that can be used to deploy the ZKGroups contracts without any additional configuration. |
+| This Hardhat plugin provides simple tasks that can be used to deploy the Bandada contracts without any additional configuration. |
 | --------------------------------------------------------------------------------------------------------------------------------- |
 
 ## 🛠 Install
@@ -80,7 +80,7 @@ const hardhatConfig: HardhatUserConfig = {
 export default hardhatConfig
 ```
 
-And use its tasks to create your own `deploy` task and deploy your contract with a ZKGroups address.
+And use its tasks to create your own `deploy` task and deploy your contract with a Bandada address.
 
 ```typescript
 import { task, types } from "hardhat/config"
@@ -88,13 +88,13 @@ import { task, types } from "hardhat/config"
 task("deploy", "Deploy a Greeter contract")
     .addOptionalParam("logs", "Print the logs", true, types.boolean)
     .setAction(async ({ logs }, { ethers, run }) => {
-        const { zkGroups } = await run("deploy:zk-groups", {
+        const { bandada } = await run("deploy:zk-groups", {
             logs
         })
 
         const Greeter = await ethers.getContractFactory("Greeter")
 
-        const greeter = await Greeter.deploy(zkGroups.address)
+        const greeter = await Greeter.deploy(bandada.address)
 
         await greeter.deployed()
 

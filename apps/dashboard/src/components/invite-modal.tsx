@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { FaRegCopy } from "react-icons/fa"
-import { generateMagicLink } from "../api/zkGroupsAPI"
+import { generateMagicLink } from "../api/bandadaAPI"
 
 export default function InviteModal({
     isOpen,

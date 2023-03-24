@@ -1,11 +1,11 @@
 import { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
-task("deploy:zkgroups-semaphore", "Deploy a ZKGroupsSemaphore contract")
+task("deploy:bandada-semaphore", "Deploy a BandadaSemaphore contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
     .addOptionalParam(
-        "zkGroups",
-        "ZKGroups contract address",
+        "bandada",
+        "Bandada contract address",
         undefined,
         types.string
     )
@@ -19,7 +19,7 @@ task("deploy:zkgroups-semaphore", "Deploy a ZKGroupsSemaphore contract")
         async (
             {
                 logs,
-                zkGroups: zkGroupsAddress,
+                bandada: bandadaAddress,
                 semaphoreVerifier: semaphoreVerifierAddress
             },
             { ethers, run }
@@ -59,28 +59,28 @@ task("deploy:zkgroups-semaphore", "Deploy a ZKGroupsSemaphore contract")
                 semaphoreVerifierAddress = semaphoreVerifier.address
             }
 
-            if (!zkGroupsAddress) {
-                const zkGroups = await run("deploy:zkgroups", {
+            if (!bandadaAddress) {
+                const bandada = await run("deploy:bandada", {
                     logs
                 })
 
-                zkGroupsAddress = zkGroups.address
+                bandadaAddress = bandada.address
             }
 
             const ContractFactory = await ethers.getContractFactory(
-                "ZKGroupsSemaphore"
+                "BandadaSemaphore"
             )
 
             const contract = await ContractFactory.deploy(
                 semaphoreVerifierAddress,
-                zkGroupsAddress
+                bandadaAddress
             )
 
             await contract.deployed()
 
             if (logs) {
                 console.info(
-                    `ZKGroupsSemaphore contract has been deployed to: ${contract.address}`
+                    `BandadaSemaphore contract has been deployed to: ${contract.address}`
                 )
             }
 

@@ -3,33 +3,33 @@
 import { Signer } from "@ethersproject/abstract-signer"
 import { Contract, ContractReceipt } from "@ethersproject/contracts"
 import getContract from "./getContract"
-import { Network, OnchainZKGroup } from "./types"
+import { Network, OnchainBandadaGroup } from "./types"
 
-export class ZKGroupsContract {
+export class BandadaContract {
     private contract: Contract
 
     constructor(contract: Contract) {
         this.contract = contract
     }
 
-    async updateGroups(groups: OnchainZKGroup[]): Promise<ContractReceipt> {
+    async updateGroups(groups: OnchainBandadaGroup[]): Promise<ContractReceipt> {
         const transaction = await this.contract.updateGroups(groups)
 
         return transaction.wait(1)
     }
 }
 
-export default function getZKGroupsContract(
+export default function getBandadaContract(
     network: Network,
     privateKeyOrSigner?: string | Signer,
     apiKey?: string
-): ZKGroupsContract {
+): BandadaContract {
     const contract = getContract(
-        "ZKGroups",
+        "Bandada",
         network,
         privateKeyOrSigner,
         apiKey
     )
 
-    return new ZKGroupsContract(contract)
+    return new BandadaContract(contract)
 }

@@ -9,7 +9,7 @@ import { InvitesService } from "./invites.service"
 
 jest.mock("@zk-groups/utils", () => ({
     __esModule: true,
-    getZKGroupsContract: () => ({
+    getBandadaContract: () => ({
         updateGroups: jest.fn(() => ({
             status: true,
             logs: ["1"]

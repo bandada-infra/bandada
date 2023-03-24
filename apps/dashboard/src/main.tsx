@@ -16,13 +16,13 @@ import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
-import { isLoggedIn } from "./api/zkGroupsAPI"
 import NotFoundPage from "./pages/404"
 import Home from "./pages/home"
 import Manage from "./pages/manage"
 import MyGroups from "./pages/my-groups"
 import SSO from "./pages/sso"
 import theme from "./styles"
+import { isLoggedIn } from "./api/bandadaAPI"
 
 const { chains, provider, webSocketProvider } = configureChains(
     [goerli],

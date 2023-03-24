@@ -3,14 +3,14 @@ import { HardhatConfig, HardhatUserConfig } from "hardhat/types"
 
 import "hardhat-dependency-compiler"
 import "@nomiclabs/hardhat-ethers"
-import "./tasks/deploy-zk-groups"
-import "./tasks/deploy-zk-groups-semaphore"
+import "./tasks/deploy-bandada"
+import "./tasks/deploy-bandada-semaphore"
 
 extendConfig(
     (config: HardhatConfig, userConfig: Readonly<HardhatUserConfig>) => {
         config.dependencyCompiler.paths = [
-            "@zk-groups/contracts/ZKGroups.sol",
-            "@zk-groups/contracts/protocols/ZKGroupsSemaphore.sol",
+            "@zk-groups/contracts/Bandada.sol",
+            "@zk-groups/contracts/protocols/BandadaSemaphore.sol",
             "@semaphore-protocol/contracts/base/Pairing.sol",
             "@semaphore-protocol/contracts/base/SemaphoreVerifier.sol"
         ]

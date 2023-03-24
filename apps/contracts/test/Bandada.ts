@@ -5,10 +5,10 @@ import { BigNumber, utils } from "ethers"
 import { run } from "hardhat"
 // @ts-ignore: typechain folder will be generated after contracts compilation.
 // eslint-disable-next-line import/extensions
-import { ZKGroups } from "../typechain-types"
+import { Bandada } from "../typechain-types"
 
-describe("ZKGroups", () => {
-    let zkGroups: ZKGroups
+describe("Bandada", () => {
+    let bandada: Bandada
 
     const groupId = utils.formatBytes32String("Name")
     const identities = [0, 1].map((i) => new Identity(i.toString()))
@@ -17,14 +17,14 @@ describe("ZKGroups", () => {
     group.addMembers(identities.map(({ commitment }) => commitment))
 
     before(async () => {
-        zkGroups = await run("deploy:zkgroups", {
+        bandada = await run("deploy:bandada", {
             logs: false
         })
     })
 
     describe("# updateGroup", () => {
         it("Should update groups", async () => {
-            const transaction = zkGroups.updateGroups([
+            const transaction = bandada.updateGroups([
                 {
                     id: groupId,
                     fingerprint: group.root
@@ -32,14 +32,14 @@ describe("ZKGroups", () => {
             ])
 
             await expect(transaction)
-                .to.emit(zkGroups, "GroupUpdated")
+                .to.emit(bandada, "GroupUpdated")
                 .withArgs(groupId, group.root)
         })
     })
 
     describe("# groups", () => {
         it("Should get the current fingerprint of an off-chain group", async () => {
-            const fingerprint = await zkGroups.groups(groupId)
+            const fingerprint = await bandada.groups(groupId)
 
             expect(fingerprint).to.equal(group.root)
         })

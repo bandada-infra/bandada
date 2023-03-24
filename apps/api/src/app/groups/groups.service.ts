@@ -11,9 +11,9 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import {
-    getZKGroupsContract,
+    getBandadaContract,
     Network,
-    ZKGroupsContract
+    BandadaContract
 } from "@zk-groups/utils"
 import { Repository } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
@@ -27,7 +27,7 @@ import { MerkleProof } from "./types"
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
-    private zkGroupsContract: ZKGroupsContract
+    private bandadaContract: BandadaContract
 
     constructor(
         @InjectRepository(Group)
@@ -36,7 +36,7 @@ export class GroupsService {
         private readonly invitesService: InvitesService
     ) {
         this.cachedGroups = new Map()
-        this.zkGroupsContract = getZKGroupsContract(
+        this.bandadaContract = getBandadaContract(
             process.env.ETHEREUM_NETWORK as Network,
             process.env.BACKEND_PRIVATE_KEY as string,
             process.env.INFURA_API_KEY as string
@@ -294,7 +294,7 @@ export class GroupsService {
     private async updateContractGroups(
         updatedGroup: CachedGroup
     ): Promise<void> {
-        const tx = await this.zkGroupsContract.updateGroups([
+        const tx = await this.bandadaContract.updateGroups([
             {
                 id: BigInt(updatedGroup.id),
                 fingerprint: BigInt(updatedGroup.root)

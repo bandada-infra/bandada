@@ -1,7 +1,7 @@
 {
     "name": "@zk-groups/utils",
     "version": "0.4.0",
-    "description": "General ZKGroups utility functions.",
+    "description": "General Bandada utility functions.",
     "license": "MIT",
     "main": "dist/index.node.js",
     "exports": {

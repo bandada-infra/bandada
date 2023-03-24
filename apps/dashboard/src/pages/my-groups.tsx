@@ -19,7 +19,7 @@ import GroupBox from "../components/group-box"
 import GroupFolder from "../components/group-folder"
 import { Group } from "../types/groups"
 import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
-import { getGroups as getOffchainGroups } from "../api/zkGroupsAPI"
+import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()

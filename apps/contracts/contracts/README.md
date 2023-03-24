@@ -93,9 +93,9 @@ yarn test:report-gas
 Deploy a zk-groups contract:
 
 ```bash
-yarn deploy:zkgroups
+yarn deploy:bandada
 # or
-yarn deploy:zkgroups-semaphore
+yarn deploy:bandada-semaphore
 ```
 
 If you want to deploy contracts on Goerli or Arbitrum, remember to provide a valid private key and an Infura API in your `.env` file.

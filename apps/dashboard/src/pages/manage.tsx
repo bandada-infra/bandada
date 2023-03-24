@@ -14,7 +14,7 @@ import AddMemberModal from "../components/add-member-modal"
 import InviteModal from "../components/invite-modal"
 import { Group } from "../types/groups"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
-import { getGroup as getOffchainGroup, removeMember } from "../api/zkGroupsAPI"
+import { getGroup as getOffchainGroup, removeMember } from "../api/bandadaAPI"
 
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()

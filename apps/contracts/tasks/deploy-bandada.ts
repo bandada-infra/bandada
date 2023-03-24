@@ -1,11 +1,11 @@
 import { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
-task("deploy:zkgroups", "Deploy a ZKGroups contract")
+task("deploy:bandada", "Deploy a Bandada contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
 
     .setAction(async ({ logs }, { ethers }): Promise<Contract> => {
-        const ContractFactory = await ethers.getContractFactory("ZKGroups")
+        const ContractFactory = await ethers.getContractFactory("Bandada")
 
         const contract = await ContractFactory.deploy()
 
@@ -13,7 +13,7 @@ task("deploy:zkgroups", "Deploy a ZKGroups contract")
 
         if (logs) {
             console.info(
-                `ZKGroups contract has been deployed to: ${contract.address}`
+                `Bandada contract has been deployed to: ${contract.address}`
             )
         }
 

@@ -21,7 +21,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useSigner } from "wagmi"
 import { groupSizeInfo } from "../types/groups"
-import { createGroup as createOffchainGroup } from "../api/zkGroupsAPI"
+import { createGroup as createOffchainGroup } from "../api/bandadaAPI"
 
 export default function CreateGroupModal({
     isOpen,

@@ -1,7 +1,7 @@
 {
     "name": "@zk-groups/hardhat",
     "version": "0.4.0",
-    "description": "A Hardhat plugin which provides tasks to deploy ZKGroups contracts.",
+    "description": "A Hardhat plugin which provides tasks to deploy Bandada contracts.",
     "license": "MIT",
     "main": "dist/index.node.js",
     "exports": {

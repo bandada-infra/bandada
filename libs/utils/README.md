@@ -1,8 +1,8 @@
 <p align="center">
     <h1 align="center">
-        ZKGroups utils
+        Bandada utils
     </h1>
-    <p align="center">General ZKGroups utility functions.</p>
+    <p align="center">General Bandada utility functions.</p>
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@
     </h4>
 </div>
 
-| This package provides simple utility functions that can be used by ZKGroups itself or externals. |
+| This package provides simple utility functions that can be used by Bandada itself or externals. |
 | ------------------------------------------------------------------------------------------------ |
 
 ## 🛠 Install
