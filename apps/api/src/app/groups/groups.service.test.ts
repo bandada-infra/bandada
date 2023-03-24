@@ -13,7 +13,8 @@ jest.mock("@bandada/utils", () => ({
         updateGroups: jest.fn(() => ({
             status: true,
             logs: ["1"]
-        }))
+        })),
+        getGroups: jest.fn(() => [])
     })
 }))
 

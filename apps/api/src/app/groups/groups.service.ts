@@ -284,6 +284,11 @@ export class GroupsService {
         Logger.log(`GroupsService: ${groups.length} groups have been cached`)
     }
 
+    /**
+     * If the off-chain groups roots don't match the contract's ones, it updates them.
+     * @param
+     */
+    /* istanbul ignore next */
     private async _syncContractGroups() {
         const contractGroups = await this.bandadaContract.getGroups()
         const fingerprints = new Set(
@@ -299,7 +304,7 @@ export class GroupsService {
 
     /**
      * Update the fingerprint of the group in the contract.
-     * @param
+     * @param group Off-chain group.
      */
     /* istanbul ignore next */
     private async _updateContractGroup(group: CachedGroup): Promise<void> {
