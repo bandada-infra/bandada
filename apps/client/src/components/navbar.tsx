@@ -39,7 +39,7 @@ export default function NavBar(): JSX.Element {
                     <Center>
                         <Link to="/">
                             <Text fontSize="lg" fontWeight="bold">
-                                ZK Groups
+                                Bandada
                             </Text>
                         </Link>
                     </Center>

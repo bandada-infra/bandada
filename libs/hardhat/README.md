@@ -7,7 +7,7 @@
 
 <p align="center">
     <a href="https://github.com/privacy-scaling-explorations/bandada">
-        <img src="https://img.shields.io/badge/project-ZKGroups-blue.svg?style=flat-square">
+        <img src="https://img.shields.io/badge/project-Bandada-blue.svg?style=flat-square">
     </a>
     <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/LICENSE">
         <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/bandada.svg?style=flat-square">
