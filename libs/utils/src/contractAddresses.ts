@@ -11,8 +11,8 @@ const CONTRACT_ADDRESSES: { [K in Network]: { [Y in ContractName]: string } } =
         },
         goerli: {
             Semaphore: "0x89490c95eD199D980Cdb4FF8Bac9977EDb41A7E7",
-            Bandada: "0x461C2f74F5adB6F3CE559A7f86F2872568DAB9B3",
-            BandadaSemaphore: "0xd81B417Ca0F6A74fBa86Ea17105d1863beE90bf4"
+            Bandada: "0xB6f17dB678Dab765bC684Fd6BaA0F222Af388F77",
+            BandadaSemaphore: "0xa0Bf12642C66Fc17d706D3FA7C9eB8EfAEA67d02"
         }
     }
 
