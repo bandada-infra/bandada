@@ -19,6 +19,16 @@ export class BandadaContract {
 
         return transaction.wait(1)
     }
+
+    async getGroups(): Promise<OnchainBandadaGroup[]> {
+        const filter = this.contract.filters.GroupUpdated()
+        const events = await this.contract.queryFilter(filter)
+
+        return events.map(({ args }: any) => ({
+            id: args[0].toBigInt(),
+            fingerprint: args[1].toBigInt()
+        }))
+    }
 }
 
 export default function getBandadaContract(
