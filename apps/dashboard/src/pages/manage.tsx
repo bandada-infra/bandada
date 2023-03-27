@@ -23,14 +23,12 @@ export default function Manage(): JSX.Element {
     const [_group, setGroup] = useState<Group | null>()
     const [updatedTime, setUpdatedTime] = useState(new Date())
     const [searchParams] = useSearchParams()
-    const pageOption = searchParams.get("type")
-    const isOnChainGroup = pageOption === "on-chain"
 
     useEffect(() => {
         ;(async () => {
             if (groupId) {
                 try {
-                    if (isOnChainGroup) {
+                    if (searchParams.has("on-chain")) {
                         const onchainGroup = await getOnchainGroup(groupId)
 
                         if (onchainGroup) {
@@ -49,7 +47,7 @@ export default function Manage(): JSX.Element {
                 }
             }
         })()
-    }, [groupId, navigate, isOnChainGroup, updatedTime])
+    }, [groupId, navigate, searchParams, updatedTime])
 
     if (!_group) {
         return <div />
@@ -67,7 +65,9 @@ export default function Manage(): JSX.Element {
                         fontSize="16px"
                         border="1px solid #373A3E"
                     >
-                        {isOnChainGroup ? "Add Member" : "New Invite"}
+                        {searchParams.has("on-chain")
+                            ? "Add Member"
+                            : "New Invite"}
                     </Button>
                 </Flex>
                 <Text mt="16px" mb="29px">
@@ -170,7 +170,7 @@ export default function Manage(): JSX.Element {
                     </Flex>
                 </Box>
             </Flex>
-            {isOnChainGroup ? (
+            {searchParams.has("on-chain") ? (
                 <AddMemberModal
                     isOpen={isOpen}
                     onClose={onClose}

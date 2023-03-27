@@ -11,10 +11,10 @@ import {
     metaMaskWallet,
     walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets"
-import { StrictMode } from "react"
+import { StrictMode, useMemo } from "react"
 import * as ReactDOM from "react-dom/client"
 import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
-import { configureChains, createClient, WagmiConfig } from "wagmi"
+import { configureChains, createClient, useAccount, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
 import { isLoggedIn } from "./api/bandadaAPI"
@@ -43,57 +43,74 @@ const connectors = connectorsForWallets([
 ])
 
 const wagmiClient = createClient({
-    autoConnect: false,
+    autoConnect: true,
     connectors,
     provider,
     webSocketProvider
 })
 
-async function requireAuth() {
-    const { account } = (await wagmiClient.autoConnect()) || {}
+function Routes(): JSX.Element {
+    const { isConnected } = useAccount()
 
-    if (account) {
-        return null
-    }
+    const router = useMemo(
+        () =>
+            createBrowserRouter([
+                {
+                    path: "/",
+                    element: <Home />,
+                    async loader({ request }) {
+                        const { pathname, searchParams } = new URL(request.url)
 
-    // Check if user is logged in using SSO (i.e. they have JWT token).
-    if (!(await isLoggedIn())) {
-        throw redirect("/")
-    }
+                        const web2LoggedIn = await isLoggedIn()
+                        const web3connected = isConnected
 
-    return null
+                        if (["/", "/login", "/sign-up"].includes(pathname)) {
+                            if (web2LoggedIn) {
+                                throw redirect("/my-groups")
+                            }
+                        }
+
+                        if (pathname.includes("/my-groups")) {
+                            if (
+                                (!searchParams.has("on-chain") &&
+                                    !web2LoggedIn) ||
+                                (searchParams.has("on-chain") && !web3connected)
+                            ) {
+                                throw redirect("/")
+                            }
+                        }
+
+                        return null
+                    },
+                    children: [
+                        {
+                            path: "login",
+                            element: <SSO />
+                        },
+                        {
+                            path: "sign-up",
+                            element: <SSO />
+                        },
+                        {
+                            path: "my-groups",
+                            element: <MyGroups />
+                        },
+                        {
+                            path: "my-groups/:groupId",
+                            element: <Manage />
+                        },
+                        {
+                            path: "*",
+                            element: <NotFoundPage />
+                        }
+                    ]
+                }
+            ]),
+        [isConnected]
+    )
+
+    return <RouterProvider router={router} />
 }
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-        children: [
-            {
-                path: "login",
-                element: <SSO />
-            },
-            {
-                path: "sign-up",
-                element: <SSO />
-            },
-            {
-                path: "my-groups",
-                element: <MyGroups />,
-                loader: requireAuth
-            },
-            {
-                path: "my-groups/:groupId",
-                element: <Manage />,
-                loader: requireAuth
-            },
-            {
-                path: "*",
-                element: <NotFoundPage />
-            }
-        ]
-    }
-])
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
@@ -102,7 +119,7 @@ root.render(
         <RainbowKitProvider chains={chains} initialChain={goerli}>
             <StrictMode>
                 <ChakraProvider theme={theme}>
-                    <RouterProvider router={router} />
+                    <Routes />
                 </ChakraProvider>
             </StrictMode>
         </RainbowKitProvider>

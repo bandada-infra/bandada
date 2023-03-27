@@ -31,15 +31,12 @@ export default function CreateGroupModal({
     onClose: (created: boolean) => void
 }): JSX.Element {
     const [searchParams] = useSearchParams()
-    const pageOption = searchParams.get("type")
     const [_step, setStep] = useState<number>(0)
     const [_groupName, setGroupName] = useState<string>("")
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>()
     const { data: signer } = useSigner()
-
-    const isOnChainGroup = pageOption === "on-chain"
 
     const nextStep = useCallback(() => {
         setStep(_step + 1)
@@ -59,7 +56,7 @@ export default function CreateGroupModal({
 
     const createGroup = useCallback(
         async (name: string, description: string, treeDepth: number) => {
-            if (isOnChainGroup && signer) {
+            if (searchParams.has("on-chain") && signer) {
                 setLoading(true)
                 try {
                     const semaphore = getSemaphoreContract(
@@ -87,7 +84,7 @@ export default function CreateGroupModal({
                 }
             }
         },
-        [isOnChainGroup, signer, onClose]
+        [searchParams, signer, onClose]
     )
 
     // eslint-disable-next-line react/no-unstable-nested-components
@@ -150,7 +147,11 @@ export default function CreateGroupModal({
                     {_step === 0 ? (
                         <form onSubmit={nextStep}>
                             <Flex
-                                h={isOnChainGroup ? "250px" : "300px"}
+                                h={
+                                    searchParams.has("on-chain")
+                                        ? "250px"
+                                        : "300px"
+                                }
                                 flexDir="column"
                                 justifyContent="space-around"
                             >
@@ -158,7 +159,11 @@ export default function CreateGroupModal({
                                     <FormLabel>Name</FormLabel>
                                     <Input
                                         value={_groupName}
-                                        maxLength={isOnChainGroup ? 31 : 100}
+                                        maxLength={
+                                            searchParams.has("on-chain")
+                                                ? 31
+                                                : 100
+                                        }
                                         onChange={(e) =>
                                             setGroupName(e.target.value)
                                         }
@@ -166,7 +171,7 @@ export default function CreateGroupModal({
                                         placeholder="Give your group a title"
                                     />
                                 </FormControl>
-                                {!isOnChainGroup && (
+                                {!searchParams.has("on-chain") && (
                                     <FormControl>
                                         <FormLabel>Description</FormLabel>
                                         <Input
