@@ -4,27 +4,26 @@ import {
     connectorsForWallets,
     RainbowKitProvider
 } from "@rainbow-me/rainbowkit"
+import "@rainbow-me/rainbowkit/styles.css"
 import {
     coinbaseWallet,
     injectedWallet,
     metaMaskWallet,
     walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets"
-import "@rainbow-me/rainbowkit/styles.css"
 import { StrictMode } from "react"
 import * as ReactDOM from "react-dom/client"
 import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
-import { ethers } from "ethers"
+import { isLoggedIn } from "./api/bandadaAPI"
 import NotFoundPage from "./pages/404"
 import Home from "./pages/home"
 import Manage from "./pages/manage"
 import MyGroups from "./pages/my-groups"
 import SSO from "./pages/sso"
 import theme from "./styles"
-import { isLoggedIn } from "./api/bandadaAPI"
 
 const { chains, provider, webSocketProvider } = configureChains(
     [goerli],
@@ -51,17 +50,13 @@ const wagmiClient = createClient({
 })
 
 async function requireAuth() {
-    // Check if wallet is connected
-    const connectedWallet = await new ethers.providers.Web3Provider(
-        window.ethereum as any
-    )
-        .getSigner()
-        .getAddress()
-    if (connectedWallet) {
+    const { account } = (await wagmiClient.autoConnect()) || {}
+
+    if (account) {
         return null
     }
 
-    // Check if user is logged in using SSO (i.e. has JWT token)
+    // Check if user is logged in using SSO (i.e. they have JWT token).
     if (!(await isLoggedIn())) {
         throw redirect("/")
     }

@@ -32,10 +32,7 @@ export class GroupsController {
     @Post()
     @UseGuards(AuthGuard("jwt"))
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
-        const group = await this.groupsService.createGroup(
-            dto,
-            req["user"].username
-        )
+        const group = await this.groupsService.createGroup(dto, req["user"].id)
 
         return mapGroupToResponseDTO(group)
     }
@@ -50,7 +47,7 @@ export class GroupsController {
         const group = await this.groupsService.updateGroup(
             dto,
             groupId,
-            req["user"].username
+            req["user"].id
         )
 
         return mapGroupToResponseDTO(group)
@@ -68,9 +65,7 @@ export class GroupsController {
     @Get("admin-groups")
     @UseGuards(AuthGuard("jwt"))
     async getGroupsByAdmin(@Req() req: Request) {
-        const groups = await this.groupsService.getGroupsByAdmin(
-            req["user"].username
-        )
+        const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
 
         return groups.map(mapGroupToResponseDTO)
     }
@@ -110,10 +105,6 @@ export class GroupsController {
         @Param("id") groupId: string,
         @Param("member") member: string
     ): Promise<void> {
-        await this.groupsService.removeMember(
-            groupId,
-            member,
-            req["user"].username
-        )
+        await this.groupsService.removeMember(groupId, member, req["user"].id)
     }
 }
