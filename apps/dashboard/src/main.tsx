@@ -17,6 +17,7 @@ import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
+import { ethers } from "ethers"
 import NotFoundPage from "./pages/404"
 import Home from "./pages/home"
 import Manage from "./pages/manage"
@@ -50,6 +51,17 @@ const wagmiClient = createClient({
 })
 
 async function requireAuth() {
+    // Check if wallet is connected
+    const connectedWallet = await new ethers.providers.Web3Provider(
+        window.ethereum as any
+    )
+        .getSigner()
+        .getAddress()
+    if (connectedWallet) {
+        return null
+    }
+
+    // Check if user is logged in using SSO (i.e. has JWT token)
     if (!(await isLoggedIn())) {
         throw redirect("/")
     }
@@ -61,18 +73,6 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Home />,
-        loader: async ({ request }) => {
-            const { pathname } = new URL(request.url)
-
-            if (
-                ["/", "/login", "/sign-up"].includes(pathname) &&
-                (await isLoggedIn())
-            ) {
-                throw redirect("/my-groups")
-            }
-
-            return null
-        },
         children: [
             {
                 path: "login",
