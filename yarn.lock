@@ -5265,6 +5265,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/express-session@npm:^1.17.7":
+  version: 1.17.7
+  resolution: "@types/express-session@npm:1.17.7"
+  dependencies:
+    "@types/express": "*"
+  checksum: 4764eafaf4e26842e891e83fa9fee30b92cc3724d91987aac3a658322f9a69fb544dae24fc3aba6e15fe9575ed862760ebecd7ff97a947afb695284967434a65
+  languageName: node
+  linkType: hard
+
 "@types/express@npm:*":
   version: 4.17.13
   resolution: "@types/express@npm:4.17.13"
@@ -7101,6 +7110,7 @@ __metadata:
     "@semaphore-protocol/group": 3.4.0
     "@types/cookie-parser": ^1.4.3
     "@types/express": ^4.17.13
+    "@types/express-session": ^1.17.7
     "@types/node": 18.11.18
     "@types/passport": ^1.0.12
     "@types/passport-github": ^1.1.7
