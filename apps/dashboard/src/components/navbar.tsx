@@ -47,23 +47,24 @@ export default function NavBar(): JSX.Element {
 
                     <Spacer />
 
-                    {!isConnected && location.pathname.includes("/my-groups") && (
-                        <Center>
-                            <Link href="/my-groups?type=off-chain">
-                                <Button
-                                    variant="solid"
-                                    mr="10px"
-                                    colorScheme="primary"
-                                >
-                                    My Groups
-                                </Button>
-                            </Link>
+                    {!isConnected &&
+                        location.pathname.includes("/my-groups") && (
+                            <Center>
+                                <Link href="/my-groups?type=off-chain">
+                                    <Button
+                                        variant="solid"
+                                        mr="10px"
+                                        colorScheme="primary"
+                                    >
+                                        My Groups
+                                    </Button>
+                                </Link>
 
-                            <Button variant="solid" onClick={logOut}>
-                                Log out
-                            </Button>
-                        </Center>
-                    )}
+                                <Button variant="solid" onClick={logOut}>
+                                    Log out
+                                </Button>
+                            </Center>
+                        )}
 
                     {isConnected && (
                         <Center>

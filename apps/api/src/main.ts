@@ -17,9 +17,11 @@ async function bootstrap() {
 
     const port = 3000
 
-    app.use(session({
-        secret: process.env.JWT_SECRET_KEY,
-    }))
+    app.use(
+        session({
+            secret: process.env.JWT_SECRET_KEY
+        })
+    )
 
     app.use(cookieParser())
     app.enableCors({
