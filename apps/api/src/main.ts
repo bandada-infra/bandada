@@ -19,7 +19,9 @@ async function bootstrap() {
 
     app.use(
         session({
-            secret: process.env.JWT_SECRET_KEY
+            secret: process.env.JWT_SECRET_KEY,
+            resave: false,
+            saveUninitialized: false
         })
     )
 
