@@ -45,7 +45,7 @@ export class GroupsService {
     /**
      * Creates a new group.
      * @param dto External parameters used to create a new group.
-     * @param admin Admin username.
+     * @param admin Admin id.
      * @returns Created group.
      */
     async createGroup(
@@ -85,7 +85,7 @@ export class GroupsService {
      * Updates some parameters of the group.
      * @param dto External parameters used to update a group.
      * @param groupId Group id.
-     * @param admin Admin username.
+     * @param admin Admin id.
      * @returns Updated group.
      */
     async updateGroup(
@@ -208,7 +208,7 @@ export class GroupsService {
 
     /**
      * Returns a list of groups of a specific admin.
-     * @param admin Admin username.
+     * @param admin Admin id.
      * @returns List of admin's existing groups.
      */
     async getGroupsByAdmin(admin: string): Promise<Group[]> {
