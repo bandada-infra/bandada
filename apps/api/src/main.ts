@@ -1,6 +1,7 @@
 import { Logger, ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
 import * as cookieParser from "cookie-parser"
+import * as session from "express-session"
 import { AppModule } from "./app/app.module"
 
 async function bootstrap() {
@@ -15,6 +16,12 @@ async function bootstrap() {
     )
 
     const port = 3000
+
+    app.use(
+        session({
+            secret: process.env.JWT_SECRET_KEY
+        })
+    )
 
     app.use(cookieParser())
     app.enableCors({
