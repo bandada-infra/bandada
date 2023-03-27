@@ -47,7 +47,7 @@ export default function NavBar(): JSX.Element {
 
                     <Spacer />
 
-                    {location.pathname.includes("/my-groups") && (
+                    {!isConnected && location.pathname.includes("/my-groups") && (
                         <Center>
                             <Link href="/my-groups?type=off-chain">
                                 <Button
