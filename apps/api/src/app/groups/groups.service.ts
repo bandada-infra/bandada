@@ -39,7 +39,10 @@ export class GroupsService {
         )
 
         this._cacheGroups()
-        this._syncContractGroups()
+
+        setTimeout(() => {
+            this._syncContractGroups()
+        }, 5000)
     }
 
     /**

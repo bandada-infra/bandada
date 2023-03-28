@@ -43,31 +43,34 @@ const connectors = connectorsForWallets([
 ])
 
 const wagmiClient = createClient({
-    autoConnect: false,
     connectors,
     provider,
     webSocketProvider
 })
 
-async function requireAuth() {
-    const { account } = (await wagmiClient.autoConnect()) || {}
-
-    if (account) {
-        return null
-    }
-
-    // Check if user is logged in using SSO (i.e. they have JWT token).
-    if (!(await isLoggedIn())) {
-        throw redirect("/")
-    }
-
-    return null
-}
-
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Home />,
+        async loader({ request }) {
+            const { pathname, searchParams } = new URL(request.url)
+
+            const web2LoggedIn = await isLoggedIn()
+
+            if (["/login", "/sign-up"].includes(pathname)) {
+                if (web2LoggedIn) {
+                    throw redirect("/my-groups")
+                }
+            }
+
+            if (pathname.includes("/my-groups")) {
+                if (!searchParams.has("on-chain") && !web2LoggedIn) {
+                    throw redirect("/")
+                }
+            }
+
+            return null
+        },
         children: [
             {
                 path: "login",
@@ -79,13 +82,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "my-groups",
-                element: <MyGroups />,
-                loader: requireAuth
+                element: <MyGroups />
             },
             {
                 path: "my-groups/:groupId",
-                element: <Manage />,
-                loader: requireAuth
+                element: <Manage />
             },
             {
                 path: "*",

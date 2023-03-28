@@ -23,7 +23,6 @@ import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
-    const pageOption = searchParams.get("type")
     const { address } = useAccount()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [isLoading, setIsLoading] = useState(false)
@@ -31,14 +30,16 @@ export default function MyGroups(): JSX.Element {
     const [_groupList, setGroupList] = useState<Group[] | null>()
     const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
-    const [groupsUpdateTime, setGroupsUpdateTime] = useState(new Date())
 
     useEffect(() => {
         ;(async () => {
             setIsLoading(true)
+
             try {
-                if (address) {
-                    setGroupList(await getOnchainGroups(address))
+                if (searchParams.has("on-chain")) {
+                    if (address) {
+                        setGroupList(await getOnchainGroups(address))
+                    }
                 } else {
                     setGroupList(await getOffchainGroups())
                 }
@@ -46,7 +47,7 @@ export default function MyGroups(): JSX.Element {
                 setIsLoading(false)
             }
         })()
-    }, [groupsUpdateTime, address])
+    }, [searchParams, address])
 
     useEffect(() => {
         if (_groupList) {
@@ -64,7 +65,13 @@ export default function MyGroups(): JSX.Element {
         <Container maxW="container.xl">
             <Flex justifyContent="space-between" mt="43px">
                 <Center>
-                    <Heading fontSize="40px">My {pageOption} groups</Heading>
+                    <Heading fontSize="40px">
+                        My{" "}
+                        {searchParams.has("on-chain")
+                            ? "on-chain"
+                            : "off-chain"}{" "}
+                        groups
+                    </Heading>
                 </Center>
                 <Center>
                     <Button
@@ -146,15 +153,7 @@ export default function MyGroups(): JSX.Element {
             ) : (
                 <GroupFolder />
             )}
-            <CreateGroupModal
-                isOpen={isOpen}
-                onClose={(created) => {
-                    if (created) {
-                        setGroupsUpdateTime(new Date())
-                    }
-                    onClose()
-                }}
-            />
+            <CreateGroupModal isOpen={isOpen} onClose={onClose} />
         </Container>
     )
 }

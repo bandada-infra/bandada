@@ -1,3 +1,4 @@
+import { shortenAddress } from "@bandada/utils"
 import {
     Box,
     Button,
@@ -10,22 +11,19 @@ import {
     Tooltip,
     useClipboard
 } from "@chakra-ui/react"
-import { shortenAddress } from "@bandada/utils"
+import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask"
 import { useCallback } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { useAccount, useDisconnect } from "wagmi"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { useAccount, useConnect } from "wagmi"
 import { logOut as _logOut } from "../api/bandadaAPI"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
-    const location = useLocation()
-    const { isConnected, address } = useAccount()
+    const { isConnected } = useAccount()
+    const { connect } = useConnect()
+    const [searchParams] = useSearchParams()
+    const { address } = useAccount()
     const { hasCopied, onCopy } = useClipboard(address || "")
-    const { disconnect } = useDisconnect({
-        onSuccess: () => {
-            navigate("/")
-        }
-    })
 
     const logOut = useCallback(async () => {
         await _logOut()
@@ -47,36 +45,14 @@ export default function NavBar(): JSX.Element {
 
                     <Spacer />
 
-                    {!isConnected &&
-                        location.pathname.includes("/my-groups") && (
-                            <Center>
-                                <Link href="/my-groups?type=off-chain">
-                                    <Button
-                                        variant="solid"
-                                        mr="10px"
-                                        colorScheme="primary"
-                                    >
-                                        My Groups
-                                    </Button>
-                                </Link>
-
-                                <Button variant="solid" onClick={logOut}>
-                                    Log out
-                                </Button>
-                            </Center>
-                        )}
-
-                    {isConnected && (
+                    {!searchParams.has("on-chain") ? (
                         <Center>
-                            <Link href="/my-groups?type=on-chain">
-                                <Button
-                                    variant="solid"
-                                    colorScheme="primary"
-                                    mr="10"
-                                >
-                                    My Groups
-                                </Button>
-                            </Link>
+                            <Button variant="solid" onClick={logOut}>
+                                Log out
+                            </Button>
+                        </Center>
+                    ) : (
+                        <Center>
                             <Tooltip
                                 label={hasCopied ? "Copied" : "Copy"}
                                 closeOnClick={false}
@@ -93,9 +69,15 @@ export default function NavBar(): JSX.Element {
                             <Button
                                 variant="outline"
                                 colorScheme="primary"
-                                onClick={() => disconnect()}
+                                onClick={() =>
+                                    isConnected
+                                        ? navigate("/")
+                                        : connect({
+                                              connector: new MetaMaskConnector()
+                                          })
+                                }
                             >
-                                Disconnect
+                                {isConnected ? "Disconnect" : "Connect"}
                             </Button>
                         </Center>
                     )}

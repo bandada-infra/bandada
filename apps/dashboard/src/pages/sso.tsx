@@ -10,29 +10,28 @@ import {
     Text,
     VStack
 } from "@chakra-ui/react"
-import { useConnectModal } from "@rainbow-me/rainbowkit"
+import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask"
 import { useEffect } from "react"
 import { FaEthereum } from "react-icons/fa"
 import { useLocation, useNavigate } from "react-router-dom"
-import { goerli, useAccount, useSwitchNetwork } from "wagmi"
+import { goerli, useAccount, useConnect, useSwitchNetwork } from "wagmi"
 import logoUrl from "../assets/logo.svg"
 import SsoButton from "../components/sso-button"
 
 export default function SSO(): JSX.Element {
     const navigate = useNavigate()
-    const { openConnectModal } = useConnectModal()
+    const { connect } = useConnect()
     const { switchNetwork } = useSwitchNetwork()
     const { pathname } = useLocation()
-
     const { isConnected } = useAccount()
 
     useEffect(() => {
         if (isConnected) {
             switchNetwork?.(goerli.id)
 
-            navigate("/my-groups?type=on-chain")
+            navigate("/my-groups?on-chain")
         }
-    }, [navigate, isConnected, switchNetwork])
+    }, [isConnected, navigate, switchNetwork])
 
     return (
         <Container maxW="container.xl" pt="20" pb="20" px="6">
@@ -64,7 +63,11 @@ export default function SSO(): JSX.Element {
                         border="1px solid #D0D1D2"
                         fontSize="18px"
                         w="500px"
-                        onClick={openConnectModal}
+                        onClick={() =>
+                            connect({
+                                connector: new MetaMaskConnector()
+                            })
+                        }
                     >
                         <Icon as={FaEthereum} mr="13px" />
                         Connect Wallet
