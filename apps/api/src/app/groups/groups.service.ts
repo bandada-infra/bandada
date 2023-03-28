@@ -40,9 +40,11 @@ export class GroupsService {
 
         this._cacheGroups()
 
-        setTimeout(() => {
-            this._syncContractGroups()
-        }, 5000)
+        if (process.env.NODE_ENV !== "test") {
+            setTimeout(() => {
+                this._syncContractGroups()
+            }, 5000)
+        }
     }
 
     /**
