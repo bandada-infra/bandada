@@ -3,7 +3,9 @@
     "private": true,
     "scripts": {
         "compile": "hardhat compile",
-        "local-node": "yarn compile && hardhat node & yarn deploy:bandada --network localhost",
+        "start-local-node-if-needed": "lsof -i :8545 > /dev/null && (echo 'A local ETH node is running already') || (yarn start-local-node)",
+        "start-local-node": "hardhat node & (sleep 1 && yarn compile && yarn deploy:bandada --network localhost)",
+        "dev": "yarn start-local-node-if-needed",
         "deploy:bandada": "hardhat deploy:bandada",
         "verify:bandada": "hardhat verify:bandada",
         "deploy:bandada-semaphore": "hardhat deploy:bandada-semaphore",
