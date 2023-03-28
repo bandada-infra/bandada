@@ -36,8 +36,10 @@ export default function MyGroups(): JSX.Element {
             setIsLoading(true)
 
             try {
-                if (searchParams.has("on-chain") && address) {
-                    setGroupList(await getOnchainGroups(address))
+                if (searchParams.has("on-chain")) {
+                    if (address) {
+                        setGroupList(await getOnchainGroups(address))
+                    }
                 } else {
                     setGroupList(await getOffchainGroups())
                 }

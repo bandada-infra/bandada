@@ -11,7 +11,7 @@ import {
     VStack
 } from "@chakra-ui/react"
 import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask"
-import { useCallback } from "react"
+import { useEffect } from "react"
 import { FaEthereum } from "react-icons/fa"
 import { useLocation, useNavigate } from "react-router-dom"
 import { goerli, useAccount, useConnect, useSwitchNetwork } from "wagmi"
@@ -20,27 +20,18 @@ import SsoButton from "../components/sso-button"
 
 export default function SSO(): JSX.Element {
     const navigate = useNavigate()
-    const { connectAsync } = useConnect()
+    const { connect } = useConnect()
     const { switchNetwork } = useSwitchNetwork()
     const { pathname } = useLocation()
     const { isConnected } = useAccount()
 
-    const connectWallet = useCallback(async () => {
-        if (!isConnected) {
-            const response = await connectAsync({
-                connector: new MetaMaskConnector()
-            })
-
-            if (response && response.account) {
-                // TODO: this doesn't work yet.
-                navigate("/my-groups?on-chain")
-            }
-        } else {
+    useEffect(() => {
+        if (isConnected) {
             switchNetwork?.(goerli.id)
 
             navigate("/my-groups?on-chain")
         }
-    }, [isConnected, connectAsync, navigate, switchNetwork])
+    }, [isConnected, navigate, switchNetwork])
 
     return (
         <Container maxW="container.xl" pt="20" pb="20" px="6">
@@ -72,7 +63,11 @@ export default function SSO(): JSX.Element {
                         border="1px solid #D0D1D2"
                         fontSize="18px"
                         w="500px"
-                        onClick={connectWallet}
+                        onClick={() =>
+                            connect({
+                                connector: new MetaMaskConnector()
+                            })
+                        }
                     >
                         <Icon as={FaEthereum} mr="13px" />
                         Connect Wallet

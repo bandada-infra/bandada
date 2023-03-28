@@ -11,13 +11,16 @@ import {
     Tooltip,
     useClipboard
 } from "@chakra-ui/react"
+import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask"
 import { useCallback } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { useAccount } from "wagmi"
+import { useAccount, useConnect } from "wagmi"
 import { logOut as _logOut } from "../api/bandadaAPI"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
+    const { isConnected } = useAccount()
+    const { connect } = useConnect()
     const [searchParams] = useSearchParams()
     const { address } = useAccount()
     const { hasCopied, onCopy } = useClipboard(address || "")
@@ -66,9 +69,15 @@ export default function NavBar(): JSX.Element {
                             <Button
                                 variant="outline"
                                 colorScheme="primary"
-                                onClick={() => navigate("/")}
+                                onClick={() =>
+                                    isConnected
+                                        ? navigate("/")
+                                        : connect({
+                                              connector: new MetaMaskConnector()
+                                          })
+                                }
                             >
-                                Disconnect
+                                {isConnected ? "Disconnect" : "Connect"}
                             </Button>
                         </Center>
                     )}
