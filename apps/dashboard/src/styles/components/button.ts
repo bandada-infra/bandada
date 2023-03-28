@@ -9,15 +9,12 @@ const Button = {
         borderRadius: 0,
         fontWeight: 500
     },
-    sizes: {
-        md: {
-            width: "220px",
-            height: "60px"
-        }
-    },
     variants: {
         solid: (props: GlobalStyleProps): SystemStyleObject => {
             const { colorScheme: c } = props
+
+            const width = "220px"
+            const height = "60px"
 
             if (c === "primary") {
                 const bg = `${c}.800`
@@ -26,6 +23,8 @@ const Button = {
                 return {
                     bg,
                     color,
+                    width,
+                    height,
                     _hover: {
                         bg: `${c}.700`,
                         _disabled: {
@@ -41,6 +40,8 @@ const Button = {
             return {
                 bg,
                 color: `${c}.800`,
+                width,
+                height,
                 _hover: {
                     bg: `${c}.200`,
                     _disabled: {
