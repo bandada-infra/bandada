@@ -1,6 +1,9 @@
 import { SystemStyleObject } from "@chakra-ui/react"
 import { GlobalStyleProps } from "@chakra-ui/theme-tools"
 
+const width = "220px"
+const height = "60px"
+
 const Button = {
     baseStyle: {
         _focus: {
@@ -10,11 +13,12 @@ const Button = {
         fontWeight: 500
     },
     variants: {
+        outline: (): SystemStyleObject => ({
+            width,
+            height
+        }),
         solid: (props: GlobalStyleProps): SystemStyleObject => {
             const { colorScheme: c } = props
-
-            const width = "220px"
-            const height = "60px"
 
             if (c === "primary") {
                 const bg = `${c}.800`
