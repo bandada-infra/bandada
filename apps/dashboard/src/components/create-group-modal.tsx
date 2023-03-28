@@ -1,3 +1,4 @@
+import { getSemaphoreContract } from "@bandada/utils"
 import {
     Box,
     Button,
@@ -16,19 +17,18 @@ import {
     Spinner,
     Text
 } from "@chakra-ui/react"
-import { getSemaphoreContract } from "@bandada/utils"
 import { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useSigner } from "wagmi"
-import { groupSizeInfo } from "../types/groups"
 import { createGroup as createOffchainGroup } from "../api/bandadaAPI"
+import { groupSizeInfo } from "../types/groups"
 
 export default function CreateGroupModal({
     isOpen,
     onClose
 }: {
     isOpen: boolean
-    onClose: (created: boolean) => void
+    onClose: () => void
 }): JSX.Element {
     const [searchParams] = useSearchParams()
     const [_step, setStep] = useState<number>(0)
@@ -68,20 +68,20 @@ export default function CreateGroupModal({
                     const transaction =
                         signer &&
                         (await semaphore.createGroup(name, treeDepth, admin))
+
                     setLoading(false)
 
-                    if (transaction && onClose) {
-                        onClose(true)
+                    if (transaction) {
+                        onClose()
                     }
                 } catch (error) {
                     console.error(error)
+                    onClose()
                 }
             } else {
                 await createOffchainGroup(name, description, treeDepth)
 
-                if (onClose) {
-                    onClose(true)
-                }
+                onClose()
             }
         },
         [searchParams, signer, onClose]
@@ -132,7 +132,7 @@ export default function CreateGroupModal({
     }, [isOpen])
 
     return (
-        <Modal isOpen={!!isOpen} onClose={() => onClose(false)}>
+        <Modal isOpen={!!isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent maxW={_step === 1 ? "1200px" : "600px"}>
                 <ModalHeader borderBottom="1px" borderColor="gray.200">

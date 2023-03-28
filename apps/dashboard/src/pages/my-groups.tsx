@@ -23,7 +23,7 @@ import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 
 export default function MyGroups(): JSX.Element {
     const [searchParams] = useSearchParams()
-    const { address } = useAccount()
+    const { address, isConnected } = useAccount()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [isLoading, setIsLoading] = useState(false)
     const [_selectedForm, setSelectedForm] = useState<string>("groups")
@@ -77,6 +77,7 @@ export default function MyGroups(): JSX.Element {
                     <Button
                         fontSize="lg"
                         variant="solid"
+                        isDisabled={!isConnected}
                         colorScheme="primary"
                         onClick={onOpen}
                     >

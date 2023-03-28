@@ -20,11 +20,9 @@ export class SemaphoreContract {
     ): Promise<ContractReceipt> {
         const groupId = BigInt(formatBytes32String(groupName))
 
-        const transaction = await this.contract.createGroup(
-            groupId,
-            merkleTreeDepth,
-            admin
-        )
+        const transaction = await this.contract[
+            "createGroup(uint256,uint256,address)"
+        ](groupId, merkleTreeDepth, admin)
 
         return transaction.wait(1)
     }

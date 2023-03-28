@@ -1,5 +1,5 @@
 import { SemaphoreSubgraph } from "@semaphore-protocol/data"
-import { utils } from "ethers"
+import { BigNumber, utils } from "ethers"
 import { Group } from "../types/groups"
 
 const ETHEREUM_NETWORK = import.meta.env.VITE_ETHEREUM_NETWORK
@@ -8,7 +8,9 @@ const subgraph = new SemaphoreSubgraph(ETHEREUM_NETWORK)
 
 function formatGroupName(groupNameInt: string) {
     try {
-        return utils.toUtf8String(groupNameInt)
+        return utils.parseBytes32String(
+            BigNumber.from(groupNameInt).toHexString()
+        )
     } catch (error) {
         // If not parse-able as String, return original value
         return groupNameInt
