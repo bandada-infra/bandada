@@ -31,12 +31,14 @@ export default function MyGroups(): JSX.Element {
     const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
 
+    const isOnChainAuth = searchParams.has("on-chain")
+
     useEffect(() => {
         ;(async () => {
             setIsLoading(true)
 
             try {
-                if (searchParams.has("on-chain")) {
+                if (isOnChainAuth) {
                     if (address) {
                         setGroupList(await getOnchainGroups(address))
                     }
@@ -47,7 +49,7 @@ export default function MyGroups(): JSX.Element {
                 setIsLoading(false)
             }
         })()
-    }, [searchParams, address])
+    }, [isOnChainAuth, address])
 
     useEffect(() => {
         if (_groupList) {
@@ -77,7 +79,7 @@ export default function MyGroups(): JSX.Element {
                     <Button
                         fontSize="lg"
                         variant="solid"
-                        isDisabled={!isConnected}
+                        isDisabled={isOnChainAuth && !isConnected}
                         colorScheme="primary"
                         onClick={onOpen}
                     >
