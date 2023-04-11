@@ -75,7 +75,7 @@ export class GroupsService {
 
         await this.groupRepository.save(group)
 
-        const cachedGroup = new CachedGroup(treeDepth)
+        const cachedGroup = new CachedGroup(group.id, group.treeDepth)
 
         this.cachedGroups.set(_groupId, cachedGroup)
 
