@@ -4,7 +4,7 @@ import {
     Entity,
     Index,
     OneToMany,
-    PrimaryColumn
+    PrimaryColumn,
 } from "typeorm"
 import { Member } from "./member.entity"
 
@@ -30,6 +30,12 @@ export class Group {
         cascade: true
     })
     members: Member[]
+
+    @Column({ default: false  })
+    isAPIEnabled: boolean
+
+    @Column()
+    apiKey: string
 
     @CreateDateColumn()
     createdAt: Date

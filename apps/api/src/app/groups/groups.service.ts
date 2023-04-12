@@ -12,6 +12,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
+import { v4 as uuidv4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
@@ -272,6 +273,35 @@ export class GroupsService {
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)
+    }
+
+    async enableAPI(groupId: string, enableAPI: boolean, loggedInUser: string) {
+        const group = await this.getGroup(groupId)
+
+        if (group.admin !== loggedInUser) {
+            throw new BadRequestException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (enableAPI === true) {
+            if (!group.isAPIEnabled) {
+                Logger.log(
+                    `GroupsService: Enabling API Access for group ${group.id}`
+                )
+                group.isAPIEnabled = true
+            }
+
+            if (!group.apiKey) {
+                group.apiKey = uuidv4()
+            }
+        }
+
+        if (enableAPI === false) {
+            group.isAPIEnabled = false
+        }
+
+        this.groupRepository.save(group)
     }
 
     private async _cacheGroups() {

@@ -107,4 +107,14 @@ export class GroupsController {
     ): Promise<void> {
         await this.groupsService.removeMember(groupId, member, req["user"].id)
     }
+
+    @Post(":id/api-access")
+    @UseGuards(AuthGuard("jwt"))
+    async enableAPI(
+        @Req() req: Request,
+        @Param("id") groupId: string,
+        @Param("enableAPI") enableAPI: boolean
+    ): Promise<void> {
+        await this.groupsService.enableAPI(groupId, enableAPI, req["user"].id)
+    }
 }
