@@ -119,14 +119,14 @@ export class GroupsService {
     }
 
     /**
-     * If a member does not exist in the group, they is added.
+     * For a member can join themselves to a group by redeeming invite code.
      * @param dto Parameters used to add a group member.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
      * @returns Group data with added member.
      */
-    async addMember(
-        { inviteCode }: AddMemberDto,
+    async joinGroup(
+        dto : { inviteCode : string },
         groupId: string,
         memberId: string
     ): Promise<Group> {
@@ -136,9 +136,56 @@ export class GroupsService {
             )
         }
 
-        await this.invitesService.redeemInvite(inviteCode, groupId)
+        await this.invitesService.redeemInvite(dto.inviteCode, groupId)
 
         const group = await this.getGroup(groupId)
+        const member = new Member()
+        member.group = group
+        member.id = memberId
+
+        group.members.push(member)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.addMember(memberId)
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
+        )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    async addMemberWithAPIKey(
+        groupId: string,
+        memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (!group.isAPIEnabled) {
+            throw new BadRequestException(
+                `API is not enabled for the group '${groupId}'`
+            )
+            }
+
+            if (group.apiKey !== apiKey) {
+                throw new BadRequestException(
+                    `API key is not valid for the group '${groupId}'`
+                )
+            }
+
+
+        if (this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' already exists in the group '${groupId}'`
+            )
+        }
+
         const member = new Member()
         member.group = group
         member.id = memberId

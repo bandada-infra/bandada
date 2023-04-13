@@ -137,7 +137,7 @@ describe("GroupsService", () => {
         })
 
         it("Should add a member to an existing group", async () => {
-            const { members } = await groupsService.addMember(
+            const { members } = await groupsService.joinGroup(
                 { inviteCode: invite.code },
                 groupId,
                 "123123"
@@ -152,7 +152,7 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.addMember(
+            await groupsService.joinGroup(
                 { inviteCode: invite2.code },
                 groupId,
                 "124"
@@ -165,7 +165,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not add any member if they already exist", async () => {
-            const fun = groupsService.addMember(
+            const fun = groupsService.joinGroup(
                 { inviteCode: invite.code },
                 groupId,
                 "123123"
@@ -223,7 +223,7 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            const { members } = await groupsService.addMember(
+            const { members } = await groupsService.joinGroup(
                 { inviteCode: invite.code },
                 _groupId,
                 "111000"
@@ -261,7 +261,7 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.addMember(
+            await groupsService.joinGroup(
                 { inviteCode: invite.code },
                 _groupId,
                 "111000"

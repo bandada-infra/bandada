@@ -3,6 +3,7 @@ import {
     Controller,
     Delete,
     Get,
+    Headers,
     Param,
     Post,
     Put,
@@ -53,13 +54,26 @@ export class GroupsController {
         return mapGroupToResponseDTO(group)
     }
 
-    @Post(":id/:member")
+    @Post(":id/add-member")
     async addMember(
+        @Param("id") groupId: string,
+        @Body() dto: { memberId: string },
+        @Headers() headers,
+    ): Promise<void> {
+        const apiKey = headers["X-API-KEY"] as string
+        
+        await this.groupsService.addMemberWithAPIKey(groupId, dto.memberId, apiKey)
+
+        // TODO: Implement admin adding members manually
+    }
+
+    @Post(":id/:member")
+    async joinGroup(
         @Param("id") groupId: string,
         @Param("member") member: string,
         @Body() dto: AddMemberDto
     ): Promise<void> {
-        await this.groupsService.addMember(dto, groupId, member)
+        await this.groupsService.joinGroup(dto, groupId, member)
     }
 
     @Get("admin-groups")
