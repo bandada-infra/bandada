@@ -107,10 +107,13 @@ export async function getApiConfig(groupId: string) {
 
 export async function updateApiConfig(groupId: string, isEnabled: boolean) {
     try {
-        const config = await request(`${API_URL}/groups/${groupId}/api-config`, {
-            method: "POST",
-            data: { isEnabled }
-        })
+        const config = await request(
+            `${API_URL}/groups/${groupId}/api-config`,
+            {
+                method: "POST",
+                data: { isEnabled }
+            }
+        )
 
         return config as {
             isEnabled: boolean

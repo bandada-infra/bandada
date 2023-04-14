@@ -89,11 +89,7 @@ export class GroupsController {
     ): Promise<void> {
         const apiKey = headers["x-api-key"] as string
 
-        await this.groupsService.addMemberWithAPIKey(
-            groupId,
-            dto.id,
-            apiKey
-        )
+        await this.groupsService.addMemberWithAPIKey(groupId, dto.id, apiKey)
 
         // TODO: Implement admin adding members manually
     }

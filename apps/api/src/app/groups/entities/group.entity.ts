@@ -4,7 +4,7 @@ import {
     Entity,
     Index,
     OneToMany,
-    PrimaryColumn,
+    PrimaryColumn
 } from "typeorm"
 import { Member } from "./member.entity"
 
@@ -31,7 +31,7 @@ export class Group {
     })
     members: Member[]
 
-    @Column({ default: false  })
+    @Column({ default: false })
     isAPIEnabled: boolean
 
     @Column({ nullable: true })
