@@ -167,15 +167,9 @@ export class GroupsService {
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        if (!group.apiEnabled) {
+        if (!group.apiEnabled || group.apiKey !== apiKey) {
             throw new BadRequestException(
-                `API is not enabled for the group '${groupId}'`
-            )
-        }
-
-        if (group.apiKey !== apiKey) {
-            throw new BadRequestException(
-                `API key is not valid for the group '${groupId}'`
+                `Invalid API key or API access not enabled for group '${groupId}'`
             )
         }
 
@@ -228,6 +222,48 @@ export class GroupsService {
         if (group.admin !== loggedInUser) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        group.members = group.members.filter((m) => m.id !== memberId)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+        )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
+     * Delete a member from group using API Key
+     * @param groupId Group name.
+     * @param memberId Member's identity commitment.
+     * @returns Group data with removed member.
+     */
+    async removeMemberWithAPIKey(
+        groupId: string,
+        memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (!group.apiEnabled || group.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for group '${groupId}'`
+            )
+        }
+
+        if (!this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' is not a member of group '${groupId}'`
             )
         }
 
