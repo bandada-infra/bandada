@@ -126,7 +126,7 @@ export class GroupsService {
      * @returns Group data with added member.
      */
     async joinGroup(
-        dto : { inviteCode : string },
+        dto: { inviteCode: string },
         groupId: string,
         memberId: string
     ): Promise<Group> {
@@ -171,14 +171,13 @@ export class GroupsService {
             throw new BadRequestException(
                 `API is not enabled for the group '${groupId}'`
             )
-            }
+        }
 
-            if (group.apiKey !== apiKey) {
-                throw new BadRequestException(
-                    `API key is not valid for the group '${groupId}'`
-                )
-            }
-
+        if (group.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `API key is not valid for the group '${groupId}'`
+            )
+        }
 
         if (this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(
@@ -330,7 +329,7 @@ export class GroupsService {
      */
     async getAPIConfig(groupId: string, loggedInUser: string) {
         const group = await this.getGroup(groupId)
-        
+
         if (group.admin !== loggedInUser.toString()) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
@@ -345,14 +344,14 @@ export class GroupsService {
 
     /**
      * Enabled API Access ot this group. Only admin can do this.
-     * @param groupId 
-     * @param isEnabled 
-     * @param loggedInUser 
-     * @returns 
+     * @param groupId
+     * @param isEnabled
+     * @param loggedInUser
+     * @returns
      */
     async enableAPI(groupId: string, isEnabled: boolean, loggedInUser: string) {
         const group = await this.getGroup(groupId)
-        
+
         if (group.admin !== loggedInUser.toString()) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`

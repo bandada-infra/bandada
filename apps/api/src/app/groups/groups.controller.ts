@@ -84,14 +84,14 @@ export class GroupsController {
     @Post(":id/add-member")
     async addMember(
         @Param("id") groupId: string,
-        @Body() dto: { memberId: string },
+        @Body() dto: { id: string },
         @Headers() headers
     ): Promise<void> {
-        const apiKey = headers["X-API-KEY"] as string
+        const apiKey = headers["x-api-key"] as string
 
         await this.groupsService.addMemberWithAPIKey(
             groupId,
-            dto.memberId,
+            dto.id,
             apiKey
         )
 
