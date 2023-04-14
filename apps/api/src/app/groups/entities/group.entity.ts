@@ -34,7 +34,7 @@ export class Group {
     @Column({ default: false  })
     isAPIEnabled: boolean
 
-    @Column()
+    @Column({ nullable: true })
     apiKey: string
 
     @CreateDateColumn()
