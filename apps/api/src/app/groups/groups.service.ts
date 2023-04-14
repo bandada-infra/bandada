@@ -167,7 +167,7 @@ export class GroupsService {
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        if (!group.isAPIEnabled) {
+        if (!group.apiEnabled) {
             throw new BadRequestException(
                 `API is not enabled for the group '${groupId}'`
             )
@@ -337,7 +337,7 @@ export class GroupsService {
         }
 
         return {
-            isEnabled: group.isAPIEnabled,
+            isEnabled: group.apiEnabled,
             apiKey: group.apiKey
         }
     }
@@ -359,11 +359,11 @@ export class GroupsService {
         }
 
         if (isEnabled === true) {
-            if (!group.isAPIEnabled) {
+            if (!group.apiEnabled) {
                 Logger.log(
                     `GroupsService: Enabling API Access for group ${group.id}`
                 )
-                group.isAPIEnabled = true
+                group.apiEnabled = true
             }
 
             // Generate a new API key if it doesn't exist
@@ -373,13 +373,13 @@ export class GroupsService {
         }
 
         if (isEnabled === false) {
-            group.isAPIEnabled = false
+            group.apiEnabled = false
         }
 
         this.groupRepository.save(group)
 
         return {
-            isEnabled: group.isAPIEnabled,
+            isEnabled: group.apiEnabled,
             apiKey: group.apiKey
         }
     }

@@ -32,7 +32,7 @@ export class Group {
     members: Member[]
 
     @Column({ default: false })
-    isAPIEnabled: boolean
+    apiEnabled: boolean
 
     @Column({ nullable: true })
     apiKey: string
