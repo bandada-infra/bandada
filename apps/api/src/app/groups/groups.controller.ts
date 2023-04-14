@@ -54,6 +54,35 @@ export class GroupsController {
         return mapGroupToResponseDTO(group)
     }
 
+    @Get(":id/api-config")
+    @UseGuards(AuthGuard("jwt"))
+    async getAPIConfig(
+        @Req() req: Request,
+        @Param("id") groupId: string,
+        @Body() dto: { isEnabled: boolean }
+    ) {
+        const group = await this.groupsService.enableAPI(groupId, dto.isEnabled, req["user"].id)
+        
+        return {
+            isEnabled: group.isAPIEnabled,
+            apiKey: group.apiKey
+        }
+    }
+
+    @Post(":id/api-config")
+    @UseGuards(AuthGuard("jwt"))
+    async enableAPI(
+        @Req() req: Request,
+        @Param("id") groupId: string,
+        @Body() dto: { isEnabled: boolean }
+    ) {
+        const group = await this.groupsService.enableAPI(groupId, dto.isEnabled, req["user"].id)
+        return {
+            isEnabled: group.isAPIEnabled,
+            apiKey: group.apiKey
+        }
+    }
+
     @Post(":id/add-member")
     async addMember(
         @Param("id") groupId: string,
@@ -120,15 +149,5 @@ export class GroupsController {
         @Param("member") member: string
     ): Promise<void> {
         await this.groupsService.removeMember(groupId, member, req["user"].id)
-    }
-
-    @Post(":id/api-access")
-    @UseGuards(AuthGuard("jwt"))
-    async enableAPI(
-        @Req() req: Request,
-        @Param("id") groupId: string,
-        @Param("enableAPI") enableAPI: boolean
-    ): Promise<void> {
-        await this.groupsService.enableAPI(groupId, enableAPI, req["user"].id)
     }
 }

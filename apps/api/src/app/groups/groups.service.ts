@@ -322,16 +322,37 @@ export class GroupsService {
         return cachedGroup.generateMerkleProof(memberIndex)
     }
 
-    async enableAPI(groupId: string, enableAPI: boolean, loggedInUser: string) {
+    /**
+     * 
+     * @param groupId ID of the group
+     * @param loggedInUser accountId of the requesting user
+     * @returns { isEnabled: boolean, apiKey: string }
+     */
+    async getAPIConfig(groupId: string, loggedInUser: string) {
         const group = await this.getGroup(groupId)
-
-        if (group.admin !== loggedInUser) {
+        
+        if (group.admin !== loggedInUser.toString()) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
             )
         }
 
-        if (enableAPI === true) {
+        return {
+            isEnabled: group.isAPIEnabled,
+            apiKey: group.apiKey
+        }
+    }
+
+    async enableAPI(groupId: string, isEnabled: boolean, loggedInUser: string) {
+        const group = await this.getGroup(groupId)
+        
+        if (group.admin !== loggedInUser.toString()) {
+            throw new BadRequestException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (isEnabled === true) {
             if (!group.isAPIEnabled) {
                 Logger.log(
                     `GroupsService: Enabling API Access for group ${group.id}`
@@ -339,16 +360,19 @@ export class GroupsService {
                 group.isAPIEnabled = true
             }
 
+            // Generate a new API key if it doesn't exist
             if (!group.apiKey) {
                 group.apiKey = uuidv4()
             }
         }
 
-        if (enableAPI === false) {
+        if (isEnabled === false) {
             group.isAPIEnabled = false
         }
 
         this.groupRepository.save(group)
+
+        return group
     }
 
     private async _cacheGroups() {
