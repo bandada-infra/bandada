@@ -14,7 +14,6 @@ import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
 import { v4 as uuidv4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
-import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
@@ -119,7 +118,7 @@ export class GroupsService {
     }
 
     /**
-     * For a member can join themselves to a group by redeeming invite code.
+     * Join the group by redeeming invite code.
      * @param dto Parameters used to add a group member.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
@@ -160,6 +159,13 @@ export class GroupsService {
         return group
     }
 
+    /**
+     * Add a member to the group using API Key.
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @param apiKey API key for the group
+     * @returns Group
+     */
     async addMemberWithAPIKey(
         groupId: string,
         memberId: string,

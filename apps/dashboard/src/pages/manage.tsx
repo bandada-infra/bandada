@@ -121,7 +121,7 @@ export default function Manage(): JSX.Element {
                                     size="lg"
                                     id="enable-api"
                                     isChecked={apiConfig.isEnabled}
-                                    onChange={onAPIAccessToggle}
+                                    onChange={(e) => onAPIAccessToggle(e)}
                                 />
                             </FormControl>
 
