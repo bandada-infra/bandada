@@ -323,7 +323,7 @@ export class GroupsService {
     }
 
     /**
-     * 
+     * Return the API Configuration. Only admin can do this.
      * @param groupId ID of the group
      * @param loggedInUser accountId of the requesting user
      * @returns { isEnabled: boolean, apiKey: string }
@@ -343,6 +343,13 @@ export class GroupsService {
         }
     }
 
+    /**
+     * Enabled API Access ot this group. Only admin can do this.
+     * @param groupId 
+     * @param isEnabled 
+     * @param loggedInUser 
+     * @returns 
+     */
     async enableAPI(groupId: string, isEnabled: boolean, loggedInUser: string) {
         const group = await this.getGroup(groupId)
         
@@ -372,7 +379,10 @@ export class GroupsService {
 
         this.groupRepository.save(group)
 
-        return group
+        return {
+            isEnabled: group.isAPIEnabled,
+            apiKey: group.apiKey
+        }
     }
 
     private async _cacheGroups() {

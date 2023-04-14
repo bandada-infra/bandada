@@ -56,17 +56,13 @@ export class GroupsController {
 
     @Get(":id/api-config")
     @UseGuards(AuthGuard("jwt"))
-    async getAPIConfig(
-        @Req() req: Request,
-        @Param("id") groupId: string,
-        @Body() dto: { isEnabled: boolean }
-    ) {
-        const group = await this.groupsService.enableAPI(groupId, dto.isEnabled, req["user"].id)
-        
-        return {
-            isEnabled: group.isAPIEnabled,
-            apiKey: group.apiKey
-        }
+    async getAPIConfig(@Req() req: Request, @Param("id") groupId: string) {
+        const config = await this.groupsService.getAPIConfig(
+            groupId,
+            req["user"].id
+        )
+
+        return config
     }
 
     @Post(":id/api-config")
@@ -76,22 +72,28 @@ export class GroupsController {
         @Param("id") groupId: string,
         @Body() dto: { isEnabled: boolean }
     ) {
-        const group = await this.groupsService.enableAPI(groupId, dto.isEnabled, req["user"].id)
-        return {
-            isEnabled: group.isAPIEnabled,
-            apiKey: group.apiKey
-        }
+        const config = await this.groupsService.enableAPI(
+            groupId,
+            dto.isEnabled,
+            req["user"].id
+        )
+
+        return config
     }
 
     @Post(":id/add-member")
     async addMember(
         @Param("id") groupId: string,
         @Body() dto: { memberId: string },
-        @Headers() headers,
+        @Headers() headers
     ): Promise<void> {
         const apiKey = headers["X-API-KEY"] as string
-        
-        await this.groupsService.addMemberWithAPIKey(groupId, dto.memberId, apiKey)
+
+        await this.groupsService.addMemberWithAPIKey(
+            groupId,
+            dto.memberId,
+            apiKey
+        )
 
         // TODO: Implement admin adding members manually
     }
