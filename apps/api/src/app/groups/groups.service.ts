@@ -12,8 +12,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
+import { v4 as uuidv4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
-import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
@@ -118,14 +118,14 @@ export class GroupsService {
     }
 
     /**
-     * If a member does not exist in the group, they is added.
+     * Join the group by redeeming invite code.
      * @param dto Parameters used to add a group member.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
      * @returns Group data with added member.
      */
-    async addMember(
-        { inviteCode }: AddMemberDto,
+    async joinGroup(
+        dto: { inviteCode: string },
         groupId: string,
         memberId: string
     ): Promise<Group> {
@@ -135,9 +135,56 @@ export class GroupsService {
             )
         }
 
-        await this.invitesService.redeemInvite(inviteCode, groupId)
+        await this.invitesService.redeemInvite(dto.inviteCode, groupId)
 
         const group = await this.getGroup(groupId)
+        const member = new Member()
+        member.group = group
+        member.id = memberId
+
+        group.members.push(member)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.addMember(memberId)
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
+        )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
+     * Add a member to the group using API Key.
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @param apiKey API key for the group
+     * @returns Group
+     */
+    async addMemberWithAPIKey(
+        groupId: string,
+        memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (!group.apiEnabled || group.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for group '${groupId}'`
+            )
+        }
+
+        if (this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' already exists in the group '${groupId}'`
+            )
+        }
+
         const member = new Member()
         member.group = group
         member.id = memberId
@@ -181,6 +228,48 @@ export class GroupsService {
         if (group.admin !== loggedInUser) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        group.members = group.members.filter((m) => m.id !== memberId)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+        )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
+     * Delete a member from group using API Key
+     * @param groupId Group name.
+     * @param memberId Member's identity commitment.
+     * @returns Group data with removed member.
+     */
+    async removeMemberWithAPIKey(
+        groupId: string,
+        memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (!group.apiEnabled || group.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for group '${groupId}'`
+            )
+        }
+
+        if (!this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' is not a member of group '${groupId}'`
             )
         }
 
@@ -272,6 +361,69 @@ export class GroupsService {
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)
+    }
+
+    /**
+     * Return the API Configuration. Only admin can do this.
+     * @param groupId ID of the group
+     * @param loggedInUser accountId of the requesting user
+     * @returns { isEnabled: boolean, apiKey: string }
+     */
+    async getAPIConfig(groupId: string, loggedInUser: string) {
+        const group = await this.getGroup(groupId)
+
+        if (group.admin !== loggedInUser.toString()) {
+            throw new BadRequestException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        return {
+            isEnabled: group.apiEnabled,
+            apiKey: group.apiKey
+        }
+    }
+
+    /**
+     * Enabled API Access ot this group. Only admin can do this.
+     * @param groupId
+     * @param isEnabled
+     * @param loggedInUser
+     * @returns
+     */
+    async enableAPI(groupId: string, isEnabled: boolean, loggedInUser: string) {
+        const group = await this.getGroup(groupId)
+
+        if (group.admin !== loggedInUser.toString()) {
+            throw new BadRequestException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (isEnabled === true) {
+            if (!group.apiEnabled) {
+                Logger.log(
+                    `GroupsService: Enabling API Access for group ${group.id}`
+                )
+                group.apiEnabled = true
+            }
+
+            // Generate a new API key if it doesn't exist
+            if (!group.apiKey) {
+                group.apiKey = uuidv4()
+            }
+        }
+
+        if (isEnabled === false) {
+            group.apiEnabled = false
+        }
+
+        this.groupRepository.save(group)
+
+        return {
+            isEnabled: group.apiEnabled,
+            apiKey: group.apiKey
+        }
     }
 
     private async _cacheGroups() {

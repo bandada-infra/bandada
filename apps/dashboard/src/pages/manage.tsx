@@ -3,7 +3,13 @@ import {
     Button,
     Container,
     Flex,
+    FormControl,
+    FormLabel,
     Heading,
+    Input,
+    InputGroup,
+    InputLeftAddon,
+    Switch,
     Text,
     useDisclosure
 } from "@chakra-ui/react"
@@ -14,13 +20,22 @@ import AddMemberModal from "../components/add-member-modal"
 import InviteModal from "../components/invite-modal"
 import { Group } from "../types/groups"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
-import { getGroup as getOffchainGroup, removeMember } from "../api/bandadaAPI"
+import {
+    getApiConfig,
+    getGroup as getOffchainGroup,
+    removeMember,
+    updateApiConfig
+} from "../api/bandadaAPI"
 
 export default function Manage(): JSX.Element {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { groupId } = useParams()
-    const [_group, setGroup] = useState<Group | null>()
+    const [group, setGroup] = useState<Group | null>()
+    const [apiConfig, setApiConfig] = useState<{
+        isEnabled: boolean
+        apiKey: string
+    } | null>()
     const [updatedTime, setUpdatedTime] = useState(new Date())
     const [searchParams] = useSearchParams()
 
@@ -35,10 +50,12 @@ export default function Manage(): JSX.Element {
                             setGroup(onchainGroup)
                         }
                     } else {
-                        const group = await getOffchainGroup(groupId || "")
+                        const _group = await getOffchainGroup(groupId || "")
+                        const _apiConfig = await getApiConfig(groupId || "")
 
-                        if (group) {
-                            setGroup(group)
+                        if (_group) {
+                            setGroup(_group)
+                            setApiConfig(_apiConfig)
                         }
                     }
                 } catch (error) {
@@ -49,7 +66,13 @@ export default function Manage(): JSX.Element {
         })()
     }, [groupId, navigate, searchParams, updatedTime])
 
-    if (!_group) {
+    async function onAPIAccessToggle(e: React.ChangeEvent<HTMLInputElement>) {
+        const isEnabled = e.target.checked
+        const res = await updateApiConfig(groupId as string, isEnabled)
+        setApiConfig(res)
+    }
+
+    if (!group) {
         return <div />
     }
 
@@ -57,7 +80,7 @@ export default function Manage(): JSX.Element {
         <Container maxW="container.xl">
             <Box borderBottom="1px" borderColor="gray.200">
                 <Flex mt="40px" justifyContent="space-between">
-                    <Heading fontSize="32px">{_group.name}</Heading>
+                    <Heading fontSize="32px">{group.name}</Heading>
                     <Button
                         onClick={onOpen}
                         variant="solid"
@@ -70,22 +93,61 @@ export default function Manage(): JSX.Element {
                             : "New Invite"}
                     </Button>
                 </Flex>
-                <Text mt="16px" mb="29px">
-                    {_group?.treeDepth === 30
-                        ? "Globe size group"
-                        : _group?.treeDepth === 25
-                        ? "Nation size group"
-                        : _group?.treeDepth === 20
-                        ? "City size group"
-                        : "Community size group"}
-                </Text>
+
+                <Flex
+                    justifyContent="space-between"
+                    py="1rem"
+                    borderBottom="1px"
+                    borderColor="gray.200"
+                    mt="1rem"
+                >
+                    <Text w="50%">
+                        {group?.treeDepth === 30
+                            ? "Globe size group"
+                            : group?.treeDepth === 25
+                            ? "Nation size group"
+                            : group?.treeDepth === 20
+                            ? "City size group"
+                            : "Community size group"}
+                    </Text>
+
+                    {apiConfig && (
+                        <Box w="50%">
+                            <FormControl display="flex" alignItems="center">
+                                <FormLabel htmlFor="email-alerts" mb="0">
+                                    Enable API Access
+                                </FormLabel>
+                                <Switch
+                                    size="lg"
+                                    id="enable-api"
+                                    isChecked={apiConfig.isEnabled}
+                                    onChange={(e) => onAPIAccessToggle(e)}
+                                />
+                            </FormControl>
+
+                            {apiConfig.isEnabled && (
+                                <InputGroup mt="1rem">
+                                    <InputLeftAddon>API Key</InputLeftAddon>
+                                    <Input
+                                        value={apiConfig?.apiKey}
+                                        isReadOnly
+                                        onClick={(e) => {
+                                            e.currentTarget.select()
+                                        }}
+                                    />
+                                </InputGroup>
+                            )}
+                        </Box>
+                    )}
+                </Flex>
             </Box>
+
             <Flex mt="30px">
                 <Box w="100%">
                     <Text fontWeight="bold" fontSize="lg">
                         Members
                     </Text>
-                    {_group.members?.length ? (
+                    {group.members?.length ? (
                         <Box borderBottom="1px" borderColor="gray.200" p="16px">
                             <Text fontWeight="bold" fontSize="16px">
                                 Identity Commitment
@@ -95,7 +157,7 @@ export default function Manage(): JSX.Element {
                         <Text mt="5">No members in the group yet.</Text>
                     )}
 
-                    {_group.members?.map((member) => (
+                    {group.members?.map((member) => (
                         <Flex
                             borderBottom="1px"
                             borderColor="gray.200"
@@ -119,7 +181,7 @@ export default function Manage(): JSX.Element {
                                             "Are you sure you want to remove this member from the group?"
                                         )
                                     ) {
-                                        await removeMember(_group.id, member)
+                                        await removeMember(group.id, member)
                                         setUpdatedTime(new Date())
                                     }
                                 }}
@@ -139,30 +201,30 @@ export default function Manage(): JSX.Element {
                         justifyContent="space-between"
                         mt="23px"
                     >
-                        {_group?.description && (
+                        {group?.description && (
                             <Box>
-                                <Text mb="10">{_group?.description}</Text>
+                                <Text mb="10">{group?.description}</Text>
                             </Box>
                         )}
                         <Box>
                             <Text mt="5">
-                                Members: {_group?.members.length || "0"}
+                                Members: {group?.members.length || "0"}
                             </Text>
                             <Text mt="5">
-                                {_group?.treeDepth === 30
+                                {group?.treeDepth === 30
                                     ? "Capacity: 1 Billion"
-                                    : _group?.treeDepth === 25
+                                    : group?.treeDepth === 25
                                     ? "CapacityL 30 Million"
-                                    : _group?.treeDepth === 20
+                                    : group?.treeDepth === 20
                                     ? "Capacity: 500 Thousand"
                                     : "Capacity: 30 Thousand"}
                             </Text>
                             <Text mt="5">
-                                {_group?.treeDepth === 30
+                                {group?.treeDepth === 30
                                     ? "Tree depth: 30"
-                                    : _group?.treeDepth === 25
+                                    : group?.treeDepth === 25
                                     ? "Tree depth: 25"
-                                    : _group?.treeDepth === 20
+                                    : group?.treeDepth === 20
                                     ? "Tree depth: 20"
                                     : "Tree depth: 16"}
                             </Text>
@@ -174,13 +236,13 @@ export default function Manage(): JSX.Element {
                 <AddMemberModal
                     isOpen={isOpen}
                     onClose={onClose}
-                    groupName={_group.name}
+                    groupName={group.name}
                 />
             ) : (
                 <InviteModal
                     isOpen={isOpen}
                     onClose={onClose}
-                    groupId={_group.id}
+                    groupId={group.id}
                 />
             )}
         </Container>

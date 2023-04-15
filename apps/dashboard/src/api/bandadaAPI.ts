@@ -92,3 +92,34 @@ export async function isLoggedIn(): Promise<boolean> {
         return false
     }
 }
+
+export async function getApiConfig(groupId: string) {
+    try {
+        const config = await request(`${API_URL}/groups/${groupId}/api-config`)
+        return config as {
+            isEnabled: boolean
+            apiKey: string
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export async function updateApiConfig(groupId: string, isEnabled: boolean) {
+    try {
+        const config = await request(
+            `${API_URL}/groups/${groupId}/api-config`,
+            {
+                method: "POST",
+                data: { isEnabled }
+            }
+        )
+
+        return config as {
+            isEnabled: boolean
+            apiKey: string
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}

@@ -32,6 +32,8 @@ CREATE TABLE groups (
     "treeDepth" integer NOT NULL,
     "createdAt" timestamp without time zone NOT NULL DEFAULT now(),
     tag integer NOT NULL DEFAULT 0
+    apiEnabled boolean NOT NULL DEFAULT false,
+    apiKey character varying
 );
 
 -- Indices -------------------------------------------------------

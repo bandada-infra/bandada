@@ -7135,6 +7135,7 @@ __metadata:
     ts-node: ^10.0.0
     typeorm: ^0.3.12
     typescript: ^4.7.4
+    uuid: ^9.0.0
   languageName: unknown
   linkType: soft
 
