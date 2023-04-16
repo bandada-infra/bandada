@@ -49,7 +49,7 @@ export default function usePermissionedGroups(): ReturnParameters {
             const hasJoined = await request(
                 `${
                     import.meta.env.VITE_API_URL
-                }/groups/${groupId}/${identityCommitment}`
+                }/groups/${groupId}/members/${identityCommitment}`
             )
             setHasjoined(hasJoined)
             setLoading(false)

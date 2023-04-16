@@ -128,7 +128,7 @@ export class GroupsController {
         return response
     }
 
-    @Get(":id/:member")
+    @Get(":id/members/:member")
     isGroupMember(
         @Param("id") groupId: string,
         @Param("member") member: string
@@ -136,7 +136,7 @@ export class GroupsController {
         return this.groupsService.isGroupMember(groupId, member)
     }
 
-    @Get(":id/:member/proof")
+    @Get(":id/members/:member/proof")
     generateMerkleProof(
         @Param("id") groupId: string,
         @Param("member") member: string
