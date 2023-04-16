@@ -75,10 +75,10 @@ describe("GroupsService", () => {
     describe("# updateGroup", () => {
         it("Should update a group", async () => {
             const { description } = await groupsService.updateGroup(
+                groupId,
                 {
                     description: "This is a new description"
                 },
-                groupId,
                 "admin"
             )
 
@@ -87,10 +87,10 @@ describe("GroupsService", () => {
 
         it("Should not update a group if the admin is the wrong one", async () => {
             const fun = groupsService.updateGroup(
+                groupId,
                 {
                     description: "This is a new description"
                 },
-                groupId,
                 "wrong-admin"
             )
 

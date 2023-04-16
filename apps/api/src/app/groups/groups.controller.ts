@@ -45,8 +45,8 @@ export class GroupsController {
         @Body() dto: UpdateGroupDto
     ) {
         const group = await this.groupsService.updateGroup(
-            dto,
             groupId,
+            dto,
             req["user"].id
         )
 
@@ -112,13 +112,15 @@ export class GroupsController {
         return groups.map(mapGroupToResponseDTO)
     }
 
+    // TODO: Make this API public without guards
     @Get(":id")
+    @UseGuards(AuthGuard("jwt"))
     async getGroup(@Param("id") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
         const response: any = mapGroupToResponseDTO(group)
 
-        if (group.admin === req["user"].id) {
+        if (group.admin === req["user"].id?.toString()) {
             response.apiKey = group.apiKey
             response.apiEnabled = group.apiEnabled
         }

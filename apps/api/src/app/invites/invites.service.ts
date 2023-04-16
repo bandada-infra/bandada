@@ -34,7 +34,7 @@ export class InvitesService {
     ): Promise<Invite> {
         const group = await this.groupsService.getGroup(groupId)
 
-        if (group.admin !== groupAdmin) {
+        if (group.admin !== groupAdmin.toString()) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
