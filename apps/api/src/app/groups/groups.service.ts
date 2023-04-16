@@ -119,15 +119,15 @@ export class GroupsService {
 
     /**
      * Join the group by redeeming invite code.
-     * @param dto Parameters used to add a group member.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
+     * @param dto Parameters used to add a group member.
      * @returns Group data with added member.
      */
     async joinGroup(
-        dto: { inviteCode: string },
         groupId: string,
-        memberId: string
+        memberId: string,
+        dto: { inviteCode: string }
     ): Promise<Group> {
         if (this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(

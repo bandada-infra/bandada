@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Headers,
     Param,
@@ -33,7 +34,6 @@ export class GroupsController {
     @UseGuards(AuthGuard("jwt"))
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
         const group = await this.groupsService.createGroup(dto, req["user"].id)
-
         return mapGroupToResponseDTO(group)
     }
 
@@ -53,56 +53,38 @@ export class GroupsController {
         return mapGroupToResponseDTO(group)
     }
 
-    @Get(":id/api-config")
-    @UseGuards(AuthGuard("jwt"))
-    async getAPIConfig(@Req() req: Request, @Param("id") groupId: string) {
-        const config = await this.groupsService.getAPIConfig(
-            groupId,
-            req["user"].id
-        )
-
-        return config
-    }
-
-    @Post(":id/api-config")
-    @UseGuards(AuthGuard("jwt"))
-    async enableAPI(
-        @Req() req: Request,
-        @Param("id") groupId: string,
-        @Body() dto: { isEnabled: boolean }
-    ) {
-        const config = await this.groupsService.enableAPI(
-            groupId,
-            dto.isEnabled,
-            req["user"].id
-        )
-
-        return config
-    }
-
-    @Post(":id/add-member")
+    @Post(":id/members")
     async addMember(
         @Param("id") groupId: string,
-        @Body() dto: { id: string },
+        @Body() dto: AddMemberDto,
         @Headers() headers
     ): Promise<void> {
-        const apiKey = headers["x-api-key"] as string
+        if (dto.inviteCode) {
+            await this.groupsService.joinGroup(groupId, dto.id, {
+                inviteCode: dto.inviteCode
+            })
+            return
+        }
 
+        const apiKey = headers["x-api-key"] as string
         if (apiKey) {
             await this.groupsService.addMemberWithAPIKey(
                 groupId,
                 dto.id,
                 apiKey
             )
+            return
         }
 
         // TODO: Implement admin adding members manually
+
+        throw new Error("Not implemented")
     }
 
-    @Post(":id/remove-member")
+    @Delete(":id/members/:memberId")
     async removeMember(
         @Param("id") groupId: string,
-        @Body() dto: { id: string },
+        @Param("memberId") memberId: string,
         @Req() req: Request,
         @Headers() headers
     ): Promise<void> {
@@ -111,23 +93,16 @@ export class GroupsController {
         if (apiKey) {
             await this.groupsService.removeMemberWithAPIKey(
                 groupId,
-                dto.id,
+                memberId,
                 apiKey
             )
             return
         }
 
-        await this.groupsService.removeMember(groupId, dto.id, req["user"].id)
+        // Remove as admin
+        await this.groupsService.removeMember(groupId, memberId, req["user"].id)
     }
 
-    @Post(":id/:member")
-    async joinGroup(
-        @Param("id") groupId: string,
-        @Param("member") member: string,
-        @Body() dto: AddMemberDto
-    ): Promise<void> {
-        await this.groupsService.joinGroup(dto, groupId, member)
-    }
 
     @Get("admin-groups")
     @UseGuards(AuthGuard("jwt"))
@@ -138,10 +113,17 @@ export class GroupsController {
     }
 
     @Get(":id")
-    async getGroup(@Param("id") groupId: string) {
+    async getGroup(@Param("id") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
-        return mapGroupToResponseDTO(group)
+        const response: any = mapGroupToResponseDTO(group)
+
+        if (group.admin === req["user"].id) {
+            response.apiKey = group.apiKey
+            response.apiEnabled = group.apiEnabled
+        }
+
+        return response
     }
 
     @Get(":id/:member")
@@ -164,15 +146,4 @@ export class GroupsController {
 
         return stringifyJSON(merkleProof)
     }
-
-    // TODO : Implement this a leaveGroup - member leaving the group by themselves
-    // @Delete(":id/:member")
-    // @UseGuards(AuthGuard("jwt"))
-    // async removeMember(
-    //     @Req() req: Request,
-    //     @Param("id") groupId: string,
-    //     @Param("member") member: string
-    // ): Promise<void> {
-    //     await this.groupsService.removeMember(groupId, member, req["user"].id)
-    // }
 }
