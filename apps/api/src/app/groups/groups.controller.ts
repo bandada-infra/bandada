@@ -27,14 +27,17 @@ export class GroupsController {
     async getAllGroups() {
         const groups = await this.groupsService.getAllGroups()
 
-        return groups.map(mapGroupToResponseDTO)
+        return groups.map((g) => mapGroupToResponseDTO(g))
     }
 
     @Post()
     @UseGuards(AuthGuard("jwt"))
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
         const group = await this.groupsService.createGroup(dto, req["user"].id)
-        return mapGroupToResponseDTO(group)
+        return mapGroupToResponseDTO(
+            group,
+            req["user"].id.toString() === group.admin
+        )
     }
 
     @Put(":id")
@@ -50,7 +53,10 @@ export class GroupsController {
             req["user"].id
         )
 
-        return mapGroupToResponseDTO(group)
+        return mapGroupToResponseDTO(
+            group,
+            req["user"].id.toString() === group.admin
+        )
     }
 
     @Post(":id/members")
@@ -103,13 +109,12 @@ export class GroupsController {
         await this.groupsService.removeMember(groupId, memberId, req["user"].id)
     }
 
-
     @Get("admin-groups")
     @UseGuards(AuthGuard("jwt"))
     async getGroupsByAdmin(@Req() req: Request) {
         const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
 
-        return groups.map(mapGroupToResponseDTO)
+        return groups.map((g) => mapGroupToResponseDTO(g))
     }
 
     // TODO: Make this API public without guards
@@ -118,12 +123,10 @@ export class GroupsController {
     async getGroup(@Param("id") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
-        const response: any = mapGroupToResponseDTO(group)
-
-        if (group.admin === req["user"].id?.toString()) {
-            response.apiKey = group.apiKey
-            response.apiEnabled = group.apiEnabled
-        }
+        const response: any = mapGroupToResponseDTO(
+            group,
+            req["user"].id.toString() === group.admin
+        )
 
         return response
     }
