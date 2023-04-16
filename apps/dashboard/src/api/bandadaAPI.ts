@@ -64,7 +64,7 @@ export async function createGroup(
 
 export async function removeMember(groupId: string, memberId: string) {
     try {
-        await request(`${API_URL}/groups/${groupId}/${memberId}`, {
+        await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
             method: "delete"
         })
     } catch (error) {
@@ -93,32 +93,17 @@ export async function isLoggedIn(): Promise<boolean> {
     }
 }
 
-export async function getApiConfig(groupId: string) {
+export async function updateGroup(
+    groupId: string,
+    { apiEnabled }: { apiEnabled: boolean }
+) {
     try {
-        const config = await request(`${API_URL}/groups/${groupId}/api-config`)
-        return config as {
-            isEnabled: boolean
-            apiKey: string
-        }
-    } catch (error) {
-        console.error(error)
-    }
-}
+        const group = await request(`${API_URL}/groups/${groupId}`, {
+            method: "PUT",
+            data: { apiEnabled }
+        })
 
-export async function updateApiConfig(groupId: string, isEnabled: boolean) {
-    try {
-        const config = await request(
-            `${API_URL}/groups/${groupId}/api-config`,
-            {
-                method: "POST",
-                data: { isEnabled }
-            }
-        )
-
-        return config as {
-            isEnabled: boolean
-            apiKey: string
-        }
+        return group as Group
     } catch (error) {
         console.error(error)
     }
