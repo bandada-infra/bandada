@@ -96,7 +96,7 @@ export class GroupsService {
     async updateGroup(
         groupId: string,
         { description, treeDepth, tag, apiEnabled }: UpdateGroupDto,
-        loggedInUserId: string,
+        loggedInUserId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 

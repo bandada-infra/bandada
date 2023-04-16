@@ -106,32 +106,32 @@ export default function Manage(): JSX.Element {
                             : "Community size group"}
                     </Text>
 
-                        <Box w="50%">
-                            <FormControl display="flex" alignItems="center">
-                                <FormLabel htmlFor="email-alerts" mb="0">
-                                    Enable API Access
-                                </FormLabel>
-                                <Switch
-                                    size="lg"
-                                    id="enable-api"
-                                    isChecked={group.apiEnabled}
-                                    onChange={(e) => onAPIAccessToggle(e)}
-                                />
-                            </FormControl>
+                    <Box w="50%">
+                        <FormControl display="flex" alignItems="center">
+                            <FormLabel htmlFor="email-alerts" mb="0">
+                                Enable API Access
+                            </FormLabel>
+                            <Switch
+                                size="lg"
+                                id="enable-api"
+                                isChecked={group.apiEnabled}
+                                onChange={(e) => onAPIAccessToggle(e)}
+                            />
+                        </FormControl>
 
-                            {group.apiEnabled && (
-                                <InputGroup mt="1rem">
-                                    <InputLeftAddon>API Key</InputLeftAddon>
-                                    <Input
-                                        value={group?.apiKey}
-                                        isReadOnly
-                                        onClick={(e) => {
-                                            e.currentTarget.select()
-                                        }}
-                                    />
-                                </InputGroup>
-                            )}
-                        </Box>
+                        {group.apiEnabled && (
+                            <InputGroup mt="1rem">
+                                <InputLeftAddon>API Key</InputLeftAddon>
+                                <Input
+                                    value={group?.apiKey}
+                                    isReadOnly
+                                    onClick={(e) => {
+                                        e.currentTarget.select()
+                                    }}
+                                />
+                            </InputGroup>
+                        )}
+                    </Box>
                 </Flex>
             </Box>
 

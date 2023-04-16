@@ -1,6 +1,9 @@
 import { Group } from "./entities/group.entity"
 
-export function mapGroupToResponseDTO(group: Group, includeAPIKey: boolean = false) {
+export function mapGroupToResponseDTO(
+    group: Group,
+    includeAPIKey: boolean = false
+) {
     const dto = {
         id: group.id,
         name: group.name,

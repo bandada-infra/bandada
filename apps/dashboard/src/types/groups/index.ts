@@ -4,8 +4,8 @@ export type Group = {
     description: string
     treeDepth: number
     members: string[]
-    admin: string,
-    apiEnabled?: boolean,
+    admin: string
+    apiEnabled?: boolean
     apiKey?: string
 }
 
