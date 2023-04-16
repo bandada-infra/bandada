@@ -30,6 +30,28 @@ export class GroupsController {
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
 
+    @Get("admin-groups")
+    @UseGuards(AuthGuard("jwt"))
+    async getGroupsByAdmin(@Req() req: Request) {
+        const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
+
+        return groups.map((g) => mapGroupToResponseDTO(g))
+    }
+
+    // TODO: Make this API public without guards
+    @Get(":id")
+    @UseGuards(AuthGuard("jwt"))
+    async getGroup(@Param("id") groupId: string, @Req() req: Request) {
+        const group = await this.groupsService.getGroup(groupId)
+
+        const response: any = mapGroupToResponseDTO(
+            group,
+            req["user"].id.toString() === group.admin
+        )
+
+        return response
+    }
+
     @Post()
     @UseGuards(AuthGuard("jwt"))
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
@@ -57,6 +79,27 @@ export class GroupsController {
             group,
             req["user"].id.toString() === group.admin
         )
+    }
+
+    @Get(":id/members/:member")
+    isGroupMember(
+        @Param("id") groupId: string,
+        @Param("member") member: string
+    ): boolean {
+        return this.groupsService.isGroupMember(groupId, member)
+    }
+
+    @Get(":id/members/:member/proof")
+    generateMerkleProof(
+        @Param("id") groupId: string,
+        @Param("member") member: string
+    ): string {
+        const merkleProof = this.groupsService.generateMerkleProof(
+            groupId,
+            member
+        )
+
+        return stringifyJSON(merkleProof)
     }
 
     @Post(":id/members")
@@ -107,48 +150,5 @@ export class GroupsController {
 
         // Remove as admin
         await this.groupsService.removeMember(groupId, memberId, req["user"].id)
-    }
-
-    @Get("admin-groups")
-    @UseGuards(AuthGuard("jwt"))
-    async getGroupsByAdmin(@Req() req: Request) {
-        const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
-
-        return groups.map((g) => mapGroupToResponseDTO(g))
-    }
-
-    // TODO: Make this API public without guards
-    @Get(":id")
-    @UseGuards(AuthGuard("jwt"))
-    async getGroup(@Param("id") groupId: string, @Req() req: Request) {
-        const group = await this.groupsService.getGroup(groupId)
-
-        const response: any = mapGroupToResponseDTO(
-            group,
-            req["user"].id.toString() === group.admin
-        )
-
-        return response
-    }
-
-    @Get(":id/members/:member")
-    isGroupMember(
-        @Param("id") groupId: string,
-        @Param("member") member: string
-    ): boolean {
-        return this.groupsService.isGroupMember(groupId, member)
-    }
-
-    @Get(":id/members/:member/proof")
-    generateMerkleProof(
-        @Param("id") groupId: string,
-        @Param("member") member: string
-    ): string {
-        const merkleProof = this.groupsService.generateMerkleProof(
-            groupId,
-            member
-        )
-
-        return stringifyJSON(merkleProof)
     }
 }
