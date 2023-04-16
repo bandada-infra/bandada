@@ -138,9 +138,9 @@ describe("GroupsService", () => {
 
         it("Should add a member to an existing group", async () => {
             const { members } = await groupsService.joinGroup(
-                { inviteCode: invite.code },
                 groupId,
-                "123123"
+                "123123",
+                { inviteCode: invite.code }
             )
 
             expect(members).toHaveLength(1)
@@ -152,11 +152,9 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.joinGroup(
-                { inviteCode: invite2.code },
-                groupId,
-                "124"
-            )
+            await groupsService.joinGroup(groupId, "124", {
+                inviteCode: invite2.code
+            })
 
             expect(
                 // @ts-ignore
@@ -165,11 +163,9 @@ describe("GroupsService", () => {
         })
 
         it("Should not add any member if they already exist", async () => {
-            const fun = groupsService.joinGroup(
-                { inviteCode: invite.code },
-                groupId,
-                "123123"
-            )
+            const fun = groupsService.joinGroup(groupId, "123123", {
+                inviteCode: invite.code
+            })
 
             await expect(fun).rejects.toThrow("already exists")
         })
@@ -224,9 +220,9 @@ describe("GroupsService", () => {
             )
 
             const { members } = await groupsService.joinGroup(
-                { inviteCode: invite.code },
                 _groupId,
-                "111000"
+                "111000",
+                { inviteCode: invite.code }
             )
 
             expect(members).toHaveLength(1)
@@ -261,11 +257,9 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.joinGroup(
-                { inviteCode: invite.code },
-                _groupId,
-                "111000"
-            )
+            await groupsService.joinGroup(_groupId, "111000", {
+                inviteCode: invite.code
+            })
 
             const fun = groupsService.removeMember(_groupId, "111000", "rndom")
 
