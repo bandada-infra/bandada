@@ -15,10 +15,14 @@ export class AccountService {
 
     public async create(
         payload: CreateAccountDTO
-    ): Promise<Account & CreateAccountDTO> {
-        payload.userId = BigInt(id(payload.userId)).toString()
+    ): Promise<CreateAccountDTO> {
+        const username = payload.username || payload.id.slice(-5)
 
-        return this.accountRepository.save(payload)
+        return this.accountRepository.save({
+            id: id(payload.id),
+            username,
+            createdAt: new Date(),
+        })
     }
 
     public async findOne(
@@ -26,19 +30,4 @@ export class AccountService {
     ): Promise<Account> {
         return this.accountRepository.findOneBy(payload)
     }
-
-    // public async findAll(): Promise<Account[]> {
-    // return this.accountRepository.find()
-    // }
-
-    // public async update(
-    // id: number,
-    // payload: UpdateAccountDTO
-    // ): Promise<UpdateResult> {
-    // return this.accountRepository.update(id, payload)
-    // }
-
-    // public async remove(id: number): Promise<DeleteResult> {
-    // return this.accountRepository.delete(id)
-    // }
 }
