@@ -21,10 +21,9 @@ import InviteModal from "../components/invite-modal"
 import { Group } from "../types/groups"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
 import {
-    getApiConfig,
     getGroup as getOffchainGroup,
     removeMember,
-    updateApiConfig
+    updateGroup
 } from "../api/bandadaAPI"
 
 export default function Manage(): JSX.Element {
@@ -32,10 +31,6 @@ export default function Manage(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { groupId } = useParams()
     const [group, setGroup] = useState<Group | null>()
-    const [apiConfig, setApiConfig] = useState<{
-        isEnabled: boolean
-        apiKey: string
-    } | null>()
     const [updatedTime, setUpdatedTime] = useState(new Date())
     const [searchParams] = useSearchParams()
 
@@ -51,11 +46,9 @@ export default function Manage(): JSX.Element {
                         }
                     } else {
                         const _group = await getOffchainGroup(groupId || "")
-                        const _apiConfig = await getApiConfig(groupId || "")
 
                         if (_group) {
                             setGroup(_group)
-                            setApiConfig(_apiConfig)
                         }
                     }
                 } catch (error) {
@@ -68,8 +61,10 @@ export default function Manage(): JSX.Element {
 
     async function onAPIAccessToggle(e: React.ChangeEvent<HTMLInputElement>) {
         const isEnabled = e.target.checked
-        const res = await updateApiConfig(groupId as string, isEnabled)
-        setApiConfig(res)
+        const res = await updateGroup(groupId as string, {
+            apiEnabled: isEnabled
+        })
+        setGroup(res)
     }
 
     if (!group) {
@@ -111,34 +106,32 @@ export default function Manage(): JSX.Element {
                             : "Community size group"}
                     </Text>
 
-                    {apiConfig && (
-                        <Box w="50%">
-                            <FormControl display="flex" alignItems="center">
-                                <FormLabel htmlFor="email-alerts" mb="0">
-                                    Enable API Access
-                                </FormLabel>
-                                <Switch
-                                    size="lg"
-                                    id="enable-api"
-                                    isChecked={apiConfig.isEnabled}
-                                    onChange={(e) => onAPIAccessToggle(e)}
-                                />
-                            </FormControl>
+                    <Box w="50%">
+                        <FormControl display="flex" alignItems="center">
+                            <FormLabel htmlFor="email-alerts" mb="0">
+                                Enable API Access
+                            </FormLabel>
+                            <Switch
+                                size="lg"
+                                id="enable-api"
+                                isChecked={group.apiEnabled}
+                                onChange={(e) => onAPIAccessToggle(e)}
+                            />
+                        </FormControl>
 
-                            {apiConfig.isEnabled && (
-                                <InputGroup mt="1rem">
-                                    <InputLeftAddon>API Key</InputLeftAddon>
-                                    <Input
-                                        value={apiConfig?.apiKey}
-                                        isReadOnly
-                                        onClick={(e) => {
-                                            e.currentTarget.select()
-                                        }}
-                                    />
-                                </InputGroup>
-                            )}
-                        </Box>
-                    )}
+                        {group.apiEnabled && (
+                            <InputGroup mt="1rem">
+                                <InputLeftAddon>API Key</InputLeftAddon>
+                                <Input
+                                    value={group?.apiKey}
+                                    isReadOnly
+                                    onClick={(e) => {
+                                        e.currentTarget.select()
+                                    }}
+                                />
+                            </InputGroup>
+                        )}
+                    </Box>
                 </Flex>
             </Box>
 

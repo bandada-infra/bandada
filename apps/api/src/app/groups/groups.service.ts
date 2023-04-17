@@ -88,19 +88,19 @@ export class GroupsService {
 
     /**
      * Updates some parameters of the group.
-     * @param dto External parameters used to update a group.
      * @param groupId Group id.
-     * @param admin Admin id.
+     * @param dto External parameters used to update a group.
+     * @param loggedInUserId Admin id.
      * @returns Updated group.
      */
     async updateGroup(
-        { description, treeDepth, tag }: UpdateGroupDto,
         groupId: string,
-        admin: string
+        { description, treeDepth, tag, apiEnabled }: UpdateGroupDto,
+        loggedInUserId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== admin) {
+        if (group.admin !== loggedInUserId.toString()) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -109,6 +109,15 @@ export class GroupsService {
         group.description = description
         group.treeDepth = treeDepth
         group.tag = tag
+
+        if (apiEnabled !== undefined) {
+            group.apiEnabled = apiEnabled
+
+            // Generate a new API key if it doesn't exist
+            if (!group.apiKey) {
+                group.apiKey = uuidv4()
+            }
+        }
 
         await this.groupRepository.save(group)
 
@@ -119,15 +128,15 @@ export class GroupsService {
 
     /**
      * Join the group by redeeming invite code.
-     * @param dto Parameters used to add a group member.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
+     * @param dto Parameters used to add a group member.
      * @returns Group data with added member.
      */
     async joinGroup(
-        dto: { inviteCode: string },
         groupId: string,
-        memberId: string
+        memberId: string,
+        dto: { inviteCode: string }
     ): Promise<Group> {
         if (this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(
@@ -225,7 +234,8 @@ export class GroupsService {
 
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== loggedInUser) {
+        // TODO: loggedInUser is coming as number, need to check why
+        if (group.admin !== loggedInUser.toString()) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -361,69 +371,6 @@ export class GroupsService {
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)
-    }
-
-    /**
-     * Return the API Configuration. Only admin can do this.
-     * @param groupId ID of the group
-     * @param loggedInUser accountId of the requesting user
-     * @returns { isEnabled: boolean, apiKey: string }
-     */
-    async getAPIConfig(groupId: string, loggedInUser: string) {
-        const group = await this.getGroup(groupId)
-
-        if (group.admin !== loggedInUser.toString()) {
-            throw new BadRequestException(
-                `You are not the admin of the group '${groupId}'`
-            )
-        }
-
-        return {
-            isEnabled: group.apiEnabled,
-            apiKey: group.apiKey
-        }
-    }
-
-    /**
-     * Enabled API Access ot this group. Only admin can do this.
-     * @param groupId
-     * @param isEnabled
-     * @param loggedInUser
-     * @returns
-     */
-    async enableAPI(groupId: string, isEnabled: boolean, loggedInUser: string) {
-        const group = await this.getGroup(groupId)
-
-        if (group.admin !== loggedInUser.toString()) {
-            throw new BadRequestException(
-                `You are not the admin of the group '${groupId}'`
-            )
-        }
-
-        if (isEnabled === true) {
-            if (!group.apiEnabled) {
-                Logger.log(
-                    `GroupsService: Enabling API Access for group ${group.id}`
-                )
-                group.apiEnabled = true
-            }
-
-            // Generate a new API key if it doesn't exist
-            if (!group.apiKey) {
-                group.apiKey = uuidv4()
-            }
-        }
-
-        if (isEnabled === false) {
-            group.apiEnabled = false
-        }
-
-        this.groupRepository.save(group)
-
-        return {
-            isEnabled: group.apiEnabled,
-            apiKey: group.apiKey
-        }
     }
 
     private async _cacheGroups() {

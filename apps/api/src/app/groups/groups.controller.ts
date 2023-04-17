@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Headers,
     Param,
@@ -26,15 +27,39 @@ export class GroupsController {
     async getAllGroups() {
         const groups = await this.groupsService.getAllGroups()
 
-        return groups.map(mapGroupToResponseDTO)
+        return groups.map((g) => mapGroupToResponseDTO(g))
+    }
+
+    @Get("admin-groups")
+    @UseGuards(AuthGuard("jwt"))
+    async getGroupsByAdmin(@Req() req: Request) {
+        const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
+
+        return groups.map((g) => mapGroupToResponseDTO(g))
+    }
+
+    // TODO: Make this API public without guards
+    @Get(":id")
+    @UseGuards(AuthGuard("jwt"))
+    async getGroup(@Param("id") groupId: string, @Req() req: Request) {
+        const group = await this.groupsService.getGroup(groupId)
+
+        const response: any = mapGroupToResponseDTO(
+            group,
+            req["user"].id.toString() === group.admin
+        )
+
+        return response
     }
 
     @Post()
     @UseGuards(AuthGuard("jwt"))
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
         const group = await this.groupsService.createGroup(dto, req["user"].id)
-
-        return mapGroupToResponseDTO(group)
+        return mapGroupToResponseDTO(
+            group,
+            req["user"].id.toString() === group.admin
+        )
     }
 
     @Put(":id")
@@ -45,106 +70,18 @@ export class GroupsController {
         @Body() dto: UpdateGroupDto
     ) {
         const group = await this.groupsService.updateGroup(
+            groupId,
             dto,
-            groupId,
             req["user"].id
         )
 
-        return mapGroupToResponseDTO(group)
-    }
-
-    @Get(":id/api-config")
-    @UseGuards(AuthGuard("jwt"))
-    async getAPIConfig(@Req() req: Request, @Param("id") groupId: string) {
-        const config = await this.groupsService.getAPIConfig(
-            groupId,
-            req["user"].id
+        return mapGroupToResponseDTO(
+            group,
+            req["user"].id.toString() === group.admin
         )
-
-        return config
     }
 
-    @Post(":id/api-config")
-    @UseGuards(AuthGuard("jwt"))
-    async enableAPI(
-        @Req() req: Request,
-        @Param("id") groupId: string,
-        @Body() dto: { isEnabled: boolean }
-    ) {
-        const config = await this.groupsService.enableAPI(
-            groupId,
-            dto.isEnabled,
-            req["user"].id
-        )
-
-        return config
-    }
-
-    @Post(":id/add-member")
-    async addMember(
-        @Param("id") groupId: string,
-        @Body() dto: { id: string },
-        @Headers() headers
-    ): Promise<void> {
-        const apiKey = headers["x-api-key"] as string
-
-        if (apiKey) {
-            await this.groupsService.addMemberWithAPIKey(
-                groupId,
-                dto.id,
-                apiKey
-            )
-        }
-
-        // TODO: Implement admin adding members manually
-    }
-
-    @Post(":id/remove-member")
-    async removeMember(
-        @Param("id") groupId: string,
-        @Body() dto: { id: string },
-        @Req() req: Request,
-        @Headers() headers
-    ): Promise<void> {
-        const apiKey = headers["x-api-key"] as string
-
-        if (apiKey) {
-            await this.groupsService.removeMemberWithAPIKey(
-                groupId,
-                dto.id,
-                apiKey
-            )
-            return
-        }
-
-        await this.groupsService.removeMember(groupId, dto.id, req["user"].id)
-    }
-
-    @Post(":id/:member")
-    async joinGroup(
-        @Param("id") groupId: string,
-        @Param("member") member: string,
-        @Body() dto: AddMemberDto
-    ): Promise<void> {
-        await this.groupsService.joinGroup(dto, groupId, member)
-    }
-
-    @Get("admin-groups")
-    @UseGuards(AuthGuard("jwt"))
-    async getGroupsByAdmin(@Req() req: Request) {
-        const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
-
-        return groups.map(mapGroupToResponseDTO)
-    }
-
-    @Get(":id")
-    async getGroup(@Param("id") groupId: string) {
-        const group = await this.groupsService.getGroup(groupId)
-
-        return mapGroupToResponseDTO(group)
-    }
-
-    @Get(":id/:member")
+    @Get(":id/members/:member")
     isGroupMember(
         @Param("id") groupId: string,
         @Param("member") member: string
@@ -152,7 +89,7 @@ export class GroupsController {
         return this.groupsService.isGroupMember(groupId, member)
     }
 
-    @Get(":id/:member/proof")
+    @Get(":id/members/:member/proof")
     generateMerkleProof(
         @Param("id") groupId: string,
         @Param("member") member: string
@@ -165,14 +102,53 @@ export class GroupsController {
         return stringifyJSON(merkleProof)
     }
 
-    // TODO : Implement this a leaveGroup - member leaving the group by themselves
-    // @Delete(":id/:member")
-    // @UseGuards(AuthGuard("jwt"))
-    // async removeMember(
-    //     @Req() req: Request,
-    //     @Param("id") groupId: string,
-    //     @Param("member") member: string
-    // ): Promise<void> {
-    //     await this.groupsService.removeMember(groupId, member, req["user"].id)
-    // }
+    @Post(":id/members")
+    async addMember(
+        @Param("id") groupId: string,
+        @Body() dto: AddMemberDto,
+        @Headers() headers
+    ): Promise<void> {
+        if (dto.inviteCode) {
+            await this.groupsService.joinGroup(groupId, dto.id, {
+                inviteCode: dto.inviteCode
+            })
+            return
+        }
+
+        const apiKey = headers["x-api-key"] as string
+        if (apiKey) {
+            await this.groupsService.addMemberWithAPIKey(
+                groupId,
+                dto.id,
+                apiKey
+            )
+            return
+        }
+
+        // TODO: Implement admin adding members manually
+
+        throw new Error("Not implemented")
+    }
+
+    @Delete(":id/members/:memberId")
+    async removeMember(
+        @Param("id") groupId: string,
+        @Param("memberId") memberId: string,
+        @Req() req: Request,
+        @Headers() headers
+    ): Promise<void> {
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            await this.groupsService.removeMemberWithAPIKey(
+                groupId,
+                memberId,
+                apiKey
+            )
+            return
+        }
+
+        // Remove as admin
+        await this.groupsService.removeMember(groupId, memberId, req["user"].id)
+    }
 }

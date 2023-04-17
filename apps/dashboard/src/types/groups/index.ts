@@ -5,6 +5,8 @@ export type Group = {
     treeDepth: number
     members: string[]
     admin: string
+    apiEnabled?: boolean
+    apiKey?: string
 }
 
 export type Size = {

@@ -75,10 +75,10 @@ describe("GroupsService", () => {
     describe("# updateGroup", () => {
         it("Should update a group", async () => {
             const { description } = await groupsService.updateGroup(
+                groupId,
                 {
                     description: "This is a new description"
                 },
-                groupId,
                 "admin"
             )
 
@@ -87,10 +87,10 @@ describe("GroupsService", () => {
 
         it("Should not update a group if the admin is the wrong one", async () => {
             const fun = groupsService.updateGroup(
+                groupId,
                 {
                     description: "This is a new description"
                 },
-                groupId,
                 "wrong-admin"
             )
 
@@ -138,9 +138,9 @@ describe("GroupsService", () => {
 
         it("Should add a member to an existing group", async () => {
             const { members } = await groupsService.joinGroup(
-                { inviteCode: invite.code },
                 groupId,
-                "123123"
+                "123123",
+                { inviteCode: invite.code }
             )
 
             expect(members).toHaveLength(1)
@@ -152,11 +152,9 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.joinGroup(
-                { inviteCode: invite2.code },
-                groupId,
-                "124"
-            )
+            await groupsService.joinGroup(groupId, "124", {
+                inviteCode: invite2.code
+            })
 
             expect(
                 // @ts-ignore
@@ -165,11 +163,9 @@ describe("GroupsService", () => {
         })
 
         it("Should not add any member if they already exist", async () => {
-            const fun = groupsService.joinGroup(
-                { inviteCode: invite.code },
-                groupId,
-                "123123"
-            )
+            const fun = groupsService.joinGroup(groupId, "123123", {
+                inviteCode: invite.code
+            })
 
             await expect(fun).rejects.toThrow("already exists")
         })
@@ -224,9 +220,9 @@ describe("GroupsService", () => {
             )
 
             const { members } = await groupsService.joinGroup(
-                { inviteCode: invite.code },
                 _groupId,
-                "111000"
+                "111000",
+                { inviteCode: invite.code }
             )
 
             expect(members).toHaveLength(1)
@@ -261,15 +257,103 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.joinGroup(
-                { inviteCode: invite.code },
-                _groupId,
-                "111000"
-            )
+            await groupsService.joinGroup(_groupId, "111000", {
+                inviteCode: invite.code
+            })
 
             const fun = groupsService.removeMember(_groupId, "111000", "rndom")
 
             await expect(fun).rejects.toThrow("You are not the admin")
+        })
+    })
+
+    describe("# API access", () => {
+        let group: Group
+        let apiKey: string
+
+        it("Should generate a new API key", async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16
+                },
+                "admin"
+            )
+
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: true },
+                "admin"
+            )
+
+            apiKey = (await groupsService.getGroup(group.id)).apiKey
+
+            expect(apiKey.length).toBeGreaterThan(1)
+        })
+    })
+
+    describe("# Add and remove member via API", () => {
+        let group: Group
+        let apiKey: string
+
+        beforeAll(async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16
+                },
+                "admin"
+            )
+
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: true },
+                "admin"
+            )
+
+            apiKey = (await groupsService.getGroup(group.id)).apiKey
+        })
+
+        it("Should add a member to an existing group via API", async () => {
+            const { members } = await groupsService.addMemberWithAPIKey(
+                group.id,
+                "123123",
+                apiKey
+            )
+
+            expect(members).toHaveLength(1)
+        })
+
+        it("Should delete a member from an existing group via API", async () => {
+            await groupsService.addMemberWithAPIKey(group.id, "100001", apiKey)
+
+            const { members } = await groupsService.removeMemberWithAPIKey(
+                group.id,
+                "100001",
+                apiKey
+            )
+
+            expect(members.map((m) => m.id)).not.toContain("100001")
+        })
+
+        it("Should not add a member to an existing group if API is disabled", async () => {
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: false },
+                "admin"
+            )
+
+            const promise = groupsService.addMemberWithAPIKey(
+                groupId,
+                "100002",
+                apiKey
+            )
+
+            await expect(promise).rejects.toThrow(
+                "Invalid API key or API access not enabled for group"
+            )
         })
     })
 })

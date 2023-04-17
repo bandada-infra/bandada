@@ -4,7 +4,8 @@ import {
     Max,
     Min,
     IsOptional,
-    MinLength
+    MinLength,
+    IsBoolean
 } from "class-validator"
 
 export class UpdateGroupDto {
@@ -22,4 +23,12 @@ export class UpdateGroupDto {
     @IsOptional()
     @IsNumber()
     readonly tag?: number
+
+    @IsOptional()
+    @IsBoolean()
+    readonly apiEnabled?: boolean
+
+    @IsOptional()
+    @IsString()
+    readonly apiKey?: string
 }
