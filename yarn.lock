@@ -4783,6 +4783,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@spruceid/siwe-parser@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@spruceid/siwe-parser@npm:1.1.3"
+  dependencies:
+    apg-js: ^4.1.1
+  checksum: 708786ba2f10987c45c1fd8a6243ba6572ee7f320531616d71ff66044828bc24af66f5537ce09c9272bdae93fcc35b566a7804fe7997284f2ee5445a36e6add2
+  languageName: node
+  linkType: hard
+
 "@sqltools/formatter@npm:^1.2.5":
   version: 1.2.5
   resolution: "@sqltools/formatter@npm:1.2.5"
@@ -7090,6 +7099,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"apg-js@npm:^4.1.1":
+  version: 4.1.3
+  resolution: "apg-js@npm:4.1.3"
+  checksum: fa815838fc3c4b2fa5801419d050c5cf0ac8b5dbbc7476a9c9b8e1ae5fc78feccf01ff3ff52ef1e80c72f8b7bf39f589f1b8aaad5f5aeba399523a9ba18da127
+  languageName: node
+  linkType: hard
+
 "api@workspace:apps/api":
   version: 0.0.0-use.local
   resolution: "api@workspace:apps/api"
@@ -7682,6 +7698,7 @@ __metadata:
     jest: 29.4.3
     lint-staged: ^12.4.2
     prettier: ^2.8.4
+    siwe: ^1.1.6
     ts-jest: 29.0.5
     tslib: ^2.5.0
     typescript: ^4.7.0
@@ -18388,6 +18405,19 @@ __metadata:
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
   checksum: aba6438f46d2bfcef94cf112c835ab395172c75f67453fe05c340c770d3c402363018ae1ab4172a1026a90c47eaccf3af7b6ff6fa749a680c2929bd7fa2b37a4
+  languageName: node
+  linkType: hard
+
+"siwe@npm:^1.1.6":
+  version: 1.1.6
+  resolution: "siwe@npm:1.1.6"
+  dependencies:
+    "@spruceid/siwe-parser": ^1.1.3
+    "@stablelib/random": ^1.0.1
+    apg-js: ^4.1.1
+  peerDependencies:
+    ethers: 5.5.1
+  checksum: 067517d2dd37c034f6c81011cf2d9cd821d44710030161990f630cf0228dcf327d02343e59cd00c761836aa3497f1e9f2d975f9d887db6174d611b3b3a6190f5
   languageName: node
   linkType: hard
 

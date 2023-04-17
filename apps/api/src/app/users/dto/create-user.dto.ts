@@ -9,5 +9,5 @@ export class CreateUserDTO {
 
     @IsOptional()
     @IsString()
-    username: string
+    username?: string
 }

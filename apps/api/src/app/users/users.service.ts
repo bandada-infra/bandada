@@ -15,7 +15,7 @@ export class UserService {
 
     public async create(
         payload: CreateUserDTO
-    ): Promise<CreateUserDTO> {
+    ): Promise<User> {
         const username = payload.username || payload.address.slice(-5)
 
         return this.userRepository.save({

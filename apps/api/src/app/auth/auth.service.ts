@@ -1,46 +1,41 @@
 /* istanbul ignore file */
 import { Injectable } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
-import { Account } from "../accounts/entities/account.entity"
-import { AccountService } from "../accounts/account.service"
-import { CreateAccountDTO } from "../accounts/dto/create-account.dto"
-import { Payload } from "./types"
+import { SiweMessage } from "siwe"
+import { v4 } from "uuid"
+import { UserService } from "../users/users.service"
+import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly accountService: AccountService,
+        private readonly userService: UserService,
         private readonly jwtService: JwtService
     ) {}
 
-    public async findOrCreateAccount(
-        payload: CreateAccountDTO
-    ): Promise<string> {
-        let account: Account = await this.accountService.findOne({
-            username: payload.username,
-            service: payload.service
-        })
+    async signIn(params: SignInWithEthereumDTO) {
+        const { message, signature } = params
 
-        if (!account) {
-            account = await this.accountService.create(payload)
+        const siweMessage = new SiweMessage(message)
+        const { address } = await siweMessage.validate(signature)
+
+        let user = await this.userService.findOne({ address })
+
+        if (!user) {
+            user = await this.userService.create({
+                id: v4(),
+                address
+            })
         }
 
-        return this.generateToken(account)
-    }
-
-    public async generateToken(payload: Account): Promise<string> {
-        return this.jwtService.sign({
-            userId: payload.userId,
-            username: payload.username
-        })
-    }
-
-    async tokenValidateAccount(payload: Payload): Promise<Account | undefined> {
-        const userFind = await this.accountService.findOne({
-            userId: payload.userId,
-            username: payload.username
+        // Note: At the moment server does not acknowledge the expiration time of the signature
+        // A fixed expiry is set by the server
+        const token = this.jwtService.sign({
+            id: user.id,
+            username: user.username,
+            address
         })
 
-        return userFind
+        return { token, user }
     }
 }
