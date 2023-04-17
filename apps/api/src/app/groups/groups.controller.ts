@@ -11,13 +11,13 @@ import {
     Request,
     UseGuards
 } from "@nestjs/common"
-import { AuthGuard } from "@nestjs/passport"
 import { stringifyJSON } from "../utils"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { mapGroupToResponseDTO } from "./groups.utils"
 import { GroupsService } from "./groups.service"
+import { AuthGuard } from "../auth/auth.guard"
 
 @Controller("groups")
 export class GroupsController {
@@ -31,7 +31,7 @@ export class GroupsController {
     }
 
     @Get("admin-groups")
-    @UseGuards(AuthGuard("jwt"))
+    @UseGuards(AuthGuard)
     async getGroupsByAdmin(@Req() req: Request) {
         const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
 
@@ -40,7 +40,7 @@ export class GroupsController {
 
     // TODO: Make this API public without guards
     @Get(":id")
-    @UseGuards(AuthGuard("jwt"))
+    @UseGuards(AuthGuard)
     async getGroup(@Param("id") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
@@ -53,7 +53,7 @@ export class GroupsController {
     }
 
     @Post()
-    @UseGuards(AuthGuard("jwt"))
+    @UseGuards(AuthGuard)
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
         const group = await this.groupsService.createGroup(dto, req["user"].id)
         return mapGroupToResponseDTO(
@@ -63,7 +63,7 @@ export class GroupsController {
     }
 
     @Put(":id")
-    @UseGuards(AuthGuard("jwt"))
+    @UseGuards(AuthGuard)
     async updateGroup(
         @Req() req: Request,
         @Param("id") groupId: string,

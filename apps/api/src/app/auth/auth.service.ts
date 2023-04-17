@@ -28,12 +28,10 @@ export class AuthService {
             })
         }
 
-        // Note: At the moment server does not acknowledge the expiration time of the signature
-        // A fixed expiry is set by the server
+        // TODO: Use common expiration
         const token = this.jwtService.sign({
             id: user.id,
             username: user.username,
-            address
         })
 
         return { token, user }

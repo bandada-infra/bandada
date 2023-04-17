@@ -5,30 +5,36 @@ import {
     Post,
     Req,
     Res,
-    UseGuards
 } from "@nestjs/common"
-import { AuthGuard } from "@nestjs/passport"
 import { Request, Response } from "express"
 import { AuthService } from "./auth.service"
-import { SignInWithEthereumDTO } from "./dto/create-account.dto"
+import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
 @Controller("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post("")
-    signIn(
-        @Body() body: SignInWithEthereumDTO
+    async signIn(
+        @Body() body: SignInWithEthereumDTO,
+        @Res() res: Response
     ) {
-        this.authService.signIn({
+        const { token, user } = await this.authService.signIn({
             message: body.message,
             signature: body.signature
         })
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            expires: new Date()
+        })
+
+        res.send(user)
     }
 
     @Delete("")
     logOut(@Req() _req: Request, @Res() res: Response) {
-        res.cookie("jwt", "", {
+        res.cookie("token", "", {
             httpOnly: true,
             expires: new Date()
         })
