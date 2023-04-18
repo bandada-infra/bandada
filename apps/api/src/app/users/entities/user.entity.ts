@@ -2,11 +2,12 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    PrimaryColumn,
 } from "typeorm"
 
 @Entity("users")
 export class User {
-    @Column({ unique: true })
+    @PrimaryColumn({ unique: true })
     id: string
 
     // Wallet address of the user when using SIWE
