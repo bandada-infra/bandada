@@ -1,11 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Post,
-    Req,
-    Res,
-} from "@nestjs/common"
+import { Body, Controller, Delete, Post, Req, Res } from "@nestjs/common"
 import { Request, Response } from "express"
 import { AuthService } from "./auth.service"
 import { SignInWithEthereumDTO } from "./dto/siwe-dto"
@@ -15,10 +8,7 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post("")
-    async signIn(
-        @Body() body: SignInWithEthereumDTO,
-        @Res() res: Response
-    ) {
+    async signIn(@Body() body: SignInWithEthereumDTO, @Res() res: Response) {
         const { token, user } = await this.authService.signIn({
             message: body.message,
             signature: body.signature

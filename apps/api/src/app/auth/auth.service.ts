@@ -1,10 +1,13 @@
 /* istanbul ignore file */
-import { Injectable } from "@nestjs/common"
+import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
 import { SiweMessage } from "siwe"
 import { v4 } from "uuid"
 import { UserService } from "../users/users.service"
 import { SignInWithEthereumDTO } from "./dto/siwe-dto"
+
+const SIWE_STATEMENT =
+    "You are using your Ethereum Wallet to sign in to Bandada."
 
 @Injectable()
 export class AuthService {
@@ -17,7 +20,21 @@ export class AuthService {
         const { message, signature } = params
 
         const siweMessage = new SiweMessage(message)
-        const { address } = await siweMessage.validate(signature)
+        const { address, statement, domain } = await siweMessage.validate(
+            signature
+        )
+
+        if (statement !== SIWE_STATEMENT) {
+            throw new UnauthorizedException(
+                "Invalid statement used in the SIWE message."
+            )
+        }
+
+        if (domain !== new URL(process.env.API_URL).host) {
+            throw new UnauthorizedException(
+                "Invalid domain used in the SIWE message."
+            )
+        }
 
         let user = await this.userService.findOne({ address })
 
@@ -31,7 +48,7 @@ export class AuthService {
         // TODO: Use common expiration
         const token = this.jwtService.sign({
             id: user.id,
-            username: user.username,
+            username: user.username
         })
 
         return { token, user }

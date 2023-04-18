@@ -13,16 +13,14 @@ export class UserService {
         private readonly userRepository: Repository<User>
     ) {}
 
-    public async create(
-        payload: CreateUserDTO
-    ): Promise<User> {
+    public async create(payload: CreateUserDTO): Promise<User> {
         const username = payload.username || payload.address.slice(-5)
 
         return this.userRepository.save({
             id: id(payload.id),
             address: payload.address,
             username,
-            createdAt: new Date(),
+            createdAt: new Date()
         })
     }
 

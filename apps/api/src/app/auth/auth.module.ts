@@ -12,7 +12,7 @@ import { AuthService } from "./auth.service"
         JwtModule.register({
             secret: process.env.JWT_SECRET_KEY,
             signOptions: { expiresIn: "300s" }
-        }),
+        })
     ],
     providers: [AuthService, CookieSerializer],
     controllers: [AuthController],

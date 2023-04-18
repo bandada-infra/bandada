@@ -1,15 +1,11 @@
-import { ScheduleModule } from "@nestjs/schedule"
 import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { Group } from "../groups/entities/group.entity"
-import { Member } from "../groups/entities/member.entity"
-import { GroupsService } from "../groups/groups.service"
-import { AuthService } from "./auth.service"
-import { User } from "../users/entities/user.entity"
 import { SiweMessage } from "siwe"
 import { ethers } from "ethers"
+import { JwtModule } from "@nestjs/jwt"
+import { AuthService } from "./auth.service"
+import { User } from "../users/entities/user.entity"
 import { UserService } from "../users/users.service"
-import { JwtModule, JwtService } from "@nestjs/jwt"
 
 jest.mock("@bandada/utils", () => ({
     __esModule: true,
@@ -30,12 +26,16 @@ const account2 = new ethers.Wallet(
     "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
 )
 
-function createSiweMessage(address) {
+const testUrl = new URL("https://bandada.test")
+
+function createSiweMessage(address, statement?: string) {
     const message = new SiweMessage({
-        domain: "bandada.test",
+        domain: testUrl.host,
         address,
-        statement: "Sign in with Ethereum to the app.",
-        uri: "https://bandada.test",
+        statement:
+            statement ||
+            "You are using your Ethereum Wallet to sign in to Bandada.",
+        uri: testUrl.origin,
         version: "1",
         chainId: 1
     })
@@ -43,9 +43,11 @@ function createSiweMessage(address) {
     return message.prepareMessage()
 }
 
-describe.only("AuthService", () => {
+describe("AuthService", () => {
     let authService: AuthService
     let userService: UserService
+
+    let originalApiUrl: string
 
     beforeAll(async () => {
         const module = await Test.createTestingModule({
@@ -70,6 +72,14 @@ describe.only("AuthService", () => {
 
         authService = await module.resolve(AuthService)
         userService = await module.resolve(UserService)
+
+        // Set API_URL so auth service can validate domain
+        originalApiUrl = process.env.API_URL
+        process.env.API_URL = testUrl.toString()
+    })
+
+    afterAll(() => {
+        process.env.API_URL = originalApiUrl
     })
 
     describe("# SIWE", () => {
@@ -118,6 +128,34 @@ describe.only("AuthService", () => {
             await expect(
                 authService.signIn({
                     message,
+                    signature
+                })
+            ).rejects.toThrow()
+        })
+
+        it("Should throw an error if the statement is invalid", async () => {
+            // Use a custom message to sign
+            const message = await createSiweMessage(account1.address, "Sign in")
+            const signature = await account1.signMessage(message)
+
+            await expect(
+                authService.signIn({
+                    message: "invalid message",
+                    signature
+                })
+            ).rejects.toThrow()
+        })
+
+        it("Should throw an error if the host is different", async () => {
+            process.env.API_URL = "https://bandada2.test"
+
+            // Use a custom message to sign
+            const message = await createSiweMessage(account1.address)
+            const signature = await account1.signMessage(message)
+
+            await expect(
+                authService.signIn({
+                    message: "invalid message",
                     signature
                 })
             ).rejects.toThrow()
