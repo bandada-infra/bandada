@@ -8,18 +8,18 @@ import {
     Request,
     UseGuards
 } from "@nestjs/common"
-import { AuthGuard } from "@nestjs/passport"
 import { mapEntity } from "../utils"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
+import { AuthGuard } from "../auth/auth.guard"
 
 @Controller("invites")
 export class InvitesController {
     constructor(private readonly invitesService: InvitesService) {}
 
     @Post()
-    @UseGuards(AuthGuard("jwt"))
+    @UseGuards(AuthGuard)
     async createInvite(
         @Req() req: Request,
         @Body() dto: CreateInviteDto

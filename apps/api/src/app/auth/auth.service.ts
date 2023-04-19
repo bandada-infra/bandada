@@ -1,46 +1,54 @@
 /* istanbul ignore file */
-import { Injectable } from "@nestjs/common"
+import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
-import { Account } from "../accounts/entities/account.entity"
-import { AccountService } from "../accounts/account.service"
-import { CreateAccountDTO } from "../accounts/dto/create-account.dto"
-import { Payload } from "./types"
+import { SiweMessage } from "siwe"
+import { v4 } from "uuid"
+import { UserService } from "../users/users.service"
+import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly accountService: AccountService,
+        private readonly userService: UserService,
         private readonly jwtService: JwtService
     ) {}
 
-    public async findOrCreateAccount(
-        payload: CreateAccountDTO
-    ): Promise<string> {
-        let account: Account = await this.accountService.findOne({
-            username: payload.username,
-            service: payload.service
-        })
+    async signIn(params: SignInWithEthereumDTO) {
+        const { message, signature } = params
 
-        if (!account) {
-            account = await this.accountService.create(payload)
+        const siweMessage = new SiweMessage(message)
+        const { address, statement, domain } = await siweMessage.validate(
+            signature
+        )
+
+        if (statement !== process.env.SIWE_STATEMENT) {
+            throw new UnauthorizedException(
+                "Invalid statement used in the SIWE message."
+            )
         }
 
-        return this.generateToken(account)
-    }
+        // Assuming the auth was made from the dashboard
+        if (domain !== new URL(process.env.DASHBOARD_URL).host) {
+            throw new UnauthorizedException(
+                "Invalid domain used in the SIWE message."
+            )
+        }
 
-    public async generateToken(payload: Account): Promise<string> {
-        return this.jwtService.sign({
-            userId: payload.userId,
-            username: payload.username
+        let user = await this.userService.findOne({ address })
+
+        if (!user) {
+            user = await this.userService.create({
+                id: v4(),
+                address
+            })
+        }
+
+        // TODO: Use common expiration
+        const token = this.jwtService.sign({
+            id: user.id,
+            username: user.username
         })
-    }
 
-    async tokenValidateAccount(payload: Payload): Promise<Account | undefined> {
-        const userFind = await this.accountService.findOne({
-            userId: payload.userId,
-            username: payload.username
-        })
-
-        return userFind
+        return { token, user }
     }
 }

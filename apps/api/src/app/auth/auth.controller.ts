@@ -1,91 +1,35 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Req,
-    Res,
-    UnauthorizedException,
-    UseGuards
-} from "@nestjs/common"
-import { AuthGuard } from "@nestjs/passport"
+import { Body, Controller, Delete, Post, Req, Res } from "@nestjs/common"
 import { Request, Response } from "express"
+import { AuthService } from "./auth.service"
+import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
 @Controller("auth")
 export class AuthController {
-    @Get("github")
-    @UseGuards(AuthGuard("github"))
-    github() {
-        throw new UnauthorizedException()
-    }
+    constructor(private readonly authService: AuthService) {}
 
-    @Get("github/callback")
-    @UseGuards(AuthGuard("github"))
-    githubCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req["user"]
-        if (jwtToken) {
-            res.cookie("jwt", jwtToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
-            })
-        }
+    @Post("")
+    async signIn(@Body() body: SignInWithEthereumDTO, @Res() res: Response) {
+        const { token, user } = await this.authService.signIn({
+            message: body.message,
+            signature: body.signature
+        })
 
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
-    }
-
-    @Get("twitter")
-    @UseGuards(AuthGuard("twitter"))
-    twitter() {
-        throw new UnauthorizedException()
-    }
-
-    @Get("twitter/callback")
-    @UseGuards(AuthGuard("twitter"))
-    twitterCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req["user"]
-        if (jwtToken) {
-            res.cookie("jwt", jwtToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
-            })
-        }
-
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
-    }
-
-    @Get("reddit")
-    @UseGuards(AuthGuard("reddit"))
-    reddit() {
-        throw new UnauthorizedException()
-    }
-
-    @Get("reddit/callback")
-    @UseGuards(AuthGuard("reddit"))
-    redditCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req["user"]
-        if (jwtToken) {
-            res.cookie("jwt", jwtToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
-            })
-        }
-
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
-    }
-
-    @Get("getUser")
-    @UseGuards(AuthGuard("jwt"))
-    jwtCheck() {
-        return true
-    }
-
-    @Post("log-out")
-    @UseGuards(AuthGuard("jwt"))
-    logOut(@Req() _req: Request, @Res() res: Response) {
-        res.cookie("jwt", "", {
+        res.cookie("token", token, {
             httpOnly: true,
             expires: new Date()
         })
 
+        res.send(user)
+    }
+
+    @Delete("")
+    logOut(@Req() _req: Request, @Res() res: Response) {
+        res.cookie("token", "", {
+            httpOnly: true,
+            expires: new Date()
+        })
+
+        // TODO: Avoid this redirect here and move to client side
         res.redirect(`${process.env.DASHBOARD_URL}`)
     }
 }
