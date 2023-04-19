@@ -1,5 +1,6 @@
 import { request } from "@bandada/utils"
 import { Group } from "../types/groups"
+import { SiweMessage } from "siwe"
 
 const API_URL = import.meta.env.VITE_API_URL
 const CLIENT_URL = import.meta.env.VITE_CLIENT_URL
@@ -107,4 +108,23 @@ export async function updateGroup(
     } catch (error) {
         console.error(error)
     }
+}
+
+export async function signIn({
+    message,
+    signature
+}: {
+    message: SiweMessage
+    signature: string
+}) {
+    const response = await request(`${API_URL}/auth`, {
+        method: "POST",
+        data: {
+            message,
+            signature
+        }
+    })
+
+    const { user } = response.data
+    return { user }
 }

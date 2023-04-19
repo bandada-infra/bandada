@@ -2,7 +2,6 @@ import {
     Box,
     Button,
     Container,
-    Divider,
     Flex,
     Heading,
     Icon,
@@ -10,17 +9,16 @@ import {
     Text,
     VStack
 } from "@chakra-ui/react"
-import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask"
 import { useEffect } from "react"
 import { FaEthereum } from "react-icons/fa"
 import { useLocation, useNavigate } from "react-router-dom"
 import { goerli, useAccount, useConnect, useSwitchNetwork } from "wagmi"
 import logoUrl from "../assets/logo.svg"
-import SsoButton from "../components/sso-button"
+import { useConnectModal } from "@rainbow-me/rainbowkit"
 
 export default function SSO(): JSX.Element {
     const navigate = useNavigate()
-    const { connect } = useConnect()
+    const { openConnectModal } = useConnectModal()
     const { switchNetwork } = useSwitchNetwork()
     const { pathname } = useLocation()
     const { isConnected } = useAccount()
@@ -55,6 +53,8 @@ export default function SSO(): JSX.Element {
                 justifyContent="space-between"
                 alignItems="center"
             >
+                <Heading mb="2rem">Sign in with Ethereum</Heading>
+
                 <Text mb="24px">Continue on the Ethereum blockchain</Text>
                 <Box>
                     <Button
@@ -64,20 +64,13 @@ export default function SSO(): JSX.Element {
                         fontSize="18px"
                         w="500px"
                         onClick={() =>
-                            connect({
-                                connector: new MetaMaskConnector()
-                            })
+                            openConnectModal()
                         }
                     >
                         <Icon as={FaEthereum} mr="13px" />
                         Connect Wallet
                     </Button>
                 </Box>
-                <Divider orientation="horizontal" my="24px" w="500px" />
-                <Text mb="24px">Continue off-chain</Text>
-                <SsoButton provider="Github" />
-                <SsoButton provider="Twitter" />
-                <SsoButton provider="Reddit" />
             </Flex>
         </Container>
     )

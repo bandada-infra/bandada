@@ -64,5 +64,10 @@
     },
     "resolutions": {
         "changelogithub@0.12.7": "patch:changelogithub@npm:0.12.7#.yarn/patches/changelogithub-npm-0.12.7-72f348805d.patch"
+    },
+    "dependencies": {
+        "@rainbow-me/rainbowkit": "^0.12.8",
+        "ethers": "^5",
+        "wagmi": "^0.12.11"
     }
 }

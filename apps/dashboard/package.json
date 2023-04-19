@@ -14,7 +14,7 @@
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@fontsource/ibm-plex-sans": "^4.5.13",
-        "@rainbow-me/rainbowkit": "^0.11.0",
+        "@rainbow-me/rainbowkit": "^0.12.8",
         "@semaphore-protocol/data": "3.4.0",
         "ethers": "^5.4.7",
         "framer-motion": "^10.0.1",
@@ -22,6 +22,7 @@
         "react-dom": "^18.2.0",
         "react-icons": "^4.8.0",
         "react-router-dom": "^6.8.1",
+        "siwe": "^1.1.6",
         "wagmi": "^0.11.7"
     },
     "devDependencies": {
