@@ -76,6 +76,8 @@ describe("AuthService", () => {
         // Set API_URL so auth service can validate domain
         originalApiUrl = process.env.DASHBOARD_URL
         process.env.DASHBOARD_URL = mockDashboardUrl.toString()
+        process.env.SIWE_STATEMENT =
+            "You are using your Ethereum Wallet to sign in to Bandada."
     })
 
     afterAll(() => {
