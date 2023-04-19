@@ -30,7 +30,8 @@ export class AuthService {
             )
         }
 
-        if (domain !== new URL(process.env.API_URL).host) {
+        // Assuming the auth was made from the dashboard
+        if (domain !== new URL(process.env.DASHBOARD_URL).host) {
             throw new UnauthorizedException(
                 "Invalid domain used in the SIWE message."
             )

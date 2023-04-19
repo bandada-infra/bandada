@@ -26,16 +26,16 @@ const account2 = new ethers.Wallet(
     "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
 )
 
-const testUrl = new URL("https://bandada.test")
+const mockDashboardUrl = new URL("https://bandada.test")
 
 function createSiweMessage(address, statement?: string) {
     const message = new SiweMessage({
-        domain: testUrl.host,
+        domain: mockDashboardUrl.host,
         address,
         statement:
             statement ||
             "You are using your Ethereum Wallet to sign in to Bandada.",
-        uri: testUrl.origin,
+        uri: mockDashboardUrl.origin,
         version: "1",
         chainId: 1
     })
@@ -74,12 +74,12 @@ describe("AuthService", () => {
         userService = await module.resolve(UserService)
 
         // Set API_URL so auth service can validate domain
-        originalApiUrl = process.env.API_URL
-        process.env.API_URL = testUrl.toString()
+        originalApiUrl = process.env.DASHBOARD_URL
+        process.env.DASHBOARD_URL = mockDashboardUrl.toString()
     })
 
     afterAll(() => {
-        process.env.API_URL = originalApiUrl
+        process.env.DASHBOARD_URL = originalApiUrl
     })
 
     describe("# SIWE", () => {
@@ -147,7 +147,7 @@ describe("AuthService", () => {
         })
 
         it("Should throw an error if the host is different", async () => {
-            process.env.API_URL = "https://bandada2.test"
+            process.env.DASHBOARD_URL = "https://bandada2.test"
 
             // Use a custom message to sign
             const message = await createSiweMessage(account1.address)
