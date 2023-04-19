@@ -6,9 +6,6 @@ import { v4 } from "uuid"
 import { UserService } from "../users/users.service"
 import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
-const SIWE_STATEMENT =
-    "You are using your Ethereum Wallet to sign in to Bandada."
-
 @Injectable()
 export class AuthService {
     constructor(
@@ -24,7 +21,7 @@ export class AuthService {
             signature
         )
 
-        if (statement !== SIWE_STATEMENT) {
+        if (statement !== process.env.SIWE_STATEMENT) {
             throw new UnauthorizedException(
                 "Invalid statement used in the SIWE message."
             )
