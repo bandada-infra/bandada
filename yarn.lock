@@ -7169,6 +7169,7 @@ __metadata:
     querystring: ^0.2.1
     reflect-metadata: ^0.1.13
     rxjs: ^7.2.0
+    siwe: ^1.1.6
     sqlite3: ^5.1.4
     ts-node: ^10.0.0
     typeorm: ^0.3.12
@@ -7720,7 +7721,6 @@ __metadata:
     jest: 29.4.3
     lint-staged: ^12.4.2
     prettier: ^2.8.4
-    siwe: ^1.1.6
     ts-jest: 29.0.5
     tslib: ^2.5.0
     typescript: ^4.7.0
