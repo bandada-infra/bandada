@@ -1,11 +1,11 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm"
 
-@Entity("users")
-export class User {
+@Entity("admins")
+export class Admin {
     @PrimaryColumn({ unique: true })
     id: string
 
-    // Wallet address of the user when using SIWE
+    // Wallet address of the admin when using SIWE
     @Column({ unique: true })
     address: string
 

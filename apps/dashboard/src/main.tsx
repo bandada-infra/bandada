@@ -4,14 +4,14 @@ import "@rainbow-me/rainbowkit/styles.css"
 import { StrictMode } from "react"
 import * as ReactDOM from "react-dom/client"
 import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
-import { isLoggedIn } from "./api/bandadaAPI"
+import { AuthContextProvider } from "./context/auth-context"
 import NotFoundPage from "./pages/404"
 import Home from "./pages/home"
 import Manage from "./pages/manage"
 import MyGroups from "./pages/my-groups"
-import SSO from "./pages/siwe"
+import SIWE from "./pages/siwe"
 import theme from "./styles"
-import { AuthContextProvider } from "./context/auth-context"
+import { getAdmin } from "./utils/session"
 
 const router = createBrowserRouter([
     {
@@ -20,14 +20,15 @@ const router = createBrowserRouter([
         async loader({ request }) {
             const { pathname } = new URL(request.url)
 
-            const _loggedIn = await isLoggedIn()
+            if (["/login", "/sign-up"].includes(pathname) && getAdmin()) {
+                throw redirect("/my-groups")
+            }
 
-            if (["/login", "/sign-up"].includes(pathname)) {
-                if (_loggedIn) {
-                    throw redirect("/my-groups")
-                }
-            } else if (!_loggedIn) {
-                throw redirect("/login")
+            if (
+                !["/", "/login", "/sign-up"].includes(pathname) &&
+                !getAdmin()
+            ) {
+                throw redirect("/")
             }
 
             return null
@@ -35,11 +36,11 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "login",
-                element: <SSO />
+                element: <SIWE />
             },
             {
                 path: "sign-up",
-                element: <SSO />
+                element: <SIWE />
             },
             {
                 path: "my-groups",

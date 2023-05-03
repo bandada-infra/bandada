@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from "class-validator"
 
-export class CreateUserDTO {
+export class CreateAdminDTO {
     @IsString()
     id: string
 

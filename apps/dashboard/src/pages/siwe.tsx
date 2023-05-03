@@ -9,27 +9,14 @@ import {
     Text,
     VStack
 } from "@chakra-ui/react"
-import { useEffect } from "react"
-import { FaEthereum } from "react-icons/fa"
-import { useLocation, useNavigate } from "react-router-dom"
-import { goerli, useAccount, useConnect, useSwitchNetwork } from "wagmi"
-import logoUrl from "../assets/logo.svg"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
+import { FaEthereum } from "react-icons/fa"
+import { useLocation } from "react-router-dom"
+import logoUrl from "../assets/logo.svg"
 
-export default function SSO(): JSX.Element {
-    const navigate = useNavigate()
+export default function SIWE(): JSX.Element {
     const { openConnectModal } = useConnectModal()
-    const { switchNetwork } = useSwitchNetwork()
     const { pathname } = useLocation()
-    const { isConnected } = useAccount()
-
-    useEffect(() => {
-        if (isConnected) {
-            switchNetwork?.(goerli.id)
-
-            navigate("/my-groups?on-chain")
-        }
-    }, [isConnected, navigate, switchNetwork])
 
     return (
         <Container maxW="container.xl" pt="20" pb="20" px="6">
@@ -63,9 +50,7 @@ export default function SSO(): JSX.Element {
                         border="1px solid #D0D1D2"
                         fontSize="18px"
                         w="500px"
-                        onClick={() =>
-                            openConnectModal()
-                        }
+                        onClick={openConnectModal}
                     >
                         <Icon as={FaEthereum} mr="13px" />
                         Connect Wallet

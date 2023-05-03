@@ -23,7 +23,7 @@
         "react-icons": "^4.8.0",
         "react-router-dom": "^6.8.1",
         "siwe": "^1.1.6",
-        "wagmi": "^0.11.7"
+        "wagmi": "^0.12.12"
     },
     "devDependencies": {
         "@types/react": "^18.0.27",

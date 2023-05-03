@@ -3,20 +3,20 @@ import { id } from "@ethersproject/hash"
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindOptionsWhere, Repository } from "typeorm"
-import { CreateUserDTO } from "./dto/create-user.dto"
-import { User } from "./entities/user.entity"
+import { CreateAdminDTO } from "./dto/create-admin.dto"
+import { Admin } from "./entities/admin.entity"
 
 @Injectable()
-export class UserService {
+export class AdminService {
     constructor(
-        @InjectRepository(User)
-        private readonly userRepository: Repository<User>
+        @InjectRepository(Admin)
+        private readonly adminRepository: Repository<Admin>
     ) {}
 
-    public async create(payload: CreateUserDTO): Promise<User> {
+    public async create(payload: CreateAdminDTO): Promise<Admin> {
         const username = payload.username || payload.address.slice(-5)
 
-        return this.userRepository.save({
+        return this.adminRepository.save({
             id: id(payload.id),
             address: payload.address,
             username,
@@ -25,8 +25,8 @@ export class UserService {
     }
 
     public async findOne(
-        payload: FindOptionsWhere<User> | FindOptionsWhere<User>[]
-    ): Promise<User> {
-        return this.userRepository.findOneBy(payload)
+        payload: FindOptionsWhere<Admin> | FindOptionsWhere<Admin>[]
+    ): Promise<Admin> {
+        return this.adminRepository.findOneBy(payload)
     }
 }

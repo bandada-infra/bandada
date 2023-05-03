@@ -1,6 +1,6 @@
 import { request } from "@bandada/utils"
-import { Group } from "../types/groups"
 import { SiweMessage } from "siwe"
+import { Group } from "../types/groups"
 
 const API_URL = import.meta.env.VITE_API_URL
 const CLIENT_URL = import.meta.env.VITE_CLIENT_URL
@@ -73,40 +73,29 @@ export async function removeMember(groupId: string, memberId: string) {
     }
 }
 
-export async function logOut(): Promise<void | null> {
-    try {
-        // TODO: check if this works properly.
-        await request(`${API_URL}/auth/log-out`, {
-            method: "post"
-        })
-    } catch (error) {
-        console.error(error)
-
-        return null
-    }
-}
-
-export async function isLoggedIn(): Promise<boolean> {
-    try {
-        return await request(`${import.meta.env.VITE_API_URL}/auth/getUser`)
-    } catch (error) {
-        return false
-    }
-}
-
 export async function updateGroup(
     groupId: string,
     { apiEnabled }: { apiEnabled: boolean }
 ) {
     try {
-        const group = await request(`${API_URL}/groups/${groupId}`, {
+        return (await request(`${API_URL}/groups/${groupId}`, {
             method: "PUT",
             data: { apiEnabled }
-        })
-
-        return group as Group
+        })) as Group
     } catch (error) {
         console.error(error)
+    }
+}
+
+export async function getNonce(): Promise<string | null> {
+    try {
+        return await request(`${API_URL}/auth/nonce`, {
+            method: "GET"
+        })
+    } catch (error) {
+        console.error(error)
+
+        return null
     }
 }
 
@@ -116,15 +105,30 @@ export async function signIn({
 }: {
     message: SiweMessage
     signature: string
-}) {
-    const response = await request(`${API_URL}/auth`, {
-        method: "POST",
-        data: {
-            message,
-            signature
-        }
-    })
+}): Promise<any | null> {
+    try {
+        return await request(`${API_URL}/auth`, {
+            method: "POST",
+            data: {
+                message: message.toMessage(),
+                signature
+            }
+        })
+    } catch (error) {
+        console.error(error)
 
-    const { user } = response.data
-    return { user }
+        return null
+    }
+}
+
+export async function logOut(): Promise<void | null> {
+    try {
+        await request(`${API_URL}/auth`, {
+            method: "DELETE"
+        })
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
 }

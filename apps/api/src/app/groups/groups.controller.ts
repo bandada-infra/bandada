@@ -8,16 +8,16 @@ import {
     Post,
     Put,
     Req,
-    Request,
     UseGuards
 } from "@nestjs/common"
+import { Request } from "express"
+import { AuthGuard } from "../auth/auth.guard"
 import { stringifyJSON } from "../utils"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
-import { mapGroupToResponseDTO } from "./groups.utils"
 import { GroupsService } from "./groups.service"
-import { AuthGuard } from "../auth/auth.guard"
+import { mapGroupToResponseDTO } from "./groups.utils"
 
 @Controller("groups")
 export class GroupsController {
@@ -33,7 +33,9 @@ export class GroupsController {
     @Get("admin-groups")
     @UseGuards(AuthGuard)
     async getGroupsByAdmin(@Req() req: Request) {
-        const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
+        const groups = await this.groupsService.getGroupsByAdmin(
+            req["admin"].id
+        )
 
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
@@ -46,7 +48,7 @@ export class GroupsController {
 
         const response: any = mapGroupToResponseDTO(
             group,
-            req["user"].id.toString() === group.admin
+            req["admin"].id.toString() === group.admin
         )
 
         return response
@@ -55,10 +57,10 @@ export class GroupsController {
     @Post()
     @UseGuards(AuthGuard)
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
-        const group = await this.groupsService.createGroup(dto, req["user"].id)
+        const group = await this.groupsService.createGroup(dto, req["admin"].id)
         return mapGroupToResponseDTO(
             group,
-            req["user"].id.toString() === group.admin
+            req["admin"].id.toString() === group.admin
         )
     }
 
@@ -72,12 +74,12 @@ export class GroupsController {
         const group = await this.groupsService.updateGroup(
             groupId,
             dto,
-            req["user"].id
+            req["admin"].id
         )
 
         return mapGroupToResponseDTO(
             group,
-            req["user"].id.toString() === group.admin
+            req["admin"].id.toString() === group.admin
         )
     }
 
@@ -149,6 +151,10 @@ export class GroupsController {
         }
 
         // Remove as admin
-        await this.groupsService.removeMember(groupId, memberId, req["user"].id)
+        await this.groupsService.removeMember(
+            groupId,
+            memberId,
+            req["admin"].id
+        )
     }
 }

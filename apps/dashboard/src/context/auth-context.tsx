@@ -1,29 +1,27 @@
 import {
-    connectorsForWallets,
-    lightTheme,
     AuthenticationStatus,
+    connectorsForWallets,
     createAuthenticationAdapter,
+    lightTheme,
     RainbowKitAuthenticationProvider,
     RainbowKitProvider
 } from "@rainbow-me/rainbowkit"
-import React, { ReactNode } from "react"
 import {
-    metaMaskWallet,
     coinbaseWallet,
-    walletConnectWallet,
-    trustWallet,
-    ledgerWallet
+    injectedWallet,
+    metaMaskWallet,
+    walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets"
-import { configureChains, createClient, WagmiConfig } from "wagmi"
-import { mainnet } from "wagmi/chains"
-import { publicProvider } from "wagmi/providers/public"
+import React, { ReactNode, useMemo, useState } from "react"
 import { SiweMessage } from "siwe"
-import { signIn } from "../api/bandadaAPI"
-import { deleteUser, getUser, saveUser } from "../utils/auth"
-import { User } from "../types/user"
+import { configureChains, createClient, WagmiConfig } from "wagmi"
+import { goerli } from "wagmi/chains"
+import { publicProvider } from "wagmi/providers/public"
+import { getNonce, logOut, signIn } from "../api/bandadaAPI"
+import { deleteAdmin, getAdmin, saveAdmin } from "../utils/session"
 
 const { chains, provider, webSocketProvider } = configureChains(
-    [mainnet],
+    [goerli],
     [publicProvider()]
 )
 
@@ -31,11 +29,10 @@ const connectors = connectorsForWallets([
     {
         groupName: "Wallets",
         wallets: [
+            injectedWallet({ chains }),
             metaMaskWallet({ chains }),
             coinbaseWallet({ appName: "Bandada", chains }),
-            walletConnectWallet({ chains }),
-            trustWallet({ chains }),
-            ledgerWallet({ chains })
+            walletConnectWallet({ chains })
         ]
     }
 ])
@@ -47,42 +44,34 @@ const wagmiClient = createClient({
     webSocketProvider
 })
 
-type AuthContextParams = {
-    user: User | null
-}
-
-export const AuthContext = React.createContext<AuthContextParams>({
-    user: getUser()
-})
-
 const customTheme = lightTheme()
 customTheme.radii.modal = "10px"
 
 export function AuthContextProvider(props: { children: ReactNode }) {
     const { children } = props
-    const verifyingRef = React.useRef(false)
-
-    const [user, setUser] = React.useState<User | null>(getUser())
 
     const [authStatus, setAuthStatus] =
-        React.useState<AuthenticationStatus>("loading")
+        useState<AuthenticationStatus>("loading")
 
     React.useEffect(() => {
-        setAuthStatus(getUser() ? "authenticated" : "unauthenticated")
+        setAuthStatus(getAdmin() ? "authenticated" : "unauthenticated")
     }, [])
 
-    const authAdapter = React.useMemo(
+    const authAdapter = useMemo(
         () =>
             createAuthenticationAdapter({
                 async getNonce() {
-                    return Math.random().toString(36).substring(7)
+                    const nonce = await getNonce()
+
+                    return nonce ?? ""
                 },
 
                 createMessage: ({ nonce, address, chainId }) =>
                     new SiweMessage({
                         domain: window.location.host,
                         address,
-                        statement: "Sign in with Ethereum to the app.",
+                        statement:
+                            "You are using your Ethereum Wallet to sign in to Bandada.",
                         uri: window.location.origin,
                         version: "1",
                         chainId,
@@ -92,62 +81,54 @@ export function AuthContextProvider(props: { children: ReactNode }) {
                 getMessageBody: ({ message }) => message.prepareMessage(),
 
                 verify: async ({ message, signature }) => {
-                    verifyingRef.current = true
+                    const user = await signIn({
+                        message,
+                        signature
+                    })
 
-                    try {
-                        const { user: _user } = await signIn({
-                            message,
-                            signature
-                        })
+                    if (user) {
+                        setAuthStatus("authenticated")
+                        saveAdmin(user.address)
 
-                        saveUser(_user)
-
-                        setAuthStatus(
-                            _user ? "authenticated" : "unauthenticated"
-                        )
-                        setUser(_user)
+                        window.location.reload()
 
                         return true
-                    } catch (error) {
-                        console.error(error)
-                        return false
-                    } finally {
-                        verifyingRef.current = false
                     }
+
+                    setAuthStatus("unauthenticated")
+
+                    return false
                 },
 
                 signOut: async () => {
+                    await logOut()
+
+                    deleteAdmin()
+
                     setAuthStatus("unauthenticated")
-                    deleteUser()
                 }
             }),
         []
     )
 
     return (
-        <AuthContext.Provider
-            value={{
-                user
-            }}
-        >
-            <WagmiConfig client={wagmiClient}>
-                <RainbowKitAuthenticationProvider
-                    adapter={authAdapter}
-                    status={authStatus}
+        <WagmiConfig client={wagmiClient}>
+            <RainbowKitAuthenticationProvider
+                adapter={authAdapter}
+                status={authStatus}
+            >
+                <RainbowKitProvider
+                    chains={chains}
+                    modalSize="compact"
+                    theme={customTheme}
+                    appInfo={{
+                        appName: "Bandada"
+                    }}
+                    showRecentTransactions={false}
                 >
-                    <RainbowKitProvider
-                        chains={chains}
-                        modalSize="compact"
-                        theme={customTheme}
-                        appInfo={{
-                            appName: "Bandada"
-                        }}
-                        showRecentTransactions={false}
-                    >
-                        {children}
-                    </RainbowKitProvider>
-                </RainbowKitAuthenticationProvider>
-            </WagmiConfig>
-        </AuthContext.Provider>
+                    {children}
+                </RainbowKitProvider>
+            </RainbowKitAuthenticationProvider>
+        </WagmiConfig>
     )
 }

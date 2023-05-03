@@ -16,6 +16,7 @@ import { useCallback } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useAccount, useConnect } from "wagmi"
 import { logOut as _logOut } from "../api/bandadaAPI"
+import { deleteAdmin } from "../utils/session"
 
 export default function NavBar(): JSX.Element {
     const navigate = useNavigate()
@@ -27,6 +28,8 @@ export default function NavBar(): JSX.Element {
 
     const logOut = useCallback(async () => {
         await _logOut()
+
+        deleteAdmin()
 
         navigate("/")
     }, [navigate])

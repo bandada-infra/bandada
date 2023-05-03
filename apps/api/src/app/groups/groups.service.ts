@@ -12,7 +12,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
-import { v4 as uuidv4 } from "uuid"
+import { v4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
@@ -115,7 +115,7 @@ export class GroupsService {
 
             // Generate a new API key if it doesn't exist
             if (!group.apiKey) {
-                group.apiKey = uuidv4()
+                group.apiKey = v4()
             }
         }
 
