@@ -15,13 +15,13 @@ import {
     Text,
     useDisclosure
 } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { CgProfile } from "react-icons/cg"
 import { MdOutlineArrowBackIosNew } from "react-icons/md"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import {
     getGroup as getOffchainGroup,
-    removeMember,
+    removeMember as removeOffchainGroupMember,
     updateGroup
 } from "../api/bandadaAPI"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
@@ -34,7 +34,9 @@ export default function GroupPage(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { groupId, groupType } = useParams()
     const [group, setGroup] = useState<Group | null>()
-    const [updatedTime, setUpdatedTime] = useState(new Date())
+    const [_status, setStatus] = useState<
+        "default" | "loading" | "success" | "failure"
+    >("default")
 
     useEffect(() => {
         ;(async () => {
@@ -59,7 +61,7 @@ export default function GroupPage(): JSX.Element {
                 }
             }
         })()
-    }, [groupId, groupType, navigate, updatedTime])
+    }, [groupId, groupType, navigate])
 
     async function onAPIAccessToggle(e: React.ChangeEvent<HTMLInputElement>) {
         const isEnabled = e.target.checked
@@ -68,6 +70,23 @@ export default function GroupPage(): JSX.Element {
         })
         setGroup(res)
     }
+
+    const removeMember = useCallback(
+        async (member: string) => {
+            if (group) {
+                setStatus("loading")
+
+                if (await removeOffchainGroupMember(group.id, member)) {
+                    setStatus("success")
+
+                    window.location.reload()
+                } else {
+                    setStatus("failure")
+                }
+            }
+        },
+        [group]
+    )
 
     if (!group) {
         return <div />
@@ -185,22 +204,16 @@ export default function GroupPage(): JSX.Element {
                                     {member}
                                 </Text>
                             </Flex>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={async () => {
-                                    if (
-                                        window.confirm(
-                                            "Are you sure you want to remove this member from the group?"
-                                        )
-                                    ) {
-                                        await removeMember(group.id, member)
-                                        setUpdatedTime(new Date())
-                                    }
-                                }}
-                            >
-                                Remove
-                            </Button>
+                            {groupType === "off-chain" && (
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    isLoading={_status === "loading"}
+                                    onClick={() => removeMember(member)}
+                                >
+                                    Remove
+                                </Button>
+                            )}
                         </Flex>
                     ))}
                 </Box>

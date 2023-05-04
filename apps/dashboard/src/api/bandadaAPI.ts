@@ -59,17 +59,24 @@ export async function createGroup(
             }
         })
     } catch (error) {
+        console.error(error)
+
         return null
     }
 }
 
-export async function removeMember(groupId: string, memberId: string) {
+export async function removeMember(
+    groupId: string,
+    memberId: string
+): Promise<void | null> {
     try {
         await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
             method: "delete"
         })
     } catch (error) {
         console.error(error)
+
+        return null
     }
 }
 
