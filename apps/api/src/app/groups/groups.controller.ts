@@ -108,16 +108,18 @@ export class GroupsController {
     async addMember(
         @Param("id") groupId: string,
         @Body() dto: AddMemberDto,
-        @Headers() headers
+        @Headers() headers: Headers
     ): Promise<void> {
         if (dto.inviteCode) {
             await this.groupsService.joinGroup(groupId, dto.id, {
                 inviteCode: dto.inviteCode
             })
+
             return
         }
 
         const apiKey = headers["x-api-key"] as string
+
         if (apiKey) {
             await this.groupsService.addMemberWithAPIKey(
                 groupId,
@@ -137,7 +139,7 @@ export class GroupsController {
         @Param("id") groupId: string,
         @Param("memberId") memberId: string,
         @Req() req: Request,
-        @Headers() headers
+        @Headers() headers: Headers
     ): Promise<void> {
         const apiKey = headers["x-api-key"] as string
 
@@ -150,11 +152,11 @@ export class GroupsController {
             return
         }
 
-        // Remove as admin
+        // Remove as an admin.
         await this.groupsService.removeMember(
             groupId,
             memberId,
-            req["admin"].id
+            req.session.adminId
         )
     }
 }
