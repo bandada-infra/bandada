@@ -25,16 +25,16 @@ export class InvitesService {
      * Creates a new group invite with a unique code. Group invites can only be
      * created by group admins.
      * @param dto External parameters used to create a new Invite.
-     * @param groupAdmin Group admin username.
+     * @param adminId Group admin id.
      * @returns The created invite.
      */
     async createInvite(
         { groupId }: CreateInviteDto,
-        groupAdmin: string
+        adminId: string
     ): Promise<Invite> {
         const group = await this.groupsService.getGroup(groupId)
 
-        if (group.admin !== groupAdmin.toString()) {
+        if (group.admin !== adminId.toString()) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )

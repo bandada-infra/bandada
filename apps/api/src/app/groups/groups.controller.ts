@@ -34,34 +34,28 @@ export class GroupsController {
     @UseGuards(AuthGuard)
     async getGroupsByAdmin(@Req() req: Request) {
         const groups = await this.groupsService.getGroupsByAdmin(
-            req["admin"].id
+            req.session.adminId
         )
 
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
 
-    // TODO: Make this API public without guards
     @Get(":id")
-    @UseGuards(AuthGuard)
     async getGroup(@Param("id") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
-        const response: any = mapGroupToResponseDTO(
-            group,
-            req["admin"].id.toString() === group.admin
-        )
-
-        return response
+        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
     }
 
     @Post()
     @UseGuards(AuthGuard)
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
-        const group = await this.groupsService.createGroup(dto, req["admin"].id)
-        return mapGroupToResponseDTO(
-            group,
-            req["admin"].id.toString() === group.admin
+        const group = await this.groupsService.createGroup(
+            dto,
+            req.session.adminId
         )
+
+        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
     }
 
     @Put(":id")
@@ -74,13 +68,10 @@ export class GroupsController {
         const group = await this.groupsService.updateGroup(
             groupId,
             dto,
-            req["admin"].id
+            req.session.adminId
         )
 
-        return mapGroupToResponseDTO(
-            group,
-            req["admin"].id.toString() === group.admin
-        )
+        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
     }
 
     @Get(":id/members/:member")
