@@ -9,7 +9,6 @@ import NotFoundPage from "./pages/404"
 import Home from "./pages/home"
 import Manage from "./pages/manage"
 import MyGroups from "./pages/my-groups"
-import SIWE from "./pages/siwe"
 import theme from "./styles"
 import { getAdmin } from "./utils/session"
 
@@ -20,28 +19,17 @@ const router = createBrowserRouter([
         async loader({ request }) {
             const { pathname } = new URL(request.url)
 
-            if (["/login", "/sign-up"].includes(pathname) && getAdmin()) {
-                throw redirect("/my-groups")
-            }
-
-            if (
-                !["/", "/login", "/sign-up"].includes(pathname) &&
-                !getAdmin()
-            ) {
+            if (["/"].includes(pathname)) {
+                if (getAdmin()) {
+                    throw redirect("/my-groups")
+                }
+            } else if (!getAdmin()) {
                 throw redirect("/")
             }
 
             return null
         },
         children: [
-            {
-                path: "login",
-                element: <SIWE />
-            },
-            {
-                path: "sign-up",
-                element: <SIWE />
-            },
             {
                 path: "my-groups",
                 element: <MyGroups />

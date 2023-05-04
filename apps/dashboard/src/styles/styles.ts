@@ -4,7 +4,7 @@ import { Styles } from "@chakra-ui/theme-tools"
 const styles: Styles = {
     global: (): SystemStyleObject => ({
         body: {
-            bg: "background.900"
+            bg: "background.100"
         },
         "body, #root, #root > div": {
             minHeight: "100vh"
