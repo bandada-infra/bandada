@@ -18,11 +18,10 @@ async function bootstrap() {
 
     app.use(
         ironSession({
+            ttl: 1209600, // Expiry: 14 days.
             cookieName: "bandada_siwe_cookie",
             password: process.env.IRON_SESSION_PASSWORD,
             cookieOptions: {
-                // TODO: decide when session should expiry.
-                // expires: ,
                 secure: process.env.NODE_ENV === "production"
             }
         })
