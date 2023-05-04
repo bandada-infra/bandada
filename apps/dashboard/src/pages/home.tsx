@@ -21,7 +21,7 @@ export default function Home(): JSX.Element {
 
     return (
         <>
-            {!["/", "/login", "/sign-up"].includes(pathname) && <NavBar />}
+            {pathname !== "/" && <NavBar />}
 
             <Box flex="1">
                 {outlet || (

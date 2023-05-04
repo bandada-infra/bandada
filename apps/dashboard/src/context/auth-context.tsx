@@ -38,7 +38,7 @@ const connectors = connectorsForWallets([
 ])
 
 const wagmiClient = createClient({
-    autoConnect: false,
+    autoConnect: true,
     connectors,
     provider,
     webSocketProvider
@@ -104,6 +104,8 @@ export function AuthContextProvider(props: { children: ReactNode }) {
                     await logOut()
 
                     deleteAdmin()
+
+                    window.location.reload()
 
                     setAuthStatus("unauthenticated")
                 }
