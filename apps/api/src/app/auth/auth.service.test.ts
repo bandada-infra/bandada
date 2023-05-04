@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ethers } from "ethers"
-import { SiweMessage } from "siwe"
+import { generateNonce, SiweMessage } from "siwe"
 import { Admin } from "../admins/entities/admin.entity"
 import { AdminService } from "../admins/admins.service"
 import { AuthService } from "./auth.service"
@@ -27,11 +27,13 @@ const account2 = new ethers.Wallet(
 
 const mockDashboardUrl = new URL("https://bandada.test")
 
+const nonce = generateNonce()
+
 function createSiweMessage(address: string, statement?: string) {
     const message = new SiweMessage({
         domain: mockDashboardUrl.host,
         address,
-        nonce: "1234",
+        nonce,
         statement:
             statement ||
             "You are using your Ethereum Wallet to sign in to Bandada.",
@@ -81,7 +83,7 @@ describe("AuthService", () => {
     })
 
     describe("# SIWE", () => {
-        it("Should sign in and generate token for a new admin", async () => {
+        it("Should sign in and create a a new admin", async () => {
             const message = createSiweMessage(account1.address)
             const signature = await account1.signMessage(message)
 
@@ -90,14 +92,14 @@ describe("AuthService", () => {
                     message,
                     signature
                 },
-                "1234"
+                nonce
             )
 
             expect(admin).toBeTruthy()
             expect(admin.address).toBe(account1.address)
         })
 
-        it("Should sign in and generate token for an existing admin", async () => {
+        it("Should sign in and return an existing admin", async () => {
             // Create a admin directly
             const admin2 = await adminService.create({
                 id: "account2",
@@ -113,7 +115,7 @@ describe("AuthService", () => {
                     message,
                     signature
                 },
-                "1234"
+                nonce
             )
 
             expect(admin).toBeTruthy()
@@ -133,7 +135,7 @@ describe("AuthService", () => {
                         message,
                         signature
                     },
-                    "1234"
+                    nonce
                 )
             ).rejects.toThrow()
         })
@@ -149,7 +151,7 @@ describe("AuthService", () => {
                         message: "invalid message",
                         signature
                     },
-                    "1234"
+                    nonce
                 )
             ).rejects.toThrow()
         })
@@ -167,7 +169,7 @@ describe("AuthService", () => {
                         message: "invalid message",
                         signature
                     },
-                    "1234"
+                    nonce
                 )
             ).rejects.toThrow()
         })
