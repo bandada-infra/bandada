@@ -14,7 +14,7 @@ import logoImage from "../assets/logo.svg"
 import Footbar from "../components/footbar"
 import NavBar from "../components/navbar"
 
-export default function Home(): JSX.Element {
+export default function HomePage(): JSX.Element {
     const outlet = useOutlet()
     const { openConnectModal } = useConnectModal()
     const { pathname } = useLocation()

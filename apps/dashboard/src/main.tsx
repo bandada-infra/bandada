@@ -6,22 +6,22 @@ import * as ReactDOM from "react-dom/client"
 import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"
 import { AuthContextProvider } from "./context/auth-context"
 import NotFoundPage from "./pages/404"
-import Home from "./pages/home"
-import Manage from "./pages/manage"
-import MyGroups from "./pages/my-groups"
+import HomePage from "./pages/home"
+import GroupPage from "./pages/group"
+import GroupsPage from "./pages/groups"
 import theme from "./styles"
 import { getAdmin } from "./utils/session"
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home />,
+        element: <HomePage />,
         async loader({ request }) {
             const { pathname } = new URL(request.url)
 
             if (["/"].includes(pathname)) {
                 if (getAdmin()) {
-                    throw redirect("/my-groups")
+                    throw redirect("/groups")
                 }
             } else if (!getAdmin()) {
                 throw redirect("/")
@@ -31,12 +31,12 @@ const router = createBrowserRouter([
         },
         children: [
             {
-                path: "my-groups",
-                element: <MyGroups />
+                path: "groups",
+                element: <GroupsPage />
             },
             {
-                path: "my-groups/:groupId",
-                element: <Manage />
+                path: "groups/:groupType/:groupId",
+                element: <GroupPage />
             },
             {
                 path: "*",

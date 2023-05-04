@@ -6,6 +6,8 @@ import {
     FormControl,
     FormLabel,
     Heading,
+    HStack,
+    IconButton,
     Input,
     InputGroup,
     InputLeftAddon,
@@ -15,30 +17,30 @@ import {
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { CgProfile } from "react-icons/cg"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
-import AddMemberModal from "../components/add-member-modal"
-import InviteModal from "../components/invite-modal"
-import { Group } from "../types/groups"
-import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
+import { MdOutlineArrowBackIosNew } from "react-icons/md"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import {
     getGroup as getOffchainGroup,
     removeMember,
     updateGroup
 } from "../api/bandadaAPI"
+import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
+import AddMemberModal from "../components/add-member-modal"
+import InviteModal from "../components/invite-modal"
+import { Group } from "../types/groups"
 
-export default function Manage(): JSX.Element {
+export default function GroupPage(): JSX.Element {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { groupId } = useParams()
+    const { groupId, groupType } = useParams()
     const [group, setGroup] = useState<Group | null>()
     const [updatedTime, setUpdatedTime] = useState(new Date())
-    const [searchParams] = useSearchParams()
 
     useEffect(() => {
         ;(async () => {
             if (groupId) {
                 try {
-                    if (searchParams.has("on-chain")) {
+                    if (groupType === "on-chain") {
                         const onchainGroup = await getOnchainGroup(groupId)
 
                         if (onchainGroup) {
@@ -57,7 +59,7 @@ export default function Manage(): JSX.Element {
                 }
             }
         })()
-    }, [groupId, navigate, searchParams, updatedTime])
+    }, [groupId, groupType, navigate, updatedTime])
 
     async function onAPIAccessToggle(e: React.ChangeEvent<HTMLInputElement>) {
         const isEnabled = e.target.checked
@@ -74,7 +76,25 @@ export default function Manage(): JSX.Element {
     return (
         <Container maxW="container.xl">
             <Box borderBottom="1px" borderColor="gray.200">
-                <Flex mt="40px" justifyContent="space-between">
+                <HStack mt="20px">
+                    <Link to="/groups">
+                        <IconButton
+                            variant="link"
+                            aria-label="Go back"
+                            icon={<MdOutlineArrowBackIosNew />}
+                        />
+                    </Link>
+
+                    <Text
+                        fontSize="sm"
+                        textTransform="uppercase"
+                        color="background.700"
+                    >
+                        all groups
+                    </Text>
+                </HStack>
+
+                <Flex mt="30px" justifyContent="space-between">
                     <Heading fontSize="32px">{group.name}</Heading>
                     <Button
                         onClick={onOpen}
@@ -83,9 +103,7 @@ export default function Manage(): JSX.Element {
                         fontSize="16px"
                         border="1px solid #373A3E"
                     >
-                        {searchParams.has("on-chain")
-                            ? "Add Member"
-                            : "New Invite"}
+                        {groupType === "on-chain" ? "Add Member" : "New Invite"}
                     </Button>
                 </Flex>
 
@@ -106,32 +124,34 @@ export default function Manage(): JSX.Element {
                             : "Community size group"}
                     </Text>
 
-                    <Box w="50%">
-                        <FormControl display="flex" alignItems="center">
-                            <FormLabel htmlFor="email-alerts" mb="0">
-                                Enable API Access
-                            </FormLabel>
-                            <Switch
-                                size="lg"
-                                id="enable-api"
-                                isChecked={group.apiEnabled}
-                                onChange={(e) => onAPIAccessToggle(e)}
-                            />
-                        </FormControl>
-
-                        {group.apiEnabled && (
-                            <InputGroup mt="1rem">
-                                <InputLeftAddon>API Key</InputLeftAddon>
-                                <Input
-                                    value={group?.apiKey}
-                                    isReadOnly
-                                    onClick={(e) => {
-                                        e.currentTarget.select()
-                                    }}
+                    {groupType === "off-chain" && (
+                        <Box w="50%">
+                            <FormControl display="flex" alignItems="center">
+                                <FormLabel htmlFor="email-alerts" mb="0">
+                                    Enable API Access
+                                </FormLabel>
+                                <Switch
+                                    size="lg"
+                                    id="enable-api"
+                                    isChecked={group.apiEnabled}
+                                    onChange={(e) => onAPIAccessToggle(e)}
                                 />
-                            </InputGroup>
-                        )}
-                    </Box>
+                            </FormControl>
+
+                            {group.apiEnabled && (
+                                <InputGroup mt="1rem">
+                                    <InputLeftAddon>API Key</InputLeftAddon>
+                                    <Input
+                                        value={group?.apiKey}
+                                        isReadOnly
+                                        onClick={(e) => {
+                                            e.currentTarget.select()
+                                        }}
+                                    />
+                                </InputGroup>
+                            )}
+                        </Box>
+                    )}
                 </Flex>
             </Box>
 
@@ -225,7 +245,7 @@ export default function Manage(): JSX.Element {
                     </Flex>
                 </Box>
             </Flex>
-            {searchParams.has("on-chain") ? (
+            {groupType === "on-chain" ? (
                 <AddMemberModal
                     isOpen={isOpen}
                     onClose={onClose}

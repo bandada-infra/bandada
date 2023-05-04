@@ -14,11 +14,12 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Select,
     Spinner,
-    Text
+    Text,
+    VStack
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
-import { useSearchParams } from "react-router-dom"
 import { useSigner } from "wagmi"
 import { createGroup as createOffchainGroup } from "../api/bandadaAPI"
 import { groupSizeInfo } from "../types/groups"
@@ -30,9 +31,9 @@ export default function CreateGroupModal({
     isOpen: boolean
     onClose: () => void
 }): JSX.Element {
-    const [searchParams] = useSearchParams()
     const [_step, setStep] = useState<number>(0)
     const [_groupName, setGroupName] = useState<string>("")
+    const [_groupType, setGroupType] = useState<string>("")
     const [_groupDescription, setGroupDescription] = useState<string>("")
     const [_groupSize, setGroupSize] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>()
@@ -55,8 +56,13 @@ export default function CreateGroupModal({
     }, [_groupSize, nextStep])
 
     const createGroup = useCallback(
-        async (name: string, description: string, treeDepth: number) => {
-            if (searchParams.has("on-chain") && signer) {
+        async (
+            name: string,
+            type: string,
+            description: string,
+            treeDepth: number
+        ) => {
+            if (type === "on-chain" && signer) {
                 setLoading(true)
                 try {
                     const semaphore = getSemaphoreContract(
@@ -84,7 +90,7 @@ export default function CreateGroupModal({
                 onClose()
             }
         },
-        [searchParams, signer, onClose]
+        [signer, onClose]
     )
 
     // eslint-disable-next-line react/no-unstable-nested-components
@@ -125,6 +131,7 @@ export default function CreateGroupModal({
             if (!isOpen) {
                 setStep(0)
                 setGroupName("")
+                setGroupType("")
                 setGroupDescription("")
                 setGroupSize("")
             }
@@ -146,32 +153,36 @@ export default function CreateGroupModal({
                 <ModalBody>
                     {_step === 0 ? (
                         <form onSubmit={nextStep}>
-                            <Flex
-                                h={
-                                    searchParams.has("on-chain")
-                                        ? "250px"
-                                        : "300px"
-                                }
-                                flexDir="column"
-                                justifyContent="space-around"
-                            >
+                            <VStack spacing="4" mt="2">
                                 <FormControl>
                                     <FormLabel>Name</FormLabel>
                                     <Input
                                         value={_groupName}
-                                        maxLength={
-                                            searchParams.has("on-chain")
-                                                ? 31
-                                                : 100
-                                        }
+                                        maxLength={32}
                                         onChange={(e) =>
                                             setGroupName(e.target.value)
                                         }
                                         isRequired
-                                        placeholder="Give your group a title"
+                                        placeholder="Group name"
                                     />
                                 </FormControl>
-                                {!searchParams.has("on-chain") && (
+                                <FormControl>
+                                    <FormLabel>Type</FormLabel>
+                                    <Select
+                                        placeholder="Group type"
+                                        onChange={(e) =>
+                                            setGroupType(e.target.value as any)
+                                        }
+                                    >
+                                        <option value="on-chain">
+                                            On-chain
+                                        </option>
+                                        <option value="off-chain">
+                                            Off-chain
+                                        </option>
+                                    </Select>
+                                </FormControl>
+                                {_groupType === "off-chain" && (
                                     <FormControl>
                                         <FormLabel>Description</FormLabel>
                                         <Input
@@ -187,15 +198,17 @@ export default function CreateGroupModal({
                                         />
                                     </FormControl>
                                 )}
-                                <Button
-                                    type="submit"
-                                    fontSize="lg"
-                                    variant="solid"
-                                    colorScheme="primary"
-                                >
-                                    Continue
-                                </Button>
-                            </Flex>
+                            </VStack>
+                            <Button
+                                mt="6"
+                                mb="5"
+                                type="submit"
+                                fontSize="lg"
+                                variant="solid"
+                                colorScheme="primary"
+                            >
+                                Continue
+                            </Button>
                         </form>
                     ) : _step === 1 ? (
                         <Box>
@@ -295,6 +308,7 @@ export default function CreateGroupModal({
                                             try {
                                                 createGroup(
                                                     _groupName,
+                                                    _groupType,
                                                     _groupDescription,
                                                     groupSizeInfo[_groupSize]
                                                         .treeDepth
