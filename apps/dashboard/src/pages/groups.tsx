@@ -29,25 +29,27 @@ export default function GroupsPage(): JSX.Element {
 
     useEffect(() => {
         ;(async () => {
-            setIsLoading(true)
+            if (address) {
+                setIsLoading(true)
 
-            const onchainGroups = await getOnchainGroups(address as string)
-            const offchainGroups = await getOffchainGroups()
+                const onchainGroups = await getOnchainGroups(address as string)
+                const offchainGroups = await getOffchainGroups()
 
-            if (onchainGroups && offchainGroups) {
-                setGroupList([
-                    ...onchainGroups.map((group) => ({
-                        ...group,
-                        type: "on-chain"
-                    })),
-                    ...offchainGroups.map((group) => ({
-                        ...group,
-                        type: "off-chain"
-                    }))
-                ])
+                if (onchainGroups && offchainGroups) {
+                    setGroupList([
+                        ...onchainGroups.map((group) => ({
+                            ...group,
+                            type: "on-chain"
+                        })),
+                        ...offchainGroups.map((group) => ({
+                            ...group,
+                            type: "off-chain"
+                        }))
+                    ])
+                }
+
+                setIsLoading(false)
             }
-
-            setIsLoading(false)
         })()
     }, [address])
 

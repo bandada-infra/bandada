@@ -1,7 +1,11 @@
 import { shortenAddress } from "@bandada/utils"
 import { Button, Container, HStack, Image, Link } from "@chakra-ui/react"
-import { useAccountModal, useChainModal } from "@rainbow-me/rainbowkit"
-import { useCallback } from "react"
+import {
+    useAccountModal,
+    useChainModal,
+    useConnectModal
+} from "@rainbow-me/rainbowkit"
+import { useCallback, useEffect } from "react"
 import { useAccount, useNetwork } from "wagmi"
 import { goerli } from "wagmi/chains"
 import logoImage from "../assets/logo.svg"
@@ -10,6 +14,7 @@ import { getAdmin } from "../utils/session"
 export default function NavBar(): JSX.Element {
     const { chain } = useNetwork()
     const { address } = useAccount()
+    const { openConnectModal } = useConnectModal()
     const { openChainModal } = useChainModal()
     const { openAccountModal } = useAccountModal()
 
@@ -19,6 +24,12 @@ export default function NavBar(): JSX.Element {
     )
 
     const isLoggedInAdmin = useCallback(() => getAdmin() === address, [address])
+
+    useEffect(() => {
+        if (getAdmin() && !isLoggedInAdmin()) {
+            openConnectModal?.()
+        }
+    }, [isLoggedInAdmin, openConnectModal])
 
     return (
         <Container maxWidth="container.xl">
