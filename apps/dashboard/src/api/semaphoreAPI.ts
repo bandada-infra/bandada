@@ -43,15 +43,15 @@ export async function getGroups(admin: string): Promise<Group[] | null> {
     }
 }
 
-export async function getGroup(groupName: string): Promise<Group | null> {
+export async function getGroup(groupId: string): Promise<Group | null> {
     try {
-        const group = await subgraph.getGroup(groupName, {
+        const group = await subgraph.getGroup(groupId, {
             members: true
         })
 
         return {
             id: group.id,
-            name: groupName,
+            name: formatGroupName(group.id),
             description: "",
             treeDepth: group.merkleTree.depth,
             members: group.members as string[],

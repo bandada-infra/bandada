@@ -1,11 +1,10 @@
 import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { SiweMessage } from "siwe"
 import { ethers } from "ethers"
-import { JwtModule } from "@nestjs/jwt"
+import { generateNonce, SiweMessage } from "siwe"
+import { Admin } from "../admins/entities/admin.entity"
+import { AdminService } from "../admins/admins.service"
 import { AuthService } from "./auth.service"
-import { User } from "../users/entities/user.entity"
-import { UserService } from "../users/users.service"
 
 jest.mock("@bandada/utils", () => ({
     __esModule: true,
@@ -28,10 +27,13 @@ const account2 = new ethers.Wallet(
 
 const mockDashboardUrl = new URL("https://bandada.test")
 
-function createSiweMessage(address, statement?: string) {
+const nonce = generateNonce()
+
+function createSiweMessage(address: string, statement?: string) {
     const message = new SiweMessage({
         domain: mockDashboardUrl.host,
         address,
+        nonce,
         statement:
             statement ||
             "You are using your Ethereum Wallet to sign in to Bandada.",
@@ -45,7 +47,7 @@ function createSiweMessage(address, statement?: string) {
 
 describe("AuthService", () => {
     let authService: AuthService
-    let userService: UserService
+    let adminService: AdminService
 
     let originalApiUrl: string
 
@@ -57,21 +59,17 @@ describe("AuthService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [User],
+                        entities: [Admin],
                         synchronize: true
                     })
                 }),
-                TypeOrmModule.forFeature([User]),
-                JwtModule.register({
-                    secret: "s3cret",
-                    signOptions: { expiresIn: "300s" }
-                })
+                TypeOrmModule.forFeature([Admin])
             ],
-            providers: [AuthService, UserService]
+            providers: [AuthService, AdminService]
         }).compile()
 
         authService = await module.resolve(AuthService)
-        userService = await module.resolve(UserService)
+        adminService = await module.resolve(AdminService)
 
         // Set API_URL so auth service can validate domain
         originalApiUrl = process.env.DASHBOARD_URL
@@ -85,66 +83,76 @@ describe("AuthService", () => {
     })
 
     describe("# SIWE", () => {
-        it("Should sign in and generate token for a new user", async () => {
-            const message = await createSiweMessage(account1.address)
+        it("Should sign in and create a a new admin", async () => {
+            const message = createSiweMessage(account1.address)
             const signature = await account1.signMessage(message)
 
-            const { user, token } = await authService.signIn({
-                message,
-                signature
-            })
+            const { admin } = await authService.signIn(
+                {
+                    message,
+                    signature
+                },
+                nonce
+            )
 
-            expect(user).toBeTruthy()
-            expect(user.address).toBe(account1.address)
-            expect(token).toBeTruthy()
+            expect(admin).toBeTruthy()
+            expect(admin.address).toBe(account1.address)
         })
 
-        it("Should sign in and generate token for an existing user", async () => {
-            // Create a user directly
-            const user2 = await userService.create({
+        it("Should sign in and return an existing admin", async () => {
+            // Create a admin directly
+            const admin2 = await adminService.create({
                 id: "account2",
                 address: account2.address
             })
 
             // Sign in with same address
-            const message = await createSiweMessage(account2.address)
+            const message = createSiweMessage(account2.address)
             const signature = await account2.signMessage(message)
 
-            const { user, token } = await authService.signIn({
-                message,
-                signature
-            })
+            const { admin } = await authService.signIn(
+                {
+                    message,
+                    signature
+                },
+                nonce
+            )
 
-            expect(user).toBeTruthy()
-            expect(token).toBeTruthy()
-            expect(user.address).toBe(user2.address)
-            expect(user.address).toBe(account2.address)
+            expect(admin).toBeTruthy()
+            expect(admin.address).toBe(admin2.address)
+            expect(admin.address).toBe(account2.address)
         })
 
         it("Should throw an error if the signature is invalid", async () => {
-            const message = await createSiweMessage(account1.address)
+            const message = createSiweMessage(account1.address)
 
             // Sign the message with a different account
             const signature = await account2.signMessage(message)
 
             await expect(
-                authService.signIn({
-                    message,
-                    signature
-                })
+                authService.signIn(
+                    {
+                        message,
+                        signature
+                    },
+                    nonce
+                )
             ).rejects.toThrow()
         })
 
         it("Should throw an error if the statement is invalid", async () => {
             // Use a custom message to sign
-            const message = await createSiweMessage(account1.address, "Sign in")
+            const message = createSiweMessage(account1.address, "Sign in")
             const signature = await account1.signMessage(message)
 
             await expect(
-                authService.signIn({
-                    message: "invalid message",
-                    signature
-                })
+                authService.signIn(
+                    {
+                        message: "invalid message",
+                        signature
+                    },
+                    nonce
+                )
             ).rejects.toThrow()
         })
 
@@ -152,14 +160,17 @@ describe("AuthService", () => {
             process.env.DASHBOARD_URL = "https://bandada2.test"
 
             // Use a custom message to sign
-            const message = await createSiweMessage(account1.address)
+            const message = createSiweMessage(account1.address)
             const signature = await account1.signMessage(message)
 
             await expect(
-                authService.signIn({
-                    message: "invalid message",
-                    signature
-                })
+                authService.signIn(
+                    {
+                        message: "invalid message",
+                        signature
+                    },
+                    nonce
+                )
             ).rejects.toThrow()
         })
     })

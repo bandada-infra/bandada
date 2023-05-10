@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Post, Req, Res } from "@nestjs/common"
-import { Request, Response } from "express"
+import { Body, Controller, Delete, Get, Post, Req } from "@nestjs/common"
+import { Request } from "express"
+import { generateNonce } from "siwe"
 import { AuthService } from "./auth.service"
 import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
@@ -7,29 +8,34 @@ import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
+    @Get("nonce")
+    async nonce(@Req() req: Request) {
+        req.session.nonce = generateNonce()
+
+        await req.session.save()
+
+        return req.session.nonce
+    }
+
     @Post("")
-    async signIn(@Body() body: SignInWithEthereumDTO, @Res() res: Response) {
-        const { token, user } = await this.authService.signIn({
-            message: body.message,
-            signature: body.signature
-        })
+    async signIn(@Body() body: SignInWithEthereumDTO, @Req() req: Request) {
+        const { admin } = await this.authService.signIn(
+            {
+                message: body.message,
+                signature: body.signature
+            },
+            req.session.nonce
+        )
 
-        res.cookie("token", token, {
-            httpOnly: true,
-            expires: new Date()
-        })
+        req.session.adminId = admin.id
 
-        res.send(user)
+        await req.session.save()
+
+        return admin
     }
 
     @Delete("")
-    logOut(@Req() _req: Request, @Res() res: Response) {
-        res.cookie("token", "", {
-            httpOnly: true,
-            expires: new Date()
-        })
-
-        // TODO: Avoid this redirect here and move to client side
-        res.redirect(`${process.env.DASHBOARD_URL}`)
+    logOut(@Req() req: Request) {
+        req.session.destroy()
     }
 }

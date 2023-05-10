@@ -6,7 +6,7 @@ dotenvConfig({ path: resolve(process.cwd(), ".env") })
 
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { UsersModule } from "./users/users.module"
+import { AdminsModule } from "./admins/admins.module"
 import { AuthModule } from "./auth/auth.module"
 import { GroupsModule } from "./groups/groups.module"
 import { InvitesModule } from "./invites/invites.module"
@@ -16,7 +16,7 @@ type DB_TYPE = "mysql" | "sqlite" | "postgres"
 @Module({
     imports: [
         AuthModule,
-        UsersModule,
+        AdminsModule,
         InvitesModule,
         GroupsModule,
         TypeOrmModule.forRoot({

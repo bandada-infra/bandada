@@ -1,25 +1,29 @@
 /* istanbul ignore file */
-import { Injectable, UnauthorizedException } from "@nestjs/common"
-import { JwtService } from "@nestjs/jwt"
+import {
+    Injectable,
+    UnauthorizedException,
+    UnprocessableEntityException
+} from "@nestjs/common"
 import { SiweMessage } from "siwe"
 import { v4 } from "uuid"
-import { UserService } from "../users/users.service"
+import { AdminService } from "../admins/admins.service"
 import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private readonly userService: UserService,
-        private readonly jwtService: JwtService
-    ) {}
+    constructor(private readonly adminService: AdminService) {}
 
-    async signIn(params: SignInWithEthereumDTO) {
-        const { message, signature } = params
-
+    async signIn(
+        { message, signature }: SignInWithEthereumDTO,
+        expectedNonce: string
+    ) {
         const siweMessage = new SiweMessage(message)
-        const { address, statement, domain } = await siweMessage.validate(
-            signature
-        )
+        const { address, statement, domain, nonce } =
+            await siweMessage.validate(signature)
+
+        if (nonce !== expectedNonce) {
+            throw new UnprocessableEntityException("Invalid nonce.")
+        }
 
         if (statement !== process.env.SIWE_STATEMENT) {
             throw new UnauthorizedException(
@@ -34,21 +38,15 @@ export class AuthService {
             )
         }
 
-        let user = await this.userService.findOne({ address })
+        let admin = await this.adminService.findOne({ address })
 
-        if (!user) {
-            user = await this.userService.create({
+        if (!admin) {
+            admin = await this.adminService.create({
                 id: v4(),
                 address
             })
         }
 
-        // TODO: Use common expiration
-        const token = this.jwtService.sign({
-            id: user.id,
-            username: user.username
-        })
-
-        return { token, user }
+        return { admin, siweMessage }
     }
 }

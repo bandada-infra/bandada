@@ -12,7 +12,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
-import { v4 as uuidv4 } from "uuid"
+import { v4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
@@ -90,17 +90,17 @@ export class GroupsService {
      * Updates some parameters of the group.
      * @param groupId Group id.
      * @param dto External parameters used to update a group.
-     * @param loggedInUserId Admin id.
+     * @param adminId Group admin id.
      * @returns Updated group.
      */
     async updateGroup(
         groupId: string,
         { description, treeDepth, tag, apiEnabled }: UpdateGroupDto,
-        loggedInUserId: string
+        adminId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== loggedInUserId.toString()) {
+        if (group.admin !== adminId) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -115,7 +115,7 @@ export class GroupsService {
 
             // Generate a new API key if it doesn't exist
             if (!group.apiKey) {
-                group.apiKey = uuidv4()
+                group.apiKey = v4()
             }
         }
 
@@ -219,12 +219,13 @@ export class GroupsService {
      * Delete a member from group
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
+     * @param adminId Group admin id.
      * @returns Group data with removed member.
      */
     async removeMember(
         groupId: string,
         memberId: string,
-        loggedInUser: string
+        adminId: string
     ): Promise<Group> {
         if (!this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(
@@ -234,8 +235,7 @@ export class GroupsService {
 
         const group = await this.getGroup(groupId)
 
-        // TODO: loggedInUser is coming as number, need to check why
-        if (group.admin !== loggedInUser.toString()) {
+        if (group.admin !== adminId) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
             )

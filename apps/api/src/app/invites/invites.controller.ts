@@ -5,14 +5,14 @@ import {
     Param,
     Post,
     Req,
-    Request,
     UseGuards
 } from "@nestjs/common"
+import { Request } from "express"
+import { AuthGuard } from "../auth/auth.guard"
 import { mapEntity } from "../utils"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
-import { AuthGuard } from "../auth/auth.guard"
 
 @Controller("invites")
 export class InvitesController {
@@ -26,7 +26,7 @@ export class InvitesController {
     ): Promise<string> {
         const { code } = await this.invitesService.createInvite(
             dto,
-            req["user"].id
+            req.session.adminId
         )
 
         return code

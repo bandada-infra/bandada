@@ -8,16 +8,16 @@ import {
     Post,
     Put,
     Req,
-    Request,
     UseGuards
 } from "@nestjs/common"
+import { Request } from "express"
+import { AuthGuard } from "../auth/auth.guard"
 import { stringifyJSON } from "../utils"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
-import { mapGroupToResponseDTO } from "./groups.utils"
 import { GroupsService } from "./groups.service"
-import { AuthGuard } from "../auth/auth.guard"
+import { mapGroupToResponseDTO } from "./groups.utils"
 
 @Controller("groups")
 export class GroupsController {
@@ -33,33 +33,29 @@ export class GroupsController {
     @Get("admin-groups")
     @UseGuards(AuthGuard)
     async getGroupsByAdmin(@Req() req: Request) {
-        const groups = await this.groupsService.getGroupsByAdmin(req["user"].id)
+        const groups = await this.groupsService.getGroupsByAdmin(
+            req.session.adminId
+        )
 
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
 
-    // TODO: Make this API public without guards
     @Get(":id")
-    @UseGuards(AuthGuard)
     async getGroup(@Param("id") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
-        const response: any = mapGroupToResponseDTO(
-            group,
-            req["user"].id.toString() === group.admin
-        )
-
-        return response
+        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
     }
 
     @Post()
     @UseGuards(AuthGuard)
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
-        const group = await this.groupsService.createGroup(dto, req["user"].id)
-        return mapGroupToResponseDTO(
-            group,
-            req["user"].id.toString() === group.admin
+        const group = await this.groupsService.createGroup(
+            dto,
+            req.session.adminId
         )
+
+        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
     }
 
     @Put(":id")
@@ -72,13 +68,10 @@ export class GroupsController {
         const group = await this.groupsService.updateGroup(
             groupId,
             dto,
-            req["user"].id
+            req.session.adminId
         )
 
-        return mapGroupToResponseDTO(
-            group,
-            req["user"].id.toString() === group.admin
-        )
+        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
     }
 
     @Get(":id/members/:member")
@@ -106,16 +99,18 @@ export class GroupsController {
     async addMember(
         @Param("id") groupId: string,
         @Body() dto: AddMemberDto,
-        @Headers() headers
+        @Headers() headers: Headers
     ): Promise<void> {
         if (dto.inviteCode) {
             await this.groupsService.joinGroup(groupId, dto.id, {
                 inviteCode: dto.inviteCode
             })
+
             return
         }
 
         const apiKey = headers["x-api-key"] as string
+
         if (apiKey) {
             await this.groupsService.addMemberWithAPIKey(
                 groupId,
@@ -135,7 +130,7 @@ export class GroupsController {
         @Param("id") groupId: string,
         @Param("memberId") memberId: string,
         @Req() req: Request,
-        @Headers() headers
+        @Headers() headers: Headers
     ): Promise<void> {
         const apiKey = headers["x-api-key"] as string
 
@@ -148,7 +143,11 @@ export class GroupsController {
             return
         }
 
-        // Remove as admin
-        await this.groupsService.removeMember(groupId, memberId, req["user"].id)
+        // Remove as an admin.
+        await this.groupsService.removeMember(
+            groupId,
+            memberId,
+            req.session.adminId
+        )
     }
 }
