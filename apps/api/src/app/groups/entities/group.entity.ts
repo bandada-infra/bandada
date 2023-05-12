@@ -24,7 +24,7 @@ export class Group {
     @Column()
     admin: string
 
-    @Column()
+    @Column({ name: "tree_depth" })
     treeDepth: number
 
     @OneToMany(() => Member, (member) => member.group, {
@@ -32,12 +32,18 @@ export class Group {
     })
     members: Member[]
 
-    @Column({ default: false })
+    @Column({ type: "simple-json", name: "reputation_criteria", nullable: true })
+    reputationCriteria: any // TODO: Add correct type for reputationCriteria JSON
+
+    @Column({ name: "api_enabled", default: false })
     apiEnabled: boolean
 
-    @Column({ nullable: true })
+    @Column({ name: "api_key", nullable: true })
     apiKey: string
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: "created_at" })
     createdAt: Date
+
+    @UpdateDateColumn({ name: "updated_at" })
+    updatedAt: Date
 }
