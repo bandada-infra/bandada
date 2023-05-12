@@ -21,10 +21,6 @@ export class UpdateGroupDto {
     readonly treeDepth?: number
 
     @IsOptional()
-    @IsNumber()
-    readonly tag?: number
-
-    @IsOptional()
     @IsBoolean()
     readonly apiEnabled?: boolean
 

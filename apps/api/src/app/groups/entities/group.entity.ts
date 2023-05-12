@@ -4,7 +4,8 @@ import {
     Entity,
     Index,
     OneToMany,
-    PrimaryColumn
+    PrimaryColumn,
+    UpdateDateColumn
 } from "typeorm"
 import { Member } from "./member.entity"
 
@@ -39,7 +40,4 @@ export class Group {
 
     @CreateDateColumn()
     createdAt: Date
-
-    @Column({ default: 0 })
-    tag: number
 }

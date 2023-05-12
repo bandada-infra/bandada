@@ -54,7 +54,7 @@ export class GroupsService {
      * @returns Created group.
      */
     async createGroup(
-        { id: groupId, name, description, treeDepth, tag }: CreateGroupDto,
+        { id: groupId, name, description, treeDepth }: CreateGroupDto,
         admin: string
     ): Promise<Group> {
         const _groupId =
@@ -68,7 +68,6 @@ export class GroupsService {
             name,
             description,
             treeDepth,
-            tag,
             admin,
             members: []
         })
@@ -95,7 +94,7 @@ export class GroupsService {
      */
     async updateGroup(
         groupId: string,
-        { description, treeDepth, tag, apiEnabled }: UpdateGroupDto,
+        { description, treeDepth, apiEnabled }: UpdateGroupDto,
         adminId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
@@ -108,7 +107,6 @@ export class GroupsService {
 
         group.description = description
         group.treeDepth = treeDepth
-        group.tag = tag
 
         if (apiEnabled !== undefined) {
             group.apiEnabled = apiEnabled
