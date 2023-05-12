@@ -17,9 +17,10 @@ export class Invite {
     @Index({ unique: true })
     code: string
 
-    @Column({ default: false })
-    redeemed?: boolean
+    @Column({ default: false, name: "is_redeemed" })
+    isRedeemed?: boolean
 
     @ManyToOne(() => Group)
+    @Column({ name: "group_id" })
     group: Group
 }

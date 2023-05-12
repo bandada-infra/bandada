@@ -1,4 +1,4 @@
-import { PrimaryColumn, CreateDateColumn, Entity, ManyToOne } from "typeorm"
+import { PrimaryColumn, CreateDateColumn, Entity, ManyToOne, Column } from "typeorm"
 
 import { Group } from "./group.entity"
 
@@ -7,9 +7,10 @@ export class Member {
     @PrimaryColumn()
     id: string
 
-    @ManyToOne(() => Group, (group) => group.members)
+    @ManyToOne(() => Group, (group) => group.members,)
+    @Column({ name: "group_id" })
     group: Group
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: "created_at" })
     createdAt: Date
 }

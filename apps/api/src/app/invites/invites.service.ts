@@ -83,7 +83,7 @@ export class InvitesService {
             )
         }
 
-        if (invite.redeemed === true) {
+        if (invite.isRedeemed === true) {
             throw new BadRequestException(
                 `Invite code '${inviteCode}' has already been redeemed`
             )
@@ -95,7 +95,7 @@ export class InvitesService {
             )
         }
 
-        invite.redeemed = true
+        invite.isRedeemed = true
 
         return this.inviteRepository.save(invite)
     }
