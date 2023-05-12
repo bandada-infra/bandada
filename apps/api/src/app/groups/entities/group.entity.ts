@@ -3,6 +3,7 @@ import {
     CreateDateColumn,
     Entity,
     Index,
+    ManyToMany,
     OneToMany,
     PrimaryColumn,
     UpdateDateColumn
@@ -27,8 +28,8 @@ export class Group {
     @Column({ name: "tree_depth" })
     treeDepth: number
 
-    @OneToMany(() => Member, (member) => member.group, {
-        cascade: true
+    @ManyToMany(() => Member, (member) => member.group, {
+        cascade: false
     })
     members: Member[]
 
