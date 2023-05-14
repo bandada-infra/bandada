@@ -21,13 +21,13 @@ export class Group {
     @Column()
     description: string
 
-    @Column()
-    admin: string
+    @Column({ name: "admin_id" })
+    adminId: string
 
     @Column({ name: "tree_depth" })
     treeDepth: number
 
-    @OneToMany(() => Member, (member) => member.group)
+    @OneToMany(() => Member, (member) => member.group, { cascade: ["insert"] })
     members: Member[]
 
     @Column({

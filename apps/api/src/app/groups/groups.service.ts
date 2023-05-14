@@ -68,7 +68,7 @@ export class GroupsService {
             name,
             description,
             treeDepth,
-            admin,
+            adminId: admin,
             members: []
         })
 
@@ -99,7 +99,7 @@ export class GroupsService {
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== adminId) {
+        if (group.adminId !== adminId) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -233,7 +233,7 @@ export class GroupsService {
 
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== adminId) {
+        if (group.adminId !== adminId) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -316,7 +316,7 @@ export class GroupsService {
     async getGroupsByAdmin(admin: string): Promise<Group[]> {
         return this.groupRepository.find({
             relations: { members: true },
-            where: { admin }
+            where: { adminId: admin }
         })
     }
 
