@@ -24,7 +24,7 @@ export default function PermissionedGroup(): JSX.Element {
             if (invite) {
                 setGroupId(invite.groupId)
                 setGroupName(invite.groupName)
-                setIsRedeemed(invite.redeemed)
+                setIsRedeemed(invite.isRedeemed)
             }
         })()
     }, [inviteCode, getInvite])
