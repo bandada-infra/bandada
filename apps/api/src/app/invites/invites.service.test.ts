@@ -57,10 +57,11 @@ describe("InvitesService", () => {
 
     describe("# createInvite", () => {
         it("Should create an invite", async () => {
-            const { group, code, isRedeemed: redeemed } = await invitesService.createInvite(
-                { groupId },
-                "admin"
-            )
+            const {
+                group,
+                code,
+                isRedeemed: redeemed
+            } = await invitesService.createInvite({ groupId }, "admin")
 
             expect(redeemed).toBeFalsy()
             expect(code).toHaveLength(8)

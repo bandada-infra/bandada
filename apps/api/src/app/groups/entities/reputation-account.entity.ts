@@ -1,4 +1,12 @@
-import { PrimaryColumn, CreateDateColumn, Entity, ManyToOne, Column, Unique, Index, JoinColumn } from "typeorm"
+import {
+    PrimaryColumn,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    Unique,
+    Index,
+    JoinColumn
+} from "typeorm"
 
 import { Group } from "./group.entity"
 
@@ -9,7 +17,7 @@ export class ReputationAccount {
     @PrimaryColumn()
     accountHash: string
 
-    @ManyToOne(() => Group, (group) => group.members)
+    @ManyToOne(() => Group)
     @JoinColumn({ name: "group_id" })
     group: Group
 
