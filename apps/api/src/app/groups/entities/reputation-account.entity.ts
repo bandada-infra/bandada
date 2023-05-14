@@ -1,6 +1,5 @@
 import {
     PrimaryColumn,
-    CreateDateColumn,
     Entity,
     ManyToOne,
     Unique,
@@ -20,7 +19,4 @@ export class ReputationAccount {
     @ManyToOne(() => Group)
     @JoinColumn({ name: "group_id" })
     group: Group
-
-    @CreateDateColumn({ name: "created_at" })
-    createdAt: Date
 }
