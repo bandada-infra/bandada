@@ -104,11 +104,9 @@ describe("GroupsService", () => {
 
             expect(result).toHaveLength(2)
         })
-    })
 
-    describe("# getGroupsByAdmin", () => {
         it("Should return a list of groups by admin", async () => {
-            const result = await groupsService.getGroupsByAdmin("admin")
+            const result = await groupsService.getAllGroups({ adminId: "admin" })
 
             expect(result).toHaveLength(2)
         })

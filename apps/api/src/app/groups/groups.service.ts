@@ -194,7 +194,7 @@ export class GroupsService {
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== adminId) {
+        if (group.adminId !== adminId) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -363,23 +363,18 @@ export class GroupsService {
      * Returns a list of groups.
      * @returns List of existing groups.
      */
-    async getAllGroups(): Promise<Group[]> {
+    async getAllGroups(filters?: { adminId: string }): Promise<Group[]> {
+        const where = [];
+
+        if (filters?.adminId) {
+            where.push({ adminId: filters.adminId })
+        }
+
         return this.groupRepository.find({
             relations: { members: true }
         })
     }
 
-    /**
-     * Returns a list of groups of a specific admin.
-     * @param admin Admin id.
-     * @returns List of admin's existing groups.
-     */
-    async getGroupsByAdmin(admin: string): Promise<Group[]> {
-        return this.groupRepository.find({
-            relations: { members: true },
-            where: { adminId: admin }
-        })
-    }
 
     /**
      * Returns a specific group.

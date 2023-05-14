@@ -24,18 +24,8 @@ export class GroupsController {
     constructor(private readonly groupsService: GroupsService) {}
 
     @Get()
-    async getAllGroups() {
-        const groups = await this.groupsService.getAllGroups()
-
-        return groups.map((g) => mapGroupToResponseDTO(g))
-    }
-
-    @Get("admin-groups")
-    @UseGuards(AuthGuard)
-    async getGroupsByAdmin(@Req() req: Request) {
-        const groups = await this.groupsService.getGroupsByAdmin(
-            req.session.adminId
-        )
+    async getAllGroups(@Param("adminId") adminId: string) {
+        const groups = await this.groupsService.getAllGroups({ adminId })
 
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
