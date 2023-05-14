@@ -108,7 +108,8 @@ export class GroupsController {
     async addMember(
         @Param("id") groupId: string,
         @Body() dto: AddMemberDto,
-        @Headers() headers: Headers
+        @Headers() headers: Headers,
+        @Req() req: Request
     ): Promise<void> {
         if (dto.inviteCode) {
             await this.groupsService.joinGroup(groupId, dto.id, {
@@ -129,7 +130,10 @@ export class GroupsController {
             return
         }
 
-        // TODO: Implement admin adding members manually
+        if (dto.id) {
+            await this.groupsService.addMemberManually(groupId, dto.id, req.session.adminId)
+            return
+        }
 
         throw new Error("Not implemented")
     }

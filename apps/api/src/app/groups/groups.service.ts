@@ -181,6 +181,53 @@ export class GroupsService {
     }
 
     /**
+     * Add a member to the group manually as an admin
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @param adminId id of the admin making the request
+     * @returns Group
+     */
+    async addMemberManually(
+        groupId: string,
+        memberId: string,
+        adminId: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (group.admin !== adminId) {
+            throw new UnauthorizedException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' already exists in the group '${groupId}'`
+            )
+        }
+
+        const member = new Member()
+        member.group = group
+        member.id = memberId
+
+        group.members.push(member)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.addMember(memberId)
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
+        )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
      * Add a member to the group using API Key.
      * @param groupId ID of the group
      * @param memberId ID of the member to be added

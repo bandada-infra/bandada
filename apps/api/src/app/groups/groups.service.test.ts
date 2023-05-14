@@ -357,6 +357,43 @@ describe("GroupsService", () => {
         })
     })
 
+    describe("# Add and remove member manually", () => {
+        let group: Group
+
+        beforeAll(async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16
+                },
+                "admin"
+            )
+        })
+
+        it("Should add a member to an existing group manually", async () => {
+            const { members } = await groupsService.addMemberManually(
+                group.id,
+                "123123",
+                "admin"
+            )
+
+            expect(members).toHaveLength(1)
+        })
+
+        it("Should delete a member from an existing group manually", async () => {
+            await groupsService.addMemberManually(group.id, "100001", "admin")
+
+            const { members } = await groupsService.removeMember(
+                group.id,
+                "100001",
+                "admin"
+            )
+
+            expect(members.map((m) => m.id)).not.toContain("100001")
+        })
+    })
+
     describe("# Reputation Criteria", () => {
         it("Should save the reputation criteria for the group", async () => {
             const group = await groupsService.createGroup(
