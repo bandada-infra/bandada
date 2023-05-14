@@ -94,7 +94,12 @@ export class GroupsService {
      */
     async updateGroup(
         groupId: string,
-        { description, treeDepth, apiEnabled }: UpdateGroupDto,
+        {
+            description,
+            treeDepth,
+            apiEnabled,
+            reputationCriteria
+        }: UpdateGroupDto,
         adminId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
@@ -105,8 +110,17 @@ export class GroupsService {
             )
         }
 
-        group.description = description
-        group.treeDepth = treeDepth
+        if (description) {
+            group.description = description
+        }
+
+        if (treeDepth) {
+            group.treeDepth = treeDepth
+        }
+
+        if (reputationCriteria) {
+            group.reputationCriteria = reputationCriteria
+        }
 
         if (apiEnabled !== undefined) {
             group.apiEnabled = apiEnabled

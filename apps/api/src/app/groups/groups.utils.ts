@@ -12,6 +12,7 @@ export function mapGroupToResponseDTO(
         treeDepth: group.treeDepth,
         createdAt: group.createdAt,
         members: (group.members || []).map((m) => m.id),
+        reputationCriteria: group.reputationCriteria,
         apiKey: undefined,
         apiEnabled: undefined
     }

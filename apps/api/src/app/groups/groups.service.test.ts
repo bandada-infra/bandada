@@ -356,4 +356,35 @@ describe("GroupsService", () => {
             )
         })
     })
+
+    describe("# Reputation Criteria", () => {
+        it("Should save the reputation criteria for the group", async () => {
+            const group = await groupsService.createGroup(
+                {
+                    name: "Group 1",
+                    description: "This is a new group",
+                    treeDepth: 16
+                },
+                "admin"
+            )
+
+            const reputationCriteria = {
+                type: "GITHUB_REPO_COMMITS",
+                params: {
+                    repo: "https://github.com/privacy-scaling-explorations/sugesto",
+                    minCommits: 100
+                }
+            }
+
+            await groupsService.updateGroup(
+                group.id,
+                { reputationCriteria },
+                "admin"
+            )
+
+            const updatedGroup = await groupsService.getGroup(group.id)
+
+            expect(updatedGroup).toHaveProperty("reputationCriteria")
+        })
+    })
 })
