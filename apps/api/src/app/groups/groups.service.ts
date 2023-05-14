@@ -364,7 +364,7 @@ export class GroupsService {
      * @returns List of existing groups.
      */
     async getAllGroups(filters?: { adminId: string }): Promise<Group[]> {
-        const where = [];
+        const where = []
 
         if (filters?.adminId) {
             where.push({ adminId: filters.adminId })
@@ -374,7 +374,6 @@ export class GroupsService {
             relations: { members: true }
         })
     }
-
 
     /**
      * Returns a specific group.

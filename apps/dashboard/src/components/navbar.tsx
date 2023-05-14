@@ -23,7 +23,10 @@ export default function NavBar(): JSX.Element {
         [chain]
     )
 
-    const isLoggedInAdmin = useCallback(() => getAdmin() === address, [address])
+    const isLoggedInAdmin = useCallback(
+        () => getAdmin()?.address === address,
+        [address]
+    )
 
     useEffect(() => {
         if (getAdmin() && !isLoggedInAdmin()) {

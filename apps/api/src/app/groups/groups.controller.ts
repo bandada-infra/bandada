@@ -121,7 +121,11 @@ export class GroupsController {
         }
 
         if (dto.id) {
-            await this.groupsService.addMemberManually(groupId, dto.id, req.session.adminId)
+            await this.groupsService.addMemberManually(
+                groupId,
+                dto.id,
+                req.session.adminId
+            )
             return
         }
 
