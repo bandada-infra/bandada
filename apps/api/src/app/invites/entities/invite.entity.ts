@@ -21,6 +21,5 @@ export class Invite {
     isRedeemed?: boolean
 
     @ManyToOne(() => Group)
-    @Column({ name: "group_id" })
     group: Group
 }

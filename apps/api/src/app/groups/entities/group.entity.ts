@@ -3,8 +3,7 @@ import {
     CreateDateColumn,
     Entity,
     Index,
-    ManyToMany,
-    OneToMany,
+    ManyToOne,
     PrimaryColumn,
     UpdateDateColumn
 } from "typeorm"
@@ -28,9 +27,7 @@ export class Group {
     @Column({ name: "tree_depth" })
     treeDepth: number
 
-    @ManyToMany(() => Member, (member) => member.group, {
-        cascade: false
-    })
+    @ManyToOne(() => Member, (member) => member.group)
     members: Member[]
 
     @Column({ type: "simple-json", name: "reputation_criteria", nullable: true })
