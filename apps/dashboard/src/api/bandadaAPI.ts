@@ -86,7 +86,7 @@ export async function updateGroup(
 ) {
     try {
         return (await request(`${API_URL}/groups/${groupId}`, {
-            method: "PUT",
+            method: "PATCH",
             data: { apiEnabled }
         })) as Group
     } catch (error) {

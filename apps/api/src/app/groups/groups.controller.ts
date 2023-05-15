@@ -5,8 +5,9 @@ import {
     Get,
     Headers,
     Param,
+    Patch,
     Post,
-    Put,
+    Query,
     Req,
     UseGuards
 } from "@nestjs/common"
@@ -24,7 +25,7 @@ export class GroupsController {
     constructor(private readonly groupsService: GroupsService) {}
 
     @Get()
-    async getGroups(@Param("adminId") adminId: string) {
+    async getGroups(@Query("adminId") adminId: string) {
         const groups = await this.groupsService.getGroups({ adminId })
 
         return groups.map((g) => mapGroupToResponseDTO(g))
@@ -54,7 +55,7 @@ export class GroupsController {
         )
     }
 
-    @Put(":id")
+    @Patch(":id")
     @UseGuards(AuthGuard)
     async updateGroup(
         @Req() req: Request,
