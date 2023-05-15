@@ -5,7 +5,8 @@ import {
     Min,
     IsOptional,
     MinLength,
-    IsBoolean
+    IsBoolean,
+    IsObject
 } from "class-validator"
 
 export class UpdateGroupDto {
@@ -27,4 +28,8 @@ export class UpdateGroupDto {
     @IsOptional()
     @IsString()
     readonly apiKey?: string
+
+    @IsOptional()
+    @IsObject()
+    readonly reputationCriteria?: object
 }
