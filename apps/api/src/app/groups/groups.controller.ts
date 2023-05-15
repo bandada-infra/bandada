@@ -44,7 +44,10 @@ export class GroupsController {
     async getGroup(@Param("id") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
-        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
+        return mapGroupToResponseDTO(
+            group,
+            req.session.adminId === group.adminId
+        )
     }
 
     @Post()
@@ -55,7 +58,10 @@ export class GroupsController {
             req.session.adminId
         )
 
-        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
+        return mapGroupToResponseDTO(
+            group,
+            req.session.adminId === group.adminId
+        )
     }
 
     @Put(":id")
@@ -71,7 +77,10 @@ export class GroupsController {
             req.session.adminId
         )
 
-        return mapGroupToResponseDTO(group, req.session.adminId === group.admin)
+        return mapGroupToResponseDTO(
+            group,
+            req.session.adminId === group.adminId
+        )
     }
 
     @Get(":id/members/:member")

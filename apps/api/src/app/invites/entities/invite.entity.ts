@@ -1,8 +1,10 @@
 /* istanbul ignore file */
 import {
     Column,
+    CreateDateColumn,
     Entity,
     Index,
+    JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn
 } from "typeorm"
@@ -17,9 +19,13 @@ export class Invite {
     @Index({ unique: true })
     code: string
 
-    @Column({ default: false })
-    redeemed?: boolean
+    @Column({ default: false, name: "is_redeemed" })
+    isRedeemed?: boolean
 
     @ManyToOne(() => Group)
+    @JoinColumn({ name: "group_id" })
     group: Group
+
+    @CreateDateColumn({ name: "created_at" })
+    createdAt: Date
 }

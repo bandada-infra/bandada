@@ -12,6 +12,6 @@ export class Admin {
     @Column({ unique: true })
     username: string
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: "created_at" })
     createdAt: Date
 }

@@ -57,10 +57,11 @@ describe("InvitesService", () => {
 
     describe("# createInvite", () => {
         it("Should create an invite", async () => {
-            const { group, code, redeemed } = await invitesService.createInvite(
-                { groupId },
-                "admin"
-            )
+            const {
+                group,
+                code,
+                isRedeemed: redeemed
+            } = await invitesService.createInvite({ groupId }, "admin")
 
             expect(redeemed).toBeFalsy()
             expect(code).toHaveLength(8)
@@ -83,7 +84,7 @@ describe("InvitesService", () => {
 
             const invite = await invitesService.getInvite(code)
 
-            expect(invite.redeemed).toBeFalsy()
+            expect(invite.isRedeemed).toBeFalsy()
             expect(invite.code).toHaveLength(8)
             expect(invite.group).toBeDefined()
         })
@@ -109,7 +110,7 @@ describe("InvitesService", () => {
         })
 
         it("Should redeem an invite", async () => {
-            const { redeemed } = await invitesService.redeemInvite(
+            const { isRedeemed: redeemed } = await invitesService.redeemInvite(
                 invite.code,
                 groupId
             )

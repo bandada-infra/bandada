@@ -8,7 +8,7 @@ export function mapGroupToResponseDTO(
         id: group.id,
         name: group.name,
         description: group.description,
-        admin: group.admin,
+        admin: group.adminId,
         treeDepth: group.treeDepth,
         createdAt: group.createdAt,
         members: (group.members || []).map((m) => m.id),

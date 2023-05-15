@@ -2,7 +2,7 @@ import { Group } from "./group"
 
 export type Invite = {
     code: string
-    redeemed: boolean
+    isRedeemed: boolean
     groupName: string
     groupId: string
 }

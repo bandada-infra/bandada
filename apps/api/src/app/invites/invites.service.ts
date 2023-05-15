@@ -34,7 +34,7 @@ export class InvitesService {
     ): Promise<Invite> {
         const group = await this.groupsService.getGroup(groupId)
 
-        if (group.admin !== adminId.toString()) {
+        if (group.adminId !== adminId.toString()) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -83,7 +83,7 @@ export class InvitesService {
             )
         }
 
-        if (invite.redeemed === true) {
+        if (invite.isRedeemed === true) {
             throw new BadRequestException(
                 `Invite code '${inviteCode}' has already been redeemed`
             )
@@ -95,7 +95,7 @@ export class InvitesService {
             )
         }
 
-        invite.redeemed = true
+        invite.isRedeemed = true
 
         return this.inviteRepository.save(invite)
     }
