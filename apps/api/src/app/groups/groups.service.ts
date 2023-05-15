@@ -363,7 +363,7 @@ export class GroupsService {
      * Returns a list of groups.
      * @returns List of existing groups.
      */
-    async getAllGroups(filters?: { adminId: string }): Promise<Group[]> {
+    async getGroups(filters?: { adminId: string }): Promise<Group[]> {
         const where = []
 
         if (filters?.adminId) {
@@ -371,7 +371,8 @@ export class GroupsService {
         }
 
         return this.groupRepository.find({
-            relations: { members: true }
+            relations: { members: true },
+            where
         })
     }
 
@@ -427,7 +428,7 @@ export class GroupsService {
     }
 
     private async _cacheGroups() {
-        const groups = await this.getAllGroups()
+        const groups = await this.getGroups()
 
         /* istanbul ignore next */
         for (const group of groups) {

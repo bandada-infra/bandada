@@ -100,17 +100,36 @@ describe("GroupsService", () => {
 
     describe("# getAllGroupsData", () => {
         it("Should return a list of groups", async () => {
-            const result = await groupsService.getAllGroups()
+            const result = await groupsService.getGroups()
 
             expect(result).toHaveLength(2)
         })
 
         it("Should return a list of groups by admin", async () => {
-            const result = await groupsService.getAllGroups({
-                adminId: "admin"
+            await groupsService.createGroup(
+                {
+                    name: "Group01",
+                    description: "This is a description",
+                    treeDepth: 16
+                },
+                "admin01"
+            )
+
+            // Create a group with another adminId - shouldn't be fetched below
+            await groupsService.createGroup(
+                {
+                    name: "Group02",
+                    description: "This is a description",
+                    treeDepth: 16
+                },
+                "admin02"
+            )
+
+            const result = await groupsService.getGroups({
+                adminId: "admin01"
             })
 
-            expect(result).toHaveLength(2)
+            expect(result).toHaveLength(1)
         })
     })
 
