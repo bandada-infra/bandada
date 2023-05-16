@@ -4970,26 +4970,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/data@npm:3.9.0":
-  version: 3.9.0
-  resolution: "@semaphore-protocol/data@npm:3.9.0"
+"@semaphore-protocol/data@npm:3.10.0":
+  version: 3.10.0
+  resolution: "@semaphore-protocol/data@npm:3.10.0"
   dependencies:
     "@ethersproject/contracts": ^5.7.0
     "@ethersproject/providers": ^5.7.0
     axios: ^0.27.2
-  checksum: cd89d702ddd3b69c40bd647ece306e4d6ed46ab99e3419e72a04f7beb023dc0ad5a123a934f4dfaaf910980fbd28b53a494343a31d802a3ddda2fcb3ae086ae3
+  checksum: c96c9581e119b856895ff26118e586292566c99b9e5338dabf1b72ee06b5558b850d98d79b5912e3b7b76ad4a35c1d60ac41fbdff84498c2fb35dee37222df16
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/group@npm:3.4.0":
-  version: 3.4.0
-  resolution: "@semaphore-protocol/group@npm:3.4.0"
+"@semaphore-protocol/group@npm:3.10.0":
+  version: 3.10.0
+  resolution: "@semaphore-protocol/group@npm:3.10.0"
   dependencies:
     "@ethersproject/bignumber": ^5.7.0
     "@ethersproject/bytes": ^5.7.0
     "@ethersproject/keccak256": ^5.7.0
-    "@zk-kit/incremental-merkle-tree": 1.0.0
-  checksum: fd0e1ed1091df5b09e8248fd12737b6ddf292b467735f663f5ab5b7293e10a7ad7b3f8579d8d6a3c04b1d9603e55002ef7a075835fac61db6590e3c359bd62ad
+    "@zk-kit/incremental-merkle-tree": 1.1.0
+  checksum: 07d85c62743763366443687e0c22f0a61962e01ccfe073eee3b38d82fda37fd4493154580be1d26a21a80410520e406cde33898e173a3a2c926a08b89ce42c6f
   languageName: node
   linkType: hard
 
@@ -7096,6 +7096,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zk-kit/incremental-merkle-tree@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@zk-kit/incremental-merkle-tree@npm:1.1.0"
+  checksum: 5f2d6dd2a4898aa75f72d5b3811ab965c369f0a51561250313849fb9a6a1163064c4887da3bea298d25e80a4bc79b3c6997edf6492a6a8fc157512bc3fcb5e23
+  languageName: node
+  linkType: hard
+
 "JSONStream@npm:^1.0.4, JSONStream@npm:^1.3.5":
   version: 1.3.5
   resolution: "JSONStream@npm:1.3.5"
@@ -7503,7 +7510,7 @@ __metadata:
     "@nestjs/schematics": ^9.0.0
     "@nestjs/testing": ^9.0.0
     "@nestjs/typeorm": ^9.0.1
-    "@semaphore-protocol/group": 3.4.0
+    "@semaphore-protocol/group": 3.10.0
     "@types/express": ^4.17.13
     "@types/node": 18.11.18
     class-transformer: ^0.5.1
@@ -9745,7 +9752,7 @@ __metadata:
     "@emotion/styled": ^11.10.6
     "@fontsource/ibm-plex-sans": ^4.5.13
     "@rainbow-me/rainbowkit": ^0.12.8
-    "@semaphore-protocol/data": 3.9.0
+    "@semaphore-protocol/data": 3.10.0
     "@types/react": ^18.0.27
     "@types/react-dom": ^18.0.10
     "@vitejs/plugin-react": ^3.1.0
