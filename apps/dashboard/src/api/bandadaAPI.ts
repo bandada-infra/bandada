@@ -24,9 +24,9 @@ export async function generateMagicLink(
     }
 }
 
-export async function getGroups(): Promise<Group[] | null> {
+export async function getGroups(adminId: string): Promise<Group[] | null> {
     try {
-        return await request(`${API_URL}/groups/admin-groups`)
+        return await request(`${API_URL}/groups/?adminId=${adminId}`)
     } catch (error) {
         console.error(error)
 
@@ -86,7 +86,7 @@ export async function updateGroup(
 ) {
     try {
         return (await request(`${API_URL}/groups/${groupId}`, {
-            method: "PUT",
+            method: "PATCH",
             data: { apiEnabled }
         })) as Group
     } catch (error) {

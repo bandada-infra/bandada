@@ -100,17 +100,36 @@ describe("GroupsService", () => {
 
     describe("# getAllGroupsData", () => {
         it("Should return a list of groups", async () => {
-            const result = await groupsService.getAllGroups()
+            const result = await groupsService.getGroups()
 
             expect(result).toHaveLength(2)
         })
-    })
 
-    describe("# getGroupsByAdmin", () => {
         it("Should return a list of groups by admin", async () => {
-            const result = await groupsService.getGroupsByAdmin("admin")
+            await groupsService.createGroup(
+                {
+                    name: "Group01",
+                    description: "This is a description",
+                    treeDepth: 16
+                },
+                "admin01"
+            )
 
-            expect(result).toHaveLength(2)
+            // Create a group with another adminId - shouldn't be fetched below
+            await groupsService.createGroup(
+                {
+                    name: "Group02",
+                    description: "This is a description",
+                    treeDepth: 16
+                },
+                "admin02"
+            )
+
+            const result = await groupsService.getGroups({
+                adminId: "admin01"
+            })
+
+            expect(result).toHaveLength(1)
         })
     })
 
@@ -354,6 +373,43 @@ describe("GroupsService", () => {
             await expect(promise).rejects.toThrow(
                 "Invalid API key or API access not enabled for group"
             )
+        })
+    })
+
+    describe("# Add and remove member manually", () => {
+        let group: Group
+
+        beforeAll(async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16
+                },
+                "admin"
+            )
+        })
+
+        it("Should add a member to an existing group manually", async () => {
+            const { members } = await groupsService.addMemberManually(
+                group.id,
+                "123123",
+                "admin"
+            )
+
+            expect(members).toHaveLength(1)
+        })
+
+        it("Should delete a member from an existing group manually", async () => {
+            await groupsService.addMemberManually(group.id, "100001", "admin")
+
+            const { members } = await groupsService.removeMember(
+                group.id,
+                "100001",
+                "admin"
+            )
+
+            expect(members.map((m) => m.id)).not.toContain("100001")
         })
     })
 

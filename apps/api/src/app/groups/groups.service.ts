@@ -181,6 +181,53 @@ export class GroupsService {
     }
 
     /**
+     * Add a member to the group manually as an admin
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @param adminId id of the admin making the request
+     * @returns Group
+     */
+    async addMemberManually(
+        groupId: string,
+        memberId: string,
+        adminId: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (group.adminId !== adminId) {
+            throw new UnauthorizedException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' already exists in the group '${groupId}'`
+            )
+        }
+
+        const member = new Member()
+        member.group = group
+        member.id = memberId
+
+        group.members.push(member)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.addMember(memberId)
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
+        )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
      * Add a member to the group using API Key.
      * @param groupId ID of the group
      * @param memberId ID of the member to be added
@@ -316,21 +363,16 @@ export class GroupsService {
      * Returns a list of groups.
      * @returns List of existing groups.
      */
-    async getAllGroups(): Promise<Group[]> {
-        return this.groupRepository.find({
-            relations: { members: true }
-        })
-    }
+    async getGroups(filters?: { adminId: string }): Promise<Group[]> {
+        const where = []
 
-    /**
-     * Returns a list of groups of a specific admin.
-     * @param admin Admin id.
-     * @returns List of admin's existing groups.
-     */
-    async getGroupsByAdmin(admin: string): Promise<Group[]> {
+        if (filters?.adminId) {
+            where.push({ adminId: filters.adminId })
+        }
+
         return this.groupRepository.find({
             relations: { members: true },
-            where: { adminId: admin }
+            where
         })
     }
 
@@ -386,7 +428,7 @@ export class GroupsService {
     }
 
     private async _cacheGroups() {
-        const groups = await this.getAllGroups()
+        const groups = await this.getGroups()
 
         /* istanbul ignore next */
         for (const group of groups) {

@@ -10,7 +10,7 @@ import {
     Select,
     useDisclosure
 } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
 import { useAccount } from "wagmi"
 import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
@@ -18,9 +18,11 @@ import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
 import CreateGroupModal from "../components/create-group-modal"
 import GroupBox from "../components/group-box"
 import { Group } from "../types/groups"
+import { AuthContext } from "../context/auth-context"
 
 export default function GroupsPage(): JSX.Element {
     const { address } = useAccount()
+    const { getAdmin } = useContext(AuthContext)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [isLoading, setIsLoading] = useState(false)
     const [_groupList, setGroupList] = useState<Group[] | null>()
@@ -33,7 +35,9 @@ export default function GroupsPage(): JSX.Element {
                 setIsLoading(true)
 
                 const onchainGroups = await getOnchainGroups(address as string)
-                const offchainGroups = await getOffchainGroups()
+                const offchainGroups = await getOffchainGroups(
+                    getAdmin()?.id as string
+                )
 
                 if (onchainGroups && offchainGroups) {
                     setGroupList([
@@ -51,6 +55,7 @@ export default function GroupsPage(): JSX.Element {
                 setIsLoading(false)
             }
         })()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [address])
 
     useEffect(() => {

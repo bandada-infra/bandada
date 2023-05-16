@@ -3,12 +3,16 @@
 // to store admins' sessions manually.
 // TODO: explore other solutions.
 
-export function saveAdmin(address: string) {
-    localStorage.setItem("admin", address)
+export function saveAdmin(admin: { address: string; id: string }) {
+    localStorage.setItem("admin", JSON.stringify(admin))
 }
 
 export function getAdmin() {
-    return localStorage.getItem("admin")
+    const admin = localStorage.getItem("admin")
+    if (admin) {
+        return JSON.parse(admin)
+    }
+    return null
 }
 
 export function deleteAdmin() {

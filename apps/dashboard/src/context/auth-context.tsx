@@ -47,6 +47,8 @@ const wagmiClient = createClient({
 const customTheme = lightTheme()
 customTheme.radii.modal = "10px"
 
+export const AuthContext = React.createContext({ getAdmin })
+
 export function AuthContextProvider(props: { children: ReactNode }) {
     const { children } = props
 
@@ -88,7 +90,7 @@ export function AuthContextProvider(props: { children: ReactNode }) {
 
                     if (user) {
                         setAuthStatus("authenticated")
-                        saveAdmin(user.address)
+                        saveAdmin(user)
 
                         window.location.reload()
 
@@ -114,23 +116,26 @@ export function AuthContextProvider(props: { children: ReactNode }) {
     )
 
     return (
-        <WagmiConfig client={wagmiClient}>
-            <RainbowKitAuthenticationProvider
-                adapter={authAdapter}
-                status={authStatus}
-            >
-                <RainbowKitProvider
-                    chains={chains}
-                    modalSize="compact"
-                    theme={customTheme}
-                    appInfo={{
-                        appName: "Bandada"
-                    }}
-                    showRecentTransactions={false}
+        // eslint-disable-next-line react/jsx-no-constructed-context-values
+        <AuthContext.Provider value={{ getAdmin }}>
+            <WagmiConfig client={wagmiClient}>
+                <RainbowKitAuthenticationProvider
+                    adapter={authAdapter}
+                    status={authStatus}
                 >
-                    {children}
-                </RainbowKitProvider>
-            </RainbowKitAuthenticationProvider>
-        </WagmiConfig>
+                    <RainbowKitProvider
+                        chains={chains}
+                        modalSize="compact"
+                        theme={customTheme}
+                        appInfo={{
+                            appName: "Bandada"
+                        }}
+                        showRecentTransactions={false}
+                    >
+                        {children}
+                    </RainbowKitProvider>
+                </RainbowKitAuthenticationProvider>
+            </WagmiConfig>
+        </AuthContext.Provider>
     )
 }

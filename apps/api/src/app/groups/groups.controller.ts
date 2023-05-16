@@ -5,8 +5,9 @@ import {
     Get,
     Headers,
     Param,
+    Patch,
     Post,
-    Put,
+    Query,
     Req,
     UseGuards
 } from "@nestjs/common"
@@ -24,18 +25,8 @@ export class GroupsController {
     constructor(private readonly groupsService: GroupsService) {}
 
     @Get()
-    async getAllGroups() {
-        const groups = await this.groupsService.getAllGroups()
-
-        return groups.map((g) => mapGroupToResponseDTO(g))
-    }
-
-    @Get("admin-groups")
-    @UseGuards(AuthGuard)
-    async getGroupsByAdmin(@Req() req: Request) {
-        const groups = await this.groupsService.getGroupsByAdmin(
-            req.session.adminId
-        )
+    async getGroups(@Query("adminId") adminId: string) {
+        const groups = await this.groupsService.getGroups({ adminId })
 
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
@@ -64,7 +55,7 @@ export class GroupsController {
         )
     }
 
-    @Put(":id")
+    @Patch(":id")
     @UseGuards(AuthGuard)
     async updateGroup(
         @Req() req: Request,
@@ -108,7 +99,8 @@ export class GroupsController {
     async addMember(
         @Param("id") groupId: string,
         @Body() dto: AddMemberDto,
-        @Headers() headers: Headers
+        @Headers() headers: Headers,
+        @Req() req: Request
     ): Promise<void> {
         if (dto.inviteCode) {
             await this.groupsService.joinGroup(groupId, dto.id, {
@@ -129,7 +121,14 @@ export class GroupsController {
             return
         }
 
-        // TODO: Implement admin adding members manually
+        if (dto.id) {
+            await this.groupsService.addMemberManually(
+                groupId,
+                dto.id,
+                req.session.adminId
+            )
+            return
+        }
 
         throw new Error("Not implemented")
     }
