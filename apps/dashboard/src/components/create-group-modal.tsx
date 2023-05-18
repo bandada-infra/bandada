@@ -22,7 +22,7 @@ import {
 import { useCallback, useEffect, useState } from "react"
 import { useSigner } from "wagmi"
 import { createGroup as createOffchainGroup } from "../api/bandadaAPI"
-import { groupSizeInfo } from "../types/groups"
+import { groupSizes } from "../data"
 
 export default function CreateGroupModal({
     isOpen,
@@ -115,10 +115,10 @@ export default function CreateGroupModal({
                     <Text fontSize="lg" fontWeight="bold">
                         {size}
                     </Text>
-                    <Text color="gray.500">{groupSizeInfo[size].sizeFor}</Text>
-                    <Text mt="15px">{groupSizeInfo[size].capacity}</Text>
+                    <Text color="gray.500">{groupSizes[size].description}</Text>
+                    <Text mt="15px">{groupSizes[size].capacity}</Text>
                     <Text mt="15px">Use for</Text>
-                    {groupSizeInfo[size].useCases.map((useCase) => (
+                    {groupSizes[size].useCases.map((useCase) => (
                         <Text key={useCase}>-{useCase}</Text>
                     ))}
                 </Box>
@@ -258,12 +258,12 @@ export default function CreateGroupModal({
                                     </Text>
                                     <Text mt="15px" color="#75797E">
                                         {_groupSize &&
-                                            `${groupSizeInfo[_groupSize].capacity}, Tree depth ${groupSizeInfo[_groupSize].treeDepth}`}
+                                            `${groupSizes[_groupSize].capacity}, Tree depth ${groupSizes[_groupSize].treeDepth}`}
                                     </Text>
                                     <Text mt="20px">{_groupDescription}</Text>
                                     <Text mt="20px">Use for</Text>
                                     {_groupSize &&
-                                        groupSizeInfo[_groupSize].useCases.map(
+                                        groupSizes[_groupSize].useCases.map(
                                             (useCase) => (
                                                 <Text key={useCase}>
                                                     -{useCase}
@@ -310,7 +310,7 @@ export default function CreateGroupModal({
                                                     _groupName,
                                                     _groupType,
                                                     _groupDescription,
-                                                    groupSizeInfo[_groupSize]
+                                                    groupSizes[_groupSize]
                                                         .treeDepth
                                                 )
                                             } catch (error) {

@@ -5,11 +5,11 @@ import {
     useChainModal,
     useConnectModal
 } from "@rainbow-me/rainbowkit"
-import { useCallback, useEffect } from "react"
+import { useCallback, useContext, useEffect } from "react"
 import { useAccount, useNetwork } from "wagmi"
 import { goerli } from "wagmi/chains"
 import logoImage from "../assets/logo.svg"
-import { getAdmin } from "../utils/session"
+import { AuthContext } from "../context/authContext"
 
 export default function NavBar(): JSX.Element {
     const { chain } = useNetwork()
@@ -17,6 +17,7 @@ export default function NavBar(): JSX.Element {
     const { openConnectModal } = useConnectModal()
     const { openChainModal } = useChainModal()
     const { openAccountModal } = useAccountModal()
+    const { admin } = useContext(AuthContext)
 
     const isSupportedNetwork = useCallback(
         () => chain && chain.id === goerli.id,
@@ -24,15 +25,15 @@ export default function NavBar(): JSX.Element {
     )
 
     const isLoggedInAdmin = useCallback(
-        () => getAdmin()?.address === address,
-        [address]
+        () => admin?.address === address,
+        [address, admin]
     )
 
     useEffect(() => {
-        if (getAdmin() && !isLoggedInAdmin()) {
+        if (admin && !isLoggedInAdmin()) {
             openConnectModal?.()
         }
-    }, [isLoggedInAdmin, openConnectModal])
+    }, [isLoggedInAdmin, openConnectModal, admin])
 
     return (
         <Container maxWidth="container.xl">

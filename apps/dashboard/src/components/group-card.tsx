@@ -1,6 +1,6 @@
-import { Container, Heading, Text } from "@chakra-ui/react"
+import { Box, Heading, Text } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import { Group } from "../../types/groups"
+import { Group } from "../types"
 
 export default function GroupCard({
     name,
@@ -10,7 +10,7 @@ export default function GroupCard({
     id
 }: Group): JSX.Element {
     return (
-        <Container p="20px" maxW="276">
+        <Box p="30px" maxW="276">
             <Heading fontSize="2xl">{name}</Heading>
 
             <Text mt="10px" color="gray.500">
@@ -26,6 +26,6 @@ export default function GroupCard({
                     Details
                 </Text>
             </Link>
-        </Container>
+        </Box>
     )
 }
