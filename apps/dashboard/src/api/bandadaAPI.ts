@@ -5,8 +5,18 @@ import { Group } from "../types/groups"
 const API_URL = import.meta.env.VITE_API_URL
 const CLIENT_URL = import.meta.env.VITE_CLIENT_URL
 
+/**
+ * It generates a magic link with a valid invite code
+ * to allows users to join groups themselves.
+ * The client URL must include a forbidden URL '\' character
+ * which will be replaced by the invite code.
+ * @param groupId The group id.
+ * @param clientUrl The client URL.
+ * @returns The magic link.
+ */
 export async function generateMagicLink(
-    groupId: string
+    groupId: string,
+    clientUrl?: string
 ): Promise<string | null> {
     try {
         const code = await request(`${API_URL}/invites`, {
@@ -16,7 +26,7 @@ export async function generateMagicLink(
             }
         })
 
-        return `${CLIENT_URL}/invites/${code}`
+        return (clientUrl || CLIENT_URL).replace("\\", code)
     } catch (error) {
         console.error(error)
 

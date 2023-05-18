@@ -1,6 +1,6 @@
 import { SemaphoreSubgraph } from "@semaphore-protocol/data"
 import { BigNumber, utils } from "ethers"
-import { Group } from "../types/groups"
+import { Group } from "../types"
 
 const ETHEREUM_NETWORK = import.meta.env.VITE_ETHEREUM_NETWORK
 
