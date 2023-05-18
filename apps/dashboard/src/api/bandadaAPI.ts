@@ -1,6 +1,6 @@
 import { request } from "@bandada/utils"
 import { SiweMessage } from "siwe"
-import { Group } from "../types/groups"
+import { Group } from "../types"
 
 const API_URL = import.meta.env.VITE_API_URL
 const CLIENT_URL = import.meta.env.VITE_CLIENT_URL
