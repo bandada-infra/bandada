@@ -29,6 +29,7 @@
         "@typescript-eslint/dot-notation": "off",
         "@typescript-eslint/naming-convention": "off",
         "@typescript-eslint/no-throw-literal": "off",
+        "@typescript-eslint/no-shadow": "off",
         "no-restricted-syntax": "off",
         "no-param-reassign": "off",
         "no-underscore-dangle": "off",
