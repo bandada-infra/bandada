@@ -253,19 +253,14 @@ To reset the local network or TheGraph node, you can stop the docker containers,
 
 Below are the ENV variables used by the `api`:
 
-| Key                     | Description                                                              |
-| ----------------------- | ------------------------------------------------------------------------ |
-| DB_TYPE                 | Type of the SQL database - `postgres`/`sqlite`.                          |
-| DB_URL                  | Connection string for the database. Path to DB file in case of `sqlite`. |
-| JWT_SECRET_KEY          | Secret key used for signing JWT auth tokens.                             |
-| GITHUB_CLIENT_ID        | Credentials required for sign in with Github.                            |
-| GITHUB_CLIENT_SECRET    | Credentials required for sign in with Github.                            |
-| TWITTER_CONSUMER_KEY    | Credentials required for sign in with Twitter.                           |
-| TWITTER_CONSUMER_SECRET | Credentials required for sign in with Twitter.                           |
-| REDDIT_CLIENT_ID        | Credentials required for sign in with Reddit.                            |
-| REDDIT_CLIENT_SECRET    | Credentials required for sign in with Reddit.                            |
-| INFURA_API_KEY          | API Key for Infura. This is used for executing blockchain transactions.  |
-| BACKEND_PRIVATE_KEY     | Ethereum wallet private key used for making blockchain transactions.     |
-| API_URL                 | Public URL of the api                                                    |
-| DASHBOARD_URL           | Public URL of the dashboard                                              |
-| ETHEREUM_NETWORK        | Ethereum network where the contract is deployed                          |
+| Key                   | Description                                                              |
+| --------------------- | ------------------------------------------------------------------------ |
+| DB_TYPE               | Type of the SQL database - `postgres`/`sqlite`.                          |
+| DB_URL                | Connection string for the database. Path to DB file in case of `sqlite`. |
+| API_URL               | Public URL of the api                                                    |
+| DASHBOARD_URL         | Public URL of the dashboard                                              |
+| ETHEREUM_NETWORK      | Ethereum network where the contract is deployed                          |
+| IRON_SESSION_PASSWORD | Secret password used for iron-session.                                   |
+| INFURA_API_KEY        | API Key for Infura. This is used for executing blockchain transactions.  |
+| BACKEND_PRIVATE_KEY   | Ethereum wallet private key used for making blockchain transactions.     |
+| SIWE_STATEMENT        | Statement used as a SIWE message.                                        |
