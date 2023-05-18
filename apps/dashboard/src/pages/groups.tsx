@@ -1,82 +1,83 @@
 import {
+    Box,
     Button,
-    Center,
     Container,
-    Flex,
+    Grid,
+    GridItem,
     Heading,
+    HStack,
     Input,
     InputGroup,
     InputLeftElement,
     Select,
-    useDisclosure
+    Spinner,
+    Text,
+    useDisclosure,
+    VStack
 } from "@chakra-ui/react"
-import { useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-import { useAccount } from "wagmi"
 import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
 import CreateGroupModal from "../components/create-group-modal"
-import GroupBox from "../components/group-box"
-import { Group } from "../types/groups"
-import { AuthContext } from "../context/auth-context"
+import GroupCard from "../components/group-card"
+import { AuthContext } from "../context/authContext"
+import { Group } from "../types"
 
 export default function GroupsPage(): JSX.Element {
-    const { address } = useAccount()
-    const { getAdmin } = useContext(AuthContext)
+    const { admin } = useContext(AuthContext)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [isLoading, setIsLoading] = useState(false)
-    const [_groupList, setGroupList] = useState<Group[] | null>()
-    const [_searchedGroupList, setSearchedGroupList] = useState<Group[]>([])
-    const [_searchField, setSearchField] = useState<string>("")
+    const [groups, setGroups] = useState<Group[]>([])
+    const [searchField, setSearchField] = useState<string>("")
 
     useEffect(() => {
         ;(async () => {
-            if (address) {
+            if (admin) {
                 setIsLoading(true)
+                setGroups([])
 
-                const onchainGroups = await getOnchainGroups(address as string)
-                const offchainGroups = await getOffchainGroups(
-                    getAdmin()?.id as string
-                )
-
-                if (onchainGroups && offchainGroups) {
-                    setGroupList([
-                        ...onchainGroups.map((group) => ({
-                            ...group,
-                            type: "on-chain"
-                        })),
-                        ...offchainGroups.map((group) => ({
-                            ...group,
-                            type: "off-chain"
-                        }))
-                    ])
-                }
+                await Promise.all([
+                    getOnchainGroups(admin.address).then((onchainGroups) => {
+                        if (onchainGroups) {
+                            setGroups((groups) => [
+                                ...groups,
+                                ...onchainGroups.map((group) => ({
+                                    ...group,
+                                    type: "on-chain"
+                                }))
+                            ])
+                        }
+                    }),
+                    getOffchainGroups(admin.id).then((offchainGroups) => {
+                        if (offchainGroups) {
+                            setGroups((groups) => [
+                                ...groups,
+                                ...offchainGroups.map((group) => ({
+                                    ...group,
+                                    type: "off-chain"
+                                }))
+                            ])
+                        }
+                    })
+                ])
 
                 setIsLoading(false)
             }
         })()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [address])
+    }, [admin])
 
-    useEffect(() => {
-        if (_groupList) {
-            setSearchedGroupList(
-                _groupList.filter((group) =>
-                    group.name
-                        .toLowerCase()
-                        .includes(_searchField.toLowerCase())
-                )
-            )
-        }
-    }, [_searchField, _groupList])
+    const filterPredicate = useCallback(
+        (group: Group) =>
+            group.name.toLowerCase().includes(searchField.toLowerCase()),
+        [searchField]
+    )
 
     return (
         <Container maxW="container.xl">
-            <Flex justifyContent="space-between" mt="35px" mb="20px">
-                <Center>
+            <VStack spacing={10}>
+                <HStack justifyContent="space-between" width="100%">
                     <Heading fontSize="40px">Groups</Heading>
-                </Center>
-                <Center>
                     <Button
                         fontSize="lg"
                         variant="solid"
@@ -85,34 +86,62 @@ export default function GroupsPage(): JSX.Element {
                     >
                         Add new group
                     </Button>
-                </Center>
-            </Flex>
+                </HStack>
 
-            <Flex justifyContent="space-between" mt="16px">
-                <InputGroup w="200px">
-                    <InputLeftElement pointerEvents="none">
-                        <FiSearch />
-                    </InputLeftElement>
-                    <Input
-                        placeholder="Search groups"
-                        onChange={(e) => {
-                            setSearchField(e.target.value)
-                        }}
-                    />
-                </InputGroup>
+                <HStack justifyContent="space-between" width="100%">
+                    <InputGroup w="200px">
+                        <InputLeftElement pointerEvents="none">
+                            <FiSearch />
+                        </InputLeftElement>
+                        <Input
+                            placeholder="Search groups"
+                            onChange={(e) => {
+                                setSearchField(e.target.value)
+                            }}
+                        />
+                    </InputGroup>
 
-                <Select textAlign="center" w="max-content">
-                    <option value="name">Name</option>
-                    <option value="lastModified">Last modified</option>
-                    <option value="lastOpened">Last opened</option>
-                    <option value="groupSize">Group size</option>
-                </Select>
-            </Flex>
+                    <Select textAlign="center" w="max-content">
+                        <option value="name">Name</option>
+                        <option value="lastModified">Last modified</option>
+                        <option value="lastOpened">Last opened</option>
+                        <option value="groupSize">Group size</option>
+                    </Select>
+                </HStack>
 
-            <GroupBox
-                isLoading={isLoading}
-                groupList={_searchedGroupList || []}
-            />
+                {isLoading && (
+                    <Box pt="100px">
+                        <Spinner />
+                    </Box>
+                )}
+
+                {!isLoading && groups.length === 0 && (
+                    <Text fontSize="2xl" fontWeight="bold" pt="100px">
+                        You have not created any groups
+                    </Text>
+                )}
+
+                {!isLoading && groups.length > 0 && (
+                    <Grid
+                        templateColumns="repeat(4, 1fr)"
+                        gap={10}
+                        w="100%"
+                        mt="60px"
+                    >
+                        {groups.filter(filterPredicate).map((group) => (
+                            <GridItem
+                                w="100%"
+                                borderRadius="4px"
+                                bgColor="#FCFCFC"
+                                boxShadow="0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)"
+                                key={group.name}
+                            >
+                                <GroupCard {...group} />
+                            </GridItem>
+                        ))}
+                    </Grid>
+                )}
+            </VStack>
 
             <CreateGroupModal isOpen={isOpen} onClose={onClose} />
         </Container>

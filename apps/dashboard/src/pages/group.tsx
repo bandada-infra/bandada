@@ -27,7 +27,7 @@ import {
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
 import AddMemberModal from "../components/add-member-modal"
 import InviteModal from "../components/invite-modal"
-import { Group } from "../types/groups"
+import { Group } from "../types"
 
 export default function GroupPage(): JSX.Element {
     const navigate = useNavigate()
