@@ -4,7 +4,7 @@
 import { Admin } from "../types"
 
 /**
- * Stores the admin data in the browser local storage.
+ * It stores the admin data in the browser local storage.
  * @param admin The admin to store.
  */
 export function saveAdmin(admin: Admin) {
@@ -12,7 +12,7 @@ export function saveAdmin(admin: Admin) {
 }
 
 /**
- * Retrieve the admin data from the browser local storage.
+ * It retrieves the admin data from the browser local storage.
  * @returns The admin data.
  */
 export function getAdmin() {
@@ -26,7 +26,7 @@ export function getAdmin() {
 }
 
 /**
- * Deletes the admin data from the browser local storage.
+ * It deletes the admin data from the browser local storage.
  */
 export function deleteAdmin() {
     localStorage.removeItem("admin")

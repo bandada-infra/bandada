@@ -40,23 +40,14 @@ export default function GroupsPage(): JSX.Element {
                 await Promise.all([
                     getOnchainGroups(admin.address).then((onchainGroups) => {
                         if (onchainGroups) {
-                            setGroups((groups) => [
-                                ...groups,
-                                ...onchainGroups.map((group) => ({
-                                    ...group,
-                                    type: "on-chain"
-                                }))
-                            ])
+                            setGroups((groups) => [...groups, ...onchainGroups])
                         }
                     }),
                     getOffchainGroups(admin.id).then((offchainGroups) => {
                         if (offchainGroups) {
                             setGroups((groups) => [
                                 ...groups,
-                                ...offchainGroups.map((group) => ({
-                                    ...group,
-                                    type: "off-chain"
-                                }))
+                                ...offchainGroups
                             ])
                         }
                     })

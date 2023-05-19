@@ -2,7 +2,7 @@ export type Group = {
     id: string
     name: string
     type?: string
-    description: string
+    description?: string
     treeDepth: number
     members: string[]
     admin: string

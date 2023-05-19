@@ -20,7 +20,7 @@ export async function generateMagicLink(
 ): Promise<string | null> {
     try {
         const code = await request(`${API_URL}/invites`, {
-            method: "post",
+            method: "POST",
             data: {
                 groupId
             }
@@ -34,9 +34,19 @@ export async function generateMagicLink(
     }
 }
 
+/**
+ * It returns the list of groups for a specific admin.
+ * @param adminId The admin id.
+ * @returns The list of groups or null.
+ */
 export async function getGroups(adminId: string): Promise<Group[] | null> {
     try {
-        return await request(`${API_URL}/groups/?adminId=${adminId}`)
+        const groups = await request(`${API_URL}/groups/?adminId=${adminId}`)
+
+        return groups.map((group: Group) => ({
+            ...group,
+            type: "off-chain"
+        }))
     } catch (error) {
         console.error(error)
 
@@ -44,9 +54,16 @@ export async function getGroups(adminId: string): Promise<Group[] | null> {
     }
 }
 
+/**
+ * It returns details of a specific group.
+ * @param groupId The group id.
+ * @returns The group details.
+ */
 export async function getGroup(groupId: string): Promise<Group | null> {
     try {
-        return await request(`${API_URL}/groups/${groupId}`)
+        const group = await request(`${API_URL}/groups/${groupId}`)
+
+        return { ...group, type: "off-chain" }
     } catch (error) {
         console.error(error)
 
@@ -54,18 +71,73 @@ export async function getGroup(groupId: string): Promise<Group | null> {
     }
 }
 
+/**
+ * It creates a new group.
+ * @param name The group name.
+ * @param description The group description.
+ * @param treeDepth The Merkle tree depth.
+ * @returns The group details.
+ */
 export async function createGroup(
     name: string,
     description: string,
     treeDepth: number
-): Promise<void | null> {
+): Promise<Group | null> {
     try {
-        await request(`${API_URL}/groups`, {
-            method: "post",
+        const group = await request(`${API_URL}/groups`, {
+            method: "POST",
             data: {
                 name,
                 description,
                 treeDepth
+            }
+        })
+
+        return { ...group, type: "off-chain" }
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
+}
+
+/**
+ * It updates the detail of a group.
+ * @param group The group id.
+ * @param memberId The group member id.
+ */
+export async function updateGroup(
+    groupId: string,
+    { apiEnabled }: { apiEnabled: boolean }
+): Promise<Group | null> {
+    try {
+        const group = await request(`${API_URL}/groups/${groupId}`, {
+            method: "PATCH",
+            data: { apiEnabled }
+        })
+
+        return { ...group, type: "off-chain" }
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
+}
+
+/**
+ * It adds a new member to an existing group.
+ * @param group The group id.
+ * @param memberId The group member id.
+ */
+export async function addMember(
+    groupId: string,
+    memberId: string
+): Promise<void | null> {
+    try {
+        await request(`${API_URL}/groups/${groupId}/members`, {
+            method: "POST",
+            data: {
+                id: memberId
             }
         })
     } catch (error) {
@@ -75,13 +147,18 @@ export async function createGroup(
     }
 }
 
+/**
+ * It removes a member from a group.
+ * @param group The group id.
+ * @param memberId The group member id.
+ */
 export async function removeMember(
     groupId: string,
     memberId: string
 ): Promise<void | null> {
     try {
         await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
-            method: "delete"
+            method: "DELETE"
         })
     } catch (error) {
         console.error(error)
@@ -90,20 +167,10 @@ export async function removeMember(
     }
 }
 
-export async function updateGroup(
-    groupId: string,
-    { apiEnabled }: { apiEnabled: boolean }
-) {
-    try {
-        return (await request(`${API_URL}/groups/${groupId}`, {
-            method: "PATCH",
-            data: { apiEnabled }
-        })) as Group
-    } catch (error) {
-        console.error(error)
-    }
-}
-
+/**
+ * It returns a SIWE nonce for authentication, used to prevent replay attacks.
+ * @returns The SIWE nonce.
+ */
 export async function getNonce(): Promise<string | null> {
     try {
         return await request(`${API_URL}/auth/nonce`, {
@@ -116,6 +183,12 @@ export async function getNonce(): Promise<string | null> {
     }
 }
 
+/**
+ * It allows admins to authenticate.
+ * @param message The SIWE message.
+ * @param signature The SIWE signature of the message.
+ * @returns The admin details.
+ */
 export async function signIn({
     message,
     signature
@@ -138,6 +211,9 @@ export async function signIn({
     }
 }
 
+/**
+ * It allows admins to log out.
+ */
 export async function logOut(): Promise<void | null> {
     try {
         await request(`${API_URL}/auth`, {
