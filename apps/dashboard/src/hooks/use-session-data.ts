@@ -11,7 +11,7 @@ export default function useSessionData() {
     const [admin, setAdmin] = useState<Admin | null>(session.getAdmin())
 
     const saveAdmin = useCallback((admin: Admin) => {
-        saveAdmin(admin)
+        session.saveAdmin(admin)
         setAdmin(admin)
     }, [])
 

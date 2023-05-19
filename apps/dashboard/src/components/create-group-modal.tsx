@@ -89,6 +89,8 @@ export default function CreateGroupModal({
 
                 onClose()
             }
+
+            window.location.reload()
         },
         [signer, onClose]
     )

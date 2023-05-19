@@ -21,7 +21,7 @@ import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
 import CreateGroupModal from "../components/create-group-modal"
 import GroupCard from "../components/group-card"
-import { AuthContext } from "../context/authContext"
+import { AuthContext } from "../context/auth-context"
 import { Group } from "../types"
 
 export default function GroupsPage(): JSX.Element {

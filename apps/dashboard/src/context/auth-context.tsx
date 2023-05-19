@@ -18,7 +18,7 @@ import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
 import { getNonce, logOut, signIn } from "../api/bandadaAPI"
-import useSessionData from "../hooks/useSessionData"
+import useSessionData from "../hooks/use-session-data"
 import { Admin } from "../types"
 
 export const AuthContext = React.createContext<{ admin?: Admin | null }>({})
@@ -64,6 +64,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
 
                     if (admin) {
                         setAuthStatus("authenticated")
+
                         saveAdmin(admin)
 
                         window.location.reload()

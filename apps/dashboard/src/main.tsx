@@ -2,7 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react"
 import "@fontsource/ibm-plex-sans"
 import "@rainbow-me/rainbowkit/styles.css"
 import * as ReactDOM from "react-dom/client"
-import { AuthContextProvider } from "./context/authContext"
+import { AuthContextProvider } from "./context/auth-context"
 import Routes from "./routes"
 import theme from "./styles"
 

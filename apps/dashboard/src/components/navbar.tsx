@@ -9,7 +9,7 @@ import { useCallback, useContext, useEffect } from "react"
 import { useAccount, useNetwork } from "wagmi"
 import { goerli } from "wagmi/chains"
 import logoImage from "../assets/logo.svg"
-import { AuthContext } from "../context/authContext"
+import { AuthContext } from "../context/auth-context"
 
 export default function NavBar(): JSX.Element {
     const { chain } = useNetwork()

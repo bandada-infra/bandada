@@ -6,7 +6,6 @@ import {
     FormControl,
     FormLabel,
     Heading,
-    HStack,
     IconButton,
     Input,
     InputGroup,
@@ -41,33 +40,22 @@ export default function GroupPage(): JSX.Element {
     useEffect(() => {
         ;(async () => {
             if (groupId) {
-                try {
-                    if (groupType === "on-chain") {
-                        const onchainGroup = await getOnchainGroup(groupId)
-
-                        if (onchainGroup) {
-                            setGroup(onchainGroup)
-                        }
-                    } else {
-                        const _group = await getOffchainGroup(groupId || "")
-
-                        if (_group) {
-                            setGroup(_group)
-                        }
-                    }
-                } catch (error) {
-                    console.error(error)
-                    navigate(`/group-not-found/${groupId}`)
-                }
+                setGroup(
+                    groupType === "on-chain"
+                        ? await getOnchainGroup(groupId)
+                        : await getOffchainGroup(groupId)
+                )
             }
         })()
     }, [groupId, groupType, navigate])
 
     async function onAPIAccessToggle(e: React.ChangeEvent<HTMLInputElement>) {
         const isEnabled = e.target.checked
+
         const res = await updateGroup(groupId as string, {
             apiEnabled: isEnabled
         })
+
         setGroup(res)
     }
 
@@ -94,8 +82,8 @@ export default function GroupPage(): JSX.Element {
 
     return (
         <Container maxW="container.xl">
-            <Box borderBottom="1px" borderColor="gray.200">
-                <HStack mt="20px">
+            <Box borderBottom="1px" borderColor="gray.200" pb="20px">
+                <Flex mt="20px">
                     <Link to="/groups">
                         <IconButton
                             variant="link"
@@ -104,14 +92,10 @@ export default function GroupPage(): JSX.Element {
                         />
                     </Link>
 
-                    <Text
-                        fontSize="sm"
-                        textTransform="uppercase"
-                        color="background.700"
-                    >
+                    <Text fontSize="sm" textTransform="uppercase">
                         all groups
                     </Text>
-                </HStack>
+                </Flex>
 
                 <Flex mt="30px" justifyContent="space-between">
                     <Heading fontSize="32px">{group.name}</Heading>
@@ -126,24 +110,8 @@ export default function GroupPage(): JSX.Element {
                     </Button>
                 </Flex>
 
-                <Flex
-                    justifyContent="space-between"
-                    py="1rem"
-                    borderBottom="1px"
-                    borderColor="gray.200"
-                    mt="1rem"
-                >
-                    <Text w="50%">
-                        {group?.treeDepth === 30
-                            ? "Globe size group"
-                            : group?.treeDepth === 25
-                            ? "Nation size group"
-                            : group?.treeDepth === 20
-                            ? "City size group"
-                            : "Community size group"}
-                    </Text>
-
-                    {groupType === "off-chain" && (
+                {groupType === "off-chain" && (
+                    <Flex justifyContent="space-between" mt="1rem">
                         <Box w="50%">
                             <FormControl display="flex" alignItems="center">
                                 <FormLabel htmlFor="email-alerts" mb="0">
@@ -170,8 +138,8 @@ export default function GroupPage(): JSX.Element {
                                 </InputGroup>
                             )}
                         </Box>
-                    )}
-                </Flex>
+                    </Flex>
+                )}
             </Box>
 
             <Flex mt="30px">
@@ -179,13 +147,8 @@ export default function GroupPage(): JSX.Element {
                     <Text fontWeight="bold" fontSize="lg">
                         Members
                     </Text>
-                    {group.members?.length ? (
-                        <Box borderBottom="1px" borderColor="gray.200" p="16px">
-                            <Text fontWeight="bold" fontSize="16px">
-                                Identity Commitment
-                            </Text>
-                        </Box>
-                    ) : (
+
+                    {!group.members?.length && (
                         <Text mt="5">No members in the group yet.</Text>
                     )}
 
@@ -258,6 +221,7 @@ export default function GroupPage(): JSX.Element {
                     </Flex>
                 </Box>
             </Flex>
+
             {groupType === "on-chain" ? (
                 <AddMemberModal
                     isOpen={isOpen}
