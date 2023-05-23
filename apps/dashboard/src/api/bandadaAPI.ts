@@ -3,7 +3,7 @@ import { SiweMessage } from "siwe"
 import { Group } from "../types"
 
 const API_URL = import.meta.env.VITE_API_URL
-const CLIENT_URL = import.meta.env.VITE_CLIENT_URL
+const CLIENT_URL = import.meta.env.VITE_CLIENT_INVITES_URL
 
 /**
  * It generates a magic link with a valid invite code
