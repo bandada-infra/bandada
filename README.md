@@ -118,6 +118,25 @@
                 </a>
             </td>
         </tr>
+        <tr>
+            <td>
+                <a href="/libs/reputation">
+                    @bandada/reputation
+                </a>
+            </td>
+            <td>
+                <!-- NPM version -->
+                <a href="https://npmjs.org/package/@bandada/reputation">
+                    <img src="https://img.shields.io/npm/v/@bandada/reputation.svg?style=flat-square" alt="NPM version" />
+                </a>
+            </td>
+            <td>
+                <!-- Downloads -->
+                <a href="https://npmjs.org/package/@bandada/reputation">
+                    <img src="https://img.shields.io/npm/dm/@bandada/reputation.svg?style=flat-square" alt="Downloads" />
+                </a>
+            </td>
+        </tr>
     <tbody>
 </table>
 
