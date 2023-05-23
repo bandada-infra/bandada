@@ -432,9 +432,11 @@ export class GroupsService {
 
         /* istanbul ignore next */
         for (const group of groups) {
-            const cachedGroup = new CachedGroup(group.id, group.treeDepth)
-
-            cachedGroup.addMembers(group.members.map((m) => m.id))
+            const cachedGroup = new CachedGroup(
+                group.id,
+                group.treeDepth,
+                group.members.map((m) => m.id)
+            )
 
             this.cachedGroups.set(group.id, cachedGroup)
         }

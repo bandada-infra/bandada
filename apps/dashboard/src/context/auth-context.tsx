@@ -12,53 +12,27 @@ import {
     metaMaskWallet,
     walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets"
-import React, { ReactNode, useMemo, useState } from "react"
+import React, { ReactNode, useEffect, useMemo, useState } from "react"
 import { SiweMessage } from "siwe"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { goerli } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
 import { getNonce, logOut, signIn } from "../api/bandadaAPI"
-import { deleteAdmin, getAdmin, saveAdmin } from "../utils/session"
+import useSessionData from "../hooks/use-session-data"
+import { Admin } from "../types"
 
-const { chains, provider, webSocketProvider } = configureChains(
-    [goerli],
-    [publicProvider()]
-)
+export const AuthContext = React.createContext<{ admin?: Admin | null }>({})
 
-const connectors = connectorsForWallets([
-    {
-        groupName: "Wallets",
-        wallets: [
-            injectedWallet({ chains }),
-            metaMaskWallet({ chains }),
-            coinbaseWallet({ appName: "Bandada", chains }),
-            walletConnectWallet({ chains })
-        ]
-    }
-])
-
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors,
-    provider,
-    webSocketProvider
-})
-
-const customTheme = lightTheme()
-customTheme.radii.modal = "10px"
-
-export const AuthContext = React.createContext({ getAdmin })
-
-export function AuthContextProvider(props: { children: ReactNode }) {
-    const { children } = props
-
+export function AuthContextProvider({ children }: { children: ReactNode }) {
     const [authStatus, setAuthStatus] =
         useState<AuthenticationStatus>("loading")
+    const { admin, saveAdmin, deleteAdmin } = useSessionData()
 
-    React.useEffect(() => {
-        setAuthStatus(getAdmin() ? "authenticated" : "unauthenticated")
-    }, [])
+    useEffect(() => {
+        setAuthStatus(admin ? "authenticated" : "unauthenticated")
+    }, [admin])
 
+    const contextValue = useMemo(() => ({ admin }), [admin])
     const authAdapter = useMemo(
         () =>
             createAuthenticationAdapter({
@@ -83,14 +57,15 @@ export function AuthContextProvider(props: { children: ReactNode }) {
                 getMessageBody: ({ message }) => message.prepareMessage(),
 
                 verify: async ({ message, signature }) => {
-                    const user = await signIn({
+                    const admin = await signIn({
                         message,
                         signature
                     })
 
-                    if (user) {
+                    if (admin) {
                         setAuthStatus("authenticated")
-                        saveAdmin(user)
+
+                        saveAdmin(admin)
 
                         window.location.reload()
 
@@ -112,12 +87,35 @@ export function AuthContextProvider(props: { children: ReactNode }) {
                     setAuthStatus("unauthenticated")
                 }
             }),
-        []
+        [saveAdmin, deleteAdmin]
     )
 
-    return (
-        // eslint-disable-next-line react/jsx-no-constructed-context-values
-        <AuthContext.Provider value={{ getAdmin }}>
+    const { chains, provider, webSocketProvider } = configureChains(
+        [goerli],
+        [publicProvider()]
+    )
+
+    const connectors = connectorsForWallets([
+        {
+            groupName: "Wallets",
+            wallets: [
+                injectedWallet({ chains }),
+                metaMaskWallet({ chains }),
+                coinbaseWallet({ appName: "Bandada", chains }),
+                walletConnectWallet({ chains })
+            ]
+        }
+    ])
+
+    const wagmiClient = createClient({
+        autoConnect: true,
+        connectors,
+        provider,
+        webSocketProvider
+    })
+
+    return admin !== undefined ? (
+        <AuthContext.Provider value={contextValue}>
             <WagmiConfig client={wagmiClient}>
                 <RainbowKitAuthenticationProvider
                     adapter={authAdapter}
@@ -126,7 +124,7 @@ export function AuthContextProvider(props: { children: ReactNode }) {
                     <RainbowKitProvider
                         chains={chains}
                         modalSize="compact"
-                        theme={customTheme}
+                        theme={lightTheme()}
                         appInfo={{
                             appName: "Bandada"
                         }}
@@ -137,5 +135,5 @@ export function AuthContextProvider(props: { children: ReactNode }) {
                 </RainbowKitAuthenticationProvider>
             </WagmiConfig>
         </AuthContext.Provider>
-    )
+    ) : null
 }

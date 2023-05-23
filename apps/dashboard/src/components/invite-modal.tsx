@@ -31,7 +31,7 @@ export default function InviteModal({
     }, [_magicLink])
 
     return (
-        <Modal isOpen={!!isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent maxW="600px">
                 <ModalHeader borderBottom="1px" borderColor="gray.200">

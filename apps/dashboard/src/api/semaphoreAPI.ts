@@ -1,39 +1,33 @@
 import { SemaphoreSubgraph } from "@semaphore-protocol/data"
-import { BigNumber, utils } from "ethers"
-import { Group } from "../types/groups"
+import { Group } from "../types"
+import parseGroupName from "../utils/parseGroupName"
 
 const ETHEREUM_NETWORK = import.meta.env.VITE_ETHEREUM_NETWORK
 
 const subgraph = new SemaphoreSubgraph(ETHEREUM_NETWORK)
 
-function formatGroupName(groupNameInt: string) {
-    try {
-        return utils.parseBytes32String(
-            BigNumber.from(groupNameInt).toHexString()
-        )
-    } catch (error) {
-        // If not parse-able as String, return original value
-        return groupNameInt
-    }
-}
-
-export async function getGroups(admin: string): Promise<Group[] | null> {
+/**
+ * It returns the Semaphore on-chain groups for a specific admin.
+ * @param adminAddress The admin address.
+ * @returns The list of groups.
+ */
+export async function getGroups(adminAddress: string): Promise<Group[] | null> {
     try {
         const groups = await subgraph.getGroups({
             members: true,
-            filters: { admin }
+            filters: { admin: adminAddress }
         })
 
         return groups.map((group) => {
-            const groupName = formatGroupName(group.id)
+            const groupName = parseGroupName(group.id)
 
             return {
                 id: group.id,
                 name: groupName,
-                description: "",
                 treeDepth: group.merkleTree.depth,
                 members: group.members as string[],
-                admin: group.admin as string
+                admin: group.admin as string,
+                type: "on-chain"
             }
         })
     } catch (error) {
@@ -43,6 +37,11 @@ export async function getGroups(admin: string): Promise<Group[] | null> {
     }
 }
 
+/**
+ * It returns details of a specific on-chain group.
+ * @param groupId The group id.
+ * @returns The group details.
+ */
 export async function getGroup(groupId: string): Promise<Group | null> {
     try {
         const group = await subgraph.getGroup(groupId, {
@@ -51,11 +50,11 @@ export async function getGroup(groupId: string): Promise<Group | null> {
 
         return {
             id: group.id,
-            name: formatGroupName(group.id),
-            description: "",
+            name: parseGroupName(group.id),
             treeDepth: group.merkleTree.depth,
             members: group.members as string[],
-            admin: group.admin as string
+            admin: group.admin as string,
+            type: "on-chain"
         }
     } catch (error) {
         console.error(error)
