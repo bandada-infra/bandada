@@ -1,15 +1,13 @@
-export type ReputationType =
-    | "TWITTER_FOLLOWERS"
-    | "GITHUB_FOLLOWERS"
-    | "REDDIT_KARMA"
+export type CriteriaName = "GITHUB_FOLLOWERS"
 
-export type ReputationCriteria = {
-    type: ReputationType | string
+export type Criteria = {
+    name: CriteriaName | string
     parameters: any
 }
 
-export type ReputationContext = {
+export type Context = {
     utils?: {
+        checkParameterTypes: (parameters: any, types: any) => void
         githubAPI?: (endpoint: string) => Promise<any>
         twitterAPI?: (endpoint: string) => Promise<any>
         redditAPI?: (endpoint: string) => Promise<any>
@@ -19,7 +17,7 @@ export type ReputationContext = {
     redditAccessToken?: string
 }
 
-export type ReputationHandler = (
+export type Handler = (
     parameters: any,
-    context: ReputationContext | { [key: string]: any }
+    context: Context | { [key: string]: any }
 ) => Promise<boolean>

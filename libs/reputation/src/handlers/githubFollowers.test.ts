@@ -13,7 +13,7 @@ describe("GithubFollowers", () => {
     it("Should return true if a Github user has more than 100 followers", async () => {
         const result = await validateReputation(
             {
-                type: "GITHUB_FOLLOWERS",
+                name: "GITHUB_FOLLOWERS",
                 parameters: {
                     minFollowers: 100
                 }
@@ -22,5 +22,22 @@ describe("GithubFollowers", () => {
         )
 
         expect(result).toBeTruthy()
+    })
+
+    it("Should throw a type error if the parameter type is wrong", async () => {
+        const fun = () =>
+            validateReputation(
+                {
+                    name: "GITHUB_FOLLOWERS",
+                    parameters: {
+                        minFollowers: "100"
+                    }
+                },
+                { githubAccessToken: "token" }
+            )
+
+        await expect(fun).rejects.toThrow(
+            "Parameter 'minFollowers' is not a number"
+        )
     })
 })

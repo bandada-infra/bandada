@@ -1,6 +1,7 @@
-import reputationHandlers from "./reputationHandlers"
+import checkParameterTypes from "./checkParameterTypes"
 import getAPI from "./getAPI"
-import { ReputationContext, ReputationCriteria } from "./types"
+import handlers from "./handlers"
+import { Context, Criteria } from "./types"
 
 /**
  * It checks if the user meets the reputation criteria of a group.
@@ -11,10 +12,12 @@ import { ReputationContext, ReputationCriteria } from "./types"
  * @returns True if the user meets the reputation criteria.
  */
 export default async function validateReputation(
-    criteria: ReputationCriteria,
-    context: ReputationContext
+    criteria: Criteria,
+    context: Context
 ): Promise<boolean> {
-    context.utils = {}
+    context.utils = {
+        checkParameterTypes
+    }
 
     if (context.githubAccessToken) {
         context.utils.githubAPI = getAPI(
@@ -27,5 +30,5 @@ export default async function validateReputation(
 
     // TODO: handle logic operators.
 
-    return reputationHandlers[criteria.type](criteria.parameters, context)
+    return handlers[criteria.name][0](criteria.parameters, context)
 }

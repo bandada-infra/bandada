@@ -1,4 +1,5 @@
+import addHandler from "./addHandler"
 import validateReputation from "./validateReputation"
-import addReputationHandler from "./addReputationHandler"
 
-export { validateReputation, addReputationHandler }
+export * from "./types"
+export { validateReputation, addHandler }
