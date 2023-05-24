@@ -1,3 +1,4 @@
-import Reputation from "./reputation"
+import validateReputation from "./validateReputation"
+import addReputationHandler from "./addReputationHandler"
 
-export { Reputation }
+export { validateReputation, addReputationHandler }

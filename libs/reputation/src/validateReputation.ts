@@ -1,15 +1,23 @@
 import reputationHandlers from "./reputationHandlers"
-import request from "./request"
+import getAPI from "./getAPI"
 import { ReputationContext, ReputationCriteria } from "./types"
 
-export default function validateReputation(
+/**
+ * It checks if the user meets the reputation criteria of a group.
+ * It also adds utility functions to the reputation context that
+ * can be used by handlers.
+ * @param criteria The reputation criteria of the group.
+ * @param context A set of context variables from Bandada back-end.
+ * @returns True if the user meets the reputation criteria.
+ */
+export default async function validateReputation(
     criteria: ReputationCriteria,
     context: ReputationContext
-): boolean {
+): Promise<boolean> {
     context.utils = {}
 
     if (context.githubAccessToken) {
-        context.utils.githubAPI = request(
+        context.utils.githubAPI = getAPI(
             "https://api.github.com",
             `Bearer ${context.githubAccessToken}`
         )
