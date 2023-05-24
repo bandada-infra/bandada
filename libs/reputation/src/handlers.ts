@@ -1,8 +1,8 @@
 import githubFollowers, {
-    parameterTypes as githubFollowersParameterTypes
+    criteriaTypes as githubFollowersCriteriaTypes
 } from "./handlers/githubFollowers"
-import { CriteriaName, Handler } from "./types"
+import { ValidatorName, Handler } from "./types"
 
 export default {
-    GITHUB_FOLLOWERS: [githubFollowers, githubFollowersParameterTypes]
-} as Record<CriteriaName, [Handler, any]>
+    GITHUB_FOLLOWERS: [githubFollowers, githubFollowersCriteriaTypes]
+} as Record<ValidatorName, [Handler, any]>

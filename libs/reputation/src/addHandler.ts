@@ -1,15 +1,15 @@
 import handlers from "./handlers"
-import { Handler, CriteriaName } from "./types"
+import { Handler, ValidatorName } from "./types"
 
 /**
- * It allows external devs to add a new handler.
- * @param criteriaName The criteria name.
- * @param handler The function that will check the criteria.
+ * It allows external devs to add a new handler for a validator.
+ * @param validatorName The validator name.
+ * @param handler The function that will check the reputation criteria.
  */
 export default function addHandler(
-    criteriaName: CriteriaName,
+    validatorName: ValidatorName,
     handler: Handler,
-    parameterTypes: any
+    criteria: any
 ) {
-    handlers[criteriaName] = [handler, parameterTypes]
+    handlers[validatorName] = [handler, criteria]
 }

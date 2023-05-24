@@ -14,7 +14,7 @@ describe("GithubFollowers", () => {
         const result = await validateReputation(
             {
                 name: "GITHUB_FOLLOWERS",
-                parameters: {
+                criteria: {
                     minFollowers: 100
                 }
             },
@@ -24,12 +24,12 @@ describe("GithubFollowers", () => {
         expect(result).toBeTruthy()
     })
 
-    it("Should throw a type error if the parameter type is wrong", async () => {
+    it("Should throw a type error if a criteria parameter has the wrong type", async () => {
         const fun = () =>
             validateReputation(
                 {
                     name: "GITHUB_FOLLOWERS",
-                    parameters: {
+                    criteria: {
                         minFollowers: "100"
                     }
                 },

@@ -1,13 +1,13 @@
-export type CriteriaName = "GITHUB_FOLLOWERS"
+export type ValidatorName = "GITHUB_FOLLOWERS"
 
-export type Criteria = {
-    name: CriteriaName | string
-    parameters: any
+export type Validator = {
+    name: ValidatorName | string
+    criteria: any
 }
 
 export type Context = {
     utils?: {
-        checkParameterTypes: (parameters: any, types: any) => void
+        checkCriteriaTypes: (criteria: any, types: any) => void
         githubAPI?: (endpoint: string) => Promise<any>
         twitterAPI?: (endpoint: string) => Promise<any>
         redditAPI?: (endpoint: string) => Promise<any>
@@ -18,6 +18,6 @@ export type Context = {
 }
 
 export type Handler = (
-    parameters: any,
+    criteria: any,
     context: Context | { [key: string]: any }
 ) => Promise<boolean>
