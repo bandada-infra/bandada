@@ -1,22 +1,23 @@
-import checkCriteriaTypes from "./checkCriteriaTypes"
+import checkCriteria from "./checkCriteria"
 import getAPI from "./getAPI"
-import handlers from "./handlers"
-import { Context, Validator } from "./types"
+import { Context, ReputationCriteria } from "./types"
+import validators from "./validators"
 
 /**
  * It checks if the user meets the reputation criteria of a group.
  * It also adds utility functions to the reputation context that
- * can be used by handlers.
- * @param validator The reputation validator of the group.
- * @param context A set of context variables from Bandada back-end.
+ * can be used by validators.
+ * @param validatorName The validator name.
+ * @param criteria The validator criteria.
+ * @param context A set of context variables.
  * @returns True if the user meets the reputation criteria.
  */
 export default async function validateReputation(
-    validator: Validator,
+    { name, criteria }: ReputationCriteria,
     context: Context
 ): Promise<boolean> {
     context.utils = {
-        checkCriteriaTypes
+        checkCriteria
     }
 
     if (context.githubAccessToken) {
@@ -30,5 +31,11 @@ export default async function validateReputation(
 
     // TODO: handle logic operators.
 
-    return handlers[validator.name][0](validator.criteria, context)
+    const validator = validators.find((v) => v.name === name)
+
+    if (!validator) {
+        throw Error(`Validator '${name}' does not exist`)
+    }
+
+    return validator.validate(criteria, context)
 }

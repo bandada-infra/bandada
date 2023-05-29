@@ -6,8 +6,13 @@ export type Criteria = {
     minFollowers: number
 }
 
-//
-export const criteriaTypes = {
+// The validator name. It should be unique and capitalized (snake case).
+const name = "GITHUB_FOLLOWERS"
+
+// The criteria application binary interface. It contains
+// the structure of this validator reputation criteria
+// with its parameter types.
+const criteriaABI = {
     minFollowers: "number"
 }
 
@@ -17,12 +22,16 @@ export const criteriaTypes = {
  * @param context Utility functions and other context variables.
  * @returns True if the user meets the reputation criteria.
  */
-const handler: Handler = async (criteria: Criteria, { utils }) => {
-    utils.checkCriteriaTypes(criteria, criteriaTypes)
+const validate: Handler = async (criteria: Criteria, { utils }) => {
+    utils.checkCriteria(criteria, criteriaABI)
 
     const { followers } = await utils.githubAPI("/user")
 
     return followers >= criteria.minFollowers
 }
 
-export default handler
+export default {
+    name,
+    criteriaABI,
+    validate
+}

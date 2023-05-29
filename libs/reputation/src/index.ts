@@ -1,5 +1,5 @@
-import addHandler from "./addHandler"
+import addValidator from "./addValidator"
 import validateReputation from "./validateReputation"
 
 export * from "./types"
-export { validateReputation, addHandler }
+export { validateReputation, addValidator }
