@@ -1,4 +1,4 @@
-import { Handler } from "../types"
+import { Handler } from "../.."
 
 // Typescript type for the handler criteria.
 // This will be mainly used by this handler.
@@ -7,7 +7,7 @@ export type Criteria = {
 }
 
 // The validator name. It should be unique and capitalized (snake case).
-const name = "TWITTER_FOLLOWERS"
+const name = "GITHUB_FOLLOWERS"
 
 // The criteria application binary interface. It contains
 // the structure of this validator reputation criteria
@@ -25,9 +25,9 @@ const criteriaABI = {
 const validate: Handler = async (criteria: Criteria, { utils }) => {
     utils.checkCriteria(criteria, criteriaABI)
 
-    const { data } = await utils.twitterAPI("users/me")
+    const { followers } = await utils.githubAPI("user")
 
-    return data.public_metrics.followers_count >= criteria.minFollowers
+    return followers >= criteria.minFollowers
 }
 
 export default {

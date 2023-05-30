@@ -1,7 +1,5 @@
-import addValidator from "../addValidator"
-import * as testUtils from "../testUtils"
-import validateReputation from "../validateReputation"
-import githubRepositoryCommits from "./githubRepositoryCommits"
+import { addValidator, testUtils, validateReputation } from "../.."
+import githubRepositoryCommits from "./index"
 
 global.fetch = jest.fn()
 

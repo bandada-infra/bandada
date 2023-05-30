@@ -1,28 +1,32 @@
-import addValidator from "../addValidator"
-import * as testUtils from "../testUtils"
-import validateReputation from "../validateReputation"
-import githubFollowers from "./githubFollowers"
+import { addValidator, testUtils, validateReputation } from "../.."
+import twitterFollowers from "./index"
 
 global.fetch = jest.fn()
 
-describe("GithubFollowers", () => {
+describe("TwitterFollowers", () => {
     beforeAll(() => {
-        addValidator(githubFollowers)
+        addValidator(twitterFollowers)
     })
 
-    it("Should return true if a Github user has more than 100 followers", async () => {
+    it("Should return true if a Twitter user has more than 100 followers", async () => {
         testUtils.mockAPIOnce({
-            followers: 110
+            data: {
+                public_metrics: {
+                    followers_count: 110
+                }
+            }
         })
 
         const result = await validateReputation(
             {
-                name: "GITHUB_FOLLOWERS",
+                name: "TWITTER_FOLLOWERS",
                 criteria: {
                     minFollowers: 100
                 }
             },
-            { githubAccessToken: "token" }
+            {
+                twitterAccessToken: "token"
+            }
         )
 
         expect(result).toBeTruthy()
@@ -32,10 +36,10 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_FOLLOWERS",
+                    name: "TWITTER_FOLLOWERS",
                     criteria: {}
                 },
-                { githubAccessToken: "token" }
+                { twitterAccessToken: "token" }
             )
 
         await expect(fun).rejects.toThrow(
@@ -47,17 +51,17 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_FOLLOWERS",
+                    name: "TWITTER_FOLLOWERS",
                     criteria: {
                         minFollowers: 100,
-                        minStars: 200
+                        minTweets: 200
                     }
                 },
-                { githubAccessToken: "token" }
+                { twitterAccessToken: "token" }
             )
 
         await expect(fun).rejects.toThrow(
-            "Parameter 'minStars' should not be part of the criteria"
+            "Parameter 'minTweets' should not be part of the criteria"
         )
     })
 
@@ -65,12 +69,12 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_FOLLOWERS",
+                    name: "TWITTER_FOLLOWERS",
                     criteria: {
                         minFollowers: "100"
                     }
                 },
-                { githubAccessToken: "token" }
+                { twitterAccessToken: "token" }
             )
 
         await expect(fun).rejects.toThrow(

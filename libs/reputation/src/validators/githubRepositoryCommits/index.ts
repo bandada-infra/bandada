@@ -1,4 +1,4 @@
-import { Handler } from "../types"
+import { Handler } from "../.."
 
 // Typescript type for the handler criteria.
 // This will be mainly used by this handler.
