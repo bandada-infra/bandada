@@ -7,8 +7,7 @@ import validators from "./validators"
  * It checks if the user meets the reputation criteria of a group.
  * It also adds utility functions to the reputation context that
  * can be used by validators.
- * @param validatorName The validator name.
- * @param criteria The validator criteria.
+ * @param reputationCriteria The reputation criteria of a group.
  * @param context A set of context variables.
  * @returns True if the user meets the reputation criteria.
  */
@@ -27,7 +26,14 @@ export default async function validateReputation(
         )
     }
 
-    // TODO: add API utils for Reddit and Twitter.
+    if (context.twitterAccessToken) {
+        context.utils.twitterAPI = getAPI(
+            "https://api.twitter.com/2",
+            `Bearer ${context.twitterAccessToken}`
+        )
+    }
+
+    // TODO: add API utils for Reddit.
 
     // TODO: handle logic operators.
 
