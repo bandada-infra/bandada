@@ -1,19 +1,9 @@
 import addValidator from "../addValidator"
+import * as testUtils from "../testUtils"
 import validateReputation from "../validateReputation"
 import twitterFollowers from "./twitterFollowers"
 
-global.fetch = jest.fn(() =>
-    Promise.resolve({
-        json: () =>
-            Promise.resolve({
-                data: {
-                    public_metrics: {
-                        followers_count: 110
-                    }
-                }
-            })
-    })
-) as any
+global.fetch = jest.fn()
 
 describe("TwitterFollowers", () => {
     beforeAll(() => {
@@ -21,6 +11,14 @@ describe("TwitterFollowers", () => {
     })
 
     it("Should return true if a Twitter user has more than 100 followers", async () => {
+        testUtils.mockAPIOnce({
+            data: {
+                public_metrics: {
+                    followers_count: 110
+                }
+            }
+        })
+
         const result = await validateReputation(
             {
                 name: "TWITTER_FOLLOWERS",

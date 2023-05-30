@@ -1,15 +1,9 @@
 import addValidator from "../addValidator"
+import * as testUtils from "../testUtils"
 import validateReputation from "../validateReputation"
 import githubFollowers from "./githubFollowers"
 
-global.fetch = jest.fn(() =>
-    Promise.resolve({
-        json: () =>
-            Promise.resolve({
-                followers: 110
-            })
-    })
-) as any
+global.fetch = jest.fn()
 
 describe("GithubFollowers", () => {
     beforeAll(() => {
@@ -17,6 +11,10 @@ describe("GithubFollowers", () => {
     })
 
     it("Should return true if a Github user has more than 100 followers", async () => {
+        testUtils.mockAPIOnce({
+            followers: 110
+        })
+
         const result = await validateReputation(
             {
                 name: "GITHUB_FOLLOWERS",
