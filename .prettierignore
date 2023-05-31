@@ -32,3 +32,4 @@ cache
 artifacts
 typechain
 typechain-types
+hardhat-dependency-compiler
