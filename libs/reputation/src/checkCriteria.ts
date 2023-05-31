@@ -1,5 +1,5 @@
 /**
- * It checks if the criteria parameters. Criteria must
+ * It checks if the criteria parameters are the right ones. Criteria must
  * contain the right parameters and the right types for each of them.
  * @param criteria The reputation criteria to check.
  * @param criteriaABI The criteria ABI.

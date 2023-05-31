@@ -1,17 +1,11 @@
 import { Handler } from "../.."
 
-// Typescript type for the handler criteria.
-// This will be mainly used by this handler.
 export type Criteria = {
     minFollowers: number
 }
 
-// The validator name. It should be unique and capitalized (snake case).
 const name = "GITHUB_FOLLOWERS"
 
-// The criteria application binary interface. It contains
-// the structure of this validator reputation criteria
-// with its parameter types.
 const criteriaABI = {
     minFollowers: "number"
 }
