@@ -19,7 +19,7 @@ describe("TwitterFollowers", () => {
 
         const result = await validateReputation(
             {
-                name: "TWITTER_FOLLOWERS",
+                name: twitterFollowers.name,
                 criteria: {
                     minFollowers: 100
                 }
@@ -36,7 +36,7 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "TWITTER_FOLLOWERS",
+                    name: twitterFollowers.name,
                     criteria: {}
                 },
                 { twitterAccessToken: "token" }
@@ -51,7 +51,7 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "TWITTER_FOLLOWERS",
+                    name: twitterFollowers.name,
                     criteria: {
                         minFollowers: 100,
                         minTweets: 200
@@ -69,7 +69,7 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "TWITTER_FOLLOWERS",
+                    name: twitterFollowers.name,
                     criteria: {
                         minFollowers: "100"
                     }

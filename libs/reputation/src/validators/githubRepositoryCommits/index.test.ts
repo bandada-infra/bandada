@@ -15,7 +15,7 @@ describe("GithubRepositoryCommits", () => {
 
         const result = await validateReputation(
             {
-                name: "GITHUB_REPOSITORY_COMMITS",
+                name: githubRepositoryCommits.name,
                 criteria: {
                     repository: "hello-worId",
                     minCommits: 100
@@ -31,7 +31,7 @@ describe("GithubRepositoryCommits", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_REPOSITORY_COMMITS",
+                    name: githubRepositoryCommits.name,
                     criteria: { repository: "hello-worId" }
                 },
                 { githubAccessToken: "token" }
@@ -46,7 +46,7 @@ describe("GithubRepositoryCommits", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_REPOSITORY_COMMITS",
+                    name: githubRepositoryCommits.name,
                     criteria: {
                         repository: "hello-worId",
                         minCommits: 100,
@@ -65,7 +65,7 @@ describe("GithubRepositoryCommits", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_REPOSITORY_COMMITS",
+                    name: githubRepositoryCommits.name,
                     criteria: {
                         repository: 2,
                         minCommits: 100

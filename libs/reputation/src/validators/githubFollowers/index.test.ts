@@ -15,7 +15,7 @@ describe("GithubFollowers", () => {
 
         const result = await validateReputation(
             {
-                name: "GITHUB_FOLLOWERS",
+                name: githubFollowers.name,
                 criteria: {
                     minFollowers: 100
                 }
@@ -30,7 +30,7 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_FOLLOWERS",
+                    name: githubFollowers.name,
                     criteria: {}
                 },
                 { githubAccessToken: "token" }
@@ -45,7 +45,7 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_FOLLOWERS",
+                    name: githubFollowers.name,
                     criteria: {
                         minFollowers: 100,
                         minStars: 200
@@ -63,7 +63,7 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: "GITHUB_FOLLOWERS",
+                    name: githubFollowers.name,
                     criteria: {
                         minFollowers: "100"
                     }
