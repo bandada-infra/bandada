@@ -1,13 +1,9 @@
-import { addValidator, testUtils, validateReputation } from "../.."
+import { testUtils, validateReputation } from "../.."
 import githubRepositoryCommits from "./index"
 
 global.fetch = jest.fn()
 
 describe("GithubRepositoryCommits", () => {
-    beforeAll(() => {
-        addValidator(githubRepositoryCommits)
-    })
-
     it("Should return true if a Github user's repository has more than 100 commits", async () => {
         testUtils.mockAPIOnce({ login: "octocat" })
         testUtils.mockAPIOnce(Array.from(Array(100).keys()))

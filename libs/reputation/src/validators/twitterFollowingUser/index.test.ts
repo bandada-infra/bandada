@@ -1,13 +1,9 @@
-import { addValidator, testUtils, validateReputation } from "../.."
+import { testUtils, validateReputation } from "../.."
 import twitterFollowingUser from "./index"
 
 global.fetch = jest.fn()
 
 describe("TwitterFollowingUser", () => {
-    beforeAll(() => {
-        addValidator(twitterFollowingUser)
-    })
-
     it("Should return true if a Twitter user follows another specific user", async () => {
         testUtils.mockAPIOnce({
             data: {

@@ -67,26 +67,6 @@ yarn add @bandada/reputation
 
 ## 📜 Usage
 
-\# **addValidator**(validator: _Validator_)
-
-```typescript
-import { addValidator, githubFollowers } from "@bandada/reputation"
-
-addValidator(githubFollowers)
-```
-
-\# **addValidators**(validators: _Validator[]_)
-
-```typescript
-import {
-    addValidators,
-    githubFollowers,
-    twitterFollowers
-} from "@bandada/reputation"
-
-addValidators([githubFollowers, twitterFollowers])
-```
-
 \# **validateReputation**(reputationCriteria: _ReputationCriteria_, context: _Context_)
 
 ```typescript
@@ -192,4 +172,4 @@ describe("GithubFollowers", () => {
 })
 ```
 
-Once you create your own validator and publish your NPM package, you can open a PR to add your validator to the ones supported by Bandada.
+Once you create your own validator and publish your NPM package, you can open a PR to add your validator to the ones supported by Bandada (`validators.ts` file).
