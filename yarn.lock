@@ -814,6 +814,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bandada/reputation@workspace:libs/reputation":
+  version: 0.0.0-use.local
+  resolution: "@bandada/reputation@workspace:libs/reputation"
+  dependencies:
+    "@rollup/plugin-typescript": ^11.0.0
+    rimraf: ^4.1.2
+    rollup: ^3.17.2
+    rollup-plugin-cleanup: ^3.2.1
+    typescript: ^4.9.5
+  languageName: unknown
+  linkType: soft
+
 "@bandada/utils@0.7.0, @bandada/utils@workspace:libs/utils":
   version: 0.0.0-use.local
   resolution: "@bandada/utils@workspace:libs/utils"
