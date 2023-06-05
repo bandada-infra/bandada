@@ -1,13 +1,9 @@
-import { addValidator, testUtils, validateReputation } from "../.."
+import { testUtils, validateReputation } from "../.."
 import githubPersonalStars from "./index"
 
 global.fetch = jest.fn()
 
 describe("GithubPersonalStars", () => {
-    beforeAll(() => {
-        addValidator(githubPersonalStars)
-    })
-
     it("Should return true if a Github user has more than 100 stars in their personal repositories", async () => {
         testUtils.mockAPIOnce(
             Array.from(Array(100).keys()).map(() => ({ stargazers_count: 0 }))

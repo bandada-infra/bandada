@@ -1,13 +1,9 @@
-import { addValidator, testUtils, validateReputation } from "../.."
+import { testUtils, validateReputation } from "../.."
 import githubFollowers from "./index"
 
 global.fetch = jest.fn()
 
 describe("GithubFollowers", () => {
-    beforeAll(() => {
-        addValidator(githubFollowers)
-    })
-
     it("Should return true if a Github user has more than 100 followers", async () => {
         testUtils.mockAPIOnce({
             followers: 110

@@ -1,23 +1,31 @@
 import { testUtils, validateReputation } from "../.."
-import twitterFollowers from "./index"
+import twitterFollowingUser from "./index"
 
 global.fetch = jest.fn()
 
-describe("TwitterFollowers", () => {
-    it("Should return true if a Twitter user has more than 100 followers", async () => {
+describe("TwitterFollowingUser", () => {
+    it("Should return true if a Twitter user follows another specific user", async () => {
         testUtils.mockAPIOnce({
             data: {
-                public_metrics: {
-                    followers_count: 110
-                }
+                id: "123123"
             }
+        })
+        testUtils.mockAPIOnce({
+            data: [
+                {
+                    username: "hello"
+                },
+                {
+                    username: "world"
+                }
+            ]
         })
 
         const result = await validateReputation(
             {
-                name: twitterFollowers.name,
+                name: twitterFollowingUser.name,
                 criteria: {
-                    minFollowers: 100
+                    username: "world"
                 }
             },
             {
@@ -32,14 +40,14 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowers.name,
+                    name: twitterFollowingUser.name,
                     criteria: {}
                 },
                 { twitterAccessToken: "token" }
             )
 
         await expect(fun).rejects.toThrow(
-            "Parameter 'minFollowers' has not been defined"
+            "Parameter 'username' has not been defined"
         )
     })
 
@@ -47,9 +55,9 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowers.name,
+                    name: twitterFollowingUser.name,
                     criteria: {
-                        minFollowers: 100,
+                        username: "hello",
                         minTweets: 200
                     }
                 },
@@ -65,16 +73,16 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowers.name,
+                    name: twitterFollowingUser.name,
                     criteria: {
-                        minFollowers: "100"
+                        username: 100
                     }
                 },
                 { twitterAccessToken: "token" }
             )
 
         await expect(fun).rejects.toThrow(
-            "Parameter 'minFollowers' is not a number"
+            "Parameter 'username' is not a string"
         )
     })
 })
