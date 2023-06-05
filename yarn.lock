@@ -814,7 +814,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bandada/reputation@workspace:libs/reputation":
+"@bandada/reputation@0.7.0, @bandada/reputation@workspace:libs/reputation":
   version: 0.0.0-use.local
   resolution: "@bandada/reputation@workspace:libs/reputation"
   dependencies:
@@ -7511,6 +7511,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api@workspace:apps/api"
   dependencies:
+    "@bandada/reputation": 0.7.0
     "@bandada/utils": 0.7.0
     "@ethersproject/hash": ^5.7.0
     "@nestjs/cli": ^9.0.0

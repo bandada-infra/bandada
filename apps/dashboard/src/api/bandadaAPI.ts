@@ -125,19 +125,52 @@ export async function updateGroup(
 }
 
 /**
+ * It returns a random string to be used as a OAuth state, to to protect against
+ * forgery attacks. The same string will be used to retrieve group and member
+ * before checking reputation and adding members.
+ * @param group The group id.
+ * @param memberId The group member id.
+ * @param provider OAuth provider.
+ * @returns The OAuth state id.
+ */
+export async function getOAuthState(
+    groupId: string,
+    memberId: string,
+    provider: string
+): Promise<string | null> {
+    try {
+        console.log(
+            `${API_URL}/groups/${groupId}/members/${memberId}/oauth/${provider}`
+        )
+        return await request(
+            `${API_URL}/groups/${groupId}/members/${memberId}/oauth/${provider}`
+        )
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
+}
+
+/**
  * It adds a new member to an existing group.
  * @param group The group id.
  * @param memberId The group member id.
+ * @param oAuthCode The OAuth code.
+ * @param oAuthState The OAuth state.
  */
 export async function addMember(
     groupId: string,
-    memberId: string
+    memberId: string,
+    oAuthCode?: string,
+    oAuthState?: string
 ): Promise<void | null> {
     try {
-        await request(`${API_URL}/groups/${groupId}/members`, {
+        await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
             method: "POST",
             data: {
-                id: memberId
+                oAuthCode,
+                oAuthState
             }
         })
     } catch (error) {

@@ -8,6 +8,7 @@ import {
     UpdateDateColumn
 } from "typeorm"
 import { Member } from "./member.entity"
+import { ReputationAccount } from "./reputation-account.entity"
 
 @Entity("groups")
 export class Group {
@@ -29,6 +30,11 @@ export class Group {
 
     @OneToMany(() => Member, (member) => member.group, { cascade: ["insert"] })
     members: Member[]
+
+    @OneToMany(() => ReputationAccount, (account) => account.group, {
+        cascade: ["insert"]
+    })
+    reputationAccounts: ReputationAccount[]
 
     @Column({
         type: "simple-json",

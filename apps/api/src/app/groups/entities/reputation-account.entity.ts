@@ -16,7 +16,7 @@ export class ReputationAccount {
     @PrimaryColumn()
     accountHash: string
 
-    @ManyToOne(() => Group)
+    @ManyToOne(() => Group, (group) => group.reputationAccounts)
     @JoinColumn({ name: "group_id" })
     group: Group
 }
