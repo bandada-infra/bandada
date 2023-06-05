@@ -383,6 +383,11 @@ export class GroupsService {
         return group
     }
 
+    /**
+     * It generates a random string for the OAuth state to prevent forgery attacks.
+     * @param oAuthState OAuth state (group id, member id and a provider).
+     * @returns The random string created for the OAuth state.
+     */
     async getOAuthState(oAuthState: OAuthState): Promise<string> {
         const group = await this.getGroup(oAuthState.groupId)
 
