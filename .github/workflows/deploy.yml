@@ -1,48 +1,48 @@
 name: Deploy
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-    inputs:
-      build:
-        description: "Build trigger"
-        required: true
-        default: "enable"
-        type: choice
-        options:
-        - enable
-        - disable
+    push:
+        branches: [main]
+    workflow_dispatch:
+        inputs:
+            build:
+                description: "Build trigger"
+                required: true
+                default: "enable"
+                type: choice
+                options:
+                    - enable
+                    - disable
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    env:
-      DATA: ${{ github.event.inputs.build }}
-    permissions:
-      id-token: write
-      contents: read
+    deploy:
+        runs-on: ubuntu-latest
+        env:
+            DATA: ${{ github.event.inputs.build }}
+        permissions:
+            id-token: write
+            contents: read
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  persist-credentials: false
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::490752553772:role/bandada-ecs-deploy-slc
-          role-duration-seconds: 1800
-          aws-region: eu-central-1
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                  role-to-assume: arn:aws:iam::490752553772:role/bandada-ecs-deploy-slc
+                  role-duration-seconds: 1800
+                  aws-region: eu-central-1
 
-      - name: Build and Push images to ECR
-        run: |
-          .github/scripts/build.sh ${{ env.DATA }}
+            - name: Build and Push images to ECR
+              run: |
+                  .github/scripts/build.sh ${{ env.DATA }}
 
-      - name: Create Deployment
-        run: |
-          .github/scripts/deploy.sh
+            - name: Create Deployment
+              run: |
+                  .github/scripts/deploy.sh
