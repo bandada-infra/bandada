@@ -37,7 +37,7 @@ contract Bandada is IBandada, Ownable {
     function getFingerprintCreationDate(
         uint256 groupId,
         uint256 fingerprint
-    ) external view override onlyOwner returns (uint256) {
+    ) external view override returns (uint256) {
         return fingerprintCreationDates[groupId][fingerprint];
     }
 

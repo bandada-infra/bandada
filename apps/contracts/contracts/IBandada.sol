@@ -30,7 +30,7 @@ interface IBandada {
     function getFingerprintCreationDate(
         uint256 groupId,
         uint256 fingerprint
-    ) external returns (uint256);
+    ) external view returns (uint256);
 
     function fingerprintDuration(
         uint256 groupId
