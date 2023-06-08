@@ -22,7 +22,7 @@ describe("Bandada", () => {
         })
     })
 
-    describe("# updateGroup", () => {
+    describe("# updateGroups", () => {
         it("Should update groups", async () => {
             const transaction = bandada.updateGroups([
                 {

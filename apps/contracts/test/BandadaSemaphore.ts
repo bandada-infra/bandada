@@ -57,6 +57,7 @@ describe("BandadaSemaphore", () => {
         it("Should throw an exception if the proof is not valid", async () => {
             const transaction = bandadaSemaphore.verifyProof(
                 groupId,
+                group.root,
                 group.depth,
                 signal,
                 fullProof.nullifierHash,
@@ -70,6 +71,7 @@ describe("BandadaSemaphore", () => {
         it("Should verify a proof for an off-chain group correctly", async () => {
             const transaction = bandadaSemaphore.verifyProof(
                 groupId,
+                group.root,
                 group.depth,
                 signal,
                 fullProof.nullifierHash,
@@ -91,6 +93,7 @@ describe("BandadaSemaphore", () => {
         it("Should not verify the same proof for an off-chain group twice", async () => {
             const transaction = bandadaSemaphore.verifyProof(
                 groupId,
+                group.root,
                 group.depth,
                 signal,
                 fullProof.nullifierHash,
@@ -101,6 +104,43 @@ describe("BandadaSemaphore", () => {
             await expect(transaction).to.be.revertedWithCustomError(
                 bandadaSemaphore,
                 "BandadaSemaphore__YouAreUsingTheSameNullifierTwice"
+            )
+        })
+
+        it("Should not verify a proof if the Merkle tree root is expired", async () => {
+            const fullProof = await generateProof(
+                identities[0],
+                group,
+                group.root,
+                signal,
+                {
+                    wasmFilePath,
+                    zkeyFilePath
+                }
+            )
+
+            group.addMember(new Identity("3").commitment)
+
+            await bandada.updateGroups([
+                {
+                    id: groupId,
+                    fingerprint: group.root
+                }
+            ])
+
+            const transaction = bandadaSemaphore.verifyProof(
+                groupId,
+                fullProof.merkleTreeRoot,
+                group.depth,
+                signal,
+                fullProof.nullifierHash,
+                fullProof.merkleTreeRoot,
+                fullProof.proof
+            )
+
+            await expect(transaction).to.be.revertedWithCustomError(
+                bandadaSemaphore,
+                "BandadaSemaphore__MerkleTreeRootIsExpired"
             )
         })
     })

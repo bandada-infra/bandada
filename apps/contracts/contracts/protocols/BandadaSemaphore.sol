@@ -25,13 +25,29 @@ contract BandadaSemaphore is IBandadaSemaphore {
     /// @dev See {IBandadaSemaphore-verifyProof}.
     function verifyProof(
         uint256 groupId,
+        uint256 merkleTreeRoot,
         uint256 merkleTreeDepth,
         uint256 signal,
         uint256 nullifierHash,
         uint256 externalNullifier,
         uint256[8] calldata proof
     ) external override {
-        uint256 merkleTreeRoot = bandada.groups(groupId);
+        uint256 currentMerkleTreeRoot = bandada.groups(groupId);
+
+        // A proof could have used an old Merkle tree root.
+        // https://github.com/semaphore-protocol/semaphore/issues/98
+        if (merkleTreeRoot != currentMerkleTreeRoot) {
+            uint256 merkleRootCreationDate = bandada.getFingerprintCreationDate(groupId, merkleTreeRoot);
+            uint256 merkleTreeDuration = bandada.fingerprintDuration(groupId);
+
+            if (merkleRootCreationDate == 0) {
+                revert BandadaSemaphore__MerkleTreeRootIsNotPartOfTheGroup();
+            }
+
+            if (block.timestamp > merkleRootCreationDate + merkleTreeDuration) {
+                revert BandadaSemaphore__MerkleTreeRootIsExpired();
+            }
+        }
 
         if (nullifierHashes[groupId][nullifierHash]) {
             revert BandadaSemaphore__YouAreUsingTheSameNullifierTwice();

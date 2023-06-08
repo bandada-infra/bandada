@@ -21,4 +21,18 @@ interface IBandada {
     /// @dev Updates the off-chain groups.
     /// @param _groups: List of off-chain group data.
     function updateGroups(Group[] calldata _groups) external;
+
+    function updateFingerprintDuration(
+        uint256 groupId,
+        uint256 durationMinutes
+    ) external;
+
+    function getFingerprintCreationDate(
+        uint256 groupId,
+        uint256 fingerprint
+    ) external returns (uint256);
+
+    function fingerprintDuration(
+        uint256 groupId
+    ) external view returns (uint256);
 }
