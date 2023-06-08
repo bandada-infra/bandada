@@ -22,8 +22,9 @@ contract Bandada is IBandada, Ownable {
         for (uint256 i = 0; i < _groups.length; ) {
             groups[_groups[i].id] = _groups[i].fingerprint;
 
-            fingerprintCreationDates[_groups[i].id][_groups[i].fingerprint] = block
-            .timestamp;
+            fingerprintCreationDates[_groups[i].id][
+                _groups[i].fingerprint
+            ] = block.timestamp;
 
             emit GroupUpdated(_groups[i].id, _groups[i].fingerprint);
 

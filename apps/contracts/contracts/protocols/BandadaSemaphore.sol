@@ -37,7 +37,10 @@ contract BandadaSemaphore is IBandadaSemaphore {
         // A proof could have used an old Merkle tree root.
         // https://github.com/semaphore-protocol/semaphore/issues/98
         if (merkleTreeRoot != currentMerkleTreeRoot) {
-            uint256 merkleRootCreationDate = bandada.getFingerprintCreationDate(groupId, merkleTreeRoot);
+            uint256 merkleRootCreationDate = bandada.getFingerprintCreationDate(
+                groupId,
+                merkleTreeRoot
+            );
             uint256 merkleTreeDuration = bandada.fingerprintDuration(groupId);
 
             if (merkleRootCreationDate == 0) {

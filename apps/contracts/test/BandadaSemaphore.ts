@@ -108,7 +108,7 @@ describe("BandadaSemaphore", () => {
         })
 
         it("Should not verify a proof if the Merkle tree root is expired", async () => {
-            const fullProof = await generateProof(
+            fullProof = await generateProof(
                 identities[0],
                 group,
                 group.root,
