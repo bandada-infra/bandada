@@ -24,10 +24,10 @@ interface IBandada {
 
     /// @dev Updates the current fingerprints duration of the off-chain group.
     /// @param groupId: Id of the off-chain group.
-    /// @param durationMinutes: Duration in minutes of fingerprints
+    /// @param durationSeconds: Duration in seconds of fingerprints
     function updateFingerprintDuration(
         uint256 groupId,
-        uint256 durationMinutes
+        uint256 durationSeconds
     ) external;
 
     /// @dev Gets a group id and fingerprint and returns the fingerprint creation date.
@@ -39,9 +39,9 @@ interface IBandada {
         uint256 fingerprint
     ) external view returns (uint256);
 
-    /// @dev Gets a group id and returns its current fingerprint duration.
+    /// @dev Gets a group id and returns its current fingerprint duration in seconds.
     /// @param groupId: Id of the off-chain group.
-    /// @return Current fingerprint duration.
+    /// @return Current fingerprint duration in seconds.
     function fingerprintDuration(
         uint256 groupId
     ) external view returns (uint256);

@@ -46,8 +46,8 @@ contract Bandada is IBandada, Ownable {
     /// @dev See {IBandada-updateFingerprintDuration}.
     function updateFingerprintDuration(
         uint256 groupId,
-        uint256 durationMinutes
+        uint256 durationSeconds
     ) external override onlyOwner {
-        fingerprintDuration[groupId] = durationMinutes;
+        fingerprintDuration[groupId] = durationSeconds;
     }
 }
