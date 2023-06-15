@@ -7,7 +7,7 @@ import NotFoundPage from "./pages/404"
 import GroupPage from "./pages/group"
 import GroupsPage from "./pages/groups"
 import HomePage from "./pages/home"
-import OAuthPage from "./pages/oauth"
+import ReputationPage from "./pages/reputation"
 
 export default function Routes(): JSX.Element {
     const { admin } = useContext(AuthContext)
@@ -47,8 +47,8 @@ export default function Routes(): JSX.Element {
                     ]
                 },
                 {
-                    path: "oauth",
-                    element: <OAuthPage />
+                    path: "reputation",
+                    element: <ReputationPage />
                 }
             ]),
         [admin]

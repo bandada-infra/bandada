@@ -43,8 +43,6 @@ export default function ReputationPage() {
                     oAuthCode
                 )
 
-                console.log(redirectURI)
-
                 if (redirectURI) {
                     window.location.replace(redirectURI)
                 }
