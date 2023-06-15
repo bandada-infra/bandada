@@ -219,7 +219,7 @@ export default function GroupPage(): JSX.Element {
                             </Text>
                             <Text mt="5">
                                 {group?.fingerprintDuration &&
-                                    `FIngerprint Duration: ${group?.fingerprintDuration}`}
+                                    `Fingerprint Duration: ${group?.fingerprintDuration} seconds`}
                             </Text>
                         </Box>
                     </Flex>

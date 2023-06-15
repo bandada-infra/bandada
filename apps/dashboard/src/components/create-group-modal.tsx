@@ -310,7 +310,7 @@ export default function CreateGroupModal({
                                     </Text>
                                     <Text mt="15px" color="#75797E">
                                         {_fingerprintDuration &&
-                                            `Fingerprint Duration ${_fingerprintDuration}`}
+                                            `Fingerprint Duration ${_fingerprintDuration} seconds`}
                                     </Text>
                                     <Text mt="20px">{_groupDescription}</Text>
                                     <Text mt="20px">Use for</Text>
