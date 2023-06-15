@@ -29,6 +29,18 @@ export class BandadaContract {
             fingerprint: args[1].toBigInt()
         }))
     }
+
+    async updateFingerprintDuration(
+        groupId: BigInt,
+        fingerprintDuration: BigInt
+    ): Promise<ContractReceipt> {
+        const transaction = await this.contract.updateFingerprintDuration(
+            groupId,
+            fingerprintDuration
+        )
+
+        return transaction.wait(1)
+    }
 }
 
 export default function getBandadaContract(

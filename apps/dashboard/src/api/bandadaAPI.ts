@@ -81,7 +81,8 @@ export async function getGroup(groupId: string): Promise<Group | null> {
 export async function createGroup(
     name: string,
     description: string,
-    treeDepth: number
+    treeDepth: number,
+    fingerprintDuration: number
 ): Promise<Group | null> {
     try {
         const group = await request(`${API_URL}/groups`, {
@@ -89,7 +90,8 @@ export async function createGroup(
             data: {
                 name,
                 description,
-                treeDepth
+                treeDepth,
+                fingerprintDuration
             }
         })
 

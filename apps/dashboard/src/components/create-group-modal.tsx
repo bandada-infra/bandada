@@ -17,7 +17,12 @@ import {
     Select,
     Spinner,
     Text,
-    VStack
+    VStack,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
 import { useSigner } from "wagmi"
@@ -35,6 +40,8 @@ export default function CreateGroupModal({
     const [_groupName, setGroupName] = useState<string>("")
     const [_groupType, setGroupType] = useState<string>("")
     const [_groupDescription, setGroupDescription] = useState<string>("")
+    const [_fingerprintDuration, setFingerprintDuration] =
+        useState<number>(3600)
     const [_groupSize, setGroupSize] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>()
     const { data: signer } = useSigner()
@@ -60,7 +67,8 @@ export default function CreateGroupModal({
             name: string,
             type: string,
             description: string,
-            treeDepth: number
+            treeDepth: number,
+            fingerprintDuration: number
         ) => {
             if (type === "on-chain" && signer) {
                 setLoading(true)
@@ -85,7 +93,12 @@ export default function CreateGroupModal({
                     onClose()
                 }
             } else {
-                await createOffchainGroup(name, description, treeDepth)
+                await createOffchainGroup(
+                    name,
+                    description,
+                    treeDepth,
+                    fingerprintDuration
+                )
 
                 onClose()
             }
@@ -135,6 +148,7 @@ export default function CreateGroupModal({
                 setGroupName("")
                 setGroupType("")
                 setGroupDescription("")
+                setFingerprintDuration(3600)
                 setGroupSize("")
             }
         })()
@@ -185,20 +199,52 @@ export default function CreateGroupModal({
                                     </Select>
                                 </FormControl>
                                 {_groupType === "off-chain" && (
-                                    <FormControl>
-                                        <FormLabel>Description</FormLabel>
-                                        <Input
-                                            value={_groupDescription}
-                                            minLength={10}
-                                            isRequired
-                                            onChange={(e) =>
-                                                setGroupDescription(
-                                                    e.target.value
-                                                )
-                                            }
-                                            placeholder="Enter details that will help you differentiate this group"
-                                        />
-                                    </FormControl>
+                                    <>
+                                        <FormControl>
+                                            <FormLabel>Description</FormLabel>
+                                            <Input
+                                                value={_groupDescription}
+                                                minLength={10}
+                                                isRequired
+                                                onChange={(e) =>
+                                                    setGroupDescription(
+                                                        e.target.value
+                                                    )
+                                                }
+                                                placeholder="Enter details that will help you differentiate this group"
+                                            />
+                                        </FormControl>
+                                        <FormControl>
+                                            <FormLabel>
+                                                Fingerprint Duration{" "}
+                                                <Text
+                                                    as="span"
+                                                    fontSize="sm"
+                                                    color="gray.500"
+                                                >
+                                                    (seconds)
+                                                </Text>
+                                            </FormLabel>
+                                            <NumberInput
+                                                min={0}
+                                                value={_fingerprintDuration}
+                                                onChange={(valueString) =>
+                                                    setFingerprintDuration(
+                                                        parseInt(
+                                                            valueString,
+                                                            10
+                                                        )
+                                                    )
+                                                }
+                                            >
+                                                <NumberInputField />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        </FormControl>
+                                    </>
                                 )}
                             </VStack>
                             <Button
@@ -262,6 +308,10 @@ export default function CreateGroupModal({
                                         {_groupSize &&
                                             `${groupSizes[_groupSize].capacity}, Tree depth ${groupSizes[_groupSize].treeDepth}`}
                                     </Text>
+                                    <Text mt="15px" color="#75797E">
+                                        {_fingerprintDuration &&
+                                            `Fingerprint Duration ${_fingerprintDuration}`}
+                                    </Text>
                                     <Text mt="20px">{_groupDescription}</Text>
                                     <Text mt="20px">Use for</Text>
                                     {_groupSize &&
@@ -313,7 +363,8 @@ export default function CreateGroupModal({
                                                     _groupType,
                                                     _groupDescription,
                                                     groupSizes[_groupSize]
-                                                        .treeDepth
+                                                        .treeDepth,
+                                                    _fingerprintDuration
                                                 )
                                             } catch (error) {
                                                 console.error(error)

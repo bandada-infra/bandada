@@ -44,4 +44,18 @@ describe("Bandada", () => {
             expect(fingerprint).to.equal(group.root)
         })
     })
+
+    describe("# updateFingerprintDuration", () => {
+        it("Should update the fingerprint duration", async () => {
+            const duration = 3600
+
+            await bandada.updateFingerprintDuration(groupId, duration)
+
+            const fingerprintDuration = await bandada.fingerprintDuration(
+                groupId
+            )
+
+            expect(duration).to.equal(fingerprintDuration)
+        })
+    })
 })
