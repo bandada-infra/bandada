@@ -1,9 +1,9 @@
 import { Flex, Text } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
-import { addMember, getOAuthState } from "../api/bandadaAPI"
+import { addMemberByReputation, setOAuthState } from "../api/bandadaAPI"
 
-export default function OAuthPage() {
+export default function ReputationPage() {
     const [searchParams] = useSearchParams()
 
     // Step 1
@@ -12,17 +12,20 @@ export default function OAuthPage() {
             if (searchParams.has("group") && searchParams.has("member")) {
                 const groupId = searchParams.get("group")
                 const memberId = searchParams.get("member")
+                const redirectURI =
+                    searchParams.get("redirect_uri") || undefined
 
-                const stateId = await getOAuthState(
+                const stateId = await setOAuthState(
                     groupId as string,
                     memberId as string,
-                    "github"
+                    "github",
+                    redirectURI
                 )
 
                 window.location.replace(
                     `https://github.com/login/oauth/authorize?client_id=${
                         import.meta.env.VITE_GITHUB_CLIENT_ID
-                    }&state=${stateId}_${groupId}_${memberId}`
+                    }&state=${stateId}`
                 )
             }
         })()
@@ -35,9 +38,16 @@ export default function OAuthPage() {
                 const oAuthCode = searchParams.get("code") as string
                 const oAuthState = searchParams.get("state") as string
 
-                const [oAuthStateId, groupId, memberId] = oAuthState.split("_")
+                const redirectURI = await addMemberByReputation(
+                    oAuthState,
+                    oAuthCode
+                )
 
-                await addMember(groupId, memberId, oAuthCode, oAuthStateId)
+                console.log(redirectURI)
+
+                if (redirectURI) {
+                    window.location.replace(redirectURI)
+                }
             }
         })()
     }, [searchParams])

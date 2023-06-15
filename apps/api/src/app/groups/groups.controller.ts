@@ -20,7 +20,6 @@ import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
-import { OAuthProvider } from "./types"
 
 @Controller("groups")
 export class GroupsController {
@@ -97,19 +96,6 @@ export class GroupsController {
         return stringifyJSON(merkleProof)
     }
 
-    @Get(":group/members/:member/oauth/:provider")
-    async getOAuthState(
-        @Param("group") groupId: string,
-        @Param("member") memberId: string,
-        @Param("provider") provider: OAuthProvider
-    ): Promise<string> {
-        return this.groupsService.getOAuthState({
-            groupId,
-            memberId,
-            provider
-        })
-    }
-
     @Post(":group/members/:member")
     async addMember(
         @Param("group") groupId: string,
@@ -133,16 +119,6 @@ export class GroupsController {
                 groupId,
                 memberId,
                 apiKey
-            )
-            return
-        }
-
-        if (dto.oAuthCode && dto.oAuthState) {
-            await this.groupsService.addMemberWithOAuthProvider(
-                groupId,
-                memberId,
-                dto.oAuthCode,
-                dto.oAuthState
             )
             return
         }

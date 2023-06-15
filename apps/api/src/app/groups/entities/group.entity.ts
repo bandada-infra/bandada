@@ -1,3 +1,4 @@
+import { ReputationAccount } from "src/app/reputation/entities/reputation-account.entity"
 import {
     Column,
     CreateDateColumn,
@@ -8,7 +9,6 @@ import {
     UpdateDateColumn
 } from "typeorm"
 import { Member } from "./member.entity"
-import { ReputationAccount } from "./reputation-account.entity"
 
 @Entity("groups")
 export class Group {

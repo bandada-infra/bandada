@@ -1,5 +1,5 @@
 import { request } from "@bandada/utils"
-import { OAuthProvider } from "../groups/types"
+import { OAuthProvider } from "../reputation/types"
 
 /**
  * It returns the id of a OAuth account.

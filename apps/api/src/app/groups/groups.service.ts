@@ -1,4 +1,3 @@
-import { Context, validateReputation } from "@bandada/reputation"
 import { BandadaContract, getBandadaContract, Network } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
 import {
@@ -15,19 +14,15 @@ import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
 import { v4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
-import getOAuthAccessToken from "../utils/getOAuthAccessToken"
-import getOAuthAccountId from "../utils/getOAuthAccountId"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
-import { ReputationAccount } from "./entities/reputation-account.entity"
-import { MerkleProof, OAuthState } from "./types"
+import { MerkleProof } from "./types"
 
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
-    private oAuthState: Map<string, OAuthState>
     private bandadaContract: BandadaContract
 
     constructor(
@@ -37,7 +32,6 @@ export class GroupsService {
         private readonly invitesService: InvitesService
     ) {
         this.cachedGroups = new Map()
-        this.oAuthState = new Map()
         this.bandadaContract = getBandadaContract(
             process.env.ETHEREUM_NETWORK as Network,
             process.env.BACKEND_PRIVATE_KEY as string,
@@ -164,26 +158,7 @@ export class GroupsService {
 
         await this.invitesService.redeemInvite(dto.inviteCode, groupId)
 
-        const group = await this.getGroup(groupId)
-        const member = new Member()
-        member.group = group
-        member.id = memberId
-
-        group.members.push(member)
-
-        await this.groupRepository.save(group)
-
-        const cachedGroup = this.cachedGroups.get(groupId)
-
-        cachedGroup.addMember(memberId)
-
-        Logger.log(
-            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
-        )
-
-        this._updateContractGroup(cachedGroup)
-
-        return group
+        return this.addMember(groupId, memberId)
     }
 
     /**
@@ -212,25 +187,7 @@ export class GroupsService {
             )
         }
 
-        const member = new Member()
-        member.group = group
-        member.id = memberId
-
-        group.members.push(member)
-
-        await this.groupRepository.save(group)
-
-        const cachedGroup = this.cachedGroups.get(groupId)
-
-        cachedGroup.addMember(memberId)
-
-        Logger.log(
-            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
-        )
-
-        this._updateContractGroup(cachedGroup)
-
-        return group
+        return this.addMember(groupId, memberId)
     }
 
     /**
@@ -259,114 +216,23 @@ export class GroupsService {
             )
         }
 
-        const member = new Member()
-        member.group = group
-        member.id = memberId
-
-        group.members.push(member)
-
-        await this.groupRepository.save(group)
-
-        const cachedGroup = this.cachedGroups.get(groupId)
-
-        cachedGroup.addMember(memberId)
-
-        Logger.log(
-            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
-        )
-
-        this._updateContractGroup(cachedGroup)
-
-        return group
+        return this.addMember(groupId, memberId)
     }
 
     /**
-     * Add a member to the reputation group if they meet the right reputation criteria.
+     * Add a member to the group.
      * @param groupId ID of the group
      * @param memberId ID of the member to be added
-     * @param oAuthCode OAuth code to exchange for an access token.
-     * @param OAuthState OAuth state to prevent forgery attacks.
      * @returns Group
      */
-    async addMemberWithOAuthProvider(
-        groupId: string,
-        memberId: string,
-        oAuthCode: string,
-        oAuthState: string
-    ): Promise<Group> {
-        const state = this.oAuthState.get(oAuthState)
-
-        // Check the state integrity.
-        if (
-            !state ||
-            state.groupId !== groupId ||
-            state.memberId !== memberId
-        ) {
-            throw new BadRequestException(
-                `OAuth state does not match the group or member`
-            )
-        }
-
+    async addMember(groupId: string, memberId: string): Promise<Group> {
         const group = await this.getGroup(groupId)
-
-        if (this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' already exists in the group '${groupId}'`
-            )
-        }
-
-        const context: Context = {}
-        let accountId: string
-
-        // Exchange the OAuth code for a user access token.
-        switch (state.provider) {
-            case "github": {
-                const accessToken = await getOAuthAccessToken(
-                    state.provider,
-                    oAuthCode
-                )
-
-                context.githubAccessToken = accessToken
-
-                accountId = await getOAuthAccountId(state.provider, accessToken)
-                break
-            }
-            default:
-        }
-
-        // Check if the same account has already joined a group.
-        const accountHash = id(accountId + state.provider)
-
-        if (
-            group.reputationAccounts.find(
-                (account) => account.accountHash === accountHash
-            )
-        ) {
-            throw new BadRequestException(
-                "OAuth account has already joined a group"
-            )
-        }
-
-        // Check reputation.
-        if (!(await validateReputation(group.reputationCriteria, context))) {
-            throw new UnauthorizedException(
-                "OAuth account does not match reputation criteria"
-            )
-        }
-
-        // Save OAuth account to prevent the same account to join groups with
-        // different member ids.
-        const reputationAccount = new ReputationAccount()
-
-        reputationAccount.group = group
-        reputationAccount.accountHash = accountHash
 
         const member = new Member()
         member.group = group
         member.id = memberId
 
         group.members.push(member)
-        group.reputationAccounts.push(reputationAccount)
 
         await this.groupRepository.save(group)
 
@@ -381,33 +247,6 @@ export class GroupsService {
         this._updateContractGroup(cachedGroup)
 
         return group
-    }
-
-    /**
-     * It generates a random string for the OAuth state to prevent forgery attacks.
-     * @param oAuthState OAuth state (group id, member id and a provider).
-     * @returns The random string created for the OAuth state.
-     */
-    async getOAuthState(oAuthState: OAuthState): Promise<string> {
-        const group = await this.getGroup(oAuthState.groupId)
-
-        if (!group.reputationCriteria) {
-            throw new BadRequestException(
-                `Group with id '${oAuthState.groupId}' is not a reputation group`
-            )
-        }
-
-        if (!["github"].includes(oAuthState.provider)) {
-            throw new BadRequestException(
-                `OAuth provider ${oAuthState.provider}' is not supported`
-            )
-        }
-
-        const stateId = v4()
-
-        this.oAuthState.set(stateId, oAuthState)
-
-        return stateId
     }
 
     /**
