@@ -1,12 +1,12 @@
-import { Group } from "src/app/groups/entities/group.entity"
 import {
-    PrimaryColumn,
     Entity,
-    ManyToOne,
-    Unique,
     Index,
-    JoinColumn
+    JoinColumn,
+    ManyToOne,
+    PrimaryColumn,
+    Unique
 } from "typeorm"
+import { Group } from "../../groups/entities/group.entity"
 
 @Entity("reputation_accounts")
 @Index(["accountHash", "group"])

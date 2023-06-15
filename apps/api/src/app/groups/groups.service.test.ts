@@ -3,6 +3,7 @@ import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Invite } from "../invites/entities/invite.entity"
 import { InvitesService } from "../invites/invites.service"
+import { ReputationAccount } from "../reputation/entities/reputation-account.entity"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
@@ -24,6 +25,7 @@ describe("GroupsService", () => {
     let groupId: string
 
     beforeAll(async () => {
+        console.log("A")
         const module = await Test.createTestingModule({
             imports: [
                 TypeOrmModule.forRootAsync({
@@ -31,7 +33,7 @@ describe("GroupsService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [Group, Invite, Member],
+                        entities: [Group, Invite, Member, ReputationAccount],
                         synchronize: true
                     })
                 }),
