@@ -48,7 +48,8 @@ describe("InvitesService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
-                treeDepth: 16
+                treeDepth: 16,
+                fingerprintDuration: 3600
             },
             "admin"
         )

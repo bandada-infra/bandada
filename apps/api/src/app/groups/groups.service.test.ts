@@ -48,7 +48,8 @@ describe("GroupsService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
-                treeDepth: 16
+                treeDepth: 16,
+                fingerprintDuration: 3600
             },
             "admin"
         )
@@ -62,7 +63,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -110,7 +112,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group01",
                     description: "This is a description",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin01"
             )
@@ -120,7 +123,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group02",
                     description: "This is a description",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin02"
             )
@@ -228,7 +232,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
-                    treeDepth: 21
+                    treeDepth: 21,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -266,7 +271,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
-                    treeDepth: 21
+                    treeDepth: 21,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -295,7 +301,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -321,7 +328,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -384,7 +392,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -419,7 +428,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group 1",
                     description: "This is a new group",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )

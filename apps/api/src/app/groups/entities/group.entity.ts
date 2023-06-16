@@ -27,6 +27,9 @@ export class Group {
     @Column({ name: "tree_depth" })
     treeDepth: number
 
+    @Column({ name: "fingerprint_duration" })
+    fingerprintDuration: number
+
     @OneToMany(() => Member, (member) => member.group, { cascade: ["insert"] })
     members: Member[]
 

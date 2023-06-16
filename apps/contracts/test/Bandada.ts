@@ -22,7 +22,7 @@ describe("Bandada", () => {
         })
     })
 
-    describe("# updateGroup", () => {
+    describe("# updateGroups", () => {
         it("Should update groups", async () => {
             const transaction = bandada.updateGroups([
                 {
@@ -42,6 +42,20 @@ describe("Bandada", () => {
             const fingerprint = await bandada.groups(groupId)
 
             expect(fingerprint).to.equal(group.root)
+        })
+    })
+
+    describe("# updateFingerprintDuration", () => {
+        it("Should update the fingerprint duration", async () => {
+            const duration = 3600
+
+            await bandada.updateFingerprintDuration(groupId, duration)
+
+            const fingerprintDuration = await bandada.fingerprintDuration(
+                groupId
+            )
+
+            expect(duration).to.equal(fingerprintDuration)
         })
     })
 })

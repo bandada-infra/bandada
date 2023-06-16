@@ -10,6 +10,7 @@ export function mapGroupToResponseDTO(
         description: group.description,
         admin: group.adminId,
         treeDepth: group.treeDepth,
+        fingerprintDuration: group.fingerprintDuration,
         createdAt: group.createdAt,
         members: (group.members || []).map((m) => m.id),
         reputationCriteria: group.reputationCriteria,

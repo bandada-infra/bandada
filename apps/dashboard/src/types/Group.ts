@@ -4,6 +4,7 @@ export type Group = {
     type?: string
     description?: string
     treeDepth: number
+    fingerprintDuration: number
     members: string[]
     admin: string
     apiEnabled?: boolean

@@ -54,7 +54,13 @@ export class GroupsService {
      * @returns Created group.
      */
     async createGroup(
-        { id: groupId, name, description, treeDepth }: CreateGroupDto,
+        {
+            id: groupId,
+            name,
+            description,
+            treeDepth,
+            fingerprintDuration
+        }: CreateGroupDto,
         admin: string
     ): Promise<Group> {
         const _groupId =
@@ -68,6 +74,7 @@ export class GroupsService {
             name,
             description,
             treeDepth,
+            fingerprintDuration,
             adminId: admin,
             members: []
         })
@@ -77,6 +84,8 @@ export class GroupsService {
         const cachedGroup = new CachedGroup(group.id, group.treeDepth)
 
         this.cachedGroups.set(_groupId, cachedGroup)
+
+        this._updateFingerprintDuration(group.id, fingerprintDuration)
 
         Logger.log(
             `GroupsService: group '${name}' has been created with id '${_groupId}'`
@@ -425,6 +434,25 @@ export class GroupsService {
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)
+    }
+
+    private async _updateFingerprintDuration(
+        groupId: string,
+        duration: number
+    ): Promise<void> {
+        try {
+            await this.bandadaContract.updateFingerprintDuration(
+                BigInt(groupId),
+                BigInt(duration)
+            )
+            Logger.log(
+                `GroupsService: group '${groupId}' fingerprint duration has been updated in the contract`
+            )
+        } catch {
+            Logger.log(
+                `GroupsService: failed to update fingerprint duration contract groups`
+            )
+        }
     }
 
     private async _cacheGroups() {

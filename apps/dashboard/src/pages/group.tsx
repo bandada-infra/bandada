@@ -217,6 +217,10 @@ export default function GroupPage(): JSX.Element {
                                     ? "Tree depth: 20"
                                     : "Tree depth: 16"}
                             </Text>
+                            <Text mt="5">
+                                {group?.fingerprintDuration &&
+                                    `Fingerprint Duration: ${group?.fingerprintDuration} seconds`}
+                            </Text>
                         </Box>
                     </Flex>
                 </Box>
