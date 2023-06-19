@@ -98,6 +98,19 @@ describe("GroupsService", () => {
 
             await expect(fun).rejects.toThrow("You are not the admin")
         })
+
+        it("Should update a group if the treeDepth changes", async () => {
+            const newTreeDepth = 20
+            const { treeDepth } = await groupsService.updateGroup(
+                groupId,
+                {
+                    treeDepth: newTreeDepth
+                },
+                "admin"
+            )
+
+            expect(treeDepth).toBe(newTreeDepth)
+        })
     })
 
     describe("# getAllGroupsData", () => {
@@ -141,7 +154,7 @@ describe("GroupsService", () => {
         it("Should return a group", async () => {
             const { treeDepth, members } = await groupsService.getGroup(groupId)
 
-            expect(treeDepth).toBe(16)
+            expect(treeDepth).toBe(20)
             expect(members).toHaveLength(0)
         })
 
