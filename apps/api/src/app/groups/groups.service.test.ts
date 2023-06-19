@@ -110,6 +110,10 @@ describe("GroupsService", () => {
             )
 
             expect(treeDepth).toBe(newTreeDepth)
+            expect(
+                // @ts-ignore
+                groupsService.bandadaContract.updateGroups
+            ).toHaveBeenCalled()
         })
     })
 
