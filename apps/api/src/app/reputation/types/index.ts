@@ -1,4 +1,4 @@
-export type OAuthProvider = "github" // | "twitter" | "reddit"
+export type OAuthProvider = "github" | "twitter" // | "reddit"
 
 export type OAuthState = {
     groupId: string

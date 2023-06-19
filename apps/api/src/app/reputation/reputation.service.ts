@@ -43,7 +43,7 @@ export class ReputationService {
             )
         }
 
-        if (!["github"].includes(oAuthState.provider)) {
+        if (!["github", "twitter"].includes(oAuthState.provider)) {
             throw new BadRequestException(
                 `OAuth provider ${oAuthState.provider}' is not supported`
             )
@@ -95,6 +95,18 @@ export class ReputationService {
                 )
 
                 context.githubAccessToken = accessToken
+
+                accountId = await getOAuthAccountId(provider, accessToken)
+                break
+            }
+            case "twitter": {
+                const accessToken = await getOAuthAccessToken(
+                    provider,
+                    oAuthCode,
+                    oAuthState
+                )
+
+                context.twitterAccessToken = accessToken
 
                 accountId = await getOAuthAccountId(provider, accessToken)
                 break

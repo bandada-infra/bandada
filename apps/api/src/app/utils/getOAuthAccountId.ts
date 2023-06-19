@@ -22,6 +22,19 @@ export default async function getOAuthAccountId(
 
             return id
         }
+        case "twitter": {
+            const { data } = await request(
+                "https://api.twitter.com/2/users/me",
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                }
+            )
+
+            return data.id
+        }
         default:
             throw new Error(`OAuth provider ${oAuthProvider} does not exist`)
     }
