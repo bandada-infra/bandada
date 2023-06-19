@@ -125,6 +125,14 @@ export class GroupsService {
 
         if (treeDepth) {
             group.treeDepth = treeDepth
+
+            const cachedGroup = new CachedGroup(
+                groupId,
+                treeDepth,
+                group.members.map((m) => m.id)
+            )
+            this.cachedGroups.set(groupId, cachedGroup)
+            this._updateContractGroup(cachedGroup)
         }
 
         if (reputationCriteria) {
@@ -141,16 +149,6 @@ export class GroupsService {
         }
 
         await this.groupRepository.save(group)
-
-        if (treeDepth) {
-            const cachedGroup = new CachedGroup(
-                groupId,
-                treeDepth,
-                group.members.map((m) => m.id)
-            )
-            this.cachedGroups.set(groupId, cachedGroup)
-            this._updateContractGroup(cachedGroup)
-        }
 
         Logger.log(`GroupsService: group '${group.name}' has been updated`)
 
