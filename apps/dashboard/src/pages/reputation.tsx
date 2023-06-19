@@ -6,7 +6,6 @@ import { addMemberByReputation, setOAuthState } from "../api/bandadaAPI"
 export default function ReputationPage() {
     const [searchParams] = useSearchParams()
 
-    // Step 1
     useEffect(() => {
         ;(async () => {
             if (searchParams.has("group") && searchParams.has("member")) {
@@ -28,12 +27,7 @@ export default function ReputationPage() {
                     }&state=${stateId}`
                 )
             }
-        })()
-    }, [searchParams])
 
-    // Step 2
-    useEffect(() => {
-        ;(async () => {
             if (searchParams.has("code") && searchParams.has("state")) {
                 const oAuthCode = searchParams.get("code") as string
                 const oAuthState = searchParams.get("state") as string
