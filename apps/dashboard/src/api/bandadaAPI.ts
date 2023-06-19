@@ -127,6 +127,63 @@ export async function updateGroup(
 }
 
 /**
+ * It returns a random string to be used as a OAuth state, to to protect against
+ * forgery attacks. It will be used to retrieve group, member, redirectURI and provider
+ * before checking reputation and adding members.
+ * @param group The group id.
+ * @param memberId The group member id.
+ * @param redirectURI The URL where clients will be sent after authorization.
+ * @param provider OAuth provider.
+ * @returns The OAuth state id.
+ */
+export async function setOAuthState(
+    groupId: string,
+    memberId: string,
+    provider: string,
+    redirectURI?: string
+): Promise<string | null> {
+    try {
+        return await request(`${API_URL}/reputation/oauth-state`, {
+            method: "POST",
+            data: {
+                groupId,
+                memberId,
+                provider,
+                redirectURI
+            }
+        })
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
+}
+
+/**
+ * It adds a new member to an existing reputation group.
+ * @param oAuthState The OAuth state.
+ * @param oAuthCode The OAuth code.
+ */
+export async function addMemberByReputation(
+    oAuthState: string,
+    oAuthCode: string
+): Promise<string | null> {
+    try {
+        return await request(`${API_URL}/reputation/add-member`, {
+            method: "POST",
+            data: {
+                oAuthCode,
+                oAuthState
+            }
+        })
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
+}
+
+/**
  * It adds a new member to an existing group.
  * @param group The group id.
  * @param memberId The group member id.
@@ -136,11 +193,8 @@ export async function addMember(
     memberId: string
 ): Promise<void | null> {
     try {
-        await request(`${API_URL}/groups/${groupId}/members`, {
-            method: "POST",
-            data: {
-                id: memberId
-            }
+        await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
+            method: "POST"
         })
     } catch (error) {
         console.error(error)

@@ -10,6 +10,7 @@ import { AdminsModule } from "./admins/admins.module"
 import { AuthModule } from "./auth/auth.module"
 import { GroupsModule } from "./groups/groups.module"
 import { InvitesModule } from "./invites/invites.module"
+import { ReputationModule } from "./reputation/reputation.module"
 
 type DB_TYPE = "mysql" | "sqlite" | "postgres"
 
@@ -19,6 +20,7 @@ type DB_TYPE = "mysql" | "sqlite" | "postgres"
         AdminsModule,
         InvitesModule,
         GroupsModule,
+        ReputationModule,
         TypeOrmModule.forRoot({
             type: (process.env.DB_TYPE as DB_TYPE) || "postgres",
             url: process.env.DB_URL,

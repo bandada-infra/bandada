@@ -167,26 +167,7 @@ export class GroupsService {
 
         await this.invitesService.redeemInvite(dto.inviteCode, groupId)
 
-        const group = await this.getGroup(groupId)
-        const member = new Member()
-        member.group = group
-        member.id = memberId
-
-        group.members.push(member)
-
-        await this.groupRepository.save(group)
-
-        const cachedGroup = this.cachedGroups.get(groupId)
-
-        cachedGroup.addMember(memberId)
-
-        Logger.log(
-            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
-        )
-
-        this._updateContractGroup(cachedGroup)
-
-        return group
+        return this.addMember(groupId, memberId)
     }
 
     /**
@@ -215,25 +196,7 @@ export class GroupsService {
             )
         }
 
-        const member = new Member()
-        member.group = group
-        member.id = memberId
-
-        group.members.push(member)
-
-        await this.groupRepository.save(group)
-
-        const cachedGroup = this.cachedGroups.get(groupId)
-
-        cachedGroup.addMember(memberId)
-
-        Logger.log(
-            `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
-        )
-
-        this._updateContractGroup(cachedGroup)
-
-        return group
+        return this.addMember(groupId, memberId)
     }
 
     /**
@@ -261,6 +224,18 @@ export class GroupsService {
                 `Member '${memberId}' already exists in the group '${groupId}'`
             )
         }
+
+        return this.addMember(groupId, memberId)
+    }
+
+    /**
+     * Add a member to the group.
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @returns Group
+     */
+    async addMember(groupId: string, memberId: string): Promise<Group> {
+        const group = await this.getGroup(groupId)
 
         const member = new Member()
         member.group = group
@@ -392,7 +367,7 @@ export class GroupsService {
      */
     async getGroup(groupId: string): Promise<Group> {
         const group = await this.groupRepository.findOne({
-            relations: { members: true },
+            relations: { members: true, reputationAccounts: true },
             where: { id: groupId }
         })
 

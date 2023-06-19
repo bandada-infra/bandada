@@ -4,6 +4,7 @@ import {
     Delete,
     Get,
     Headers,
+    NotImplementedException,
     Param,
     Patch,
     Post,
@@ -31,8 +32,8 @@ export class GroupsController {
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
 
-    @Get(":id")
-    async getGroup(@Param("id") groupId: string, @Req() req: Request) {
+    @Get(":group")
+    async getGroup(@Param("group") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
         return mapGroupToResponseDTO(
@@ -55,11 +56,11 @@ export class GroupsController {
         )
     }
 
-    @Patch(":id")
+    @Patch(":group")
     @UseGuards(AuthGuard)
     async updateGroup(
         @Req() req: Request,
-        @Param("id") groupId: string,
+        @Param("group") groupId: string,
         @Body() dto: UpdateGroupDto
     ) {
         const group = await this.groupsService.updateGroup(
@@ -74,17 +75,17 @@ export class GroupsController {
         )
     }
 
-    @Get(":id/members/:member")
+    @Get(":group/members/:member")
     isGroupMember(
-        @Param("id") groupId: string,
-        @Param("member") member: string
+        @Param("group") groupId: string,
+        @Param("member") memberId: string
     ): boolean {
-        return this.groupsService.isGroupMember(groupId, member)
+        return this.groupsService.isGroupMember(groupId, memberId)
     }
 
-    @Get(":id/members/:member/proof")
+    @Get(":group/members/:member/proof")
     generateMerkleProof(
-        @Param("id") groupId: string,
+        @Param("group") groupId: string,
         @Param("member") member: string
     ): string {
         const merkleProof = this.groupsService.generateMerkleProof(
@@ -95,15 +96,16 @@ export class GroupsController {
         return stringifyJSON(merkleProof)
     }
 
-    @Post(":id/members")
+    @Post(":group/members/:member")
     async addMember(
-        @Param("id") groupId: string,
+        @Param("group") groupId: string,
+        @Param("member") memberId: string,
         @Body() dto: AddMemberDto,
         @Headers() headers: Headers,
         @Req() req: Request
-    ): Promise<void> {
+    ): Promise<void | any> {
         if (dto.inviteCode) {
-            await this.groupsService.joinGroup(groupId, dto.id, {
+            await this.groupsService.joinGroup(groupId, memberId, {
                 inviteCode: dto.inviteCode
             })
 
@@ -115,28 +117,29 @@ export class GroupsController {
         if (apiKey) {
             await this.groupsService.addMemberWithAPIKey(
                 groupId,
-                dto.id,
+                memberId,
                 apiKey
             )
             return
         }
 
-        if (dto.id) {
+        if (req.session.adminId) {
             await this.groupsService.addMemberManually(
                 groupId,
-                dto.id,
+                memberId,
                 req.session.adminId
             )
+
             return
         }
 
-        throw new Error("Not implemented")
+        throw new NotImplementedException()
     }
 
-    @Delete(":id/members/:memberId")
+    @Delete(":group/members/:member")
     async removeMember(
-        @Param("id") groupId: string,
-        @Param("memberId") memberId: string,
+        @Param("group") groupId: string,
+        @Param("member") memberId: string,
         @Req() req: Request,
         @Headers() headers: Headers
     ): Promise<void> {
