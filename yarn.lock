@@ -814,7 +814,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bandada/reputation@0.7.0, @bandada/reputation@workspace:^, @bandada/reputation@workspace:libs/reputation":
+"@bandada/reputation@0.7.0, @bandada/reputation@workspace:libs/reputation":
   version: 0.0.0-use.local
   resolution: "@bandada/reputation@workspace:libs/reputation"
   dependencies:
@@ -9788,7 +9788,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:apps/dashboard"
   dependencies:
-    "@bandada/reputation": "workspace:^"
+    "@bandada/reputation": 0.7.0
     "@bandada/utils": 0.7.0
     "@chakra-ui/react": ^2.5.1
     "@chakra-ui/theme-tools": ^2.0.16
