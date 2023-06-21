@@ -1,91 +1,41 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Req,
-    Res,
-    UnauthorizedException,
-    UseGuards
-} from "@nestjs/common"
-import { AuthGuard } from "@nestjs/passport"
-import { Request, Response } from "express"
+import { Body, Controller, Delete, Get, Post, Req } from "@nestjs/common"
+import { Request } from "express"
+import { generateNonce } from "siwe"
+import { AuthService } from "./auth.service"
+import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
 @Controller("auth")
 export class AuthController {
-    @Get("github")
-    @UseGuards(AuthGuard("github"))
-    github() {
-        throw new UnauthorizedException()
+    constructor(private readonly authService: AuthService) {}
+
+    @Get("nonce")
+    async nonce(@Req() req: Request) {
+        req.session.nonce = generateNonce()
+
+        await req.session.save()
+
+        return req.session.nonce
     }
 
-    @Get("github/callback")
-    @UseGuards(AuthGuard("github"))
-    githubCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req["user"]
-        if (jwtToken) {
-            res.cookie("jwt", jwtToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
-            })
-        }
+    @Post("")
+    async signIn(@Body() body: SignInWithEthereumDTO, @Req() req: Request) {
+        const { admin } = await this.authService.signIn(
+            {
+                message: body.message,
+                signature: body.signature
+            },
+            req.session.nonce
+        )
 
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
+        req.session.adminId = admin.id
+
+        await req.session.save()
+
+        return admin
     }
 
-    @Get("twitter")
-    @UseGuards(AuthGuard("twitter"))
-    twitter() {
-        throw new UnauthorizedException()
-    }
-
-    @Get("twitter/callback")
-    @UseGuards(AuthGuard("twitter"))
-    twitterCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req["user"]
-        if (jwtToken) {
-            res.cookie("jwt", jwtToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
-            })
-        }
-
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
-    }
-
-    @Get("reddit")
-    @UseGuards(AuthGuard("reddit"))
-    reddit() {
-        throw new UnauthorizedException()
-    }
-
-    @Get("reddit/callback")
-    @UseGuards(AuthGuard("reddit"))
-    redditCallback(@Req() req: Request, @Res() res: Response) {
-        const jwtToken = req["user"]
-        if (jwtToken) {
-            res.cookie("jwt", jwtToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000
-            })
-        }
-
-        res.redirect(`${process.env.DASHBOARD_URL}/my-groups`)
-    }
-
-    @Get("getUser")
-    @UseGuards(AuthGuard("jwt"))
-    jwtCheck() {
-        return true
-    }
-
-    @Post("log-out")
-    @UseGuards(AuthGuard("jwt"))
-    logOut(@Req() _req: Request, @Res() res: Response) {
-        res.cookie("jwt", "", {
-            httpOnly: true,
-            expires: new Date()
-        })
-
-        res.redirect(`${process.env.DASHBOARD_URL}`)
+    @Delete("")
+    logOut(@Req() req: Request) {
+        req.session.destroy()
     }
 }

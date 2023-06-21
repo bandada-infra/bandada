@@ -4,7 +4,9 @@ import {
     Max,
     Min,
     IsOptional,
-    MinLength
+    MinLength,
+    IsBoolean,
+    IsObject
 } from "class-validator"
 
 export class UpdateGroupDto {
@@ -20,6 +22,14 @@ export class UpdateGroupDto {
     readonly treeDepth?: number
 
     @IsOptional()
-    @IsNumber()
-    readonly tag?: number
+    @IsBoolean()
+    readonly apiEnabled?: boolean
+
+    @IsOptional()
+    @IsString()
+    readonly apiKey?: string
+
+    @IsOptional()
+    @IsObject()
+    readonly reputationCriteria?: object
 }

@@ -25,16 +25,16 @@ export class InvitesService {
      * Creates a new group invite with a unique code. Group invites can only be
      * created by group admins.
      * @param dto External parameters used to create a new Invite.
-     * @param groupAdmin Group admin username.
+     * @param adminId Group admin id.
      * @returns The created invite.
      */
     async createInvite(
         { groupId }: CreateInviteDto,
-        groupAdmin: string
+        adminId: string
     ): Promise<Invite> {
         const group = await this.groupsService.getGroup(groupId)
 
-        if (group.admin !== groupAdmin) {
+        if (group.adminId !== adminId.toString()) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
@@ -83,7 +83,7 @@ export class InvitesService {
             )
         }
 
-        if (invite.redeemed === true) {
+        if (invite.isRedeemed === true) {
             throw new BadRequestException(
                 `Invite code '${inviteCode}' has already been redeemed`
             )
@@ -95,7 +95,7 @@ export class InvitesService {
             )
         }
 
-        invite.redeemed = true
+        invite.isRedeemed = true
 
         return this.inviteRepository.save(invite)
     }

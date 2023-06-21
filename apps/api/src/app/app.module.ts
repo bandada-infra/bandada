@@ -6,19 +6,21 @@ dotenvConfig({ path: resolve(process.cwd(), ".env") })
 
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { AccountModule } from "./accounts/account.module"
+import { AdminsModule } from "./admins/admins.module"
 import { AuthModule } from "./auth/auth.module"
 import { GroupsModule } from "./groups/groups.module"
 import { InvitesModule } from "./invites/invites.module"
+import { ReputationModule } from "./reputation/reputation.module"
 
 type DB_TYPE = "mysql" | "sqlite" | "postgres"
 
 @Module({
     imports: [
         AuthModule,
-        AccountModule,
+        AdminsModule,
         InvitesModule,
         GroupsModule,
+        ReputationModule,
         TypeOrmModule.forRoot({
             type: (process.env.DB_TYPE as DB_TYPE) || "postgres",
             url: process.env.DB_URL,

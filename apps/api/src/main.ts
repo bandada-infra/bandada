@@ -1,7 +1,6 @@
 import { Logger, ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
-import * as cookieParser from "cookie-parser"
-import * as session from "express-session"
+import { ironSession } from "iron-session/express"
 import { AppModule } from "./app/app.module"
 
 async function bootstrap() {
@@ -18,14 +17,16 @@ async function bootstrap() {
     const port = 3000
 
     app.use(
-        session({
-            secret: process.env.JWT_SECRET_KEY,
-            resave: false,
-            saveUninitialized: false
+        ironSession({
+            ttl: 1209600, // Expiry: 14 days.
+            cookieName: "bandada_siwe_cookie",
+            password: process.env.IRON_SESSION_PASSWORD,
+            cookieOptions: {
+                secure: process.env.NODE_ENV === "production"
+            }
         })
     )
 
-    app.use(cookieParser())
     app.enableCors({
         origin: true,
         credentials: true

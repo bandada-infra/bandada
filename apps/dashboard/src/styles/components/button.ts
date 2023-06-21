@@ -1,16 +1,16 @@
 import { SystemStyleObject } from "@chakra-ui/react"
 import { GlobalStyleProps } from "@chakra-ui/theme-tools"
 
-const width = "220px"
-const height = "60px"
+const width = "200px"
+const height = "50px"
 
 const Button = {
     baseStyle: {
         _focus: {
             boxShadow: "none"
         },
-        borderRadius: 0,
-        fontWeight: 500
+        borderRadius: 10,
+        fontWeight: "bold"
     },
     variants: {
         outline: (): SystemStyleObject => ({

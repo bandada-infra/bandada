@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { Group } from "../groups/entities/group.entity"
 import { Member } from "../groups/entities/member.entity"
 import { GroupsService } from "../groups/groups.service"
+import { ReputationAccount } from "../reputation/entities/reputation-account.entity"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 
@@ -31,7 +32,7 @@ describe("InvitesService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [Group, Invite, Member],
+                        entities: [Group, Invite, Member, ReputationAccount],
                         synchronize: true
                     })
                 }),
@@ -48,7 +49,8 @@ describe("InvitesService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
-                treeDepth: 16
+                treeDepth: 16,
+                fingerprintDuration: 3600
             },
             "admin"
         )
@@ -57,10 +59,11 @@ describe("InvitesService", () => {
 
     describe("# createInvite", () => {
         it("Should create an invite", async () => {
-            const { group, code, redeemed } = await invitesService.createInvite(
-                { groupId },
-                "admin"
-            )
+            const {
+                group,
+                code,
+                isRedeemed: redeemed
+            } = await invitesService.createInvite({ groupId }, "admin")
 
             expect(redeemed).toBeFalsy()
             expect(code).toHaveLength(8)
@@ -83,7 +86,7 @@ describe("InvitesService", () => {
 
             const invite = await invitesService.getInvite(code)
 
-            expect(invite.redeemed).toBeFalsy()
+            expect(invite.isRedeemed).toBeFalsy()
             expect(invite.code).toHaveLength(8)
             expect(invite.group).toBeDefined()
         })
@@ -109,7 +112,7 @@ describe("InvitesService", () => {
         })
 
         it("Should redeem an invite", async () => {
-            const { redeemed } = await invitesService.redeemInvite(
+            const { isRedeemed: redeemed } = await invitesService.redeemInvite(
                 invite.code,
                 groupId
             )

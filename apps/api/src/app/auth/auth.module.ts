@@ -1,33 +1,13 @@
-import { Module } from "@nestjs/common"
-import { JwtModule } from "@nestjs/jwt"
-import { PassportModule } from "@nestjs/passport"
-import { AccountModule } from "../accounts/account.module"
-import { CookieSerializer } from "../utils"
+import { Global, Module } from "@nestjs/common"
+import { AdminsModule } from "../admins/admins.module"
 import { AuthController } from "./auth.controller"
 import { AuthService } from "./auth.service"
-import { GithubStrategy } from "./strategies/github.strategy"
-import { JwtStrategy } from "./strategies/jwt.strategy"
-import { RedditStrategy } from "./strategies/reddit.strategy"
-import { TwitterStrategy } from "./strategies/twitter.strategy"
 
+@Global()
 @Module({
-    imports: [
-        AccountModule,
-        PassportModule.register({ session: true }),
-        JwtModule.register({
-            secret: process.env.JWT_SECRET_KEY,
-            signOptions: { expiresIn: "300s" }
-        })
-    ],
-    providers: [
-        GithubStrategy,
-        TwitterStrategy,
-        RedditStrategy,
-        AuthService,
-        CookieSerializer,
-        JwtStrategy
-    ],
+    imports: [AdminsModule],
+    providers: [AuthService],
     controllers: [AuthController],
-    exports: [PassportModule, JwtModule]
+    exports: [AuthService]
 })
 export class AuthModule {}

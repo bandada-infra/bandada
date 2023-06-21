@@ -3,6 +3,7 @@ import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Invite } from "../invites/entities/invite.entity"
 import { InvitesService } from "../invites/invites.service"
+import { ReputationAccount } from "../reputation/entities/reputation-account.entity"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
@@ -24,6 +25,7 @@ describe("GroupsService", () => {
     let groupId: string
 
     beforeAll(async () => {
+        console.log("A")
         const module = await Test.createTestingModule({
             imports: [
                 TypeOrmModule.forRootAsync({
@@ -31,7 +33,7 @@ describe("GroupsService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [Group, Invite, Member],
+                        entities: [Group, Invite, Member, ReputationAccount],
                         synchronize: true
                     })
                 }),
@@ -48,7 +50,8 @@ describe("GroupsService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
-                treeDepth: 16
+                treeDepth: 16,
+                fingerprintDuration: 3600
             },
             "admin"
         )
@@ -62,7 +65,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    treeDepth: 16
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -75,10 +79,10 @@ describe("GroupsService", () => {
     describe("# updateGroup", () => {
         it("Should update a group", async () => {
             const { description } = await groupsService.updateGroup(
+                groupId,
                 {
                     description: "This is a new description"
                 },
-                groupId,
                 "admin"
             )
 
@@ -87,30 +91,68 @@ describe("GroupsService", () => {
 
         it("Should not update a group if the admin is the wrong one", async () => {
             const fun = groupsService.updateGroup(
+                groupId,
                 {
                     description: "This is a new description"
                 },
-                groupId,
                 "wrong-admin"
             )
 
             await expect(fun).rejects.toThrow("You are not the admin")
         })
+
+        it("Should update a group if the treeDepth changes", async () => {
+            const newTreeDepth = 20
+            const { treeDepth } = await groupsService.updateGroup(
+                groupId,
+                {
+                    treeDepth: newTreeDepth
+                },
+                "admin"
+            )
+
+            expect(treeDepth).toBe(newTreeDepth)
+            expect(
+                // @ts-ignore
+                groupsService.bandadaContract.updateGroups
+            ).toHaveBeenCalled()
+        })
     })
 
     describe("# getAllGroupsData", () => {
         it("Should return a list of groups", async () => {
-            const result = await groupsService.getAllGroups()
+            const result = await groupsService.getGroups()
 
             expect(result).toHaveLength(2)
         })
-    })
 
-    describe("# getGroupsByAdmin", () => {
         it("Should return a list of groups by admin", async () => {
-            const result = await groupsService.getGroupsByAdmin("admin")
+            await groupsService.createGroup(
+                {
+                    name: "Group01",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin01"
+            )
 
-            expect(result).toHaveLength(2)
+            // Create a group with another adminId - shouldn't be fetched below
+            await groupsService.createGroup(
+                {
+                    name: "Group02",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin02"
+            )
+
+            const result = await groupsService.getGroups({
+                adminId: "admin01"
+            })
+
+            expect(result).toHaveLength(1)
         })
     })
 
@@ -118,7 +160,7 @@ describe("GroupsService", () => {
         it("Should return a group", async () => {
             const { treeDepth, members } = await groupsService.getGroup(groupId)
 
-            expect(treeDepth).toBe(16)
+            expect(treeDepth).toBe(20)
             expect(members).toHaveLength(0)
         })
 
@@ -137,10 +179,10 @@ describe("GroupsService", () => {
         })
 
         it("Should add a member to an existing group", async () => {
-            const { members } = await groupsService.addMember(
-                { inviteCode: invite.code },
+            const { members } = await groupsService.joinGroup(
                 groupId,
-                "123123"
+                "123123",
+                { inviteCode: invite.code }
             )
 
             expect(members).toHaveLength(1)
@@ -152,11 +194,9 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.addMember(
-                { inviteCode: invite2.code },
-                groupId,
-                "124"
-            )
+            await groupsService.joinGroup(groupId, "124", {
+                inviteCode: invite2.code
+            })
 
             expect(
                 // @ts-ignore
@@ -165,11 +205,9 @@ describe("GroupsService", () => {
         })
 
         it("Should not add any member if they already exist", async () => {
-            const fun = groupsService.addMember(
-                { inviteCode: invite.code },
-                groupId,
-                "123123"
-            )
+            const fun = groupsService.joinGroup(groupId, "123123", {
+                inviteCode: invite.code
+            })
 
             await expect(fun).rejects.toThrow("already exists")
         })
@@ -213,7 +251,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
-                    treeDepth: 21
+                    treeDepth: 21,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -223,10 +262,10 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            const { members } = await groupsService.addMember(
-                { inviteCode: invite.code },
+            const { members } = await groupsService.joinGroup(
                 _groupId,
-                "111000"
+                "111000",
+                { inviteCode: invite.code }
             )
 
             expect(members).toHaveLength(1)
@@ -251,7 +290,8 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
-                    treeDepth: 21
+                    treeDepth: 21,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
@@ -261,15 +301,175 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            await groupsService.addMember(
-                { inviteCode: invite.code },
-                _groupId,
-                "111000"
-            )
+            await groupsService.joinGroup(_groupId, "111000", {
+                inviteCode: invite.code
+            })
 
             const fun = groupsService.removeMember(_groupId, "111000", "rndom")
 
             await expect(fun).rejects.toThrow("You are not the admin")
+        })
+    })
+
+    describe("# API access", () => {
+        let group: Group
+        let apiKey: string
+
+        it("Should generate a new API key", async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: true },
+                "admin"
+            )
+
+            apiKey = (await groupsService.getGroup(group.id)).apiKey
+
+            expect(apiKey.length).toBeGreaterThan(1)
+        })
+    })
+
+    describe("# Add and remove member via API", () => {
+        let group: Group
+        let apiKey: string
+
+        beforeAll(async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: true },
+                "admin"
+            )
+
+            apiKey = (await groupsService.getGroup(group.id)).apiKey
+        })
+
+        it("Should add a member to an existing group via API", async () => {
+            const { members } = await groupsService.addMemberWithAPIKey(
+                group.id,
+                "123123",
+                apiKey
+            )
+
+            expect(members).toHaveLength(1)
+        })
+
+        it("Should delete a member from an existing group via API", async () => {
+            await groupsService.addMemberWithAPIKey(group.id, "100001", apiKey)
+
+            const { members } = await groupsService.removeMemberWithAPIKey(
+                group.id,
+                "100001",
+                apiKey
+            )
+
+            expect(members.map((m) => m.id)).not.toContain("100001")
+        })
+
+        it("Should not add a member to an existing group if API is disabled", async () => {
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: false },
+                "admin"
+            )
+
+            const promise = groupsService.addMemberWithAPIKey(
+                groupId,
+                "100002",
+                apiKey
+            )
+
+            await expect(promise).rejects.toThrow(
+                "Invalid API key or API access not enabled for group"
+            )
+        })
+    })
+
+    describe("# Add and remove member manually", () => {
+        let group: Group
+
+        beforeAll(async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+        })
+
+        it("Should add a member to an existing group manually", async () => {
+            const { members } = await groupsService.addMemberManually(
+                group.id,
+                "123123",
+                "admin"
+            )
+
+            expect(members).toHaveLength(1)
+        })
+
+        it("Should delete a member from an existing group manually", async () => {
+            await groupsService.addMemberManually(group.id, "100001", "admin")
+
+            const { members } = await groupsService.removeMember(
+                group.id,
+                "100001",
+                "admin"
+            )
+
+            expect(members.map((m) => m.id)).not.toContain("100001")
+        })
+    })
+
+    describe("# Reputation Criteria", () => {
+        it("Should save the reputation criteria for the group", async () => {
+            const group = await groupsService.createGroup(
+                {
+                    name: "Group 1",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            const reputationCriteria = {
+                type: "GITHUB_REPO_COMMITS",
+                params: {
+                    repo: "https://github.com/privacy-scaling-explorations/sugesto",
+                    minCommits: 100
+                }
+            }
+
+            await groupsService.updateGroup(
+                group.id,
+                { reputationCriteria },
+                "admin"
+            )
+
+            const updatedGroup = await groupsService.getGroup(group.id)
+
+            expect(updatedGroup).toHaveProperty("reputationCriteria")
         })
     })
 })

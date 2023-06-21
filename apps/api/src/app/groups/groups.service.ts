@@ -12,8 +12,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
+import { v4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
-import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
@@ -54,7 +54,13 @@ export class GroupsService {
      * @returns Created group.
      */
     async createGroup(
-        { id: groupId, name, description, treeDepth, tag }: CreateGroupDto,
+        {
+            id: groupId,
+            name,
+            description,
+            treeDepth,
+            fingerprintDuration
+        }: CreateGroupDto,
         admin: string
     ): Promise<Group> {
         const _groupId =
@@ -68,8 +74,8 @@ export class GroupsService {
             name,
             description,
             treeDepth,
-            tag,
-            admin,
+            fingerprintDuration,
+            adminId: admin,
             members: []
         })
 
@@ -78,6 +84,8 @@ export class GroupsService {
         const cachedGroup = new CachedGroup(group.id, group.treeDepth)
 
         this.cachedGroups.set(_groupId, cachedGroup)
+
+        this._updateFingerprintDuration(group.id, fingerprintDuration)
 
         Logger.log(
             `GroupsService: group '${name}' has been created with id '${_groupId}'`
@@ -88,27 +96,57 @@ export class GroupsService {
 
     /**
      * Updates some parameters of the group.
-     * @param dto External parameters used to update a group.
      * @param groupId Group id.
-     * @param admin Admin id.
+     * @param dto External parameters used to update a group.
+     * @param adminId Group admin id.
      * @returns Updated group.
      */
     async updateGroup(
-        { description, treeDepth, tag }: UpdateGroupDto,
         groupId: string,
-        admin: string
+        {
+            description,
+            treeDepth,
+            apiEnabled,
+            reputationCriteria
+        }: UpdateGroupDto,
+        adminId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== admin) {
+        if (group.adminId !== adminId) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
             )
         }
 
-        group.description = description
-        group.treeDepth = treeDepth
-        group.tag = tag
+        if (description) {
+            group.description = description
+        }
+
+        if (treeDepth) {
+            group.treeDepth = treeDepth
+
+            const cachedGroup = new CachedGroup(
+                groupId,
+                treeDepth,
+                group.members.map((m) => m.id)
+            )
+            this.cachedGroups.set(groupId, cachedGroup)
+            this._updateContractGroup(cachedGroup)
+        }
+
+        if (reputationCriteria) {
+            group.reputationCriteria = reputationCriteria
+        }
+
+        if (apiEnabled !== undefined) {
+            group.apiEnabled = apiEnabled
+
+            // Generate a new API key if it doesn't exist
+            if (!group.apiKey) {
+                group.apiKey = v4()
+            }
+        }
 
         await this.groupRepository.save(group)
 
@@ -118,16 +156,16 @@ export class GroupsService {
     }
 
     /**
-     * If a member does not exist in the group, they is added.
-     * @param dto Parameters used to add a group member.
+     * Join the group by redeeming invite code.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
+     * @param dto Parameters used to add a group member.
      * @returns Group data with added member.
      */
-    async addMember(
-        { inviteCode }: AddMemberDto,
+    async joinGroup(
         groupId: string,
-        memberId: string
+        memberId: string,
+        dto: { inviteCode: string }
     ): Promise<Group> {
         if (this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(
@@ -135,9 +173,78 @@ export class GroupsService {
             )
         }
 
-        await this.invitesService.redeemInvite(inviteCode, groupId)
+        await this.invitesService.redeemInvite(dto.inviteCode, groupId)
 
+        return this.addMember(groupId, memberId)
+    }
+
+    /**
+     * Add a member to the group manually as an admin
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @param adminId id of the admin making the request
+     * @returns Group
+     */
+    async addMemberManually(
+        groupId: string,
+        memberId: string,
+        adminId: string
+    ): Promise<Group> {
         const group = await this.getGroup(groupId)
+
+        if (group.adminId !== adminId) {
+            throw new UnauthorizedException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' already exists in the group '${groupId}'`
+            )
+        }
+
+        return this.addMember(groupId, memberId)
+    }
+
+    /**
+     * Add a member to the group using API Key.
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @param apiKey API key for the group
+     * @returns Group
+     */
+    async addMemberWithAPIKey(
+        groupId: string,
+        memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (!group.apiEnabled || group.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for group '${groupId}'`
+            )
+        }
+
+        if (this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' already exists in the group '${groupId}'`
+            )
+        }
+
+        return this.addMember(groupId, memberId)
+    }
+
+    /**
+     * Add a member to the group.
+     * @param groupId ID of the group
+     * @param memberId ID of the member to be added
+     * @returns Group
+     */
+    async addMember(groupId: string, memberId: string): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
         const member = new Member()
         member.group = group
         member.id = memberId
@@ -163,12 +270,13 @@ export class GroupsService {
      * Delete a member from group
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
+     * @param adminId Group admin id.
      * @returns Group data with removed member.
      */
     async removeMember(
         groupId: string,
         memberId: string,
-        loggedInUser: string
+        adminId: string
     ): Promise<Group> {
         if (!this.isGroupMember(groupId, memberId)) {
             throw new BadRequestException(
@@ -178,9 +286,51 @@ export class GroupsService {
 
         const group = await this.getGroup(groupId)
 
-        if (group.admin !== loggedInUser) {
+        if (group.adminId !== adminId) {
             throw new BadRequestException(
                 `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        group.members = group.members.filter((m) => m.id !== memberId)
+
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+
+        Logger.log(
+            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+        )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
+     * Delete a member from group using API Key
+     * @param groupId Group name.
+     * @param memberId Member's identity commitment.
+     * @returns Group data with removed member.
+     */
+    async removeMemberWithAPIKey(
+        groupId: string,
+        memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        if (!group.apiEnabled || group.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for group '${groupId}'`
+            )
+        }
+
+        if (!this.isGroupMember(groupId, memberId)) {
+            throw new BadRequestException(
+                `Member '${memberId}' is not a member of group '${groupId}'`
             )
         }
 
@@ -205,21 +355,16 @@ export class GroupsService {
      * Returns a list of groups.
      * @returns List of existing groups.
      */
-    async getAllGroups(): Promise<Group[]> {
-        return this.groupRepository.find({
-            relations: { members: true }
-        })
-    }
+    async getGroups(filters?: { adminId: string }): Promise<Group[]> {
+        const where = []
 
-    /**
-     * Returns a list of groups of a specific admin.
-     * @param admin Admin id.
-     * @returns List of admin's existing groups.
-     */
-    async getGroupsByAdmin(admin: string): Promise<Group[]> {
+        if (filters?.adminId) {
+            where.push({ adminId: filters.adminId })
+        }
+
         return this.groupRepository.find({
             relations: { members: true },
-            where: { admin }
+            where
         })
     }
 
@@ -230,7 +375,7 @@ export class GroupsService {
      */
     async getGroup(groupId: string): Promise<Group> {
         const group = await this.groupRepository.findOne({
-            relations: { members: true },
+            relations: { members: true, reputationAccounts: true },
             where: { id: groupId }
         })
 
@@ -274,14 +419,35 @@ export class GroupsService {
         return cachedGroup.generateMerkleProof(memberIndex)
     }
 
+    private async _updateFingerprintDuration(
+        groupId: string,
+        duration: number
+    ): Promise<void> {
+        try {
+            await this.bandadaContract.updateFingerprintDuration(
+                BigInt(groupId),
+                BigInt(duration)
+            )
+            Logger.log(
+                `GroupsService: group '${groupId}' fingerprint duration has been updated in the contract`
+            )
+        } catch {
+            Logger.log(
+                `GroupsService: failed to update fingerprint duration contract groups`
+            )
+        }
+    }
+
     private async _cacheGroups() {
-        const groups = await this.getAllGroups()
+        const groups = await this.getGroups()
 
         /* istanbul ignore next */
         for (const group of groups) {
-            const cachedGroup = new CachedGroup(group.id, group.treeDepth)
-
-            cachedGroup.addMembers(group.members.map((m) => m.id))
+            const cachedGroup = new CachedGroup(
+                group.id,
+                group.treeDepth,
+                group.members.map((m) => m.id)
+            )
 
             this.cachedGroups.set(group.id, cachedGroup)
         }

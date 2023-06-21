@@ -9,7 +9,7 @@ export default function getProvider(
 ): JsonRpcProvider {
     switch (network) {
         case "localhost":
-            return new JsonRpcProvider()
+            return new JsonRpcProvider("http://127.0.0.1:8545")
         case "goerli":
             return new InfuraProvider(network, apiKey)
         default:

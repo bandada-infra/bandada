@@ -1,88 +1,73 @@
 import { shortenAddress } from "@bandada/utils"
+import { Button, Container, HStack, Image, Link } from "@chakra-ui/react"
 import {
-    Box,
-    Button,
-    Center,
-    Container,
-    Flex,
-    Link,
-    Spacer,
-    Text,
-    Tooltip,
-    useClipboard
-} from "@chakra-ui/react"
-import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask"
-import { useCallback } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom"
-import { useAccount, useConnect } from "wagmi"
-import { logOut as _logOut } from "../api/bandadaAPI"
+    useAccountModal,
+    useChainModal,
+    useConnectModal
+} from "@rainbow-me/rainbowkit"
+import { useCallback, useContext, useEffect } from "react"
+import { useAccount, useNetwork } from "wagmi"
+import { goerli } from "wagmi/chains"
+import logoImage from "../assets/logo.svg"
+import { AuthContext } from "../context/auth-context"
 
 export default function NavBar(): JSX.Element {
-    const navigate = useNavigate()
-    const { isConnected } = useAccount()
-    const { connect } = useConnect()
-    const [searchParams] = useSearchParams()
+    const { chain } = useNetwork()
     const { address } = useAccount()
-    const { hasCopied, onCopy } = useClipboard(address || "")
+    const { openConnectModal } = useConnectModal()
+    const { openChainModal } = useChainModal()
+    const { openAccountModal } = useAccountModal()
+    const { admin } = useContext(AuthContext)
 
-    const logOut = useCallback(async () => {
-        await _logOut()
+    const isSupportedNetwork = useCallback(
+        () => chain && chain.id === goerli.id,
+        [chain]
+    )
 
-        navigate("/")
-    }, [navigate])
+    const isLoggedInAdmin = useCallback(
+        () => admin?.address === address,
+        [address, admin]
+    )
+
+    useEffect(() => {
+        if (admin && !isLoggedInAdmin()) {
+            openConnectModal?.()
+        }
+    }, [isLoggedInAdmin, openConnectModal, admin])
 
     return (
-        <Box bgColor="#F8F9FF" borderBottom="1px" borderColor="gray.200">
-            <Container maxWidth="container.xl">
-                <Flex h="100px">
-                    <Center>
-                        <Link href="/">
-                            <Text fontSize="lg" fontWeight="bold">
-                                Bandada
-                            </Text>
-                        </Link>
-                    </Center>
+        <Container maxWidth="container.xl">
+            <HStack h="150px" align="center" justify="space-between">
+                <Link href="/">
+                    <Image
+                        src={logoImage}
+                        htmlWidth="160px"
+                        alt="Bandada logo"
+                    />
+                </Link>
 
-                    <Spacer />
+                <HStack spacing="4">
+                    <Button
+                        variant="outline"
+                        colorScheme={isSupportedNetwork() ? "primary" : "red"}
+                        onClick={openChainModal}
+                    >
+                        {!isSupportedNetwork()
+                            ? "Unsupported network"
+                            : chain?.name}
+                    </Button>
 
-                    {!searchParams.has("on-chain") ? (
-                        <Center>
-                            <Button variant="solid" onClick={logOut}>
-                                Log out
-                            </Button>
-                        </Center>
-                    ) : (
-                        <Center>
-                            <Tooltip
-                                label={hasCopied ? "Copied" : "Copy"}
-                                closeOnClick={false}
-                                hasArrow
-                            >
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    onClick={onCopy}
-                                >
-                                    {address ? shortenAddress(address) : ""}
-                                </Button>
-                            </Tooltip>
-                            <Button
-                                variant="outline"
-                                colorScheme="primary"
-                                onClick={() =>
-                                    isConnected
-                                        ? navigate("/")
-                                        : connect({
-                                              connector: new MetaMaskConnector()
-                                          })
-                                }
-                            >
-                                {isConnected ? "Disconnect" : "Connect"}
-                            </Button>
-                        </Center>
-                    )}
-                </Flex>
-            </Container>
-        </Box>
+                    <Button
+                        variant="outline"
+                        colorScheme={isLoggedInAdmin() ? "primary" : "red"}
+                        onClick={openAccountModal}
+                    >
+                        {!isLoggedInAdmin()
+                            ? "Unconnected account"
+                            : shortenAddress(address as string)}
+                    </Button>
+                </HStack>
+            </HStack>
+        </Container>
     )
 }

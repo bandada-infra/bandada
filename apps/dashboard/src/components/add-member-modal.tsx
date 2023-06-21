@@ -16,7 +16,7 @@ import {
     UseDisclosureProps
 } from "@chakra-ui/react"
 import { getSemaphoreContract } from "@bandada/utils"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useSigner } from "wagmi"
 
 export default function AddMemberModal({
@@ -29,6 +29,11 @@ export default function AddMemberModal({
         "default" | "loading" | "success" | "failure"
     >("default")
     const { data: signer } = useSigner()
+
+    useEffect(() => {
+        setIdentityCommitment("")
+        setStatus("default")
+    }, [isOpen])
 
     const addMember = useCallback(
         async (identityCommitment: string) => {

@@ -31,7 +31,7 @@ export class CreateGroupDto {
     @Max(32)
     readonly treeDepth: number
 
-    @IsOptional()
     @IsNumber()
-    readonly tag?: number
+    @Min(0)
+    readonly fingerprintDuration: number
 }
