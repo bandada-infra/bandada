@@ -15,13 +15,14 @@ describe("TwitterFollowers", () => {
 
         const result = await validateReputation(
             {
-                name: twitterFollowers.name,
+                id: twitterFollowers.id,
                 criteria: {
                     minFollowers: 100
                 }
             },
             {
-                twitterAccessToken: "token"
+                profile: {},
+                accessTokens: { twitter: "token" }
             }
         )
 
@@ -32,10 +33,13 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowers.name,
+                    id: twitterFollowers.id,
                     criteria: {}
                 },
-                { twitterAccessToken: "token" }
+                {
+                    profile: {},
+                    accessTokens: { twitter: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -47,13 +51,16 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowers.name,
+                    id: twitterFollowers.id,
                     criteria: {
                         minFollowers: 100,
                         minTweets: 200
                     }
                 },
-                { twitterAccessToken: "token" }
+                {
+                    profile: {},
+                    accessTokens: { twitter: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -65,12 +72,15 @@ describe("TwitterFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowers.name,
+                    id: twitterFollowers.id,
                     criteria: {
                         minFollowers: "100"
                     }
                 },
-                { twitterAccessToken: "token" }
+                {
+                    profile: {},
+                    accessTokens: { twitter: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(

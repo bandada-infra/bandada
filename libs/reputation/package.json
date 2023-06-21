@@ -28,6 +28,9 @@
     "publishConfig": {
         "access": "public"
     },
+    "dependencies": {
+        "@bandada/utils": "0.7.0"
+    },
     "devDependencies": {
         "@rollup/plugin-typescript": "^11.0.0",
         "rimraf": "^4.1.2",

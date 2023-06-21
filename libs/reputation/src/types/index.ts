@@ -1,24 +1,36 @@
 export type Context = {
-    utils?: {
-        checkCriteria: (criteria: any, types: any) => void
-        githubAPI?: (endpoint: string) => Promise<any>
-        twitterAPI?: (endpoint: string) => Promise<any>
-        redditAPI?: (endpoint: string) => Promise<any>
+    utils: {
+        api: (endpoint: string) => Promise<any>
     }
-    githubAccessToken?: string
-    twitterAccessToken?: string
-    redditAccessToken?: string
+    profile: any
+    accessTokens: {
+        [provider: string]: string
+    }
 }
 
-export type Handler = (
-    criteria: any,
-    context: Context | { [key: string]: any }
-) => Promise<boolean>
+export type Handler = (criteria: any, context: Context) => Promise<boolean>
+
+export interface Provider {
+    name: string
+    apiURL: string
+    getAuthUrl: (clientId: string, state: string, redirectUri: string) => string
+    getAccessToken: (
+        clientId: string,
+        clientSecret: string,
+        code: string,
+        state: string,
+        redirectUri: string
+    ) => Promise<string>
+    getProfile: (accessToken: string) => Promise<any>
+}
 
 export interface Validator {
-    name: string
+    id: string
     criteriaABI: any
     validate: Handler
 }
 
-export type ReputationCriteria = any
+export type ReputationCriteria = {
+    id: string
+    criteria: any
+}
