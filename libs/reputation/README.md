@@ -74,13 +74,15 @@ import { validateReputation, githubFollowers } from "@bandada/reputation"
 
 validateReputation(
     {
-        name: githubFollowers.name,
+        id: githubFollowers.id,
         criteria: {
             minFollowers: 100
         }
     },
     {
-        githubAccessToken: "token"
+        accessToken: {
+            github: "token"
+        }
     }
 )
 ```
@@ -89,8 +91,8 @@ validateReputation(
 
 The library has been built to allow external devs to add their own validators. A validator is a simple file that exports 3 JavaScript values:
 
-1. `name`: The validater name. It must be unique and capitalized (snake case).
-2. `criteriaABI`: The criteria ABI. It contains the structure of your reputation criteria with their types.
+1. `id`: The validater id. It must be unique and capitalized (snake case).
+2. `criteriaABI`: The criteria ABI. It contains the structure of your reputation criteria with its types.
 3. `validate`: The validator handler. It usually consists of three steps: criteria types check, user data retrieval and reputation validation.
 
 ```typescript
@@ -102,37 +104,32 @@ export type Criteria = {
     minFollowers: number
 }
 
-const name = "GITHUB_FOLLOWERS"
+const validator: Validator = {
+    id: "GITHUB_FOLLOWERS",
 
-// The criteria application binary interface. It contains
-// the structure of this validator reputation criteria
-// with its parameter types.
-const criteriaABI = {
-    minFollowers: "number"
+    // The criteria application binary interface. It contains
+    // the structure of this validator reputation criteria
+    // with its parameter types.
+    criteriaABI: {
+        minFollowers: "number"
+    },
+
+    /**
+     * It checks if a user has more then 'minFollowers' followers.
+     * @param criteria The reputation criteria used to check user's reputation.
+     * @param context Utility functions and other context variables.
+     * @returns True if the user meets the reputation criteria.
+     */
+    async validate(criteria: Criteria, { utils }) {
+        // Step 1: use the API to get the user's parameters.
+        const { followers } = await utils.api("user")
+
+        // Step 2: check if they meet the validator reputation criteria.
+        return followers >= criteria.minFollowers
+    }
 }
 
-/**
- * It checks if a user has more then 'minFollowers' followers.
- * @param criteria The reputation criteria used to check user's reputation.
- * @param context Utility functions and other context variables.
- * @returns True if the user meets the reputation criteria.
- */
-const validate: Handler = async (criteria: Criteria, { utils }) => {
-    // Step 1: check if the criteria parameters are the right ones (proper structure and types).
-    utils.checkCriteria(criteria, criteriaABI)
-
-    // Step 2: use the API to get the user's parameters.
-    const { followers } = await utils.githubAPI("user")
-
-    // Step 3: check if they meet the validator reputation criteria.
-    return followers >= criteria.minFollowers
-}
-
-export default {
-    name,
-    criteriaABI,
-    validate
-}
+export default validator
 ```
 
 Testing your validator is also important. If you use Jest you can use some test utilities to mock the `fetch` function easily.
@@ -159,12 +156,16 @@ describe("GithubFollowers", () => {
 
         const result = await validateReputation(
             {
-                name: "GITHUB_FOLLOWERS",
+                id: "GITHUB_FOLLOWERS",
                 criteria: {
                     minFollowers: 100
                 }
             },
-            { githubAccessToken: "token" }
+            {
+                accessTokens: {
+                    github: "token"
+                }
+            }
         )
 
         expect(result).toBeTruthy()

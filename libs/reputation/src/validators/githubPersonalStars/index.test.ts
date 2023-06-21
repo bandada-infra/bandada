@@ -14,12 +14,15 @@ describe("GithubPersonalStars", () => {
 
         const result = await validateReputation(
             {
-                name: githubPersonalStars.name,
+                id: githubPersonalStars.id,
                 criteria: {
                     minStars: 100
                 }
             },
-            { githubAccessToken: "token" }
+            {
+                profile: {},
+                accessTokens: { github: "token" }
+            }
         )
 
         expect(result).toBeTruthy()
@@ -29,10 +32,13 @@ describe("GithubPersonalStars", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubPersonalStars.name,
+                    id: githubPersonalStars.id,
                     criteria: {}
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: {},
+                    accessTokens: { github: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -44,13 +50,16 @@ describe("GithubPersonalStars", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubPersonalStars.name,
+                    id: githubPersonalStars.id,
                     criteria: {
                         repository: "hello-worId",
                         minStars: 200
                     }
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: {},
+                    accessTokens: { github: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -62,12 +71,15 @@ describe("GithubPersonalStars", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubPersonalStars.name,
+                    id: githubPersonalStars.id,
                     criteria: {
                         minStars: "hello"
                     }
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: {},
+                    accessTokens: { github: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(

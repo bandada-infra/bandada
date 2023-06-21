@@ -1,22 +1,23 @@
-import { testUtils, validateReputation } from "../.."
+import { validateReputation } from "../.."
 import githubFollowers from "./index"
 
 global.fetch = jest.fn()
 
 describe("GithubFollowers", () => {
     it("Should return true if a Github user has more than 100 followers", async () => {
-        testUtils.mockAPIOnce({
-            followers: 110
-        })
-
         const result = await validateReputation(
             {
-                name: githubFollowers.name,
+                id: githubFollowers.id,
                 criteria: {
                     minFollowers: 100
                 }
             },
-            { githubAccessToken: "token" }
+            {
+                profile: { followers: 110 },
+                accessTokens: {
+                    github: "token"
+                }
+            }
         )
 
         expect(result).toBeTruthy()
@@ -26,10 +27,15 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubFollowers.name,
+                    id: githubFollowers.id,
                     criteria: {}
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: { followers: 110 },
+                    accessTokens: {
+                        github: "token"
+                    }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -41,13 +47,18 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubFollowers.name,
+                    id: githubFollowers.id,
                     criteria: {
                         minFollowers: 100,
                         minStars: 200
                     }
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: { followers: 110 },
+                    accessTokens: {
+                        github: "token"
+                    }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -59,12 +70,17 @@ describe("GithubFollowers", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubFollowers.name,
+                    id: githubFollowers.id,
                     criteria: {
                         minFollowers: "100"
                     }
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: { followers: 110 },
+                    accessTokens: {
+                        github: "token"
+                    }
+                }
             )
 
         await expect(fun).rejects.toThrow(

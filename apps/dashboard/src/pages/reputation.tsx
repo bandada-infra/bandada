@@ -1,3 +1,4 @@
+import { getProvider } from "@bandada/reputation"
 import { Flex, Text } from "@chakra-ui/react"
 import { useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
@@ -11,37 +12,34 @@ export default function ReputationPage() {
             if (searchParams.has("group") && searchParams.has("member")) {
                 const groupId = searchParams.get("group")
                 const memberId = searchParams.get("member")
-                const provider = searchParams.get("provider")
-                const redirectURI =
+                const providerName = searchParams.get("provider")
+                const clientRedirectUri =
                     searchParams.get("redirect_uri") || undefined
 
-                const stateId = await setOAuthState(
+                const state = await setOAuthState(
                     groupId as string,
                     memberId as string,
-                    provider as string,
-                    redirectURI
+                    providerName as string,
+                    clientRedirectUri
                 )
 
-                if (stateId) {
-                    switch (provider) {
-                        case "github":
-                            window.location.replace(
-                                `https://github.com/login/oauth/authorize?client_id=${
-                                    import.meta.env.VITE_GITHUB_CLIENT_ID
-                                }&state=${stateId}`
-                            )
-                            break
-                        case "twitter":
-                            window.location.replace(
-                                `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${
-                                    import.meta.env.VITE_TWITTER_CLIENT_ID
-                                }&scope=users.read%20tweet.read&redirect_uri=${
-                                    import.meta.env.VITE_TWITTER_REDIRECT_URI
-                                }&state=${stateId}&code_challenge=${stateId}&code_challenge_method=plain`
-                            )
-                            break
-                        default:
-                    }
+                if (state) {
+                    const clientId = import.meta.env[
+                        `VITE_${providerName?.toUpperCase()}_CLIENT_ID`
+                    ]
+                    const redirectUri = import.meta.env[
+                        `VITE_${clientRedirectUri?.toUpperCase()}_REDIRECT_URI`
+                    ]
+
+                    const provider = getProvider(providerName as string)
+
+                    const authUrl = provider.getAuthUrl(
+                        clientId,
+                        state,
+                        redirectUri
+                    )
+
+                    window.location.replace(authUrl)
                 }
             }
 
@@ -49,13 +47,13 @@ export default function ReputationPage() {
                 const oAuthCode = searchParams.get("code") as string
                 const oAuthState = searchParams.get("state") as string
 
-                const redirectURI = await addMemberByReputation(
+                const redirectUri = await addMemberByReputation(
                     oAuthState,
                     oAuthCode
                 )
 
-                if (redirectURI) {
-                    window.location.replace(redirectURI)
+                if (redirectUri) {
+                    window.location.replace(redirectUri)
                 }
             }
         })()

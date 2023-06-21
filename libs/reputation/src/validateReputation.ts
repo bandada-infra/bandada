@@ -1,7 +1,8 @@
 import checkCriteria from "./checkCriteria"
 import getAPI from "./getAPI"
+import getProvider from "./getProvider"
+import getValidator from "./getValidator"
 import { Context, ReputationCriteria } from "./types"
-import validators from "./validators"
 
 /**
  * It checks if the user meets the reputation criteria of a group.
@@ -12,36 +13,18 @@ import validators from "./validators"
  * @returns True if the user meets the reputation criteria.
  */
 export default async function validateReputation(
-    { name, criteria }: ReputationCriteria,
-    context: Context
+    { id, criteria }: ReputationCriteria,
+    context: Omit<Context, "utils">
 ): Promise<boolean> {
-    context.utils = {
-        checkCriteria
-    }
+    const validator = getValidator(id)
+    const provider = getProvider(id.split("_")[0].toLowerCase())
 
-    if (context.githubAccessToken) {
-        context.utils.githubAPI = getAPI(
-            "https://api.github.com",
-            `Bearer ${context.githubAccessToken}`
-        )
-    }
+    checkCriteria(criteria, validator.criteriaABI)
 
-    if (context.twitterAccessToken) {
-        context.utils.twitterAPI = getAPI(
-            "https://api.twitter.com/2",
-            `Bearer ${context.twitterAccessToken}`
-        )
-    }
-
-    // TODO: add API utils for Reddit.
-
-    // TODO: handle logic operators.
-
-    const validator = validators.find((v) => v.name === name)
-
-    if (!validator) {
-        throw Error(`Validator '${name}' does not exist`)
-    }
-
-    return validator.validate(criteria, context)
+    return validator.validate(criteria, {
+        ...context,
+        utils: {
+            api: getAPI(provider.apiURL, context.accessTokens[provider.name])
+        }
+    })
 }

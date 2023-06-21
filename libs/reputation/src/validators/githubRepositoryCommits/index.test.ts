@@ -5,19 +5,21 @@ global.fetch = jest.fn()
 
 describe("GithubRepositoryCommits", () => {
     it("Should return true if a Github user's repository has more than 100 commits", async () => {
-        testUtils.mockAPIOnce({ login: "octocat" })
         testUtils.mockAPIOnce(Array.from(Array(100).keys()))
         testUtils.mockAPIOnce(Array.from(Array(80).keys()))
 
         const result = await validateReputation(
             {
-                name: githubRepositoryCommits.name,
+                id: githubRepositoryCommits.id,
                 criteria: {
                     repository: "hello-worId",
                     minCommits: 100
                 }
             },
-            { githubAccessToken: "token" }
+            {
+                profile: { login: "octocat" },
+                accessTokens: { github: "token" }
+            }
         )
 
         expect(result).toBeTruthy()
@@ -27,10 +29,13 @@ describe("GithubRepositoryCommits", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubRepositoryCommits.name,
+                    id: githubRepositoryCommits.id,
                     criteria: { repository: "hello-worId" }
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: { login: "octocat" },
+                    accessTokens: { github: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -42,14 +47,17 @@ describe("GithubRepositoryCommits", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubRepositoryCommits.name,
+                    id: githubRepositoryCommits.id,
                     criteria: {
                         repository: "hello-worId",
                         minCommits: 100,
                         minStars: 200
                     }
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: { login: "octocat" },
+                    accessTokens: { github: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -61,13 +69,16 @@ describe("GithubRepositoryCommits", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: githubRepositoryCommits.name,
+                    id: githubRepositoryCommits.id,
                     criteria: {
                         repository: 2,
                         minCommits: 100
                     }
                 },
-                { githubAccessToken: "token" }
+                {
+                    profile: { login: "octocat" },
+                    accessTokens: { github: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(

@@ -1,4 +1,4 @@
-import { Context, validateReputation } from "@bandada/reputation"
+import { validateReputation, getProvider } from "@bandada/reputation"
 import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
@@ -11,8 +11,6 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { v4 } from "uuid"
 import { GroupsService } from "../groups/groups.service"
-import getOAuthAccessToken from "../utils/getOAuthAccessToken"
-import getOAuthAccountId from "../utils/getOAuthAccountId"
 import { ReputationAccount } from "./entities/reputation-account.entity"
 import { OAuthState } from "./types"
 
@@ -43,9 +41,9 @@ export class ReputationService {
             )
         }
 
-        if (!["github", "twitter"].includes(oAuthState.provider)) {
+        if (!["github", "twitter"].includes(oAuthState.providerName)) {
             throw new BadRequestException(
-                `OAuth provider ${oAuthState.provider}' is not supported`
+                `OAuth provider ${oAuthState.providerName}' is not supported`
             )
         }
 
@@ -78,44 +76,35 @@ export class ReputationService {
             throw new BadRequestException(`OAuth state does not exist`)
         }
 
-        const { groupId, memberId, provider, redirectURI } =
-            this.oAuthState.get(oAuthState)
+        const {
+            groupId,
+            memberId,
+            providerName,
+            redirectUri: clientRedirectUri
+        } = this.oAuthState.get(oAuthState)
 
         const group = await this.groupsService.getGroup(groupId)
 
-        const context: Context = {}
-        let accountId: string
+        const provider = getProvider(providerName)
+        const clientId = process.env[`${providerName.toUpperCase()}_CLIENT_ID`]
+        const clientSecret =
+            process.env[`${providerName.toUpperCase()}_CLIENT_SECRET`]
+        const redirectUri =
+            process.env[`${providerName.toUpperCase()}_REDIRECT_URI`]
 
-        // Exchange the OAuth code for a user access token.
-        switch (provider) {
-            case "github": {
-                const accessToken = await getOAuthAccessToken(
-                    provider,
-                    oAuthCode
-                )
+        // Exchange the OAuth code for a valid access token.
+        const accessToken = await provider.getAccessToken(
+            clientId,
+            clientSecret,
+            oAuthCode,
+            oAuthState,
+            redirectUri
+        )
 
-                context.githubAccessToken = accessToken
-
-                accountId = await getOAuthAccountId(provider, accessToken)
-                break
-            }
-            case "twitter": {
-                const accessToken = await getOAuthAccessToken(
-                    provider,
-                    oAuthCode,
-                    oAuthState
-                )
-
-                context.twitterAccessToken = accessToken
-
-                accountId = await getOAuthAccountId(provider, accessToken)
-                break
-            }
-            default:
-        }
+        const profile = await provider.getProfile(accessToken)
 
         // Check if the same account has already joined a group.
-        const accountHash = id(accountId + provider)
+        const accountHash = id(profile.id + provider)
 
         if (
             group.reputationAccounts.find(
@@ -128,7 +117,12 @@ export class ReputationService {
         }
 
         // Check reputation.
-        if (!(await validateReputation(group.reputationCriteria, context))) {
+        if (
+            !(await validateReputation(group.reputationCriteria, {
+                profile,
+                accessTokens: { [providerName]: accessToken }
+            }))
+        ) {
             throw new UnauthorizedException(
                 "OAuth account does not match reputation criteria"
             )
@@ -146,6 +140,6 @@ export class ReputationService {
 
         this.oAuthState.delete(oAuthState)
 
-        return redirectURI
+        return clientRedirectUri
     }
 }

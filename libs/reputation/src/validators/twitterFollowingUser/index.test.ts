@@ -6,11 +6,6 @@ global.fetch = jest.fn()
 describe("TwitterFollowingUser", () => {
     it("Should return true if a Twitter user follows another specific user", async () => {
         testUtils.mockAPIOnce({
-            data: {
-                id: "123123"
-            }
-        })
-        testUtils.mockAPIOnce({
             data: [
                 {
                     username: "hello"
@@ -23,13 +18,14 @@ describe("TwitterFollowingUser", () => {
 
         const result = await validateReputation(
             {
-                name: twitterFollowingUser.name,
+                id: twitterFollowingUser.id,
                 criteria: {
                     username: "world"
                 }
             },
             {
-                twitterAccessToken: "token"
+                profile: { id: "123123" },
+                accessTokens: { twitter: "token" }
             }
         )
 
@@ -40,10 +36,13 @@ describe("TwitterFollowingUser", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowingUser.name,
+                    id: twitterFollowingUser.id,
                     criteria: {}
                 },
-                { twitterAccessToken: "token" }
+                {
+                    profile: { id: "123123" },
+                    accessTokens: { twitter: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -55,13 +54,16 @@ describe("TwitterFollowingUser", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowingUser.name,
+                    id: twitterFollowingUser.id,
                     criteria: {
                         username: "hello",
                         minTweets: 200
                     }
                 },
-                { twitterAccessToken: "token" }
+                {
+                    profile: { id: "123123" },
+                    accessTokens: { twitter: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(
@@ -73,12 +75,15 @@ describe("TwitterFollowingUser", () => {
         const fun = () =>
             validateReputation(
                 {
-                    name: twitterFollowingUser.name,
+                    id: twitterFollowingUser.id,
                     criteria: {
                         username: 100
                     }
                 },
-                { twitterAccessToken: "token" }
+                {
+                    profile: { id: "123123" },
+                    accessTokens: { twitter: "token" }
+                }
             )
 
         await expect(fun).rejects.toThrow(

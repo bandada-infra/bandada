@@ -132,15 +132,15 @@ export async function updateGroup(
  * before checking reputation and adding members.
  * @param group The group id.
  * @param memberId The group member id.
- * @param redirectURI The URL where clients will be sent after authorization.
- * @param provider OAuth provider.
+ * @param redirectUri The URL where clients will be sent after authorization.
+ * @param providerName OAuth provider name.
  * @returns The OAuth state id.
  */
 export async function setOAuthState(
     groupId: string,
     memberId: string,
-    provider: string,
-    redirectURI?: string
+    providerName: string,
+    redirectUri?: string
 ): Promise<string | null> {
     try {
         return await request(`${API_URL}/reputation/oauth-state`, {
@@ -148,8 +148,8 @@ export async function setOAuthState(
             data: {
                 groupId,
                 memberId,
-                provider,
-                redirectURI
+                providerName,
+                redirectUri
             }
         })
     } catch (error) {
