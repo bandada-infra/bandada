@@ -125,6 +125,14 @@ export class GroupsService {
 
         if (treeDepth) {
             group.treeDepth = treeDepth
+
+            const cachedGroup = new CachedGroup(
+                groupId,
+                treeDepth,
+                group.members.map((m) => m.id)
+            )
+            this.cachedGroups.set(groupId, cachedGroup)
+            this._updateContractGroup(cachedGroup)
         }
 
         if (reputationCriteria) {
