@@ -1,8 +1,6 @@
 import { testUtils, validateReputation } from "../.."
 import githubPersonalStars from "./index"
 
-global.fetch = jest.fn()
-
 describe("GithubPersonalStars", () => {
     it("Should return true if a Github user has more than 100 stars in their personal repositories", async () => {
         testUtils.mockAPIOnce(

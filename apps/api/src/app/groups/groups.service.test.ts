@@ -25,7 +25,6 @@ describe("GroupsService", () => {
     let groupId: string
 
     beforeAll(async () => {
-        console.log("A")
         const module = await Test.createTestingModule({
             imports: [
                 TypeOrmModule.forRootAsync({

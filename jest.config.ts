@@ -9,7 +9,7 @@ const libs: any = fs
         rootDir: `libs/${name}/src`,
         testRegex: ".*\\.test\\.ts$",
         moduleNameMapper: {
-            "@bandada/(.*)": "<rootDir>/../$1/src/index.ts"
+            "@bandada/(.*)": "<rootDir>/../../$1/src/index.ts"
         },
         moduleFileExtensions: ["js", "ts", "json"],
         transform: {

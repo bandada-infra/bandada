@@ -1,8 +1,6 @@
 import { testUtils, validateReputation } from "../.."
 import twitterFollowers from "./index"
 
-global.fetch = jest.fn()
-
 describe("TwitterFollowers", () => {
     it("Should return true if a Twitter user has more than 100 followers", async () => {
         testUtils.mockAPIOnce({
