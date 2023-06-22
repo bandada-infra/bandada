@@ -17,25 +17,19 @@ Include the API key as a custom header `X-API-KEY` in all requests to the API.
 
 ### Add a member
 
-`POST /groups/:group_id/members`
-
-Body: `{"id": ":identity_commitment"}`
+`POST /groups/:group/members/:member`
 
 Example:
 
 ```bash
 
-curl --request POST 'https://bandada.appliedzkp.org/api/groups/38922764296632428858395574229367/members' \
---header 'x-api-key: <api-key-here>' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "id": "82918723982"
-}'
+curl --request POST 'https://bandada.appliedzkp.org/api/groups/38922764296632428858395574229367/members/82918723982' \
+--header 'x-api-key: <api-key-here>'
 ```
 
 ### Remove a member
 
-`DELETE /groups/:group_id/members/:id`
+`DELETE /groups/:member/members/:member`
 
 Example:
 
