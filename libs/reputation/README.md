@@ -132,7 +132,7 @@ const validator: Validator = {
 export default validator
 ```
 
-Testing your validator is also important. If you use Jest you can use some test utilities to mock the `fetch` function easily.
+Testing your validator is also important. If you use Jest you can use some test utilities to mock the API function easily.
 
 ```typescript
 import {
@@ -141,8 +141,6 @@ import {
     validateReputation
 } from "@bandada/reputation"
 import githubFollowers from "./index"
-
-global.fetch = jest.fn()
 
 describe("GithubFollowers", () => {
     beforeAll(() => {
@@ -173,4 +171,4 @@ describe("GithubFollowers", () => {
 })
 ```
 
-Once you create your own validator and publish your NPM package, you can open a PR to add your validator to the ones supported by Bandada (`validators.ts` file).
+Once you create your own validator and publish your NPM package, you can open a PR to add your validator to the ones supported by Bandada (`validators.ts` file). You can also add a new provider to the `providers.ts` file.
