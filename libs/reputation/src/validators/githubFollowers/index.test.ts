@@ -1,8 +1,6 @@
 import { validateReputation } from "../.."
 import githubFollowers from "./index"
 
-global.fetch = jest.fn()
-
 describe("GithubFollowers", () => {
     it("Should return true if a Github user has more than 100 followers", async () => {
         const result = await validateReputation(

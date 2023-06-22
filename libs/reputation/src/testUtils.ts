@@ -1,11 +1,24 @@
+import { request } from "@bandada/utils"
+
+jest.mock("@bandada/utils", () => ({
+    __esModule: true,
+    request: jest.fn(() => Promise.resolve({}))
+}))
+
+const requestMocked = request as jest.MockedFunction<typeof request>
+
 /**
- * It mocks the 'fetch' implementation with Jest.
+ * It mocks the 'request' implementation with Jest.
+ * @param response The API response.
+ */
+export function mockAPI(response: any) {
+    requestMocked.mockImplementation(() => Promise.resolve(response))
+}
+
+/**
+ * It mocks the 'request' implementation with Jest, only once.
  * @param response The API response.
  */
 export function mockAPIOnce(response: any) {
-    ;(fetch as any).mockImplementationOnce(() =>
-        Promise.resolve({
-            json: () => Promise.resolve(response)
-        })
-    )
+    requestMocked.mockImplementationOnce(() => Promise.resolve(response))
 }
