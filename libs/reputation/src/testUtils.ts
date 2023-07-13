@@ -1,9 +1,11 @@
 import { request } from "@bandada/utils"
 
-jest.mock("@bandada/utils", () => ({
-    __esModule: true,
-    request: jest.fn(() => Promise.resolve({}))
-}))
+if (global.jest) {
+    jest.mock("@bandada/utils", () => ({
+        __esModule: true,
+        request: jest.fn(() => Promise.resolve({}))
+    }))
+}
 
 const requestMocked = request as jest.MockedFunction<typeof request>
 
