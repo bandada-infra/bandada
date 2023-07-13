@@ -1,11 +1,12 @@
-import { request } from "@bandada/utils"
-
-if (global.jest) {
+if (process.env.NODE_ENV === "test") {
     jest.mock("@bandada/utils", () => ({
         __esModule: true,
         request: jest.fn(() => Promise.resolve({}))
     }))
 }
+
+// eslint-disable-next-line import/first
+import { request } from "@bandada/utils"
 
 const requestMocked = request as jest.MockedFunction<typeof request>
 
