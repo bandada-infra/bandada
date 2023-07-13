@@ -806,7 +806,7 @@ __metadata:
     rollup-plugin-cleanup: ^3.2.1
     typescript: ^4.9.5
   peerDependencies:
-    "@bandada/contracts": 0.8.0
+    "@bandada/contracts": 0.9.0
     "@nomiclabs/hardhat-ethers": ^2.0.0
     "@semaphore-protocol/contracts": 3.4.0
     ethers: ^5.4.7
@@ -814,11 +814,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bandada/reputation@0.8.0, @bandada/reputation@workspace:libs/reputation":
+"@bandada/reputation@0.9.0, @bandada/reputation@workspace:libs/reputation":
   version: 0.0.0-use.local
   resolution: "@bandada/reputation@workspace:libs/reputation"
   dependencies:
-    "@bandada/utils": 0.8.0
+    "@bandada/utils": 0.9.0
     "@rollup/plugin-typescript": ^11.0.0
     rimraf: ^4.1.2
     rollup: ^3.17.2
@@ -827,7 +827,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bandada/utils@0.8.0, @bandada/utils@workspace:libs/utils":
+"@bandada/utils@0.9.0, @bandada/utils@workspace:libs/utils":
   version: 0.0.0-use.local
   resolution: "@bandada/utils@workspace:libs/utils"
   dependencies:
@@ -7540,8 +7540,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api@workspace:apps/api"
   dependencies:
-    "@bandada/reputation": 0.8.0
-    "@bandada/utils": 0.8.0
+    "@bandada/reputation": 0.9.0
+    "@bandada/utils": 0.9.0
     "@ethersproject/hash": ^5.7.0
     "@nestjs/cli": ^9.0.0
     "@nestjs/common": ^9.0.0
@@ -9042,7 +9042,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "client@workspace:apps/client"
   dependencies:
-    "@bandada/utils": 0.8.0
+    "@bandada/utils": 0.9.0
     "@chakra-ui/react": ^2.5.1
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
@@ -9788,8 +9788,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:apps/dashboard"
   dependencies:
-    "@bandada/reputation": 0.8.0
-    "@bandada/utils": 0.8.0
+    "@bandada/reputation": 0.9.0
+    "@bandada/utils": 0.9.0
     "@chakra-ui/react": ^2.5.1
     "@chakra-ui/theme-tools": ^2.0.16
     "@emotion/react": ^11.10.6

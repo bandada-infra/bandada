@@ -8,8 +8,8 @@
         "build": "nest build"
     },
     "dependencies": {
-        "@bandada/reputation": "0.8.0",
-        "@bandada/utils": "0.8.0",
+        "@bandada/reputation": "0.9.0",
+        "@bandada/utils": "0.9.0",
         "@ethersproject/hash": "^5.7.0",
         "@nestjs/common": "^9.0.0",
         "@nestjs/core": "^9.0.0",
