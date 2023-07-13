@@ -1,6 +1,6 @@
 {
     "name": "@bandada/reputation",
-    "version": "0.9.0",
+    "version": "0.10.0",
     "description": "Bandada library to validate users' reputation.",
     "license": "MIT",
     "main": "dist/index.node.js",
@@ -29,7 +29,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@bandada/utils": "0.9.0"
+        "@bandada/utils": "0.10.0"
     },
     "devDependencies": {
         "@rollup/plugin-typescript": "^11.0.0",
