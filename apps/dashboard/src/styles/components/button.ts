@@ -26,7 +26,7 @@ const Button = {
             if (c === "primary") {
                 const bgGradient =
                     "linear(to-r, sunsetOrange.500, classicRose.600)"
-                const color = `${c}.50`
+                const color = "balticSea.50"
 
                 return {
                     bgGradient,
@@ -37,12 +37,35 @@ const Button = {
                     _hover: {
                         bgGradient:
                             "linear(to-r, sunsetOrange.600, classicRose.700)",
-                        bg: `${c}.700`,
                         _disabled: {
                             bgGradient
                         }
                     },
-                    _active: { bg: `${c}.900` }
+                    _active: {
+                        bgGradient:
+                            "linear(to-r, sunsetOrange.800, classicRose.900)"
+                    }
+                }
+            }
+
+            if (c === "secondary") {
+                const bg = "balticSea.950"
+                const color = "balticSea.100"
+
+                return {
+                    bg,
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    color,
+                    paddingX,
+                    paddingY,
+                    _hover: {
+                        bg: "balticSea.900",
+                        _disabled: {
+                            bg
+                        }
+                    },
+                    _active: { bg: "balticSea.700" }
                 }
             }
 

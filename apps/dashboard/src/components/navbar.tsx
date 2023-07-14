@@ -1,28 +1,23 @@
 import { shortenAddress } from "@bandada/utils"
-import { Button, Container, HStack, Image, Link } from "@chakra-ui/react"
-import {
-    useAccountModal,
-    useChainModal,
-    useConnectModal
-} from "@rainbow-me/rainbowkit"
+import { Button, Container, HStack, Image, Text } from "@chakra-ui/react"
+import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { useCallback, useContext, useEffect } from "react"
-import { useAccount, useNetwork } from "wagmi"
-import { goerli } from "wagmi/chains"
+import { useAccount } from "wagmi"
 import icon1Image from "../assets/icon1.svg"
 import { AuthContext } from "../context/auth-context"
 
 export default function NavBar(): JSX.Element {
-    const { chain } = useNetwork()
+    // const { chain } = useNetwork()
     const { address } = useAccount()
     const { openConnectModal } = useConnectModal()
-    const { openChainModal } = useChainModal()
+    // const { openChainModal } = useChainModal()
     const { openAccountModal } = useAccountModal()
     const { admin } = useContext(AuthContext)
 
-    const isSupportedNetwork = useCallback(
-        () => chain && chain.id === goerli.id,
-        [chain]
-    )
+    // const isSupportedNetwork = useCallback(
+    // () => chain && chain.id === goerli.id,
+    // [chain]
+    // )
 
     const isLoggedInAdmin = useCallback(
         () => admin?.address === address,
@@ -37,34 +32,39 @@ export default function NavBar(): JSX.Element {
 
     return (
         <Container maxWidth="container.xl">
-            <HStack h="150px" align="center" justify="space-between">
-                <Link href="/">
+            <HStack h="180px" align="center" justify="space-between">
+                <HStack spacing="1">
                     <Image
                         src={icon1Image}
-                        htmlWidth="160px"
+                        htmlWidth="35px"
                         alt="Bandada icon"
                     />
-                </Link>
+                    <Text fontSize="25px">bandada</Text>
+                </HStack>
 
                 <HStack spacing="4">
-                    <Button
-                        variant="outline"
-                        colorScheme={isSupportedNetwork() ? "primary" : "red"}
-                        onClick={openChainModal}
-                    >
-                        {!isSupportedNetwork()
-                            ? "Unsupported network"
-                            : chain?.name}
-                    </Button>
+                    {
+                        // <Button
+                        // variant="solid"
+                        // colorScheme={isSupportedNetwork() ? "secondary" : "red"}
+                        // onClick={openChainModal}
+                        // >
+                        // {!isSupportedNetwork()
+                        // ? "Unsupported network"
+                        // : chain?.name}
+                        // </Button>
+                    }
 
                     <Button
-                        variant="outline"
-                        colorScheme={isLoggedInAdmin() ? "primary" : "red"}
+                        variant="solid"
+                        colorScheme="secondary"
                         onClick={openAccountModal}
                     >
                         {!isLoggedInAdmin()
                             ? "Unconnected account"
-                            : shortenAddress(address as string)}
+                            : `Connected as ${shortenAddress(
+                                  address as string
+                              )}`}
                     </Button>
                 </HStack>
             </HStack>
