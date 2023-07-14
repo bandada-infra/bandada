@@ -50,7 +50,7 @@ CREATE TABLE invites (
     group_id character varying(32) REFERENCES groups(id)
 );
 
-ALTER TABLE "groups" ADD FOREIGN KEY ("admin_id") REFERENCES "admins" ("address");
+ALTER TABLE "groups" ADD FOREIGN KEY ("admin_id") REFERENCES "admins" ("id");
 ALTER TABLE "members" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 ALTER TABLE "invites" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 ALTER TABLE "reputation_accounts" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
