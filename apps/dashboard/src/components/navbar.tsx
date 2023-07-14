@@ -8,7 +8,7 @@ import {
 import { useCallback, useContext, useEffect } from "react"
 import { useAccount, useNetwork } from "wagmi"
 import { goerli } from "wagmi/chains"
-import logoImage from "../assets/logo.svg"
+import icon1Image from "../assets/icon1.svg"
 import { AuthContext } from "../context/auth-context"
 
 export default function NavBar(): JSX.Element {
@@ -40,9 +40,9 @@ export default function NavBar(): JSX.Element {
             <HStack h="150px" align="center" justify="space-between">
                 <Link href="/">
                     <Image
-                        src={logoImage}
+                        src={icon1Image}
                         htmlWidth="160px"
-                        alt="Bandada logo"
+                        alt="Bandada icon"
                     />
                 </Link>
 

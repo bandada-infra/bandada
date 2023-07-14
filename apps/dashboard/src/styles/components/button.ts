@@ -1,38 +1,45 @@
 import { SystemStyleObject } from "@chakra-ui/react"
 import { GlobalStyleProps } from "@chakra-ui/theme-tools"
 
-const width = "200px"
-const height = "50px"
+const height = "48px"
+const paddingX = "16px"
+const paddingY = "12px"
 
 const Button = {
     baseStyle: {
         _focus: {
             boxShadow: "none"
         },
-        borderRadius: 10,
-        fontWeight: "bold"
+        fontFamily: "DM Sans, sans-serif",
+        borderRadius: 8,
+        fontWeight: 500
     },
     variants: {
         outline: (): SystemStyleObject => ({
-            width,
-            height
+            height,
+            paddingX,
+            paddingY
         }),
         solid: (props: GlobalStyleProps): SystemStyleObject => {
             const { colorScheme: c } = props
 
             if (c === "primary") {
-                const bg = `${c}.800`
+                const bgGradient =
+                    "linear(to-r, sunsetOrange.500, classicRose.600)"
                 const color = `${c}.50`
 
                 return {
-                    bg,
+                    bgGradient,
                     color,
-                    width,
                     height,
+                    paddingX,
+                    paddingY,
                     _hover: {
+                        bgGradient:
+                            "linear(to-r, sunsetOrange.600, classicRose.700)",
                         bg: `${c}.700`,
                         _disabled: {
-                            bg
+                            bgGradient
                         }
                     },
                     _active: { bg: `${c}.900` }
@@ -44,8 +51,9 @@ const Button = {
             return {
                 bg,
                 color: `${c}.800`,
-                width,
                 height,
+                paddingX,
+                paddingY,
                 _hover: {
                     bg: `${c}.200`,
                     _disabled: {

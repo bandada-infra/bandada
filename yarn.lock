@@ -3505,10 +3505,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/ibm-plex-sans@npm:^4.5.13":
-  version: 4.5.13
-  resolution: "@fontsource/ibm-plex-sans@npm:4.5.13"
-  checksum: a2982ea58c79fa8d97993a39f0cd57c19403af9debd7f0df55ada381f20585b92a949f589c04c0a6905b50c383536e0b6afdae361eb15d8a9c50a49420899efb
+"@fontsource-variable/unbounded@npm:^5.0.5":
+  version: 5.0.5
+  resolution: "@fontsource-variable/unbounded@npm:5.0.5"
+  checksum: f637e1f85e5ce777483160072cae5998cfa01450febadca904acd8d8a244e21697c0e682835028ceb92c1b301b06ea3aa0ec1d8f28025fed261f6e35b7a3e6bf
   languageName: node
   linkType: hard
 
@@ -9794,7 +9794,7 @@ __metadata:
     "@chakra-ui/theme-tools": ^2.0.16
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
-    "@fontsource/ibm-plex-sans": ^4.5.13
+    "@fontsource-variable/unbounded": ^5.0.5
     "@rainbow-me/rainbowkit": ^0.12.8
     "@semaphore-protocol/data": 3.10.0
     "@types/react": ^18.0.27

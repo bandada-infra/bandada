@@ -1,5 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react"
-import "@fontsource/ibm-plex-sans"
+import "@fontsource-variable/unbounded"
 import "@rainbow-me/rainbowkit/styles.css"
 import * as ReactDOM from "react-dom/client"
 import { AuthContextProvider } from "./context/auth-context"
