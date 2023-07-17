@@ -4,6 +4,7 @@ import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { useCallback, useContext, useEffect } from "react"
 import { useAccount } from "wagmi"
 import icon1Image from "../assets/icon1.svg"
+import cloudsImage from "../assets/clouds.svg"
 import { AuthContext } from "../context/auth-context"
 
 export default function NavBar(): JSX.Element {
@@ -32,7 +33,16 @@ export default function NavBar(): JSX.Element {
 
     return (
         <Container maxWidth="container.xl">
-            <HStack h="180px" align="center" justify="space-between">
+            <HStack
+                pt="80px"
+                pb="40px"
+                align="center"
+                justify="space-between"
+                backgroundImage={`url(${cloudsImage})`}
+                backgroundPosition="center"
+                backgroundRepeat="no-repeat"
+                backgroundSize="450px"
+            >
                 <HStack spacing="1">
                     <Image
                         src={icon1Image}

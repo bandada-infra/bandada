@@ -22,12 +22,17 @@ export default function HomePage(): JSX.Element {
     return (
         <VStack
             bgColor={pathname === "/" ? "balticSea.950" : "inherit"}
+            bgGradient={
+                pathname !== "/"
+                    ? "linear(to-b, classicRose.200, balticSea.100)"
+                    : "inherit"
+            }
             color={pathname === "/" ? "balticSea.50" : "inherit"}
             flex="1"
         >
             {pathname !== "/" && <NavBar />}
 
-            <Box flex="1">
+            <Box flex="1" width="100%">
                 {outlet || (
                     <Container
                         maxW="container.xl"
@@ -74,7 +79,7 @@ export default function HomePage(): JSX.Element {
                                 color="balticSea.200"
                                 textDecoration="underline"
                             >
-                                I don't have a wallet
+                                I don&apos;t have a wallet
                             </Button>
                         </VStack>
 

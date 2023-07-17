@@ -43,7 +43,7 @@ const Button = {
                     },
                     _active: {
                         bgGradient:
-                            "linear(to-r, sunsetOrange.800, classicRose.900)"
+                            "linear(to-r, sunsetOrange.700, classicRose.800)"
                     }
                 }
             }
@@ -66,6 +66,28 @@ const Button = {
                         }
                     },
                     _active: { bg: "balticSea.700" }
+                }
+            }
+
+            if (c === "tertiary") {
+                const bg = "balticSea.100"
+                const color = "balticSea.900"
+
+                return {
+                    bg,
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    color,
+                    height,
+                    paddingX,
+                    paddingY,
+                    _hover: {
+                        bg: "balticSea.200",
+                        _disabled: {
+                            bg
+                        }
+                    },
+                    _active: { bg: "balticSea.300" }
                 }
             }
 

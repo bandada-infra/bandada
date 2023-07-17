@@ -1,4 +1,3 @@
-import "@fontsource/ibm-plex-sans"
 import "@rainbow-me/rainbowkit/styles.css"
 import { useContext, useMemo } from "react"
 import { createBrowserRouter, redirect, RouterProvider } from "react-router-dom"

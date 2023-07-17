@@ -1,7 +1,7 @@
 const colors = {
     balticSea: {
         50: "#f8f7f8",
-        100: "#f0eef0",
+        100: "#F6EDF4",
         200: "#ded9de",
         300: "#c0b8c1",
         400: "#9d919f",

@@ -4,12 +4,10 @@ import {
     Container,
     Grid,
     GridItem,
-    Heading,
     HStack,
     Input,
     InputGroup,
-    InputLeftElement,
-    Select,
+    InputRightElement,
     Spinner,
     Text,
     useDisclosure,
@@ -17,8 +15,8 @@ import {
 } from "@chakra-ui/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
+import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 import CreateGroupModal from "../components/create-group-modal"
 import GroupCard from "../components/group-card"
 import { AuthContext } from "../context/auth-context"
@@ -65,39 +63,52 @@ export default function GroupsPage(): JSX.Element {
     )
 
     return (
-        <Container maxW="container.xl">
-            <VStack spacing={10}>
+        <Container maxW="container.xl" px="8">
+            <VStack spacing="9" flex="1">
                 <HStack justifyContent="space-between" width="100%">
-                    <Heading fontSize="40px">Groups</Heading>
+                    <Text fontSize="40px">My groups</Text>
+                </HStack>
+
+                <HStack justifyContent="space-between" width="100%">
+                    <HStack>
+                        <InputGroup w="300px">
+                            <InputRightElement h="48px" pointerEvents="none">
+                                <FiSearch />
+                            </InputRightElement>
+                            <Input
+                                bg="balticSea.50"
+                                h="48px"
+                                borderColor="balticSea.200"
+                                fontFamily="DM Sans, sans-serif"
+                                fontSize="16px"
+                                placeholder="Search by name, description"
+                                onChange={(e) => {
+                                    if (!e.target.value) {
+                                        setSearchField("")
+                                    }
+                                }}
+                            />
+                        </InputGroup>
+                        <Button
+                            variant="solid"
+                            colorScheme="tertiary"
+                            onClick={(e: any) => {
+                                setSearchField(
+                                    e.target.previousSibling.lastChild.value
+                                )
+                            }}
+                        >
+                            Search
+                        </Button>
+                    </HStack>
+
                     <Button
-                        fontSize="lg"
                         variant="solid"
                         colorScheme="primary"
                         onClick={onOpen}
                     >
-                        Add new group
+                        Add group
                     </Button>
-                </HStack>
-
-                <HStack justifyContent="space-between" width="100%">
-                    <InputGroup w="200px">
-                        <InputLeftElement pointerEvents="none">
-                            <FiSearch />
-                        </InputLeftElement>
-                        <Input
-                            placeholder="Search groups"
-                            onChange={(e) => {
-                                setSearchField(e.target.value)
-                            }}
-                        />
-                    </InputGroup>
-
-                    <Select textAlign="center" w="max-content">
-                        <option value="name">Name</option>
-                        <option value="lastModified">Last modified</option>
-                        <option value="lastOpened">Last opened</option>
-                        <option value="groupSize">Group size</option>
-                    </Select>
                 </HStack>
 
                 {isLoading && (
@@ -121,10 +132,11 @@ export default function GroupsPage(): JSX.Element {
                     >
                         {groups.filter(filterPredicate).map((group) => (
                             <GridItem
-                                w="100%"
-                                borderRadius="4px"
-                                bgColor="#FCFCFC"
-                                boxShadow="0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)"
+                                borderRadius="8px"
+                                borderColor="balticSea.200"
+                                borderWidth="1px"
+                                borderStyle="solid"
+                                bgColor="balticSea.100"
                                 key={group.name}
                             >
                                 <GroupCard {...group} />
