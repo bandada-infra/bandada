@@ -1,5 +1,5 @@
-import { GroupResponse } from "./types"
 import { request } from "@bandada/utils"
+import { GroupResponse } from "./types"
 
 let url = "/groups"
 
@@ -17,8 +17,6 @@ const config = {
 export async function getGroups(): Promise<GroupResponse[]> {
     const groups = await request(url, config)
 
-    console.log(groups)
-
     return groups
 }
 
@@ -30,5 +28,7 @@ export async function getGroups(): Promise<GroupResponse[]> {
 export async function getGroup(groupId: string): Promise<GroupResponse> {
     url += `/${groupId}`
 
-    return await request(url, config)
+    const group = await request(url, config)
+
+    return group
 }

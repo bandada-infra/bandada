@@ -1,7 +1,6 @@
+import { request } from "@bandada/utils"
 import { getGroups, getGroup } from "./groups"
 import { GroupResponse } from "./types"
-
-import { request } from "@bandada/utils"
 
 jest.mock("@bandada/utils", () => ({
     __esModule: true,
@@ -30,7 +29,7 @@ describe("Bandada API SDK", () => {
             )
 
             const groups: GroupResponse[] = await getGroups()
-            expect(groups.length).toBe(1)
+            expect(groups).toHaveLength(1)
         })
         it("Should return a group", async () => {
             requestMocked.mockImplementationOnce(() =>
