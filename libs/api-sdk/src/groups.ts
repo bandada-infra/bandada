@@ -20,8 +20,6 @@ const config = {
 export async function getGroups(): Promise<GroupResponse[]> {
     const groups = await request(url, config)
 
-    console.log("config", config)
-
     return groups
 }
 
