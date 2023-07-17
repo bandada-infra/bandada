@@ -7,7 +7,10 @@ const config = {
     headers: {
         "Content-Type": "application/json"
     },
-    baseURL: "http://localhost:3000"
+    baseURL:
+        process.env.NODE_ENV === "test"
+            ? "http://localhost:3000"
+            : "https://api.bandada.appliedzkp.org/"
 }
 
 /**
@@ -16,6 +19,8 @@ const config = {
  */
 export async function getGroups(): Promise<GroupResponse[]> {
     const groups = await request(url, config)
+
+    console.log("config", config)
 
     return groups
 }
