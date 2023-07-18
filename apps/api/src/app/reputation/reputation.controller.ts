@@ -12,7 +12,7 @@ export class ReputationController {
         return this.reputationService.setOAuthState(dto)
     }
 
-    @Post("add-member")
+    @Post()
     async addMemberByReputation(
         @Body() dto: AddMemberDto
     ): Promise<void | any> {

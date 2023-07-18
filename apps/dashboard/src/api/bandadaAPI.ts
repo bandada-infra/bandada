@@ -169,7 +169,7 @@ export async function addMemberByReputation(
     oAuthCode: string
 ): Promise<string | null> {
     try {
-        return await request(`${API_URL}/reputation/add-member`, {
+        return await request(`${API_URL}/reputation`, {
             method: "POST",
             data: {
                 oAuthCode,
