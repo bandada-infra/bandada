@@ -2,8 +2,10 @@ import {
     Box,
     Button,
     Container,
+    Heading,
     HStack,
     Image,
+    Link,
     Text,
     VStack
 } from "@chakra-ui/react"
@@ -48,23 +50,24 @@ export default function HomePage(): JSX.Element {
                                     htmlWidth="32px"
                                     alt="Bandada icon"
                                 />
-                                <Text fontSize="22px">bandada</Text>
+                                <Heading fontSize="22px" as="h1">
+                                    bandada
+                                </Heading>
                             </HStack>
 
                             <Text
                                 fontSize="16px"
                                 fontWeight="500"
                                 color="sunsetOrange.100"
-                                fontFamily="DM Sans, sans-serif"
                                 textTransform="uppercase"
                             >
                                 birds of a feather band together
                             </Text>
 
-                            <Text fontSize="6xl" lineHeight="67px">
+                            <Heading fontSize="61px" as="h1" lineHeight="67px">
                                 Anonymous groups
                                 <br /> for your web3 apps.
-                            </Text>
+                            </Heading>
 
                             <Button
                                 onClick={openConnectModal}
@@ -74,13 +77,18 @@ export default function HomePage(): JSX.Element {
                                 Sign in with Ethereum
                             </Button>
 
-                            <Button
-                                variant="link"
-                                color="balticSea.200"
-                                textDecoration="underline"
+                            <Link
+                                href="https://ethereum.org/en/wallets/"
+                                target="_blank"
                             >
-                                I don&apos;t have a wallet
-                            </Button>
+                                <Button
+                                    variant="link"
+                                    color="balticSea.200"
+                                    textDecoration="underline"
+                                >
+                                    I don&apos;t have a wallet
+                                </Button>
+                            </Link>
                         </VStack>
 
                         <Image src={jumbotronImage} htmlWidth="728px" />

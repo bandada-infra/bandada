@@ -127,6 +127,22 @@ export async function updateGroup(
 }
 
 /**
+ * It removes a group.
+ * @param groupId The group id.
+ */
+export async function removeGroup(groupId: string): Promise<void | null> {
+    try {
+        await request(`${API_URL}/groups/${groupId}`, {
+            method: "DELETE"
+        })
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
+}
+
+/**
  * It returns a random string to be used as a OAuth state, to to protect against
  * forgery attacks. It will be used to retrieve group, member, redirectURI and provider
  * before checking reputation and adding members.

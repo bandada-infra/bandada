@@ -1,5 +1,12 @@
 import { shortenAddress } from "@bandada/utils"
-import { Button, Container, HStack, Image, Text } from "@chakra-ui/react"
+import {
+    Button,
+    Container,
+    Heading,
+    HStack,
+    Image,
+    Text
+} from "@chakra-ui/react"
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { useCallback, useContext, useEffect } from "react"
 import { useAccount } from "wagmi"
@@ -49,7 +56,9 @@ export default function NavBar(): JSX.Element {
                         htmlWidth="35px"
                         alt="Bandada icon"
                     />
-                    <Text fontSize="25px">bandada</Text>
+                    <Heading fontSize="25px" as="h1">
+                        bandada
+                    </Heading>
                 </HStack>
 
                 <HStack spacing="4">

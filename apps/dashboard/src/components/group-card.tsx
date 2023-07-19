@@ -24,47 +24,57 @@ export default function GroupCard({
 }: Group): JSX.Element {
     return (
         <Link to={`/groups/${type}/${id}`}>
-            <Box fontFamily="DM Sans, sans-serif" p="24px" maxW="350px">
-                <HStack>
-                    <Image
-                        src={
-                            treeDepth >= 27
-                                ? icon4Image
-                                : treeDepth >= 24
-                                ? icon3Image
-                                : treeDepth >= 20
-                                ? icon2Image
-                                : icon1Image
-                        }
-                        htmlWidth="35px"
-                        alt="Bandada icon"
-                    />
+            <VStack
+                flex="1"
+                align="left"
+                justify="space-between"
+                fontFamily="DM Sans, sans-serif"
+                p="24px"
+                w="350px"
+                h="280px"
+            >
+                <Box>
+                    <HStack>
+                        <Image
+                            src={
+                                treeDepth >= 27
+                                    ? icon4Image
+                                    : treeDepth >= 24
+                                    ? icon3Image
+                                    : treeDepth >= 20
+                                    ? icon2Image
+                                    : icon1Image
+                            }
+                            htmlWidth="35px"
+                            alt="Bandada icon"
+                        />
 
-                    <Tag
-                        colorScheme="primary"
-                        borderRadius="full"
-                        borderWidth={1}
-                        borderColor="classicRose.900"
-                        color="classicRose.900"
-                        bgColor="classicRose.50"
-                    >
-                        <TagLabel>{type}</TagLabel>
-                    </Tag>
-                </HStack>
+                        <Tag
+                            colorScheme="primary"
+                            borderRadius="full"
+                            borderWidth={1}
+                            borderColor="classicRose.900"
+                            color="classicRose.900"
+                            bgColor="classicRose.50"
+                        >
+                            <TagLabel>{type}</TagLabel>
+                        </Tag>
+                    </HStack>
 
-                <Text fontSize="20px" mt="12px">
-                    {name}
-                </Text>
+                    <Text fontSize="20px" mt="12px">
+                        {name}
+                    </Text>
 
-                <Text mt="12px" mb="20px" color="balticSea.600">
-                    {description}
-                </Text>
+                    <Text mt="12px" color="balticSea.600">
+                        {description}
+                    </Text>
+                </Box>
 
-                <VStack align="left" mt="20px" spacing="0">
+                <VStack align="left" spacing="0">
                     <Text fontSize="20px">{members.length}</Text>
                     <Text color="balticSea.400">members</Text>
                 </VStack>
-            </Box>
+            </VStack>
         </Link>
     )
 }

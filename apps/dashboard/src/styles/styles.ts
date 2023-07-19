@@ -12,6 +12,15 @@ const styles: Styles = {
         "#root > div": {
             display: "flex",
             flexDirection: "column"
+        },
+        h1: {
+            fontWeight: "400 !important"
+        },
+        "h2, h3": {
+            fontWeight: "500 !important"
+        },
+        input: {
+            fontSize: "16px !important"
         }
     })
 }

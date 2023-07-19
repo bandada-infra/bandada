@@ -91,6 +91,28 @@ const Button = {
                 }
             }
 
+            if (c === "danger") {
+                const bg = "sunsetOrange.200"
+                const color = "sunsetOrange.950"
+
+                return {
+                    bg,
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    color,
+                    height,
+                    paddingX,
+                    paddingY,
+                    _hover: {
+                        bg: "sunsetOrange.300",
+                        _disabled: {
+                            bg
+                        }
+                    },
+                    _active: { bg: "sunsetOrange.400" }
+                }
+            }
+
             const bg = "rgba(0,0,0,0)"
 
             return {

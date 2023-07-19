@@ -25,7 +25,6 @@ export async function getGroups(adminAddress: string): Promise<Group[] | null> {
                 id: group.id,
                 name: groupName,
                 treeDepth: group.merkleTree.depth,
-                fingerprintDuration: 3600,
                 members: group.members as string[],
                 admin: group.admin as string,
                 type: "on-chain"

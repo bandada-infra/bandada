@@ -6,7 +6,7 @@ import components from "./components"
 const config = {
     fonts: {
         heading: "Unbounded Variable, sans-serif",
-        body: "Unbounded Variable, sans-serif"
+        body: "DM Sans, sans-serif"
     },
     colors,
     styles,

@@ -4,6 +4,7 @@ import {
     Container,
     Grid,
     GridItem,
+    Heading,
     HStack,
     Input,
     InputGroup,
@@ -66,7 +67,9 @@ export default function GroupsPage(): JSX.Element {
         <Container maxW="container.xl" px="8">
             <VStack spacing="9" flex="1">
                 <HStack justifyContent="space-between" width="100%">
-                    <Text fontSize="40px">My groups</Text>
+                    <Heading fontSize="40px" as="h1">
+                        My groups
+                    </Heading>
                 </HStack>
 
                 <HStack justifyContent="space-between" width="100%">
@@ -79,7 +82,6 @@ export default function GroupsPage(): JSX.Element {
                                 bg="balticSea.50"
                                 h="48px"
                                 borderColor="balticSea.200"
-                                fontFamily="DM Sans, sans-serif"
                                 fontSize="16px"
                                 placeholder="Search by name, description"
                                 onChange={(e) => {
@@ -125,7 +127,7 @@ export default function GroupsPage(): JSX.Element {
 
                 {!isLoading && groups.length > 0 && (
                     <Grid
-                        templateColumns="repeat(4, 1fr)"
+                        templateColumns="repeat(3, 1fr)"
                         gap={10}
                         w="100%"
                         mt="60px"
