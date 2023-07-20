@@ -15,7 +15,9 @@ export class ReputationAccount {
     @PrimaryColumn()
     accountHash: string
 
-    @ManyToOne(() => Group, (group) => group.reputationAccounts)
+    @ManyToOne(() => Group, (group) => group.reputationAccounts, {
+        onDelete: "CASCADE"
+    })
     @JoinColumn({ name: "group_id" })
     group: Group
 }

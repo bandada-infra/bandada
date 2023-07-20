@@ -56,6 +56,12 @@ export class GroupsController {
         )
     }
 
+    @Delete(":group")
+    @UseGuards(AuthGuard)
+    async removeGroup(@Req() req: Request, @Param("group") groupId: string) {
+        await this.groupsService.removeGroup(groupId, req.session.adminId)
+    }
+
     @Patch(":group")
     @UseGuards(AuthGuard)
     async updateGroup(
