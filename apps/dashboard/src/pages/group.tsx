@@ -294,43 +294,47 @@ export default function GroupPage(): JSX.Element {
 
                     <Image src={image1} />
 
-                    <Box
-                        bgColor="classicRose.50"
-                        p="25px 30px 25px 30px"
-                        borderColor="sunsetOrange.500"
-                        borderWidth="2px"
-                        borderStyle="dashed"
-                        borderRadius="8px"
-                    >
-                        <Text fontSize="20px" color="balticSea.900">
-                            DANGER ZONE
-                        </Text>
+                    {_group.type === "off-chain" && (
+                        <Box
+                            bgColor="classicRose.50"
+                            p="25px 30px 25px 30px"
+                            borderColor="sunsetOrange.500"
+                            borderWidth="2px"
+                            borderStyle="dashed"
+                            borderRadius="8px"
+                        >
+                            <Text fontSize="20px" color="balticSea.900">
+                                DANGER ZONE
+                            </Text>
 
-                        <Text my="10px" fontWeight="400">
-                            To remove this group, type its name below.
-                        </Text>
+                            <Text my="10px" fontWeight="400">
+                                To remove this group, type its name below.
+                            </Text>
 
-                        <HStack spacing="4">
-                            <Input
-                                placeholder="Group name"
-                                size="lg"
-                                value={_removeGroupName}
-                                onChange={(event) =>
-                                    setRemoveGroupName(event.target.value)
-                                }
-                            />
+                            <HStack spacing="4">
+                                <Input
+                                    placeholder="Group name"
+                                    size="lg"
+                                    value={_removeGroupName}
+                                    onChange={(event) =>
+                                        setRemoveGroupName(event.target.value)
+                                    }
+                                />
 
-                            <Button
-                                width="200px"
-                                variant="solid"
-                                colorScheme="danger"
-                                isDisabled={_removeGroupName !== _group.name}
-                                onClick={removeGroup}
-                            >
-                                Remove group
-                            </Button>
-                        </HStack>
-                    </Box>
+                                <Button
+                                    width="200px"
+                                    variant="solid"
+                                    colorScheme="danger"
+                                    isDisabled={
+                                        _removeGroupName !== _group.name
+                                    }
+                                    onClick={removeGroup}
+                                >
+                                    Remove group
+                                </Button>
+                            </HStack>
+                        </Box>
+                    )}
                 </VStack>
 
                 <Box
@@ -410,18 +414,22 @@ export default function GroupPage(): JSX.Element {
                                         </Text>
                                     </HStack>
 
-                                    <IconButton
-                                        aria-label="Remove member"
-                                        variant="link"
-                                        icon={
-                                            <Icon
-                                                color="#ac6b6e"
-                                                boxSize="6"
-                                                as={MdOutlineCancel}
-                                            />
-                                        }
-                                        onClick={() => removeMember(memberId)}
-                                    />
+                                    {_group.type === "off-chain" && (
+                                        <IconButton
+                                            aria-label="Remove member"
+                                            variant="link"
+                                            icon={
+                                                <Icon
+                                                    color="#ac6b6e"
+                                                    boxSize="6"
+                                                    as={MdOutlineCancel}
+                                                />
+                                            }
+                                            onClick={() =>
+                                                removeMember(memberId)
+                                            }
+                                        />
+                                    )}
                                 </HStack>
                             </Flex>
                         ))
