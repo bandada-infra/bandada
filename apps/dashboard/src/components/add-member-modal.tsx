@@ -16,8 +16,7 @@ import {
     ModalOverlay,
     Text,
     Tooltip,
-    useClipboard,
-    UseDisclosureProps
+    useClipboard
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
 import { useSigner } from "wagmi"
@@ -35,7 +34,7 @@ export default function AddMemberModal({
     isOpen,
     onClose,
     group
-}: UseDisclosureProps & any): JSX.Element {
+}: AddMemberModalProps): JSX.Element {
     const [_memberId, setMemberId] = useState<string>("")
     const {
         hasCopied,

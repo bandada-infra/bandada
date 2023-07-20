@@ -25,10 +25,10 @@ import { Group } from "../types"
 
 export default function GroupsPage(): JSX.Element {
     const { admin } = useContext(AuthContext)
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const [isLoading, setIsLoading] = useState(false)
-    const [groups, setGroups] = useState<Group[]>([])
-    const [searchField, setSearchField] = useState<string>("")
+    const createGroupModal = useDisclosure()
+    const [_isLoading, setIsLoading] = useState(false)
+    const [_groups, setGroups] = useState<Group[]>([])
+    const [_searchField, setSearchField] = useState<string>("")
 
     useEffect(() => {
         ;(async () => {
@@ -57,10 +57,25 @@ export default function GroupsPage(): JSX.Element {
         })()
     }, [admin])
 
-    const filterPredicate = useCallback(
+    const addGroup = useCallback(
+        (group?: Group) => {
+            if (!group) {
+                createGroupModal.onClose()
+
+                return
+            }
+
+            setGroups([group, ..._groups])
+
+            createGroupModal.onClose()
+        },
+        [_groups, createGroupModal]
+    )
+
+    const filterGroup = useCallback(
         (group: Group) =>
-            group.name.toLowerCase().includes(searchField.toLowerCase()),
-        [searchField]
+            group.name.toLowerCase().includes(_searchField.toLowerCase()),
+        [_searchField]
     )
 
     return (
@@ -107,32 +122,32 @@ export default function GroupsPage(): JSX.Element {
                     <Button
                         variant="solid"
                         colorScheme="primary"
-                        onClick={onOpen}
+                        onClick={createGroupModal.onOpen}
                     >
                         Add group
                     </Button>
                 </HStack>
 
-                {isLoading && (
+                {_isLoading && (
                     <Box pt="100px">
                         <Spinner />
                     </Box>
                 )}
 
-                {!isLoading && groups.length === 0 && (
+                {!_isLoading && _groups.length === 0 && (
                     <Text fontSize="2xl" fontWeight="bold" pt="100px">
                         You have not created any groups
                     </Text>
                 )}
 
-                {!isLoading && groups.length > 0 && (
+                {!_isLoading && _groups.length > 0 && (
                     <Grid
                         templateColumns="repeat(3, 1fr)"
                         gap={10}
                         w="100%"
                         mt="60px"
                     >
-                        {groups.filter(filterPredicate).map((group) => (
+                        {_groups.filter(filterGroup).map((group) => (
                             <GridItem
                                 borderRadius="8px"
                                 borderColor="balticSea.200"
@@ -148,7 +163,10 @@ export default function GroupsPage(): JSX.Element {
                 )}
             </VStack>
 
-            <CreateGroupModal isOpen={isOpen} onClose={onClose} />
+            <CreateGroupModal
+                isOpen={createGroupModal.isOpen}
+                onClose={addGroup}
+            />
         </Container>
     )
 }
