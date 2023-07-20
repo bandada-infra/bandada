@@ -15,6 +15,8 @@ import {
     ModalContent,
     ModalOverlay,
     Text,
+    Tooltip,
+    useClipboard,
     UseDisclosureProps
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
@@ -35,7 +37,12 @@ export default function AddMemberModal({
     group
 }: UseDisclosureProps & any): JSX.Element {
     const [_memberId, setMemberId] = useState<string>("")
-    const [_inviteLink, setInviteLink] = useState<string>("")
+    const {
+        hasCopied,
+        value: _inviteLink,
+        setValue: setInviteLink,
+        onCopy
+    } = useClipboard("")
     const { data: signer } = useSigner()
 
     useEffect(() => {
@@ -96,7 +103,7 @@ export default function AddMemberModal({
         }
 
         setInviteLink(inviteLink)
-    }, [group])
+    }, [group, setInviteLink])
 
     return (
         <Modal
@@ -164,16 +171,27 @@ export default function AddMemberModal({
                                             isDisabled
                                         />
                                         <InputRightElement mr="5px">
-                                            <IconButton
-                                                variant="link"
-                                                aria-label="Copy invite link"
-                                                onClick={() => {
-                                                    navigator.clipboard.writeText(
-                                                        _inviteLink || ""
-                                                    )
-                                                }}
-                                                icon={<Image src={copyIcon} />}
-                                            />
+                                            <Tooltip
+                                                label={
+                                                    hasCopied
+                                                        ? "Copied!"
+                                                        : "Copy"
+                                                }
+                                                closeOnClick={false}
+                                                hasArrow
+                                            >
+                                                <IconButton
+                                                    variant="link"
+                                                    aria-label="Copy invite link"
+                                                    onClick={onCopy}
+                                                    onMouseDown={(e) =>
+                                                        e.preventDefault()
+                                                    }
+                                                    icon={
+                                                        <Image src={copyIcon} />
+                                                    }
+                                                />
+                                            </Tooltip>
                                         </InputRightElement>
                                     </InputGroup>
 

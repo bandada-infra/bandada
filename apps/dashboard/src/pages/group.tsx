@@ -13,6 +13,8 @@ import {
     InputRightElement,
     Switch,
     Text,
+    Tooltip,
+    useClipboard,
     useDisclosure,
     VStack
 } from "@chakra-ui/react"
@@ -21,7 +23,7 @@ import { CgProfile } from "react-icons/cg"
 import { FiSearch } from "react-icons/fi"
 import { MdOutlineArrowBackIosNew, MdOutlineCancel } from "react-icons/md"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import * as bandadaAPI from "../api/bandadaAPI"
+import * as bandadaApi from "../api/bandadaAPI"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
 import copyIcon from "../assets/copy.svg"
 import image1 from "../assets/image1.svg"
@@ -34,6 +36,7 @@ export default function GroupPage(): JSX.Element {
     const addMembersModal = useDisclosure()
     const { groupId, groupType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
+    const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
 
@@ -43,7 +46,7 @@ export default function GroupPage(): JSX.Element {
                 const group =
                     groupType === "on-chain"
                         ? await getOnchainGroup(groupId)
-                        : await bandadaAPI.getGroup(groupId)
+                        : await bandadaApi.getGroup(groupId)
 
                 if (group === null) {
                     alert("Some error occurred!")
@@ -56,9 +59,9 @@ export default function GroupPage(): JSX.Element {
         })()
     }, [groupId, groupType])
 
-    const onAPIAccessToggle = useCallback(
+    const onApiAccessToggle = useCallback(
         async (apiEnabled: boolean) => {
-            const group = await bandadaAPI.updateGroup(_group!.id as string, {
+            const group = await bandadaApi.updateGroup(_group!.id as string, {
                 apiEnabled
             })
 
@@ -101,7 +104,7 @@ export default function GroupPage(): JSX.Element {
             }
 
             if (
-                (await bandadaAPI.removeMember(_group!.id, memberId)) === null
+                (await bandadaApi.removeMember(_group!.id, memberId)) === null
             ) {
                 alert("Some error occurred!")
 
@@ -126,7 +129,7 @@ export default function GroupPage(): JSX.Element {
             return
         }
 
-        if ((await bandadaAPI.removeGroup(_group!.id)) === null) {
+        if ((await bandadaApi.removeGroup(_group!.id)) === null) {
             alert("Some error occurred!")
 
             return
@@ -224,7 +227,7 @@ export default function GroupPage(): JSX.Element {
                                         id="enable-api"
                                         isChecked={_group.apiEnabled}
                                         onChange={(event) =>
-                                            onAPIAccessToggle(
+                                            onApiAccessToggle(
                                                 event.target.checked
                                             )
                                         }
@@ -245,19 +248,31 @@ export default function GroupPage(): JSX.Element {
                                                 value={_group?.apiKey}
                                                 isDisabled
                                             />
+
                                             <InputRightElement mr="5px">
-                                                <IconButton
-                                                    variant="link"
-                                                    aria-label="Copy invite link"
-                                                    onClick={() => {
-                                                        navigator.clipboard.writeText(
-                                                            _group?.apiKey || ""
-                                                        )
-                                                    }}
-                                                    icon={
-                                                        <Image src={copyIcon} />
+                                                <Tooltip
+                                                    label={
+                                                        hasCopied
+                                                            ? "Copied!"
+                                                            : "Copy"
                                                     }
-                                                />
+                                                    closeOnClick={false}
+                                                    hasArrow
+                                                >
+                                                    <IconButton
+                                                        variant="link"
+                                                        aria-label="Copy invite link"
+                                                        onClick={onCopy}
+                                                        onMouseDown={(e) =>
+                                                            e.preventDefault()
+                                                        }
+                                                        icon={
+                                                            <Image
+                                                                src={copyIcon}
+                                                            />
+                                                        }
+                                                    />
+                                                </Tooltip>
                                             </InputRightElement>
                                         </InputGroup>
 
@@ -266,6 +281,9 @@ export default function GroupPage(): JSX.Element {
                                             variant="link"
                                             color="balticSea.600"
                                             textDecoration="underline"
+                                            onClick={() => {
+                                                setApiKey(_group?.apiKey || "")
+                                            }}
                                         >
                                             Generate new key
                                         </Button>
