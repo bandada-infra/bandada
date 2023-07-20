@@ -36,6 +36,7 @@ export default function AddMemberModal({
     group
 }: AddMemberModalProps): JSX.Element {
     const [_memberId, setMemberId] = useState<string>("")
+    const [_isLoading, setIsLoading] = useState(false)
     const {
         hasCopied,
         value: _inviteLink,
@@ -63,18 +64,23 @@ export default function AddMemberModal({
             return
         }
 
+        setIsLoading(true)
+
         if (group.type === "off-chain") {
             if ((await bandadaAPI.addMember(group.id, _memberId)) === null) {
                 alert("Some error occurred!")
 
+                setIsLoading(false)
                 return
             }
 
+            setIsLoading(false)
             onClose(_memberId)
         } else {
             if (!signer) {
                 alert("No valid signer for your transaction!")
 
+                setIsLoading(false)
                 return
             }
 
@@ -83,11 +89,12 @@ export default function AddMemberModal({
 
                 await semaphore.addMember(group.name, _memberId)
 
+                setIsLoading(false)
                 onClose(_memberId)
             } catch (error) {
                 alert("Some error occurred!")
 
-                console.error(error)
+                setIsLoading(false)
             }
         }
     }, [onClose, _memberId, group, signer])
@@ -138,6 +145,7 @@ export default function AddMemberModal({
                             variant="solid"
                             colorScheme="tertiary"
                             onClick={addMember}
+                            isLoading={_isLoading}
                         >
                             Add member
                         </Button>
