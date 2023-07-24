@@ -11,6 +11,10 @@ import {
     Input,
     InputGroup,
     InputRightElement,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Switch,
     Text,
     Tooltip,
@@ -21,7 +25,11 @@ import {
 import { useCallback, useEffect, useState } from "react"
 import { CgProfile } from "react-icons/cg"
 import { FiSearch } from "react-icons/fi"
-import { MdOutlineArrowBackIosNew, MdOutlineCancel } from "react-icons/md"
+import {
+    MdOutlineArrowBackIosNew,
+    MdOutlineCancel,
+    MdOutlineMoreVert
+} from "react-icons/md"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import * as bandadaApi from "../api/bandadaAPI"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
@@ -425,7 +433,7 @@ export default function GroupPage(): JSX.Element {
                                     <HStack>
                                         <Icon
                                             color="balticSea.300"
-                                            boxSize="5"
+                                            boxSize="6"
                                             as={CgProfile}
                                         />
 
@@ -435,20 +443,37 @@ export default function GroupPage(): JSX.Element {
                                     </HStack>
 
                                     {_group.type === "off-chain" && (
-                                        <IconButton
-                                            aria-label="Remove member"
-                                            variant="link"
-                                            icon={
-                                                <Icon
-                                                    color="#ac6b6e"
-                                                    boxSize="6"
-                                                    as={MdOutlineCancel}
-                                                />
-                                            }
-                                            onClick={() =>
-                                                removeMember(memberId)
-                                            }
-                                        />
+                                        <Menu>
+                                            <MenuButton
+                                                as={IconButton}
+                                                aria-label="Options"
+                                                icon={
+                                                    <Icon
+                                                        color="balticSea.300"
+                                                        boxSize="6"
+                                                        as={MdOutlineMoreVert}
+                                                    />
+                                                }
+                                                variant="link"
+                                            />
+                                            <MenuList>
+                                                <MenuItem
+                                                    icon={
+                                                        <Icon
+                                                            mt="5px"
+                                                            color="balticSea.300"
+                                                            boxSize="6"
+                                                            as={MdOutlineCancel}
+                                                        />
+                                                    }
+                                                    onClick={() =>
+                                                        removeMember(memberId)
+                                                    }
+                                                >
+                                                    Remove
+                                                </MenuItem>
+                                            </MenuList>
+                                        </Menu>
                                     )}
                                 </HStack>
                             </Flex>
