@@ -5,8 +5,8 @@ import {
     Button,
     Divider,
     Heading,
+    Icon,
     IconButton,
-    Image,
     Input,
     InputGroup,
     InputRightElement,
@@ -19,9 +19,9 @@ import {
     useClipboard
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
+import { FiCopy } from "react-icons/fi"
 import { useSigner } from "wagmi"
 import * as bandadaAPI from "../api/bandadaAPI"
-import copyIcon from "../assets/copy.svg"
 import { Group } from "../types"
 
 export type AddMemberModalProps = {
@@ -195,7 +195,11 @@ export default function AddMemberModal({
                                                         e.preventDefault()
                                                     }
                                                     icon={
-                                                        <Image src={copyIcon} />
+                                                        <Icon
+                                                            color="sunsetOrange.600"
+                                                            boxSize="5"
+                                                            as={FiCopy}
+                                                        />
                                                     }
                                                 />
                                             </Tooltip>

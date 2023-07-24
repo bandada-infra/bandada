@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
 import { CgProfile } from "react-icons/cg"
-import { FiSearch } from "react-icons/fi"
+import { FiCopy, FiSearch } from "react-icons/fi"
 import {
     MdOutlineArrowBackIosNew,
     MdOutlineCancel,
@@ -33,7 +33,6 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom"
 import * as bandadaApi from "../api/bandadaAPI"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
-import copyIcon from "../assets/copy.svg"
 import image1 from "../assets/image1.svg"
 import AddMemberModal from "../components/add-member-modal"
 import { Group } from "../types"
@@ -297,8 +296,10 @@ export default function GroupPage(): JSX.Element {
                                                             e.preventDefault()
                                                         }
                                                         icon={
-                                                            <Image
-                                                                src={copyIcon}
+                                                            <Icon
+                                                                color="sunsetOrange.600"
+                                                                boxSize="5"
+                                                                as={FiCopy}
                                                             />
                                                         }
                                                     />

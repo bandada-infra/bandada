@@ -1,8 +1,9 @@
 import Button from "./button"
 import Modal from "./modal"
-import Tag from "./tag"
+import Switch from "./switch"
 
 export default {
     Button,
-    Modal
+    Modal,
+    Switch
 }
