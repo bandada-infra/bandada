@@ -154,7 +154,7 @@ export default function GroupsPage(): JSX.Element {
                                 borderWidth="1px"
                                 borderStyle="solid"
                                 bgColor="balticSea.100"
-                                key={group.name}
+                                key={group.id + group.name}
                             >
                                 <GroupCard {...group} />
                             </GridItem>
