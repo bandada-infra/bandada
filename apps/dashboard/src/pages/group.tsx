@@ -54,10 +54,11 @@ export default function GroupPage(): JSX.Element {
                     return
                 }
 
+                setApiKey(group.apiKey || "")
                 setGroup(group)
             }
         })()
-    }, [groupId, groupType])
+    }, [groupId, groupType, setApiKey])
 
     const onApiAccessToggle = useCallback(
         async (apiEnabled: boolean) => {
@@ -137,6 +138,27 @@ export default function GroupPage(): JSX.Element {
 
         navigate("/groups")
     }, [_group, navigate])
+
+    const generateApiKey = useCallback(async () => {
+        if (
+            !window.confirm("Hare you sure you want to generate a new API key?")
+        ) {
+            return
+        }
+
+        const apiKey = await bandadaApi.generateApiKey(_group!.id)
+
+        if (apiKey === null) {
+            alert("Some error occurred!")
+
+            return
+        }
+
+        _group!.apiKey = apiKey
+
+        setApiKey(apiKey)
+        setGroup({ ..._group! })
+    }, [_group, setApiKey])
 
     return _group ? (
         <Container maxW="container.xl">
@@ -281,9 +303,7 @@ export default function GroupPage(): JSX.Element {
                                             variant="link"
                                             color="balticSea.600"
                                             textDecoration="underline"
-                                            onClick={() => {
-                                                setApiKey(_group?.apiKey || "")
-                                            }}
+                                            onClick={generateApiKey}
                                         >
                                             Generate new key
                                         </Button>

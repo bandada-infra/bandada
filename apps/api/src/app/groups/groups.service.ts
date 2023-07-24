@@ -177,6 +177,37 @@ export class GroupsService {
     }
 
     /**
+     * Updates the group api key.
+     * @param groupId Group id.
+     * @param adminId Group admin id.
+     */
+    async updateApiKey(groupId: string, adminId: string): Promise<string> {
+        const group = await this.getGroup(groupId)
+
+        if (group.adminId !== adminId) {
+            throw new UnauthorizedException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (!group.apiEnabled) {
+            throw new UnauthorizedException(
+                `Group '${groupId}' APIs are not enabled`
+            )
+        }
+
+        group.apiKey = v4()
+
+        await this.groupRepository.save(group)
+
+        Logger.log(
+            `GroupsService: group '${group.name}' APIs have been updated`
+        )
+
+        return group.apiKey
+    }
+
+    /**
      * Join the group by redeeming invite code.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.

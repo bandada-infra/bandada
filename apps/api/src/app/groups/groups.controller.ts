@@ -81,6 +81,12 @@ export class GroupsController {
         )
     }
 
+    @Patch(":group/api-key")
+    @UseGuards(AuthGuard)
+    async updateApiKey(@Req() req: Request, @Param("group") groupId: string) {
+        return this.groupsService.updateApiKey(groupId, req.session.adminId)
+    }
+
     @Get(":group/members/:member")
     isGroupMember(
         @Param("group") groupId: string,
