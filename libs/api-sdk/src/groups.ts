@@ -120,16 +120,22 @@ export async function addMemberByInviteCode(
  * Removes a member from a group.
  * @param groupId Group id.
  * @param memberId Member id.
+ * @param apiKey API Key.
  * @returns undefined.
  */
 export async function removeMember(
     groupId: string,
-    memberId: string
+    memberId: string,
+    apiKey: string
 ): Promise<void> {
     url += `/${groupId}/members/${memberId}`
 
-    await request(url, {
+    const newConfig: any = {
         method: "delete",
         ...config
-    })
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    await request(url, newConfig)
 }

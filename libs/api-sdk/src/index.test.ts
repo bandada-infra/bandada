@@ -5,7 +5,8 @@ import {
     isGroupMember,
     generateMerkleProof,
     addMemberByApiKey,
-    addMemberByInviteCode
+    addMemberByInviteCode,
+    removeMember
 } from "./groups"
 import { GroupResponse } from "./types"
 
@@ -140,6 +141,18 @@ describe("Bandada API SDK", () => {
                     memberId,
                     inviteCode
                 )
+                expect(res).toBeUndefined()
+            })
+        })
+        describe("#removeMember", () => {
+            it("Should remove a member from a group using an API Key", async () => {
+                requestMocked.mockImplementationOnce(() => Promise.resolve())
+
+                const groupId = "10402173435763029700781503965100"
+                const memberId = "1"
+                const apiKey = "2"
+
+                const res = await removeMember(groupId, memberId, apiKey)
                 expect(res).toBeUndefined()
             })
         })
