@@ -35,3 +35,101 @@ export async function getGroup(groupId: string): Promise<GroupResponse> {
 
     return group
 }
+
+/**
+ * Returns true is the member is in the group and false otherwise.
+ * @param groupId Group id.
+ * @param memberId Member id.
+ * @returns true or false.
+ */
+export async function isGroupMember(
+    groupId: string,
+    memberId: string
+): Promise<boolean> {
+    url += `/${groupId}/members/${memberId}`
+
+    const isMember = await request(url, config)
+
+    return isMember
+}
+
+/**
+ * Returns the Merkle Proof for a member in a group.
+ * @param groupId Group id.
+ * @param memberId Member id.
+ * @returns the Merkle Proof.
+ */
+export async function generateMerkleProof(
+    groupId: string,
+    memberId: string
+): Promise<string> {
+    url += `/${groupId}/members/${memberId}/proof`
+
+    const merkleProof = await request(url, config)
+
+    return merkleProof
+}
+
+/**
+ * Adds a member to a group using an API Key.
+ * @param groupId Group id.
+ * @param memberId Member id.
+ * @param apiKey API Key.
+ * @returns undefined.
+ */
+export async function addMemberByApiKey(
+    groupId: string,
+    memberId: string,
+    apiKey: string
+): Promise<void> {
+    url += `/${groupId}/members/${memberId}`
+
+    const newConfig: any = {
+        method: "post",
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    await request(url, newConfig)
+}
+
+/**
+ * Adds a member to a group using an Invite code.
+ * @param groupId Group id.
+ * @param memberId Member id.
+ * @param inviteCode Invite Code.
+ * @returns undefined.
+ */
+export async function addMemberByInviteCode(
+    groupId: string,
+    memberId: string,
+    inviteCode: string
+): Promise<void> {
+    url += `/${groupId}/members/${memberId}`
+
+    await request(url, {
+        method: "post",
+        data: {
+            inviteCode
+        }
+    })
+}
+
+/**
+ * Removes a member from a group.
+ * @param groupId Group id.
+ * @param memberId Member id.
+ * @returns undefined.
+ */
+export async function removeMember(
+    groupId: string,
+    memberId: string
+): Promise<void> {
+    url += `/${groupId}/members/${memberId}`
+
+    await request(url, {
+        method: "delete",
+        ...config
+    })
+}
