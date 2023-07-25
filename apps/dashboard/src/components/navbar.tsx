@@ -1,17 +1,10 @@
 import { shortenAddress } from "@bandada/utils"
-import {
-    Button,
-    Container,
-    Heading,
-    HStack,
-    Image,
-    Text
-} from "@chakra-ui/react"
+import { Button, Container, Heading, HStack, Image } from "@chakra-ui/react"
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit"
-import { useCallback, useContext, useEffect } from "react"
+import { useCallback, useContext } from "react"
 import { useAccount } from "wagmi"
-import icon1Image from "../assets/icon1.svg"
 import cloudsImage from "../assets/clouds.svg"
+import icon1Image from "../assets/icon1.svg"
 import { AuthContext } from "../context/auth-context"
 
 export default function NavBar(): JSX.Element {
@@ -31,12 +24,6 @@ export default function NavBar(): JSX.Element {
         () => admin?.address === address,
         [address, admin]
     )
-
-    useEffect(() => {
-        if (admin && !isLoggedInAdmin()) {
-            openConnectModal?.()
-        }
-    }, [isLoggedInAdmin, openConnectModal, admin])
 
     return (
         <Container maxWidth="container.xl">
@@ -77,7 +64,11 @@ export default function NavBar(): JSX.Element {
                     <Button
                         variant="solid"
                         colorScheme="secondary"
-                        onClick={openAccountModal}
+                        onClick={
+                            !isLoggedInAdmin()
+                                ? openConnectModal
+                                : openAccountModal
+                        }
                     >
                         {!isLoggedInAdmin()
                             ? "Unconnected account"
