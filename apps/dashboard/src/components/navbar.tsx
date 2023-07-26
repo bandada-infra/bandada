@@ -21,7 +21,7 @@ export default function NavBar(): JSX.Element {
     // )
 
     const isLoggedInAdmin = useCallback(
-        () => admin?.address === address,
+        () => admin && admin.address === address,
         [address, admin]
     )
 

@@ -67,12 +67,8 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
                     if (admin) {
                         saveAdmin(admin)
 
-                        setAuthStatus("authenticated")
-
                         return true
                     }
-
-                    setAuthStatus("unauthenticated")
 
                     return false
                 },
@@ -81,8 +77,6 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
                     await logOut()
 
                     deleteAdmin()
-
-                    setAuthStatus("unauthenticated")
                 }
             }),
         [saveAdmin, deleteAdmin]
