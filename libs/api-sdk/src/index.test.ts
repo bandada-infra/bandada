@@ -62,7 +62,7 @@ describe("Bandada API SDK", () => {
                 expect(group.id).toBe(groupId)
             })
         })
-        describe("#isMember", () => {
+        describe("#isGroupMember", () => {
             it("Should return true because the member is part of the group", async () => {
                 requestMocked.mockImplementationOnce(() =>
                     Promise.resolve(true)
@@ -130,7 +130,7 @@ describe("Bandada API SDK", () => {
 
                 const groupId = "10402173435763029700781503965100"
                 const memberId = "1"
-                const apiKey = "2"
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
                 const res = await addMemberByApiKey(groupId, memberId, apiKey)
                 expect(res).toBeUndefined()
@@ -140,7 +140,7 @@ describe("Bandada API SDK", () => {
 
                 const groupId = "10402173435763029700781503965100"
                 const memberId = "1"
-                const inviteCode = "2"
+                const inviteCode = "MQYS4UR5"
 
                 const res = await addMemberByInviteCode(
                     groupId,
@@ -156,7 +156,7 @@ describe("Bandada API SDK", () => {
 
                 const groupId = "10402173435763029700781503965100"
                 const memberId = "1"
-                const apiKey = "2"
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
                 const res = await removeMemberByApiKey(
                     groupId,

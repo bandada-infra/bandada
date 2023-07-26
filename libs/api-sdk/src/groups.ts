@@ -117,7 +117,7 @@ export async function addMemberByInviteCode(
 }
 
 /**
- * Removes a member from a group.
+ * Removes a member from a group using an API Key.
  * @param groupId Group id.
  * @param memberId Member id.
  * @param apiKey API Key.
