@@ -65,11 +65,12 @@ export default function usePermissionedGroups(): ReturnParameters {
             inviteCode: string
         ): Promise<void> => {
             await request(
-                `${import.meta.env.VITE_API_URL}/groups/${groupId}/members`,
+                `${
+                    import.meta.env.VITE_API_URL
+                }/groups/${groupId}/members/${idCommitment}`,
                 {
                     method: "post",
                     data: {
-                        id: idCommitment,
                         inviteCode
                     }
                 }
