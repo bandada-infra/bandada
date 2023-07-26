@@ -79,7 +79,7 @@ export default function GroupsPage(): JSX.Element {
     )
 
     return (
-        <Container maxW="container.xl" px="8">
+        <Container maxW="container.xl" px="8" pb="20">
             <VStack spacing="9" flex="1">
                 <HStack justifyContent="space-between" width="100%">
                     <Heading fontSize="40px" as="h1">

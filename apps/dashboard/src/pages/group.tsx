@@ -168,7 +168,7 @@ export default function GroupPage(): JSX.Element {
     }, [_group, setApiKey])
 
     return _group ? (
-        <Container maxW="container.xl">
+        <Container maxW="container.xl" pb="20" px="8">
             <HStack mt="15px" ml="-5px">
                 <Link to="/groups">
                     <HStack spacing="0">

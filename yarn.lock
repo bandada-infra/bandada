@@ -9804,7 +9804,7 @@ __metadata:
     framer-motion: ^10.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
-    react-icons: ^4.8.0
+    react-icons: ^4.10.1
     react-router-dom: ^6.8.1
     siwe: ^1.1.6
     typescript: ^4.9.3
@@ -17515,12 +17515,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-icons@npm:^4.8.0":
-  version: 4.8.0
-  resolution: "react-icons@npm:4.8.0"
+"react-icons@npm:^4.10.1":
+  version: 4.10.1
+  resolution: "react-icons@npm:4.10.1"
   peerDependencies:
     react: "*"
-  checksum: 4dbba7ad989c295b410e19b2a702722dae44368cb04b6515f9471353552f31ac80bd350f121d5bff79f81504b84039ede44d09e9f035f48bb1032e6eace126c4
+  checksum: b6c8d4fe482b112e1041515d93ef7670a0af128855c926052a076b64d0b991cdd4391394b26467100f8da3859db1ebd8f9c6b7614fa5969fde83de45c71031a3
   languageName: node
   linkType: hard
 

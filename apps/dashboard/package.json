@@ -21,7 +21,7 @@
         "framer-motion": "^10.0.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-icons": "^4.8.0",
+        "react-icons": "^4.10.1",
         "react-router-dom": "^6.8.1",
         "siwe": "^1.1.6",
         "wagmi": "^0.12.12"

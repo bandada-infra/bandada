@@ -1,19 +1,22 @@
+import { CONTRACT_ADDRESSES } from "@bandada/utils"
 import {
     Box,
     Button,
     Container,
     Heading,
     HStack,
+    Icon,
     Image,
     Link,
     Text,
     VStack
 } from "@chakra-ui/react"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
+import { FiGithub } from "react-icons/fi"
+import { LiaEthereum } from "react-icons/lia"
 import { useLocation, useOutlet } from "react-router-dom"
 import icon1Image from "../assets/icon1.svg"
 import jumbotronImage from "../assets/jumbotron.svg"
-import Footbar from "../components/footbar"
 import NavBar from "../components/navbar"
 
 export default function HomePage(): JSX.Element {
@@ -40,19 +43,60 @@ export default function HomePage(): JSX.Element {
                         maxW="container.xl"
                         pt="20"
                         pb="20"
-                        px="6"
+                        px="8"
                         centerContent
                     >
-                        <VStack spacing="5" pb="100px">
-                            <HStack mb="50px" spacing="1">
-                                <Image
-                                    src={icon1Image}
-                                    htmlWidth="32px"
-                                    alt="Bandada icon"
-                                />
-                                <Heading fontSize="22px" as="h1">
-                                    bandada
-                                </Heading>
+                        <VStack spacing="5" pb="30px">
+                            <HStack mb="60px" justify="space-between" w="100%">
+                                <HStack spacing="1">
+                                    <Image
+                                        src={icon1Image}
+                                        htmlWidth="32px"
+                                        alt="Bandada icon"
+                                    />
+                                    <Heading fontSize="22px" as="h1">
+                                        bandada
+                                    </Heading>
+                                </HStack>
+
+                                <HStack spacing="5">
+                                    <Link
+                                        href="https://github.com/privacy-scaling-explorations/bandada"
+                                        isExternal
+                                    >
+                                        <HStack spacing="1">
+                                            <Icon
+                                                boxSize={5}
+                                                color="balticSea.500"
+                                                as={FiGithub}
+                                            />
+                                            <Text
+                                                color="balticSea.300"
+                                                textDecoration="underline"
+                                            >
+                                                Github
+                                            </Text>
+                                        </HStack>
+                                    </Link>
+                                    <Link
+                                        href={`https://goerli.etherscan.io/address/${CONTRACT_ADDRESSES.goerli.Bandada}`}
+                                        isExternal
+                                    >
+                                        <HStack spacing="1">
+                                            <Icon
+                                                boxSize={6}
+                                                color="balticSea.500"
+                                                as={LiaEthereum}
+                                            />
+                                            <Text
+                                                color="balticSea.300"
+                                                textDecoration="underline"
+                                            >
+                                                Ethereum
+                                            </Text>
+                                        </HStack>
+                                    </Link>
+                                </HStack>
                             </HStack>
 
                             <Text
@@ -91,12 +135,14 @@ export default function HomePage(): JSX.Element {
                             </Link>
                         </VStack>
 
-                        <Image src={jumbotronImage} htmlWidth="728px" />
+                        <Image
+                            src={jumbotronImage}
+                            htmlWidth="728px"
+                            borderRadius="8px"
+                        />
                     </Container>
                 )}
             </Box>
-
-            <Footbar />
         </VStack>
     )
 }
