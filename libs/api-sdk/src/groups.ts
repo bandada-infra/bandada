@@ -37,7 +37,7 @@ export async function getGroup(groupId: string): Promise<GroupResponse> {
 }
 
 /**
- * Returns true is the member is in the group and false otherwise.
+ * Returns true if the member is in the group and false otherwise.
  * @param groupId Group id.
  * @param memberId Member id.
  * @returns true or false.
@@ -95,7 +95,7 @@ export async function addMemberByApiKey(
 }
 
 /**
- * Adds a member to a group using an Invite code.
+ * Adds a member to a group using an Invite Code.
  * @param groupId Group id.
  * @param memberId Member id.
  * @param inviteCode Invite Code.
@@ -123,7 +123,7 @@ export async function addMemberByInviteCode(
  * @param apiKey API Key.
  * @returns undefined.
  */
-export async function removeMember(
+export async function removeMemberByApiKey(
     groupId: string,
     memberId: string,
     apiKey: string

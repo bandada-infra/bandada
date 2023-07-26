@@ -6,7 +6,7 @@ import {
     generateMerkleProof,
     addMemberByApiKey,
     addMemberByInviteCode,
-    removeMember
+    removeMemberByApiKey
 } from "./groups"
 import { GroupResponse } from "./types"
 
@@ -68,15 +68,21 @@ describe("Bandada API SDK", () => {
                     Promise.resolve(true)
                 )
 
-                const isMember: boolean = await isGroupMember("", "")
+                const groupId = "10402173435763029700781503965100"
+                const memberId = "1"
+
+                const isMember: boolean = await isGroupMember(groupId, memberId)
                 expect(isMember).toBe(true)
             })
-            it("Should return false because the member is part of the group", async () => {
+            it("Should return false because the member is not part of the group", async () => {
                 requestMocked.mockImplementationOnce(() =>
                     Promise.resolve(false)
                 )
 
-                const isMember: boolean = await isGroupMember("", "")
+                const groupId = "10402173435763029700781503965100"
+                const memberId = "2"
+
+                const isMember: boolean = await isGroupMember(groupId, memberId)
                 expect(isMember).toBe(false)
             })
         })
@@ -119,7 +125,7 @@ describe("Bandada API SDK", () => {
             })
         })
         describe("#addMember", () => {
-            it("Should add a member to the group using an api-key", async () => {
+            it("Should add a member to the group using an API Key", async () => {
                 requestMocked.mockImplementationOnce(() => Promise.resolve())
 
                 const groupId = "10402173435763029700781503965100"
@@ -129,7 +135,7 @@ describe("Bandada API SDK", () => {
                 const res = await addMemberByApiKey(groupId, memberId, apiKey)
                 expect(res).toBeUndefined()
             })
-            it("Should add a member to the group using an invite code", async () => {
+            it("Should add a member to the group using an Invite Code", async () => {
                 requestMocked.mockImplementationOnce(() => Promise.resolve())
 
                 const groupId = "10402173435763029700781503965100"
@@ -144,7 +150,7 @@ describe("Bandada API SDK", () => {
                 expect(res).toBeUndefined()
             })
         })
-        describe("#removeMember", () => {
+        describe("#removeMemberByApiKey", () => {
             it("Should remove a member from a group using an API Key", async () => {
                 requestMocked.mockImplementationOnce(() => Promise.resolve())
 
@@ -152,7 +158,11 @@ describe("Bandada API SDK", () => {
                 const memberId = "1"
                 const apiKey = "2"
 
-                const res = await removeMember(groupId, memberId, apiKey)
+                const res = await removeMemberByApiKey(
+                    groupId,
+                    memberId,
+                    apiKey
+                )
                 expect(res).toBeUndefined()
             })
         })
