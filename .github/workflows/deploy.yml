@@ -36,7 +36,7 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v2
               with:
                   role-to-assume: arn:aws:iam::490752553772:role/bandada-ecs-deploy-slc
-                  role-duration-seconds: 1800
+                  role-duration-seconds: 2700
                   aws-region: eu-central-1
 
             - name: Build and Push images to ECR
