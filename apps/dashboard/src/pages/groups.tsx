@@ -147,18 +147,23 @@ export default function GroupsPage(): JSX.Element {
                         w="100%"
                         mt="60px"
                     >
-                        {_groups.filter(filterGroup).map((group) => (
-                            <GridItem
-                                borderRadius="8px"
-                                borderColor="balticSea.200"
-                                borderWidth="1px"
-                                borderStyle="solid"
-                                bgColor="balticSea.100"
-                                key={group.id + group.name}
-                            >
-                                <GroupCard {...group} />
-                            </GridItem>
-                        ))}
+                        {_groups
+                            .filter(filterGroup)
+                            .sort((a, b) =>
+                                a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+                            )
+                            .map((group) => (
+                                <GridItem
+                                    borderRadius="8px"
+                                    borderColor="balticSea.200"
+                                    borderWidth="1px"
+                                    borderStyle="solid"
+                                    bgColor="balticSea.100"
+                                    key={group.id + group.name}
+                                >
+                                    <GroupCard {...group} />
+                                </GridItem>
+                            ))}
                     </Grid>
                 )}
             </VStack>
