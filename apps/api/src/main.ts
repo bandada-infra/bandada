@@ -55,7 +55,7 @@ async function bootstrap() {
         .swagger-ui .topbar { background-color: transparent; } small.version-stamp { display: none !important; }`
     }
 
-    SwaggerModule.setup("api", app, document, configUI)
+    SwaggerModule.setup("/", app, document, configUI)
 
     await app.listen(port)
 
