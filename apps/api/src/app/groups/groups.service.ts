@@ -360,7 +360,7 @@ export class GroupsService {
 
         this._updateContractGroup(cachedGroup)
 
-        return group
+        return this.getGroup(groupId)
     }
 
     /**
@@ -388,9 +388,9 @@ export class GroupsService {
             )
         }
 
-        group.members = group.members.filter((m) => m.id !== memberId)
+        const member = group.members.find((m) => m.id === memberId)
 
-        await this.groupRepository.save(group)
+        await this.memberRepository.remove(member)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
@@ -402,7 +402,7 @@ export class GroupsService {
 
         this._updateContractGroup(cachedGroup)
 
-        return group
+        return this.getGroup(groupId)
     }
 
     /**
