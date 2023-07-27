@@ -28,6 +28,8 @@ export class GroupsService {
     constructor(
         @InjectRepository(Group)
         private readonly groupRepository: Repository<Group>,
+        @InjectRepository(Member)
+        private readonly memberRepository: Repository<Member>,
         @Inject(forwardRef(() => InvitesService))
         private readonly invitesService: InvitesService
     ) {
@@ -344,9 +346,9 @@ export class GroupsService {
             )
         }
 
-        group.members = group.members.filter((m) => m.id !== memberId)
+        const member = group.members.find((m) => m.id === memberId)
 
-        await this.groupRepository.save(group)
+        await this.memberRepository.remove(member)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 

@@ -11,7 +11,7 @@ import { GroupsService } from "./groups.service"
     imports: [
         ScheduleModule.forRoot(),
         forwardRef(() => InvitesModule),
-        TypeOrmModule.forFeature([Group, Member])
+        TypeOrmModule.forFeature([Member, Group])
     ],
     controllers: [GroupsController],
     providers: [GroupsService],
