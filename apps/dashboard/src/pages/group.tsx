@@ -36,6 +36,7 @@ import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
 import image1 from "../assets/image1.svg"
 import AddMemberModal from "../components/add-member-modal"
 import { Group } from "../types"
+import shortenMemberId from "../utils/shortenMemberId"
 import shortenNumber from "../utils/shortenNumber"
 
 export default function GroupPage(): JSX.Element {
@@ -439,7 +440,7 @@ export default function GroupPage(): JSX.Element {
                                         />
 
                                         <Text color="balticSea.500" pl="10px">
-                                            {memberId}
+                                            {shortenMemberId(memberId, 8)}
                                         </Text>
                                     </HStack>
 
