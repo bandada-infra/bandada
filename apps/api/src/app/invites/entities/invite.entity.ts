@@ -22,7 +22,9 @@ export class Invite {
     @Column({ default: false, name: "is_redeemed" })
     isRedeemed?: boolean
 
-    @ManyToOne(() => Group)
+    @ManyToOne(() => Group, {
+        onDelete: "CASCADE"
+    })
     @JoinColumn({ name: "group_id" })
     group: Group
 
