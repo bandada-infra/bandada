@@ -5,8 +5,8 @@ import components from "./components"
 
 const config = {
     fonts: {
-        heading: "IBM Plex Sans, sans-serif",
-        body: "IBM Plex Sans, sans-serif"
+        heading: "Unbounded Variable, sans-serif",
+        body: "DM Sans, sans-serif"
     },
     colors,
     styles,

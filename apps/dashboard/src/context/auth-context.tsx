@@ -21,6 +21,8 @@ import { getNonce, logOut, signIn } from "../api/bandadaAPI"
 import useSessionData from "../hooks/use-session-data"
 import { Admin } from "../types"
 
+const appName = "Bandada"
+
 export const AuthContext = React.createContext<{ admin?: Admin | null }>({})
 
 export function AuthContextProvider({ children }: { children: ReactNode }) {
@@ -63,16 +65,10 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
                     })
 
                     if (admin) {
-                        setAuthStatus("authenticated")
-
                         saveAdmin(admin)
-
-                        window.location.reload()
 
                         return true
                     }
-
-                    setAuthStatus("unauthenticated")
 
                     return false
                 },
@@ -81,10 +77,6 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
                     await logOut()
 
                     deleteAdmin()
-
-                    window.location.reload()
-
-                    setAuthStatus("unauthenticated")
                 }
             }),
         [saveAdmin, deleteAdmin]
@@ -101,7 +93,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
             wallets: [
                 injectedWallet({ chains }),
                 metaMaskWallet({ chains }),
-                coinbaseWallet({ appName: "Bandada", chains }),
+                coinbaseWallet({ appName, chains }),
                 walletConnectWallet({ chains })
             ]
         }
@@ -114,7 +106,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         webSocketProvider
     })
 
-    return admin !== undefined ? (
+    return (
         <AuthContext.Provider value={contextValue}>
             <WagmiConfig client={wagmiClient}>
                 <RainbowKitAuthenticationProvider
@@ -126,7 +118,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
                         modalSize="compact"
                         theme={lightTheme()}
                         appInfo={{
-                            appName: "Bandada"
+                            appName
                         }}
                         showRecentTransactions={false}
                     >
@@ -135,5 +127,5 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
                 </RainbowKitAuthenticationProvider>
             </WagmiConfig>
         </AuthContext.Provider>
-    ) : null
+    )
 }

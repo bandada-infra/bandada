@@ -3,19 +3,19 @@ import { GroupSizes } from "../types"
 const groupSizes: GroupSizes = {
     small: {
         description: "For communities, small teams",
-        capacity: "Capacity 30 thousand",
+        capacity: "Capacity 65 thousand",
         useCases: ["voting", "feedback"],
         treeDepth: 16
     },
     medium: {
         description: "For cities, large teams",
-        capacity: "Capacity 500 thousand",
+        capacity: "Capacity 1 million",
         useCases: ["voting", "feedback"],
         treeDepth: 20
     },
     large: {
         description: "For nations",
-        capacity: "Capacity 30 Million",
+        capacity: "Capacity 33 Million",
         useCases: ["voting", "feedback"],
         treeDepth: 25
     },

@@ -50,7 +50,7 @@ export class GroupsService {
     /**
      * Creates a new group.
      * @param dto External parameters used to create a new group.
-     * @param admin Admin id.
+     * @param adminId Admin id.
      * @returns Created group.
      */
     async createGroup(
@@ -61,11 +61,11 @@ export class GroupsService {
             treeDepth,
             fingerprintDuration
         }: CreateGroupDto,
-        admin: string
+        adminId: string
     ): Promise<Group> {
         const _groupId =
             groupId ||
-            BigInt(id(name + admin))
+            BigInt(id(name + adminId))
                 .toString()
                 .slice(0, 32)
 
@@ -75,7 +75,7 @@ export class GroupsService {
             description,
             treeDepth,
             fingerprintDuration,
-            adminId: admin,
+            adminId,
             members: []
         })
 
@@ -92,6 +92,27 @@ export class GroupsService {
         )
 
         return group
+    }
+
+    /**
+     * Removes a group.
+     * @param groupId Group id.
+     * @param adminId Admin id.
+     */
+    async removeGroup(groupId: string, adminId: string): Promise<void> {
+        const group = await this.getGroup(groupId)
+
+        if (group.adminId !== adminId) {
+            throw new UnauthorizedException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        await this.groupRepository.remove(group)
+
+        this.cachedGroups.delete(groupId)
+
+        Logger.log(`GroupsService: group '${group.name}' has been removed`)
     }
 
     /**
@@ -153,6 +174,37 @@ export class GroupsService {
         Logger.log(`GroupsService: group '${group.name}' has been updated`)
 
         return group
+    }
+
+    /**
+     * Updates the group api key.
+     * @param groupId Group id.
+     * @param adminId Group admin id.
+     */
+    async updateApiKey(groupId: string, adminId: string): Promise<string> {
+        const group = await this.getGroup(groupId)
+
+        if (group.adminId !== adminId) {
+            throw new UnauthorizedException(
+                `You are not the admin of the group '${groupId}'`
+            )
+        }
+
+        if (!group.apiEnabled) {
+            throw new UnauthorizedException(
+                `Group '${groupId}' APIs are not enabled`
+            )
+        }
+
+        group.apiKey = v4()
+
+        await this.groupRepository.save(group)
+
+        Logger.log(
+            `GroupsService: group '${group.name}' APIs have been updated`
+        )
+
+        return group.apiKey
     }
 
     /**

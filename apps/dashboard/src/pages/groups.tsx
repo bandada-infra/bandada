@@ -8,8 +8,7 @@ import {
     HStack,
     Input,
     InputGroup,
-    InputLeftElement,
-    Select,
+    InputRightElement,
     Spinner,
     Text,
     useDisclosure,
@@ -17,8 +16,8 @@ import {
 } from "@chakra-ui/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
+import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
 import CreateGroupModal from "../components/create-group-modal"
 import GroupCard from "../components/group-card"
 import { AuthContext } from "../context/auth-context"
@@ -26,10 +25,10 @@ import { Group } from "../types"
 
 export default function GroupsPage(): JSX.Element {
     const { admin } = useContext(AuthContext)
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const [isLoading, setIsLoading] = useState(false)
-    const [groups, setGroups] = useState<Group[]>([])
-    const [searchField, setSearchField] = useState<string>("")
+    const createGroupModal = useDisclosure()
+    const [_isLoading, setIsLoading] = useState(false)
+    const [_groups, setGroups] = useState<Group[]>([])
+    const [_searchField, setSearchField] = useState<string>("")
 
     useEffect(() => {
         ;(async () => {
@@ -58,83 +57,121 @@ export default function GroupsPage(): JSX.Element {
         })()
     }, [admin])
 
-    const filterPredicate = useCallback(
+    const addGroup = useCallback(
+        (group?: Group) => {
+            if (!group) {
+                createGroupModal.onClose()
+
+                return
+            }
+
+            setGroups([group, ..._groups])
+
+            createGroupModal.onClose()
+        },
+        [_groups, createGroupModal]
+    )
+
+    const filterGroup = useCallback(
         (group: Group) =>
-            group.name.toLowerCase().includes(searchField.toLowerCase()),
-        [searchField]
+            group.name.toLowerCase().includes(_searchField.toLowerCase()),
+        [_searchField]
     )
 
     return (
-        <Container maxW="container.xl">
-            <VStack spacing={10}>
+        <Container maxW="container.xl" px="8" pb="20">
+            <VStack spacing="9" flex="1">
                 <HStack justifyContent="space-between" width="100%">
-                    <Heading fontSize="40px">Groups</Heading>
+                    <Heading fontSize="40px" as="h1">
+                        My groups
+                    </Heading>
+                </HStack>
+
+                <HStack justifyContent="space-between" width="100%">
+                    <HStack>
+                        <InputGroup w="300px">
+                            <InputRightElement h="48px" pointerEvents="none">
+                                <FiSearch />
+                            </InputRightElement>
+                            <Input
+                                bg="balticSea.50"
+                                h="48px"
+                                borderColor="balticSea.200"
+                                fontSize="16px"
+                                placeholder="Search by name, description"
+                                onChange={(e) => {
+                                    if (!e.target.value) {
+                                        setSearchField("")
+                                    }
+                                }}
+                            />
+                        </InputGroup>
+                        <Button
+                            variant="solid"
+                            colorScheme="tertiary"
+                            onClick={(e: any) => {
+                                setSearchField(
+                                    e.target.previousSibling.lastChild.value
+                                )
+                            }}
+                        >
+                            Search
+                        </Button>
+                    </HStack>
+
                     <Button
-                        fontSize="lg"
                         variant="solid"
                         colorScheme="primary"
-                        onClick={onOpen}
+                        onClick={createGroupModal.onOpen}
                     >
-                        Add new group
+                        Add group
                     </Button>
                 </HStack>
 
-                <HStack justifyContent="space-between" width="100%">
-                    <InputGroup w="200px">
-                        <InputLeftElement pointerEvents="none">
-                            <FiSearch />
-                        </InputLeftElement>
-                        <Input
-                            placeholder="Search groups"
-                            onChange={(e) => {
-                                setSearchField(e.target.value)
-                            }}
-                        />
-                    </InputGroup>
-
-                    <Select textAlign="center" w="max-content">
-                        <option value="name">Name</option>
-                        <option value="lastModified">Last modified</option>
-                        <option value="lastOpened">Last opened</option>
-                        <option value="groupSize">Group size</option>
-                    </Select>
-                </HStack>
-
-                {isLoading && (
+                {_isLoading && (
                     <Box pt="100px">
                         <Spinner />
                     </Box>
                 )}
 
-                {!isLoading && groups.length === 0 && (
+                {!_isLoading && _groups.length === 0 && (
                     <Text fontSize="2xl" fontWeight="bold" pt="100px">
                         You have not created any groups
                     </Text>
                 )}
 
-                {!isLoading && groups.length > 0 && (
+                {!_isLoading && _groups.length > 0 && (
                     <Grid
-                        templateColumns="repeat(4, 1fr)"
+                        templateColumns="repeat(3, 1fr)"
                         gap={10}
                         w="100%"
                         mt="60px"
                     >
-                        {groups.filter(filterPredicate).map((group) => (
-                            <GridItem
-                                w="100%"
-                                borderRadius="4px"
-                                bgColor="#FCFCFC"
-                                boxShadow="0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)"
-                                key={group.name}
-                            >
-                                <GroupCard {...group} />
-                            </GridItem>
-                        ))}
+                        {_groups
+                            .filter(filterGroup)
+                            .sort((a, b) =>
+                                a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+                            )
+                            .map((group) => (
+                                <GridItem
+                                    borderRadius="8px"
+                                    borderColor="balticSea.200"
+                                    borderWidth="1px"
+                                    borderStyle="solid"
+                                    bgColor="balticSea.100"
+                                    key={group.id + group.name}
+                                >
+                                    <GroupCard {...group} />
+                                </GridItem>
+                            ))}
                     </Grid>
                 )}
             </VStack>
 
-            <CreateGroupModal isOpen={isOpen} onClose={onClose} />
+            <CreateGroupModal
+                isOpen={createGroupModal.isOpen}
+                onClose={addGroup}
+            />
         </Container>
     )
 }

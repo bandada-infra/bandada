@@ -1,151 +1,232 @@
+import { getSemaphoreContract } from "@bandada/utils"
 import {
+    AbsoluteCenter,
     Box,
     Button,
-    Flex,
-    FormControl,
-    FormLabel,
+    Divider,
+    Heading,
+    Icon,
+    IconButton,
     Input,
+    InputGroup,
+    InputRightElement,
     Modal,
     ModalBody,
-    ModalCloseButton,
     ModalContent,
-    ModalHeader,
     ModalOverlay,
-    Spinner,
     Text,
-    UseDisclosureProps
+    Tooltip,
+    useClipboard
 } from "@chakra-ui/react"
-import { getSemaphoreContract } from "@bandada/utils"
 import { useCallback, useEffect, useState } from "react"
+import { FiCopy } from "react-icons/fi"
 import { useSigner } from "wagmi"
+import * as bandadaAPI from "../api/bandadaAPI"
+import { Group } from "../types"
+
+export type AddMemberModalProps = {
+    isOpen: boolean
+    onClose: (value?: string) => void
+    group: Group
+}
 
 export default function AddMemberModal({
     isOpen,
     onClose,
-    groupName
-}: UseDisclosureProps & any): JSX.Element {
-    const [_identityCommitment, setIdentityCommitment] = useState<string>("")
-    const [_status, setStatus] = useState<
-        "default" | "loading" | "success" | "failure"
-    >("default")
+    group
+}: AddMemberModalProps): JSX.Element {
+    const [_memberId, setMemberId] = useState<string>("")
+    const [_isLoading, setIsLoading] = useState(false)
+    const {
+        hasCopied,
+        value: _inviteLink,
+        setValue: setInviteLink,
+        onCopy
+    } = useClipboard("")
     const { data: signer } = useSigner()
 
     useEffect(() => {
-        setIdentityCommitment("")
-        setStatus("default")
+        setMemberId("")
     }, [isOpen])
 
-    const addMember = useCallback(
-        async (identityCommitment: string) => {
-            if (!identityCommitment) {
-                alert("Please enter Identity commitment of the member")
+    const addMember = useCallback(async () => {
+        if (!_memberId) {
+            alert("Please enter a member id!")
 
+            return
+        }
+
+        if (
+            !window.confirm(
+                `Hare you sure you want to add member '${_memberId}'?`
+            )
+        ) {
+            return
+        }
+
+        setIsLoading(true)
+
+        if (group.type === "off-chain") {
+            if ((await bandadaAPI.addMember(group.id, _memberId)) === null) {
+                alert("Some error occurred!")
+
+                setIsLoading(false)
                 return
             }
-            setStatus("loading")
+
+            setIsLoading(false)
+            onClose(_memberId)
+        } else {
+            if (!signer) {
+                alert("No valid signer for your transaction!")
+
+                setIsLoading(false)
+                return
+            }
+
             try {
                 const semaphore = getSemaphoreContract("goerli", signer as any)
 
-                const transaction =
-                    signer &&
-                    (await semaphore.addMember(groupName, identityCommitment))
+                await semaphore.addMember(group.name, _memberId)
 
-                if (transaction) {
-                    setStatus("success")
-                }
-
-                return
+                setIsLoading(false)
+                onClose(_memberId)
             } catch (error) {
-                setStatus("failure")
-                console.error(error)
+                alert("Some error occurred!")
+
+                setIsLoading(false)
             }
-        },
-        [groupName, signer]
-    )
+        }
+    }, [onClose, _memberId, group, signer])
+
+    const generateInviteLink = useCallback(async () => {
+        const inviteLink = await bandadaAPI.generateMagicLink(group.id)
+
+        if (inviteLink === null) {
+            alert("Some error occurred!")
+
+            return
+        }
+
+        setInviteLink(inviteLink)
+    }, [group, setInviteLink])
 
     return (
-        <Modal isOpen={!!isOpen} onClose={onClose}>
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            closeOnOverlayClick={false}
+            isCentered
+        >
             <ModalOverlay />
-            <ModalContent maxW="600px">
-                <ModalHeader borderBottom="1px" borderColor="gray.200">
-                    Add member to onchain group
-                </ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    {_status === "default" && (
-                        <FormControl marginY="10px">
-                            <FormLabel color="gray.500" fontWeight="700">
-                                Enter Identity Commitment
-                            </FormLabel>
-                            <Flex alignItems="center">
-                                <Input
-                                    value={_identityCommitment}
-                                    fontSize="16px"
-                                    color="gray.500"
-                                    onChange={(e) =>
-                                        setIdentityCommitment(e.target.value)
-                                    }
-                                    placeholder="Identity Commitment"
-                                />
-                                <Button
-                                    variant="solid"
-                                    colorScheme="primary"
-                                    ml="10px"
-                                    onClick={() =>
-                                        addMember(_identityCommitment)
-                                    }
-                                >
-                                    Add Member
-                                </Button>
-                            </Flex>
-                        </FormControl>
-                    )}
+            <ModalContent bgColor="balticSea.50" maxW="450px">
+                <ModalBody p="25px 30px">
+                    <Heading fontSize="25px" fontWeight="500" mb="25px" as="h1">
+                        New member
+                    </Heading>
 
-                    {_status === "loading" && (
-                        <Flex
-                            flexDir="row"
-                            justifyContent="center"
-                            marginY="10px"
+                    <Box mb="5px">
+                        <Text my="10px" color="balticSea.800">
+                            Add member ID
+                        </Text>
+
+                        <Input
+                            placeholder="Paste member ID here"
+                            size="lg"
+                            value={_memberId}
+                            onChange={(event) =>
+                                setMemberId(event.target.value)
+                            }
+                        />
+
+                        <Button
+                            my="10px"
+                            width="100%"
+                            variant="solid"
+                            colorScheme="tertiary"
+                            onClick={addMember}
+                            isLoading={_isLoading}
                         >
-                            <Spinner size="md" />
-                            <Text ml="5">Pending transaction</Text>
-                        </Flex>
-                    )}
+                            Add member
+                        </Button>
+                    </Box>
 
-                    {_status === "success" && (
-                        <Box textAlign="center" margin="0 auto">
-                            <Text mb="20px">
-                                Member added successfully. It might take a
-                                couple of minutes for the new member to appear
-                                on the list.
-                            </Text>
-                            <Button
-                                mb="20px"
-                                variant="solid"
-                                colorScheme="primary"
-                                onClick={onClose}
-                            >
-                                Close
-                            </Button>
-                        </Box>
-                    )}
+                    {group.type === "off-chain" &&
+                        !group.reputationCriteria && (
+                            <>
+                                <Box position="relative" py="8">
+                                    <Divider borderColor="balticSea.300" />
+                                    <AbsoluteCenter
+                                        fontSize="13px"
+                                        px="4"
+                                        bgColor="balticSea.50"
+                                    >
+                                        OR
+                                    </AbsoluteCenter>
+                                </Box>
 
-                    {_status === "failure" && (
-                        <Box textAlign="center" margin="0 auto">
-                            <Text mb="20px">
-                                Error ocurred while executing the transaction.
-                                Please try again later.
-                            </Text>
-                            <Button
-                                mb="20px"
-                                variant="solid"
-                                colorScheme="primary"
-                                onClick={onClose}
-                            >
-                                Close
-                            </Button>
-                        </Box>
-                    )}
+                                <Box mb="30px">
+                                    <Text mb="10px" color="balticSea.800">
+                                        Share invite link
+                                    </Text>
+
+                                    <InputGroup size="lg">
+                                        <Input
+                                            pr="50px"
+                                            placeholder="Invite link"
+                                            value={_inviteLink}
+                                            isDisabled
+                                        />
+                                        <InputRightElement mr="5px">
+                                            <Tooltip
+                                                label={
+                                                    hasCopied
+                                                        ? "Copied!"
+                                                        : "Copy"
+                                                }
+                                                closeOnClick={false}
+                                                hasArrow
+                                            >
+                                                <IconButton
+                                                    variant="link"
+                                                    aria-label="Copy invite link"
+                                                    onClick={onCopy}
+                                                    onMouseDown={(e) =>
+                                                        e.preventDefault()
+                                                    }
+                                                    icon={
+                                                        <Icon
+                                                            color="sunsetOrange.600"
+                                                            boxSize="5"
+                                                            as={FiCopy}
+                                                        />
+                                                    }
+                                                />
+                                            </Tooltip>
+                                        </InputRightElement>
+                                    </InputGroup>
+
+                                    <Button
+                                        mt="10px"
+                                        variant="link"
+                                        color="balticSea.600"
+                                        textDecoration="underline"
+                                        onClick={generateInviteLink}
+                                    >
+                                        Generate new link
+                                    </Button>
+                                </Box>
+                            </>
+                        )}
+
+                    <Button
+                        width="100%"
+                        variant="solid"
+                        colorScheme="tertiary"
+                        onClick={() => onClose()}
+                    >
+                        Close
+                    </Button>
                 </ModalBody>
             </ModalContent>
         </Modal>

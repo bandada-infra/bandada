@@ -3518,10 +3518,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/ibm-plex-sans@npm:^4.5.13":
-  version: 4.5.13
-  resolution: "@fontsource/ibm-plex-sans@npm:4.5.13"
-  checksum: a2982ea58c79fa8d97993a39f0cd57c19403af9debd7f0df55ada381f20585b92a949f589c04c0a6905b50c383536e0b6afdae361eb15d8a9c50a49420899efb
+"@fontsource-variable/unbounded@npm:^5.0.5":
+  version: 5.0.5
+  resolution: "@fontsource-variable/unbounded@npm:5.0.5"
+  checksum: f637e1f85e5ce777483160072cae5998cfa01450febadca904acd8d8a244e21697c0e682835028ceb92c1b301b06ea3aa0ec1d8f28025fed261f6e35b7a3e6bf
   languageName: node
   linkType: hard
 
@@ -9807,7 +9807,7 @@ __metadata:
     "@chakra-ui/theme-tools": ^2.0.16
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
-    "@fontsource/ibm-plex-sans": ^4.5.13
+    "@fontsource-variable/unbounded": ^5.0.5
     "@rainbow-me/rainbowkit": ^0.12.8
     "@semaphore-protocol/data": 3.10.0
     "@types/react": ^18.0.27
@@ -9817,7 +9817,7 @@ __metadata:
     framer-motion: ^10.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
-    react-icons: ^4.8.0
+    react-icons: ^4.10.1
     react-router-dom: ^6.8.1
     siwe: ^1.1.6
     typescript: ^4.9.3
@@ -17528,12 +17528,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-icons@npm:^4.8.0":
-  version: 4.8.0
-  resolution: "react-icons@npm:4.8.0"
+"react-icons@npm:^4.10.1":
+  version: 4.10.1
+  resolution: "react-icons@npm:4.10.1"
   peerDependencies:
     react: "*"
-  checksum: 4dbba7ad989c295b410e19b2a702722dae44368cb04b6515f9471353552f31ac80bd350f121d5bff79f81504b84039ede44d09e9f035f48bb1032e6eace126c4
+  checksum: b6c8d4fe482b112e1041515d93ef7670a0af128855c926052a076b64d0b991cdd4391394b26467100f8da3859db1ebd8f9c6b7614fa5969fde83de45c71031a3
   languageName: node
   linkType: hard
 

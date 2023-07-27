@@ -31,7 +31,9 @@ export class Group {
     @Column({ name: "fingerprint_duration" })
     fingerprintDuration: number
 
-    @OneToMany(() => Member, (member) => member.group, { cascade: ["insert"] })
+    @OneToMany(() => Member, (member) => member.group, {
+        cascade: ["insert"]
+    })
     members: Member[]
 
     @OneToMany(() => ReputationAccount, (account) => account.group, {

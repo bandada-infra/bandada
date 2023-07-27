@@ -28,14 +28,17 @@ import { useCallback, useEffect, useState } from "react"
 import { useSigner } from "wagmi"
 import { createGroup as createOffchainGroup } from "../api/bandadaAPI"
 import { groupSizes } from "../data"
+import { Group } from "../types"
+
+export type CreateGroupModalProps = {
+    isOpen: boolean
+    onClose: (value?: Group) => void
+}
 
 export default function CreateGroupModal({
     isOpen,
     onClose
-}: {
-    isOpen: boolean
-    onClose: () => void
-}): JSX.Element {
+}: CreateGroupModalProps): JSX.Element {
     const [_step, setStep] = useState<number>(0)
     const [_groupName, setGroupName] = useState<string>("")
     const [_groupType, setGroupType] = useState<string>("")
@@ -93,17 +96,21 @@ export default function CreateGroupModal({
                     onClose()
                 }
             } else {
-                await createOffchainGroup(
+                const group = await createOffchainGroup(
                     name,
                     description,
                     treeDepth,
                     fingerprintDuration
                 )
 
-                onClose()
-            }
+                if (group === null) {
+                    alert("Some error occurred!")
 
-            window.location.reload()
+                    return
+                }
+
+                onClose(group)
+            }
         },
         [signer, onClose]
     )
