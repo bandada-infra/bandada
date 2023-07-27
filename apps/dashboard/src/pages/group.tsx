@@ -440,7 +440,9 @@ export default function GroupPage(): JSX.Element {
                                         />
 
                                         <Text color="balticSea.500" pl="10px">
-                                            {shortenMemberId(memberId, 8)}
+                                            {memberId.length > 16
+                                                ? shortenMemberId(memberId, 8)
+                                                : memberId}
                                         </Text>
                                     </HStack>
 
