@@ -1,5 +1,6 @@
 import { Logger, ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger"
 import { ironSession } from "iron-session/express"
 import { AppModule } from "./app/app.module"
 
@@ -31,6 +32,30 @@ async function bootstrap() {
         origin: true,
         credentials: true
     })
+
+    const latestVersion = await (
+        await fetch(
+            "https://api.github.com/repos/privacy-scaling-explorations/bandada/releases/latest"
+        )
+    ).json()
+
+    const config = new DocumentBuilder()
+        .setTitle("Bandada API Docs")
+        .setDescription("A system for managing privacy-preserving groups.")
+        .setVersion(latestVersion["name"])
+        .build()
+
+    const document = SwaggerModule.createDocument(app, config)
+
+    const configUI = {
+        customfavIcon:
+            "https://raw.githubusercontent.com/privacy-scaling-explorations/bandada/main/apps/dashboard/src/assets/favicon.ico",
+        customSiteTitle: "Bandada API Docs",
+        customCss: `.topbar-wrapper img {content:url('https://raw.githubusercontent.com/privacy-scaling-explorations/bandada/d5268274cbb93f73a1960e131bff0d2bf1eacea9/apps/dashboard/src/assets/icon1.svg'); width:60px; height:auto;}
+        .swagger-ui .topbar { background-color: transparent; } small.version-stamp { display: none !important; }`
+    }
+
+    SwaggerModule.setup("api", app, document, configUI)
 
     await app.listen(port)
 

@@ -13,6 +13,15 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { Request } from "express"
+import {
+    ApiQuery,
+    ApiTags,
+    ApiExcludeEndpoint,
+    ApiBody,
+    ApiHeader,
+    ApiOperation,
+    ApiCreatedResponse
+} from "@nestjs/swagger"
 import { AuthGuard } from "../auth/auth.guard"
 import { stringifyJSON } from "../utils"
 import { AddMemberDto } from "./dto/add-member.dto"
@@ -20,12 +29,17 @@ import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
+import { Group } from "./entities/group.entity"
 
+@ApiTags("groups")
 @Controller("groups")
 export class GroupsController {
     constructor(private readonly groupsService: GroupsService) {}
 
     @Get()
+    @ApiQuery({ name: "adminId", required: false, type: String })
+    @ApiOperation({ description: "Returns the list of groups." })
+    @ApiCreatedResponse({ type: Group, isArray: true })
     async getGroups(@Query("adminId") adminId: string) {
         const groups = await this.groupsService.getGroups({ adminId })
 
@@ -33,6 +47,8 @@ export class GroupsController {
     }
 
     @Get(":group")
+    @ApiOperation({ description: "Returns a specific group." })
+    @ApiCreatedResponse({ type: Group })
     async getGroup(@Param("group") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
 
@@ -44,6 +60,7 @@ export class GroupsController {
 
     @Post()
     @UseGuards(AuthGuard)
+    @ApiExcludeEndpoint()
     async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
         const group = await this.groupsService.createGroup(
             dto,
@@ -58,12 +75,14 @@ export class GroupsController {
 
     @Delete(":group")
     @UseGuards(AuthGuard)
+    @ApiExcludeEndpoint()
     async removeGroup(@Req() req: Request, @Param("group") groupId: string) {
         await this.groupsService.removeGroup(groupId, req.session.adminId)
     }
 
     @Patch(":group")
     @UseGuards(AuthGuard)
+    @ApiExcludeEndpoint()
     async updateGroup(
         @Req() req: Request,
         @Param("group") groupId: string,
@@ -83,11 +102,17 @@ export class GroupsController {
 
     @Patch(":group/api-key")
     @UseGuards(AuthGuard)
+    @ApiExcludeEndpoint()
     async updateApiKey(@Req() req: Request, @Param("group") groupId: string) {
         return this.groupsService.updateApiKey(groupId, req.session.adminId)
     }
 
     @Get(":group/members/:member")
+    @ApiOperation({
+        description:
+            "Returns true if the member is in the group and false otherwise."
+    })
+    @ApiCreatedResponse({ type: Boolean })
     isGroupMember(
         @Param("group") groupId: string,
         @Param("member") memberId: string
@@ -96,6 +121,10 @@ export class GroupsController {
     }
 
     @Get(":group/members/:member/proof")
+    @ApiOperation({
+        description: "Returns the Merkle Proof for a member in a group."
+    })
+    @ApiCreatedResponse({ type: String })
     generateMerkleProof(
         @Param("group") groupId: string,
         @Param("member") member: string
@@ -109,6 +138,12 @@ export class GroupsController {
     }
 
     @Post(":group/members/:member")
+    @ApiBody({ required: false, type: AddMemberDto })
+    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiOperation({
+        description:
+            "Adds a member to a group using an API Key or an Invite Code."
+    })
     async addMember(
         @Param("group") groupId: string,
         @Param("member") memberId: string,
@@ -149,6 +184,10 @@ export class GroupsController {
     }
 
     @Delete(":group/members/:member")
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiOperation({
+        description: "Removes a member from a group using an API Key."
+    })
     async removeMember(
         @Param("group") groupId: string,
         @Param("member") memberId: string,

@@ -8,12 +8,14 @@ import {
     UseGuards
 } from "@nestjs/common"
 import { Request } from "express"
+import { ApiExcludeController } from "@nestjs/swagger"
 import { AuthGuard } from "../auth/auth.guard"
 import { mapEntity } from "../utils"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 
+@ApiExcludeController()
 @Controller("invites")
 export class InvitesController {
     constructor(private readonly invitesService: InvitesService) {}

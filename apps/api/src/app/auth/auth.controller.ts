@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Post, Req } from "@nestjs/common"
 import { Request } from "express"
 import { generateNonce } from "siwe"
+import { ApiExcludeController } from "@nestjs/swagger"
 import { AuthService } from "./auth.service"
 import { SignInWithEthereumDTO } from "./dto/siwe-dto"
 
+@ApiExcludeController()
 @Controller("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
