@@ -137,6 +137,25 @@
                 </a>
             </td>
         </tr>
+        <tr>
+            <td>
+                <a href="/libs/api-sdk">
+                    @bandada/api-sdk
+                </a>
+            </td>
+            <td>
+                <!-- NPM version -->
+                <a href="https://npmjs.org/package/@bandada/api-sdk">
+                    <img src="https://img.shields.io/npm/v/@bandada/api-sdk.svg?style=flat-square" alt="NPM version" />
+                </a>
+            </td>
+            <td>
+                <!-- Downloads -->
+                <a href="https://npmjs.org/package/@bandada/api-sdk">
+                    <img src="https://img.shields.io/npm/dm/@bandada/api-sdk.svg?style=flat-square" alt="Downloads" />
+                </a>
+            </td>
+        </tr>
     <tbody>
 </table>
 
