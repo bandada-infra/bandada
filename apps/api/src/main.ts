@@ -48,6 +48,7 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config)
 
     const configUI = {
+        swaggerOptions: { defaultModelsExpandDepth: -1 },
         customfavIcon:
             "https://raw.githubusercontent.com/privacy-scaling-explorations/bandada/main/apps/dashboard/src/assets/favicon.ico",
         customSiteTitle: "Bandada API Docs",
