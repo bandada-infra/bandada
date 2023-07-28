@@ -52,8 +52,6 @@
 | Groups are an important concept when we speak about privacy and zero knowledge technologies. They can be thought of as anonymity sets, and are a way to establish necessary trust between a set of participants. The goal of this project is to provide a comprehensive infrastructure to allow anyone to create and manage their own groups. |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
----
-
 ## 📦 Packages
 
 <table>
@@ -251,7 +249,7 @@ You can also run the entire `bandada` using docker by running below command in t
 docker-compose up -d
 ```
 
-### Local Development
+#### Local development
 
 You can start dependencies essential for local development like a local ethereum network (with data persistance) and TheGraph node using the below command:
 
@@ -287,7 +285,7 @@ These values are set as defaults in `libs/utils/src/contract-addresses.ts`. If y
 
 To reset the local network or TheGraph node, you can stop the docker containers, and delete the respective folders inside `./.data`.
 
-## Environment Variables
+## Environment variables
 
 Below are the ENV variables used by the `api`:
 
@@ -295,10 +293,25 @@ Below are the ENV variables used by the `api`:
 | --------------------- | ------------------------------------------------------------------------ |
 | DB_TYPE               | Type of the SQL database - `postgres`/`sqlite`.                          |
 | DB_URL                | Connection string for the database. Path to DB file in case of `sqlite`. |
-| API_URL               | Public URL of the api                                                    |
-| DASHBOARD_URL         | Public URL of the dashboard                                              |
-| ETHEREUM_NETWORK      | Ethereum network where the contract is deployed                          |
+| API_URL               | Public URL of the api.                                                   |
+| DASHBOARD_URL         | Public URL of the dashboard.                                             |
+| ETHEREUM_NETWORK      | Ethereum network where the contract is deployed.                         |
 | IRON_SESSION_PASSWORD | Secret password used for iron-session.                                   |
 | INFURA_API_KEY        | API Key for Infura. This is used for executing blockchain transactions.  |
 | BACKEND_PRIVATE_KEY   | Ethereum wallet private key used for making blockchain transactions.     |
 | SIWE_STATEMENT        | Statement used as a SIWE message.                                        |
+| GITHUB_CLIENT_ID      | Github client id used for reputation groups.                             |
+| GITHUB_CLIENT_SECRET  | Github client secret used for reputation groups.                         |
+| TWITTER_REDIRECT_URI  | Twitter redirect URL used for reputation groups.                         |
+| TWITTER_CLIENT_ID     | Twitter client id used for reputation groups.                            |
+| TWITTER_CLIENT_SECRET | Twitter client secret used for reputation groups.                        |
+
+## API
+
+Bandada provides APIs to get groups data and manage group members. You can add or remove members in a group that you are admin of, using the API key.
+
+To enable API access for a group, you can go to the group page in the dashboard, and switch on the "Enable API Access" toggle button. Once the API is enabled, a new API key will be generated for you.
+
+You can disable the API access anytime using the same toggle button.
+
+For a complete list of the endpoints you can use go to https://api.bandada.appliedzkp.org.
