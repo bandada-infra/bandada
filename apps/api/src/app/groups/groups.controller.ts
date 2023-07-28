@@ -30,6 +30,7 @@ import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
 import { Group } from "./entities/group.entity"
+import { MerkleProof } from "./docsTypes"
 
 @ApiTags("groups")
 @Controller("groups")
@@ -124,7 +125,7 @@ export class GroupsController {
     @ApiOperation({
         description: "Returns the Merkle Proof for a member in a group."
     })
-    @ApiCreatedResponse({ type: String })
+    @ApiCreatedResponse({ type: MerkleProof })
     generateMerkleProof(
         @Param("group") groupId: string,
         @Param("member") member: string
