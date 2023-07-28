@@ -29,7 +29,7 @@ import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
-import { MerkleProof, Group } from "./docsTypes"
+import { MerkleProof, Group } from "./docSchemas"
 
 @ApiTags("groups")
 @Controller("groups")
