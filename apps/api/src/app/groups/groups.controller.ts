@@ -30,6 +30,7 @@ import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
 import { MerkleProof, Group } from "./docSchemas"
+import { ThrottlerGuard } from "@nestjs/throttler"
 
 @ApiTags("groups")
 @Controller("groups")
@@ -102,6 +103,7 @@ export class GroupsController {
 
     @Patch(":group/api-key")
     @UseGuards(AuthGuard)
+    @UseGuards(ThrottlerGuard)
     @ApiExcludeEndpoint()
     async updateApiKey(@Req() req: Request, @Param("group") groupId: string) {
         return this.groupsService.updateApiKey(groupId, req.session.adminId)
