@@ -12,25 +12,25 @@ import {
     Req,
     UseGuards
 } from "@nestjs/common"
-import { Request } from "express"
 import {
-    ApiQuery,
-    ApiTags,
-    ApiExcludeEndpoint,
     ApiBody,
+    ApiCreatedResponse,
+    ApiExcludeEndpoint,
     ApiHeader,
     ApiOperation,
-    ApiCreatedResponse
+    ApiQuery,
+    ApiTags
 } from "@nestjs/swagger"
+import { ThrottlerGuard } from "@nestjs/throttler"
+import { Request } from "express"
 import { AuthGuard } from "../auth/auth.guard"
 import { stringifyJSON } from "../utils"
+import { Group, MerkleProof } from "./docSchemas"
 import { AddMemberDto } from "./dto/add-member.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
-import { MerkleProof, Group } from "./docSchemas"
-import { ThrottlerGuard } from "@nestjs/throttler"
 
 @ApiTags("groups")
 @Controller("groups")
