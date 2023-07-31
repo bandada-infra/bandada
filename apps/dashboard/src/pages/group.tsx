@@ -74,15 +74,16 @@ export default function GroupPage(): JSX.Element {
                 apiEnabled
             })
 
-            if (!group === null) {
+            if (group === null) {
                 alert("Some error occurred!")
 
                 return
             }
 
+            setApiKey(group.apiKey!)
             setGroup(group)
         },
-        [_group]
+        [_group, setApiKey]
     )
 
     const addMember = useCallback(
