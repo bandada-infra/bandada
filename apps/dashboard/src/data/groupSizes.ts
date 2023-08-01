@@ -1,30 +1,51 @@
-import { GroupSizes } from "../types"
+import { GroupSize } from "../types"
 
-const groupSizes: GroupSizes = {
-    small: {
-        description: "For communities, small teams",
-        capacity: "Capacity 65 thousand",
-        useCases: ["voting", "feedback"],
+const groupSizes: GroupSize[] = [
+    {
+        name: "Small",
+        description: "Communities and teams",
+        capacity: "Up to 65k members",
+        useCases: [
+            "Donate to your community",
+            "Give event feedback",
+            "Prove demographic, criminal, or health information to an employer"
+        ],
         treeDepth: 16
     },
-    medium: {
-        description: "For cities, large teams",
-        capacity: "Capacity 1 million",
-        useCases: ["voting", "feedback"],
+    {
+        name: "Medium",
+        description: "Cities and companies",
+        capacity: "Up to 1M members",
+        useCases: [
+            "Vote in your city's election",
+            "Share feedback about work",
+            "Prove professional certification",
+            "Apply for grants/subsidies"
+        ],
         treeDepth: 20
     },
-    large: {
-        description: "For nations",
-        capacity: "Capacity 33 Million",
-        useCases: ["voting", "feedback"],
+    {
+        name: "Large",
+        description: "Cities, corporations, countries",
+        capacity: "Up to 33M members",
+        useCases: [
+            "Participate in a census",
+            "Vote in a national election",
+            "Donate to a campaign"
+        ],
         treeDepth: 25
     },
-    xl: {
-        description: "For multiple nations, contries",
-        capacity: "Capacity 1 Billion",
-        useCases: ["voting", "feedback"],
+    {
+        name: "XL",
+        description: "Large countries or multiple nations",
+        capacity: "Up to 1B members",
+        useCases: [
+            "Prove passport status",
+            "Share health status with other countries",
+            "Sponsor a cause"
+        ],
         treeDepth: 30
     }
-}
+]
 
 export default groupSizes
