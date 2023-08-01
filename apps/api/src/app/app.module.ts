@@ -5,6 +5,7 @@ import { resolve } from "path"
 dotenvConfig({ path: resolve(process.cwd(), ".env") })
 
 import { Module } from "@nestjs/common"
+import { ThrottlerModule } from "@nestjs/throttler"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { AdminsModule } from "./admins/admins.module"
 import { AuthModule } from "./auth/auth.module"
@@ -21,6 +22,10 @@ type DB_TYPE = "mysql" | "sqlite" | "postgres"
         InvitesModule,
         GroupsModule,
         ReputationModule,
+        ThrottlerModule.forRoot({
+            ttl: 60,
+            limit: 10
+        }),
         TypeOrmModule.forRoot({
             type: (process.env.DB_TYPE as DB_TYPE) || "postgres",
             url: process.env.DB_URL,

@@ -26,8 +26,8 @@ export class UpdateGroupDto {
     readonly apiEnabled?: boolean
 
     @IsOptional()
-    @IsString()
-    readonly apiKey?: string
+    @IsNumber()
+    readonly fingerprintDuration?: number
 
     @IsOptional()
     @IsObject()

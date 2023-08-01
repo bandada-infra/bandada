@@ -40,6 +40,12 @@ export class InvitesService {
             )
         }
 
+        if (group.reputationCriteria) {
+            throw new UnauthorizedException(
+                "Reputation groups cannot be accessed via invites"
+            )
+        }
+
         const invite = this.inviteRepository.create({
             code: this.generateCode(),
             group

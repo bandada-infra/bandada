@@ -7,8 +7,9 @@ import {
     Req,
     UseGuards
 } from "@nestjs/common"
-import { Request } from "express"
 import { ApiExcludeController } from "@nestjs/swagger"
+import { ThrottlerGuard } from "@nestjs/throttler"
+import { Request } from "express"
 import { AuthGuard } from "../auth/auth.guard"
 import { mapEntity } from "../utils"
 import { CreateInviteDto } from "./dto/create-invite.dto"
@@ -22,6 +23,7 @@ export class InvitesController {
 
     @Post()
     @UseGuards(AuthGuard)
+    @UseGuards(ThrottlerGuard)
     async createInvite(
         @Req() req: Request,
         @Body() dto: CreateInviteDto

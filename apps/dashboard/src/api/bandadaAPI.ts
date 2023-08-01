@@ -27,8 +27,14 @@ export async function generateMagicLink(
         })
 
         return (clientUrl || CLIENT_URL).replace("\\", code)
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -47,8 +53,14 @@ export async function getGroups(adminId: string): Promise<Group[] | null> {
             ...group,
             type: "off-chain"
         }))
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -64,8 +76,14 @@ export async function getGroup(groupId: string): Promise<Group | null> {
         const group = await request(`${API_URL}/groups/${groupId}`)
 
         return { ...group, type: "off-chain" }
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -96,8 +114,14 @@ export async function createGroup(
         })
 
         return { ...group, type: "off-chain" }
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -119,8 +143,14 @@ export async function updateGroup(
         })
 
         return { ...group, type: "off-chain" }
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -135,8 +165,14 @@ export async function generateApiKey(groupId: string): Promise<string | null> {
         return await request(`${API_URL}/groups/${groupId}/api-key`, {
             method: "PATCH"
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -151,8 +187,14 @@ export async function removeGroup(groupId: string): Promise<void | null> {
         await request(`${API_URL}/groups/${groupId}`, {
             method: "DELETE"
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -184,8 +226,14 @@ export async function setOAuthState(
                 redirectUri
             }
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -208,8 +256,14 @@ export async function addMemberByReputation(
                 oAuthState
             }
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -228,8 +282,14 @@ export async function addMember(
         await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
             method: "POST"
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -248,8 +308,14 @@ export async function removeMember(
         await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
             method: "DELETE"
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -264,8 +330,14 @@ export async function getNonce(): Promise<string | null> {
         return await request(`${API_URL}/auth/nonce`, {
             method: "GET"
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -292,8 +364,14 @@ export async function signIn({
                 signature
             }
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }
@@ -307,8 +385,14 @@ export async function logOut(): Promise<void | null> {
         await request(`${API_URL}/auth`, {
             method: "DELETE"
         })
-    } catch (error) {
+    } catch (error: any) {
         console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
 
         return null
     }

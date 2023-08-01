@@ -68,8 +68,6 @@ export default function AddMemberModal({
 
         if (group.type === "off-chain") {
             if ((await bandadaAPI.addMember(group.id, _memberId)) === null) {
-                alert("Some error occurred!")
-
                 setIsLoading(false)
                 return
             }
@@ -103,8 +101,6 @@ export default function AddMemberModal({
         const inviteLink = await bandadaAPI.generateMagicLink(group.id)
 
         if (inviteLink === null) {
-            alert("Some error occurred!")
-
             return
         }
 

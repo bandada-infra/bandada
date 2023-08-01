@@ -130,7 +130,8 @@ export class GroupsService {
             description,
             treeDepth,
             apiEnabled,
-            reputationCriteria
+            reputationCriteria,
+            fingerprintDuration
         }: UpdateGroupDto,
         adminId: string
     ): Promise<Group> {
@@ -146,6 +147,10 @@ export class GroupsService {
             group.description = description
         }
 
+        if (fingerprintDuration) {
+            group.fingerprintDuration = fingerprintDuration
+        }
+
         if (treeDepth) {
             group.treeDepth = treeDepth
 
@@ -158,11 +163,11 @@ export class GroupsService {
             this._updateContractGroup(cachedGroup)
         }
 
-        if (reputationCriteria) {
+        if (group.reputationCriteria && reputationCriteria) {
             group.reputationCriteria = reputationCriteria
         }
 
-        if (apiEnabled !== undefined) {
+        if (!group.reputationCriteria && apiEnabled !== undefined) {
             group.apiEnabled = apiEnabled
 
             // Generate a new API key if it doesn't exist
@@ -194,7 +199,7 @@ export class GroupsService {
 
         if (!group.apiEnabled) {
             throw new UnauthorizedException(
-                `Group '${groupId}' APIs are not enabled`
+                `Group '${groupId}' API key is not enabled`
             )
         }
 
