@@ -12,7 +12,12 @@ export default function shortenNumber(n: number) {
 
     const abbreviations = ["", "k", "m", "b", "t"]
     const magnitude = Math.floor(Math.log10(Math.abs(n)) / 3)
-    const roundedNumber = (n / 10 ** (magnitude * 3)).toFixed(1)
+
+    let roundedNumber = (n / 10 ** (magnitude * 3)).toFixed(1)
+
+    if (Number.isInteger(Number(roundedNumber))) {
+        roundedNumber = Number(roundedNumber).toFixed(0)
+    }
 
     return roundedNumber + abbreviations[magnitude]
 }

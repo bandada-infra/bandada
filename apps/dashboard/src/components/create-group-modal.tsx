@@ -104,8 +104,6 @@ export default function CreateGroupModal({
                 )
 
                 if (group === null) {
-                    alert("Some error occurred!")
-
                     return
                 }
 

@@ -57,8 +57,6 @@ export default function GroupPage(): JSX.Element {
                         : await bandadaApi.getGroup(groupId)
 
                 if (group === null) {
-                    alert("Some error occurred!")
-
                     return
                 }
 
@@ -74,15 +72,14 @@ export default function GroupPage(): JSX.Element {
                 apiEnabled
             })
 
-            if (!group === null) {
-                alert("Some error occurred!")
-
+            if (group === null) {
                 return
             }
 
+            setApiKey(group.apiKey!)
             setGroup(group)
         },
-        [_group]
+        [_group, setApiKey]
     )
 
     const addMember = useCallback(
@@ -115,8 +112,6 @@ export default function GroupPage(): JSX.Element {
             if (
                 (await bandadaApi.removeMember(_group!.id, memberId)) === null
             ) {
-                alert("Some error occurred!")
-
                 return
             }
 
@@ -139,8 +134,6 @@ export default function GroupPage(): JSX.Element {
         }
 
         if ((await bandadaApi.removeGroup(_group!.id)) === null) {
-            alert("Some error occurred!")
-
             return
         }
 
@@ -157,8 +150,6 @@ export default function GroupPage(): JSX.Element {
         const apiKey = await bandadaApi.generateApiKey(_group!.id)
 
         if (apiKey === null) {
-            alert("Some error occurred!")
-
             return
         }
 
