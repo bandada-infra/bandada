@@ -1,4 +1,5 @@
 import {
+    Button,
     Heading,
     HStack,
     Image,
@@ -8,21 +9,32 @@ import {
     UnorderedList,
     VStack
 } from "@chakra-ui/react"
-import { groupSizes } from "../../data"
+import { useEffect, useState } from "react"
 import icon1Image from "../../assets/icon1.svg"
 import icon2Image from "../../assets/icon2.svg"
 import icon3Image from "../../assets/icon3.svg"
 import icon4Image from "../../assets/icon4.svg"
+import { groupSizes } from "../../data"
 
 export type GroupSizeStepProps = {
     group: any
-    onChange: (group: any) => void
+    onSubmit: (group: any, next?: boolean) => void
+    onBack: () => void
 }
 
 export default function GroupSizeStep({
     group,
-    onChange
+    onSubmit,
+    onBack
 }: GroupSizeStepProps): JSX.Element {
+    const [_treeDepth, setTreeDepth] = useState<number>()
+
+    useEffect(() => {
+        if (group.treeDepth) {
+            onSubmit({ ...group, treeDepth: undefined }, false)
+        }
+    }, [onSubmit, group])
+
     return (
         <>
             <Text>How big is your group?</Text>
@@ -31,7 +43,7 @@ export default function GroupSizeStep({
                 {groupSizes.map((groupSize) => (
                     <VStack
                         borderColor={
-                            group.treeDepth === groupSize.treeDepth
+                            _treeDepth === groupSize.treeDepth
                                 ? "classicRose.600"
                                 : "balticSea.300"
                         }
@@ -43,12 +55,7 @@ export default function GroupSizeStep({
                         spacing="0"
                         cursor="pointer"
                         p="16px"
-                        onClick={() =>
-                            onChange({
-                                ...group,
-                                treeDepth: groupSize.treeDepth
-                            })
-                        }
+                        onClick={() => setTreeDepth(groupSize.treeDepth)}
                         key={groupSize.name}
                     >
                         <Image
@@ -62,12 +69,12 @@ export default function GroupSizeStep({
                                     : icon1Image
                             }
                             filter={
-                                group.treeDepth === groupSize.treeDepth
+                                _treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : "grayscale(100%)"
                             }
                             opacity={
-                                group.treeDepth === groupSize.treeDepth
+                                _treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : ".4"
                             }
@@ -87,12 +94,12 @@ export default function GroupSizeStep({
                             color="classicRose.900"
                             bgColor="classicRose.50"
                             filter={
-                                group.treeDepth === groupSize.treeDepth
+                                _treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : "grayscale(100%)"
                             }
                             opacity={
-                                group.treeDepth === groupSize.treeDepth
+                                _treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : ".5"
                             }
@@ -114,6 +121,25 @@ export default function GroupSizeStep({
                         </UnorderedList>
                     </VStack>
                 ))}
+            </HStack>
+
+            <HStack justify="right" pt="20px">
+                <Button variant="solid" colorScheme="tertiary" onClick={onBack}>
+                    Back
+                </Button>
+                <Button
+                    isDisabled={!_treeDepth}
+                    variant="solid"
+                    colorScheme="primary"
+                    onClick={() =>
+                        onSubmit({
+                            ...group,
+                            treeDepth: _treeDepth
+                        })
+                    }
+                >
+                    Continue
+                </Button>
             </HStack>
         </>
     )

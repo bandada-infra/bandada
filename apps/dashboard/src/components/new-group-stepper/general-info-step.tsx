@@ -1,17 +1,37 @@
-import { Box, HStack, Icon, Input, Text, VStack } from "@chakra-ui/react"
+import {
+    Box,
+    Button,
+    HStack,
+    Icon,
+    Input,
+    Text,
+    VStack
+} from "@chakra-ui/react"
+import { useEffect, useState } from "react"
 import { FiHardDrive, FiZap } from "react-icons/fi"
+import capitalize from "../../utils/capitalize"
 
 const groupTypes = ["on-chain", "off-chain"]
 
 export type GeneralInfoStepProps = {
     group: any
-    onChange: (group: any) => void
+    onSubmit: (group: any, next?: boolean) => void
+    onBack: () => void
 }
 
 export default function GeneralInfoStep({
     group,
-    onChange
+    onSubmit,
+    onBack
 }: GeneralInfoStepProps): JSX.Element {
+    const [_groupType, setGroupType] = useState<string>()
+    const [_groupName, setGroupName] = useState<string>()
+    const [_groupDescription, setGroupDescription] = useState<string>()
+
+    useEffect(() => {
+        onSubmit({}, false)
+    }, [onSubmit])
+
     return (
         <>
             <Text>What type of group is this?</Text>
@@ -20,7 +40,7 @@ export default function GeneralInfoStep({
                 {groupTypes.map((groupType: any) => (
                     <VStack
                         borderColor={
-                            group.type === groupType
+                            _groupType === groupType
                                 ? "classicRose.600"
                                 : "balticSea.200"
                         }
@@ -31,12 +51,12 @@ export default function GeneralInfoStep({
                         align="left"
                         spacing="0"
                         cursor="pointer"
-                        onClick={() => onChange({ ...group, type: groupType })}
+                        onClick={() => setGroupType(groupType)}
                         key={groupType}
                     >
                         <HStack
                             bgColor={
-                                group.type === groupType
+                                _groupType === groupType
                                     ? "classicRose.100"
                                     : "balticSea.100"
                             }
@@ -47,7 +67,7 @@ export default function GeneralInfoStep({
                         >
                             <Icon
                                 color={
-                                    group.type === groupType
+                                    _groupType === groupType
                                         ? "classicRose.600"
                                         : "balticSea.600"
                                 }
@@ -60,9 +80,7 @@ export default function GeneralInfoStep({
                             />
 
                             <Text>
-                                {groupType === "on-chain"
-                                    ? "On chain"
-                                    : "Off chain"}
+                                {capitalize(groupType.replaceAll("-", " "))}
                             </Text>
                         </HStack>
 
@@ -79,29 +97,25 @@ export default function GeneralInfoStep({
 
                 <Input
                     size="lg"
-                    value={group.name ?? ""}
-                    onChange={(event) =>
-                        onChange({ ...group, name: event.target.value })
-                    }
+                    value={_groupName ?? ""}
+                    maxLength={31}
+                    onChange={(event) => setGroupName(event.target.value)}
                 />
                 <Text fontSize="13px" color="balticSea.500">
                     Give it a cool name you can recognize.
                 </Text>
             </VStack>
 
-            {group.type === "off-chain" && (
+            {_groupType === "off-chain" && (
                 <VStack align="left" pt="20px">
                     <Text>Description</Text>
 
                     <Input
                         size="lg"
                         minLength={10}
-                        value={group.description ?? ""}
+                        value={_groupDescription ?? ""}
                         onChange={(event) =>
-                            onChange({
-                                ...group,
-                                description: event.target.value
-                            })
+                            setGroupDescription(event.target.value)
                         }
                     />
                     <Text fontSize="13px" color="balticSea.500">
@@ -110,7 +124,7 @@ export default function GeneralInfoStep({
                 </VStack>
             )}
 
-            {group.type && (
+            {_groupType && (
                 <Box pt="20px">
                     <Text
                         p="16px"
@@ -118,12 +132,37 @@ export default function GeneralInfoStep({
                         bgColor="classicRose.100"
                         color="classicRose.900"
                     >
-                        {group.type === "off-chain"
-                            ? "By continuing, you will create that will be stored in our servers."
-                            : "By continuing, you will create that lives on the Ethereum blockchain."}
+                        {_groupType === "off-chain"
+                            ? "By continuing, you will create a group that will be stored in our servers."
+                            : "By continuing, you will create a group that lives on the Ethereum blockchain."}
                     </Text>
                 </Box>
             )}
+
+            <HStack justify="right" pt="20px">
+                <Button variant="solid" colorScheme="tertiary" onClick={onBack}>
+                    Cancel
+                </Button>
+                <Button
+                    isDisabled={
+                        !_groupType ||
+                        !_groupName ||
+                        (_groupType === "off-chain" && !_groupDescription)
+                    }
+                    variant="solid"
+                    colorScheme="primary"
+                    onClick={() =>
+                        onSubmit({
+                            ...group,
+                            name: _groupName,
+                            description: _groupDescription,
+                            type: _groupType
+                        })
+                    }
+                >
+                    Continue
+                </Button>
+            </HStack>
         </>
     )
 }

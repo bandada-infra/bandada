@@ -1,5 +1,20 @@
 import { validators } from "@bandada/reputation"
-import { Box, HStack, Icon, Select, Text, VStack } from "@chakra-ui/react"
+import {
+    Box,
+    Button,
+    HStack,
+    Icon,
+    Input,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    Select,
+    Text,
+    VStack
+} from "@chakra-ui/react"
+import { useEffect, useState } from "react"
 import { FiHardDrive, FiZap } from "react-icons/fi"
 import capitalize from "../../utils/capitalize"
 
@@ -8,14 +23,27 @@ const accessModes = ["manual", "credentials"]
 export type AccessMode = "manual" | "credentials"
 
 export type AccessModeStepProps = {
-    accessMode?: AccessMode
-    onChange: (accessMode: AccessMode) => void
+    group: any
+    onSubmit: (group: any) => void
+    onBack: () => void
 }
 
 export default function AccessModeStep({
-    accessMode: _accessMode,
-    onChange
+    group,
+    onSubmit,
+    onBack
 }: AccessModeStepProps): JSX.Element {
+    const [_accessMode, setAccessMode] = useState<AccessMode>("manual")
+    const [_validator, setValidator] = useState<number>(0)
+    const [_reputationCriteria, setReputationCriteria] = useState<any>({})
+
+    useEffect(() => {
+        setReputationCriteria({
+            id: validators[_validator].id,
+            criteria: {}
+        })
+    }, [_validator])
+
     return (
         <>
             <HStack>
@@ -33,7 +61,7 @@ export default function AccessModeStep({
                         align="left"
                         spacing="0"
                         cursor="pointer"
-                        onClick={() => onChange(accessMode)}
+                        onClick={() => setAccessMode(accessMode)}
                         key={accessMode}
                     >
                         <HStack
@@ -78,9 +106,15 @@ export default function AccessModeStep({
                     <VStack align="left" pt="20px">
                         <Text>Choose credential and provider</Text>
 
-                        <Select size="lg" color="balticSea.400">
-                            {validators.map((validator) => (
-                                <option key={validator.id} value={validator.id}>
+                        <Select
+                            size="lg"
+                            value={_validator}
+                            onChange={(event) =>
+                                setValidator(Number(event.target.value))
+                            }
+                        >
+                            {validators.map((validator, i) => (
+                                <option key={validator.id} value={i}>
                                     {capitalize(
                                         validator.id
                                             .replaceAll("_", " ")
@@ -90,6 +124,65 @@ export default function AccessModeStep({
                             ))}
                         </Select>
                     </VStack>
+
+                    {_reputationCriteria.criteria &&
+                        Object.entries(validators[_validator].criteriaABI).map(
+                            (parameter) => (
+                                <VStack
+                                    align="left"
+                                    pt="20px"
+                                    key={parameter[0]}
+                                >
+                                    <Text>{capitalize(parameter[0])}</Text>
+
+                                    {parameter[1] === "number" ? (
+                                        <NumberInput
+                                            size="lg"
+                                            value={
+                                                _reputationCriteria.criteria[
+                                                    parameter[0]
+                                                ]
+                                            }
+                                            onChange={(value) =>
+                                                setReputationCriteria({
+                                                    ..._reputationCriteria,
+                                                    criteria: {
+                                                        ..._reputationCriteria.criteria,
+                                                        [parameter[0]]:
+                                                            Number(value)
+                                                    }
+                                                })
+                                            }
+                                        >
+                                            <NumberInputField />
+                                            <NumberInputStepper>
+                                                <NumberIncrementStepper />
+                                                <NumberDecrementStepper />
+                                            </NumberInputStepper>
+                                        </NumberInput>
+                                    ) : (
+                                        <Input
+                                            size="lg"
+                                            value={
+                                                _reputationCriteria.criteria[
+                                                    parameter[0]
+                                                ]
+                                            }
+                                            onChange={(event) =>
+                                                setReputationCriteria({
+                                                    ..._reputationCriteria,
+                                                    criteria: {
+                                                        ..._reputationCriteria.criteria,
+                                                        [parameter[0]]:
+                                                            event.target.value
+                                                    }
+                                                })
+                                            }
+                                        />
+                                    )}
+                                </VStack>
+                            )
+                        )}
 
                     <Box pt="20px">
                         <Text
@@ -105,6 +198,37 @@ export default function AccessModeStep({
                     </Box>
                 </>
             )}
+
+            <HStack justify="right" pt="20px">
+                <Button variant="solid" colorScheme="tertiary" onClick={onBack}>
+                    Back
+                </Button>
+                <Button
+                    isDisabled={
+                        !_accessMode ||
+                        (_accessMode === "credentials" &&
+                            (!_reputationCriteria.criteria ||
+                                Object.keys(_reputationCriteria.criteria)
+                                    .length !==
+                                    Object.keys(
+                                        validators[_validator].criteriaABI
+                                    ).length ||
+                                Object.values(
+                                    _reputationCriteria.criteria
+                                ).some((c) => c === undefined)))
+                    }
+                    variant="solid"
+                    colorScheme="primary"
+                    onClick={() => {
+                        onSubmit({
+                            ...group,
+                            reputationCriteria: _reputationCriteria
+                        })
+                    }}
+                >
+                    Continue
+                </Button>
+            </HStack>
         </>
     )
 }

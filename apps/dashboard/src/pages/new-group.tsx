@@ -1,16 +1,7 @@
-import {
-    Box,
-    Button,
-    Container,
-    Heading,
-    HStack,
-    VStack
-} from "@chakra-ui/react"
-import { useState } from "react"
+import { Box, Container, Heading, HStack, VStack } from "@chakra-ui/react"
+import { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import AccessModeStep, {
-    AccessMode
-} from "../components/new-group-stepper/access-mode-step"
+import AccessModeStep from "../components/new-group-stepper/access-mode-step"
 import GeneralInfoStep from "../components/new-group-stepper/general-info-step"
 import GroupSizeStep from "../components/new-group-stepper/group-size-step"
 import StepperNav from "../components/new-group-stepper/stepper-nav"
@@ -21,8 +12,15 @@ const steps = ["General info", "Group size", "Access mode", "Summary"]
 export default function NewGroupPage(): JSX.Element {
     const [_currentStep, setCurrentStep] = useState<number>(0)
     const [_group, setGroup] = useState<any>({})
-    const [_accessMode, setAccessMode] = useState<AccessMode>()
     const navigate = useNavigate()
+
+    const goToNextStep = useCallback((group: any, next = true) => {
+        setGroup(group)
+
+        if (next) {
+            setCurrentStep((v) => v + 1)
+        }
+    }, [])
 
     return (
         <Container maxW="container.xl" px="8" pb="20">
@@ -55,59 +53,24 @@ export default function NewGroupPage(): JSX.Element {
                         {_currentStep === 0 ? (
                             <GeneralInfoStep
                                 group={_group}
-                                onChange={setGroup}
+                                onSubmit={goToNextStep}
+                                onBack={() => navigate("/groups")}
                             />
                         ) : _currentStep === 1 ? (
-                            <GroupSizeStep group={_group} onChange={setGroup} />
+                            <GroupSizeStep
+                                group={_group}
+                                onSubmit={goToNextStep}
+                                onBack={() => setCurrentStep(0)}
+                            />
                         ) : _group.type !== "on-chain" && _currentStep === 2 ? (
                             <AccessModeStep
-                                accessMode={_accessMode}
-                                onChange={setAccessMode}
+                                group={_group}
+                                onSubmit={goToNextStep}
+                                onBack={() => setCurrentStep(1)}
                             />
                         ) : (
-                            <Box>ueo</Box>
+                            <Box>Summary</Box>
                         )}
-
-                        <HStack justify="right" pt="20px">
-                            <Button
-                                variant="solid"
-                                colorScheme="tertiary"
-                                onClick={() =>
-                                    _currentStep === 0
-                                        ? navigate("/groups")
-                                        : setCurrentStep(_currentStep - 1)
-                                }
-                            >
-                                {_currentStep === 0 ? "Cancel" : "Back"}
-                            </Button>
-                            <Button
-                                isDisabled={
-                                    !_group.name ||
-                                    (_group.type === "off-chain" &&
-                                        !_group.description) ||
-                                    !_group.type ||
-                                    (_currentStep === 1 && !_group.treeDepth) ||
-                                    (_currentStep === 2 &&
-                                        _group.type !== "on-chain" &&
-                                        !_accessMode)
-                                }
-                                variant="solid"
-                                colorScheme="primary"
-                                onClick={() =>
-                                    (_group.type === "on-chain" &&
-                                        _currentStep === 2) ||
-                                    _currentStep === 3
-                                        ? console.log("Hello")
-                                        : setCurrentStep(_currentStep + 1)
-                                }
-                            >
-                                {(_group.type === "on-chain" &&
-                                    _currentStep === 2) ||
-                                _currentStep === 3
-                                    ? "Create group"
-                                    : "Continue"}
-                            </Button>
-                        </HStack>
                     </VStack>
                 </HStack>
             </VStack>
