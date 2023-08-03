@@ -137,8 +137,11 @@ export default function GroupsPage(): JSX.Element {
                                 a.name < b.name ? -1 : a.name > b.name ? 1 : 0
                             )
                             .map((group) => (
-                                <Link to={`/groups/${group.type}/${group.id}`}>
-                                    <GridItem key={group.id + group.name}>
+                                <Link
+                                    key={group.id + group.name}
+                                    to={`/groups/${group.type}/${group.id}`}
+                                >
+                                    <GridItem>
                                         <GroupCard {...group} />
                                     </GridItem>
                                 </Link>
