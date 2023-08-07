@@ -61,7 +61,8 @@ export class GroupsService {
             name,
             description,
             treeDepth,
-            fingerprintDuration
+            fingerprintDuration,
+            reputationCriteria
         }: CreateGroupDto,
         adminId: string
     ): Promise<Group> {
@@ -77,6 +78,7 @@ export class GroupsService {
             description,
             treeDepth,
             fingerprintDuration,
+            reputationCriteria,
             adminId,
             members: []
         })
