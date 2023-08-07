@@ -1,4 +1,4 @@
-import { IsNumberString, IsString } from "class-validator"
+import { IsNumberString, IsOptional, IsString } from "class-validator"
 
 export class OAuthStateDto {
     @IsNumberString()
@@ -11,5 +11,6 @@ export class OAuthStateDto {
     readonly providerName: string
 
     @IsString()
+    @IsOptional()
     readonly redirectUri?: string
 }
