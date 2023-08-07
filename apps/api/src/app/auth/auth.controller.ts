@@ -3,7 +3,7 @@ import { Request } from "express"
 import { generateNonce } from "siwe"
 import { ApiExcludeController } from "@nestjs/swagger"
 import { AuthService } from "./auth.service"
-import { SignInWithEthereumDTO } from "./dto/siwe-dto"
+import { SignInWithEthereumDTO } from "./dto/siwe.dto"
 
 @ApiExcludeController()
 @Controller("auth")
