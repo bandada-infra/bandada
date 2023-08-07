@@ -6,7 +6,7 @@ import {
 import { SiweMessage } from "siwe"
 import { v4 } from "uuid"
 import { AdminService } from "../admins/admins.service"
-import { SignInWithEthereumDTO } from "./dto/siwe-dto"
+import { SignInWithEthereumDTO } from "./dto/siwe.dto"
 
 @Injectable()
 export class AuthService {
