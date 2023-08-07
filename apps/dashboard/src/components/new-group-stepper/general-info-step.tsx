@@ -1,9 +1,13 @@
 import {
-    Box,
     Button,
     HStack,
     Icon,
     Input,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
     Text,
     VStack
 } from "@chakra-ui/react"
@@ -27,6 +31,9 @@ export default function GeneralInfoStep({
     const [_groupName, setGroupName] = useState<string>(group.name)
     const [_groupDescription, setGroupDescription] = useState<string>(
         group.description
+    )
+    const [_fingerprintDuration, setFingerprintDuration] = useState<number>(
+        group.fingerprintDuration || 3600
     )
 
     return (
@@ -84,8 +91,9 @@ export default function GeneralInfoStep({
                         </HStack>
 
                         <Text color="balticSea.700" px="16px" py="10px">
-                            Quick summary of pros and cons of on-chain groups,
-                            spanning about 3 lines?
+                            {groupType === "on-chain"
+                                ? "The group will be fully decentralized and will live on the Ethereum blockchain."
+                                : "The group will be stored in the Bandada servers but the fingerprint will still be stored on-chain."}
                         </Text>
                     </VStack>
                 ))}
@@ -109,42 +117,64 @@ export default function GeneralInfoStep({
             </VStack>
 
             {group.type === "off-chain" && (
-                <VStack align="left" pt="20px">
-                    <Text>Description</Text>
+                <>
+                    <VStack align="left" pt="20px">
+                        <Text>Description</Text>
 
-                    <Input
-                        size="lg"
-                        minLength={10}
-                        value={_groupDescription ?? ""}
-                        onChange={(event) =>
-                            setGroupDescription(event.target.value)
-                        }
-                        onBlur={() =>
-                            onSubmit(
-                                { ...group, description: _groupDescription },
-                                false
-                            )
-                        }
-                    />
-                    <Text fontSize="13px" color="balticSea.500">
-                        Describe your group.
-                    </Text>
-                </VStack>
-            )}
+                        <Input
+                            size="lg"
+                            minLength={10}
+                            value={_groupDescription ?? ""}
+                            onChange={(event) =>
+                                setGroupDescription(event.target.value)
+                            }
+                            onBlur={() =>
+                                onSubmit(
+                                    {
+                                        ...group,
+                                        description: _groupDescription
+                                    },
+                                    false
+                                )
+                            }
+                        />
+                        <Text fontSize="13px" color="balticSea.500">
+                            Describe your group (at least 10 characters).
+                        </Text>
+                    </VStack>
 
-            {group.type && (
-                <Box pt="20px">
-                    <Text
-                        p="16px"
-                        borderRadius="8px"
-                        bgColor="classicRose.100"
-                        color="classicRose.900"
-                    >
-                        {group.type === "off-chain"
-                            ? "By continuing, you will create a group that will be stored in our servers."
-                            : "By continuing, you will create a group that lives on the Ethereum blockchain."}
-                    </Text>
-                </Box>
+                    <VStack align="left" pt="20px">
+                        <Text>Fingerprint duration</Text>
+
+                        <NumberInput
+                            size="lg"
+                            value={_fingerprintDuration}
+                            onChange={(value) =>
+                                setFingerprintDuration(Number(value))
+                            }
+                            onBlur={() =>
+                                onSubmit(
+                                    {
+                                        ...group,
+                                        fingerprintDuration:
+                                            _fingerprintDuration
+                                    },
+                                    false
+                                )
+                            }
+                        >
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <Text fontSize="13px" color="balticSea.500">
+                            Select the validity time of old fingerprints in
+                            milliseconds.
+                        </Text>
+                    </VStack>
+                </>
             )}
 
             <HStack justify="right" pt="20px">
@@ -155,6 +185,8 @@ export default function GeneralInfoStep({
                     isDisabled={
                         !group.type ||
                         !_groupName ||
+                        (group.type === "off-chain" &&
+                            _fingerprintDuration === undefined) ||
                         (group.type === "off-chain" && !_groupDescription)
                     }
                     variant="solid"

@@ -3,6 +3,7 @@ import {
     AbsoluteCenter,
     Box,
     Button,
+    Code,
     Divider,
     Heading,
     Icon,
@@ -47,7 +48,7 @@ export default function AddMemberModal({
 
     useEffect(() => {
         setMemberId("")
-    }, [isOpen])
+    }, [group, isOpen, setInviteLink])
 
     const addMember = useCallback(async () => {
         if (!_memberId) {
@@ -121,31 +122,33 @@ export default function AddMemberModal({
                         New member
                     </Heading>
 
-                    <Box mb="5px">
-                        <Text my="10px" color="balticSea.800">
-                            Add member ID
-                        </Text>
+                    {!group.reputationCriteria && (
+                        <Box mb="5px">
+                            <Text my="10px" color="balticSea.800">
+                                Add member ID
+                            </Text>
 
-                        <Input
-                            placeholder="Paste member ID here"
-                            size="lg"
-                            value={_memberId}
-                            onChange={(event) =>
-                                setMemberId(event.target.value)
-                            }
-                        />
+                            <Input
+                                placeholder="Paste member ID here"
+                                size="lg"
+                                value={_memberId}
+                                onChange={(event) =>
+                                    setMemberId(event.target.value)
+                                }
+                            />
 
-                        <Button
-                            my="10px"
-                            width="100%"
-                            variant="solid"
-                            colorScheme="tertiary"
-                            onClick={addMember}
-                            isLoading={_isLoading}
-                        >
-                            Add member
-                        </Button>
-                    </Box>
+                            <Button
+                                my="10px"
+                                width="100%"
+                                variant="solid"
+                                colorScheme="tertiary"
+                                onClick={addMember}
+                                isLoading={_isLoading}
+                            >
+                                Add member
+                            </Button>
+                        </Box>
+                    )}
 
                     {group.type === "off-chain" &&
                         !group.reputationCriteria && (
@@ -214,6 +217,19 @@ export default function AddMemberModal({
                                 </Box>
                             </>
                         )}
+
+                    {group.reputationCriteria && (
+                        <>
+                            <Text mb="10px">
+                                To allow users to join your group, you can use
+                                the following Bandada URL:
+                            </Text>
+                            <Code
+                                p="3"
+                                mb="20px"
+                            >{`${window.location.origin}/reputation?group=<groupID>&member=<memberID>&provider=<providerName>&redirect_uri=<redirectURI>`}</Code>
+                        </>
+                    )}
 
                     <Button
                         width="100%"

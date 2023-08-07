@@ -100,7 +100,8 @@ export async function createGroup(
     name: string,
     description: string,
     treeDepth: number,
-    fingerprintDuration: number
+    fingerprintDuration: number,
+    reputationCriteria?: any
 ): Promise<Group | null> {
     try {
         const group = await request(`${API_URL}/groups`, {
@@ -109,7 +110,8 @@ export async function createGroup(
                 name,
                 description,
                 treeDepth,
-                fingerprintDuration
+                fingerprintDuration,
+                reputationCriteria: JSON.stringify(reputationCriteria)
             }
         })
 

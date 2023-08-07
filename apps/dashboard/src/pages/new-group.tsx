@@ -1,7 +1,8 @@
-import { Box, Container, Heading, HStack, VStack } from "@chakra-ui/react"
+import { Container, Heading, HStack, VStack } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AccessModeStep from "../components/new-group-stepper/access-mode-step"
+import FinalPreviewStep from "../components/new-group-stepper/final-preview-step"
 import GeneralInfoStep from "../components/new-group-stepper/general-info-step"
 import GroupSizeStep from "../components/new-group-stepper/group-size-step"
 import StepperNav from "../components/new-group-stepper/stepper-nav"
@@ -44,38 +45,49 @@ export default function NewGroupPage(): JSX.Element {
                 />
 
                 <HStack w="100%" align="start">
-                    <StepperPreview group={_group} />
+                    {(_group.type === "on-chain" && _currentStep !== 2) ||
+                    (_group.type === "off-chain" && _currentStep !== 3) ? (
+                        <>
+                            <StepperPreview group={_group} />
 
-                    <VStack
-                        bg="balticSea.50"
-                        py="25px"
-                        px="35px"
-                        borderRadius="8px"
-                        flex="1"
-                        align="left"
-                    >
-                        {_currentStep === 0 ? (
-                            <GeneralInfoStep
-                                group={_group}
-                                onSubmit={goToNextStep}
-                                onBack={() => navigate("/groups")}
-                            />
-                        ) : _currentStep === 1 ? (
-                            <GroupSizeStep
-                                group={_group}
-                                onSubmit={goToNextStep}
-                                onBack={() => setCurrentStep(0)}
-                            />
-                        ) : _group.type !== "on-chain" && _currentStep === 2 ? (
-                            <AccessModeStep
-                                group={_group}
-                                onSubmit={goToNextStep}
-                                onBack={() => setCurrentStep(1)}
-                            />
-                        ) : (
-                            <Box>Summary</Box>
-                        )}
-                    </VStack>
+                            <VStack
+                                bg="balticSea.50"
+                                py="25px"
+                                px="35px"
+                                borderRadius="8px"
+                                flex="1"
+                                align="left"
+                            >
+                                {_currentStep === 0 ? (
+                                    <GeneralInfoStep
+                                        group={_group}
+                                        onSubmit={goToNextStep}
+                                        onBack={() => navigate("/groups")}
+                                    />
+                                ) : _currentStep === 1 ? (
+                                    <GroupSizeStep
+                                        group={_group}
+                                        onSubmit={goToNextStep}
+                                        onBack={() => setCurrentStep(0)}
+                                    />
+                                ) : (
+                                    _group.type !== "on-chain" &&
+                                    _currentStep === 2 && (
+                                        <AccessModeStep
+                                            group={_group}
+                                            onSubmit={goToNextStep}
+                                            onBack={() => setCurrentStep(1)}
+                                        />
+                                    )
+                                )}
+                            </VStack>
+                        </>
+                    ) : (
+                        <FinalPreviewStep
+                            group={_group}
+                            onBack={() => setCurrentStep(1)}
+                        />
+                    )}
                 </HStack>
             </VStack>
         </Container>
