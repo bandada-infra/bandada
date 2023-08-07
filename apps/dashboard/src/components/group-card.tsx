@@ -55,6 +55,8 @@ export default function GroupCard({
                                 ? icon2Image
                                 : icon1Image
                         }
+                        filter={treeDepth ? "inherit" : "grayscale(100%)"}
+                        opacity={treeDepth ? "inherit" : ".4"}
                         htmlWidth="35px"
                         alt="Bandada icon"
                     />
@@ -71,19 +73,33 @@ export default function GroupCard({
                     </Tag>
                 </HStack>
 
-                <Text fontSize="20px" mt="12px">
+                <Text
+                    fontSize="20px"
+                    mt="12px"
+                    color={!name ? "balticSea.400" : "inherit"}
+                >
                     {name || "[untitled]"}
                 </Text>
 
-                <Text mt="12px" color="balticSea.600">
+                <Text
+                    mt="12px"
+                    color={!description ? "balticSea.300" : "balticSea.600"}
+                >
                     {description ||
                         (type !== "on-chain" && "[no description yet]")}
                 </Text>
             </Box>
 
             <VStack align="left" spacing="0">
-                <Text fontSize="20px">{members?.length || 0}</Text>
-                <Text color="balticSea.400">members</Text>
+                <Text
+                    color={!members ? "balticSea.400" : "inherit"}
+                    fontSize="20px"
+                >
+                    {members?.length || 0}
+                </Text>
+                <Text color={!members ? "balticSea.300" : "balticSea.400"}>
+                    members
+                </Text>
             </VStack>
         </VStack>
     )
