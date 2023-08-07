@@ -9,7 +9,6 @@ import {
     UnorderedList,
     VStack
 } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
 import icon1Image from "../../assets/icon1.svg"
 import icon2Image from "../../assets/icon2.svg"
 import icon3Image from "../../assets/icon3.svg"
@@ -18,7 +17,7 @@ import { groupSizes } from "../../data"
 
 export type GroupSizeStepProps = {
     group: any
-    onSubmit: (group: any, next?: boolean) => void
+    onSubmit: (group?: any, next?: boolean) => void
     onBack: () => void
 }
 
@@ -27,14 +26,6 @@ export default function GroupSizeStep({
     onSubmit,
     onBack
 }: GroupSizeStepProps): JSX.Element {
-    const [_treeDepth, setTreeDepth] = useState<number>()
-
-    useEffect(() => {
-        if (group.treeDepth) {
-            onSubmit({ ...group, treeDepth: undefined }, false)
-        }
-    }, [onSubmit, group])
-
     return (
         <>
             <Text>How big is your group?</Text>
@@ -43,7 +34,7 @@ export default function GroupSizeStep({
                 {groupSizes.map((groupSize) => (
                     <VStack
                         borderColor={
-                            _treeDepth === groupSize.treeDepth
+                            group.treeDepth === groupSize.treeDepth
                                 ? "classicRose.600"
                                 : "balticSea.300"
                         }
@@ -55,7 +46,12 @@ export default function GroupSizeStep({
                         spacing="0"
                         cursor="pointer"
                         p="16px"
-                        onClick={() => setTreeDepth(groupSize.treeDepth)}
+                        onClick={() =>
+                            onSubmit(
+                                { ...group, treeDepth: groupSize.treeDepth },
+                                false
+                            )
+                        }
                         key={groupSize.name}
                     >
                         <Image
@@ -69,12 +65,12 @@ export default function GroupSizeStep({
                                     : icon1Image
                             }
                             filter={
-                                _treeDepth === groupSize.treeDepth
+                                group.treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : "grayscale(100%)"
                             }
                             opacity={
-                                _treeDepth === groupSize.treeDepth
+                                group.treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : ".4"
                             }
@@ -94,12 +90,12 @@ export default function GroupSizeStep({
                             color="classicRose.900"
                             bgColor="classicRose.50"
                             filter={
-                                _treeDepth === groupSize.treeDepth
+                                group.treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : "grayscale(100%)"
                             }
                             opacity={
-                                _treeDepth === groupSize.treeDepth
+                                group.treeDepth === groupSize.treeDepth
                                     ? "inherit"
                                     : ".5"
                             }
@@ -128,15 +124,10 @@ export default function GroupSizeStep({
                     Back
                 </Button>
                 <Button
-                    isDisabled={!_treeDepth}
+                    isDisabled={!group.treeDepth}
                     variant="solid"
                     colorScheme="primary"
-                    onClick={() =>
-                        onSubmit({
-                            ...group,
-                            treeDepth: _treeDepth
-                        })
-                    }
+                    onClick={() => onSubmit()}
                 >
                     Continue
                 </Button>

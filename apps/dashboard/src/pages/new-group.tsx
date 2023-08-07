@@ -11,11 +11,16 @@ const steps = ["General info", "Group size", "Access mode", "Summary"]
 
 export default function NewGroupPage(): JSX.Element {
     const [_currentStep, setCurrentStep] = useState<number>(0)
-    const [_group, setGroup] = useState<any>({})
+    const [_group, setGroup] = useState<any>({
+        type: "off-chain",
+        treeDepth: 16
+    })
     const navigate = useNavigate()
 
-    const goToNextStep = useCallback((group: any, next = true) => {
-        setGroup(group)
+    const goToNextStep = useCallback((group?: any, next = true) => {
+        if (group) {
+            setGroup(group)
+        }
 
         if (next) {
             setCurrentStep((v) => v + 1)

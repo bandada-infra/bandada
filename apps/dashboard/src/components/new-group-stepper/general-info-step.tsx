@@ -7,15 +7,15 @@ import {
     Text,
     VStack
 } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { FiHardDrive, FiZap } from "react-icons/fi"
 import capitalize from "../../utils/capitalize"
 
-const groupTypes = ["on-chain", "off-chain"]
+const groupTypes = ["off-chain", "on-chain"]
 
 export type GeneralInfoStepProps = {
     group: any
-    onSubmit: (group: any, next?: boolean) => void
+    onSubmit: (group?: any, next?: boolean) => void
     onBack: () => void
 }
 
@@ -24,13 +24,10 @@ export default function GeneralInfoStep({
     onSubmit,
     onBack
 }: GeneralInfoStepProps): JSX.Element {
-    const [_groupType, setGroupType] = useState<string>()
-    const [_groupName, setGroupName] = useState<string>()
-    const [_groupDescription, setGroupDescription] = useState<string>()
-
-    useEffect(() => {
-        onSubmit({}, false)
-    }, [onSubmit])
+    const [_groupName, setGroupName] = useState<string>(group.name)
+    const [_groupDescription, setGroupDescription] = useState<string>(
+        group.description
+    )
 
     return (
         <>
@@ -40,7 +37,7 @@ export default function GeneralInfoStep({
                 {groupTypes.map((groupType: any) => (
                     <VStack
                         borderColor={
-                            _groupType === groupType
+                            group.type === groupType
                                 ? "classicRose.600"
                                 : "balticSea.200"
                         }
@@ -51,12 +48,14 @@ export default function GeneralInfoStep({
                         align="left"
                         spacing="0"
                         cursor="pointer"
-                        onClick={() => setGroupType(groupType)}
+                        onClick={() =>
+                            onSubmit({ ...group, type: groupType }, false)
+                        }
                         key={groupType}
                     >
                         <HStack
                             bgColor={
-                                _groupType === groupType
+                                group.type === groupType
                                     ? "classicRose.100"
                                     : "balticSea.100"
                             }
@@ -67,7 +66,7 @@ export default function GeneralInfoStep({
                         >
                             <Icon
                                 color={
-                                    _groupType === groupType
+                                    group.type === groupType
                                         ? "classicRose.600"
                                         : "balticSea.600"
                                 }
@@ -100,13 +99,16 @@ export default function GeneralInfoStep({
                     value={_groupName ?? ""}
                     maxLength={31}
                     onChange={(event) => setGroupName(event.target.value)}
+                    onBlur={() =>
+                        onSubmit({ ...group, name: _groupName }, false)
+                    }
                 />
                 <Text fontSize="13px" color="balticSea.500">
                     Give it a cool name you can recognize.
                 </Text>
             </VStack>
 
-            {_groupType === "off-chain" && (
+            {group.type === "off-chain" && (
                 <VStack align="left" pt="20px">
                     <Text>Description</Text>
 
@@ -117,6 +119,12 @@ export default function GeneralInfoStep({
                         onChange={(event) =>
                             setGroupDescription(event.target.value)
                         }
+                        onBlur={() =>
+                            onSubmit(
+                                { ...group, description: _groupDescription },
+                                false
+                            )
+                        }
                     />
                     <Text fontSize="13px" color="balticSea.500">
                         Describe your group.
@@ -124,7 +132,7 @@ export default function GeneralInfoStep({
                 </VStack>
             )}
 
-            {_groupType && (
+            {group.type && (
                 <Box pt="20px">
                     <Text
                         p="16px"
@@ -132,7 +140,7 @@ export default function GeneralInfoStep({
                         bgColor="classicRose.100"
                         color="classicRose.900"
                     >
-                        {_groupType === "off-chain"
+                        {group.type === "off-chain"
                             ? "By continuing, you will create a group that will be stored in our servers."
                             : "By continuing, you will create a group that lives on the Ethereum blockchain."}
                     </Text>
@@ -145,20 +153,13 @@ export default function GeneralInfoStep({
                 </Button>
                 <Button
                     isDisabled={
-                        !_groupType ||
+                        !group.type ||
                         !_groupName ||
-                        (_groupType === "off-chain" && !_groupDescription)
+                        (group.type === "off-chain" && !_groupDescription)
                     }
                     variant="solid"
                     colorScheme="primary"
-                    onClick={() =>
-                        onSubmit({
-                            ...group,
-                            name: _groupName,
-                            description: _groupDescription,
-                            type: _groupType
-                        })
-                    }
+                    onClick={() => onSubmit()}
                 >
                     Continue
                 </Button>
