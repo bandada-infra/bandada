@@ -35,7 +35,7 @@ export default function AccessModeStep({
 }: AccessModeStepProps): JSX.Element {
     const [_accessMode, setAccessMode] = useState<AccessMode>("manual")
     const [_validator, setValidator] = useState<number>(0)
-    const [_reputationCriteria, setReputationCriteria] = useState<any>({})
+    const [_reputationCriteria, setReputationCriteria] = useState<any>()
 
     useEffect(() => {
         setReputationCriteria({
@@ -43,6 +43,17 @@ export default function AccessModeStep({
             criteria: {}
         })
     }, [_validator])
+
+    useEffect(() => {
+        if (_accessMode === "manual") {
+            setReputationCriteria(undefined)
+        } else {
+            setReputationCriteria({
+                id: validators[_validator].id,
+                criteria: {}
+            })
+        }
+    }, [_accessMode, _validator])
 
     return (
         <>
@@ -125,7 +136,8 @@ export default function AccessModeStep({
                         </Select>
                     </VStack>
 
-                    {_reputationCriteria.criteria &&
+                    {_reputationCriteria &&
+                        _reputationCriteria.criteria &&
                         Object.entries(validators[_validator].criteriaABI).map(
                             (parameter) => (
                                 <VStack
@@ -207,7 +219,8 @@ export default function AccessModeStep({
                     isDisabled={
                         !_accessMode ||
                         (_accessMode === "credentials" &&
-                            (!_reputationCriteria.criteria ||
+                            (!_reputationCriteria ||
+                                !_reputationCriteria.criteria ||
                                 Object.keys(_reputationCriteria.criteria)
                                     .length !==
                                     Object.keys(

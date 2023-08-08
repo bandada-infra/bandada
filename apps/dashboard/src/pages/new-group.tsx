@@ -13,7 +13,8 @@ const steps = ["General info", "Group size", "Access mode", "Summary"]
 export default function NewGroupPage(): JSX.Element {
     const [_currentStep, setCurrentStep] = useState<number>(0)
     const [_group, setGroup] = useState<any>({
-        type: "off-chain"
+        type: "off-chain",
+        fingerprintDuration: 3600
     })
     const navigate = useNavigate()
 
@@ -85,7 +86,7 @@ export default function NewGroupPage(): JSX.Element {
                     ) : (
                         <FinalPreviewStep
                             group={_group}
-                            onBack={() => setCurrentStep(1)}
+                            onBack={() => setCurrentStep(_currentStep - 1)}
                         />
                     )}
                 </HStack>

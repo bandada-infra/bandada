@@ -33,7 +33,7 @@ export default function GeneralInfoStep({
         group.description
     )
     const [_fingerprintDuration, setFingerprintDuration] = useState<number>(
-        group.fingerprintDuration || 3600
+        group.fingerprintDuration
     )
 
     return (
