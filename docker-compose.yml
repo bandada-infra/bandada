@@ -6,10 +6,20 @@ services:
         build:
             context: ./
             dockerfile: ./apps/api/Dockerfile
+            args:
+                - BUILD_LOCAL=true
         image: bandada-api:latest
         restart: unless-stopped
-        env_file:
-            - apps/api/.env
+        environment:
+            - DB_URL=postgres://root:helloworld@postgres:5432/postgres
+            - DB_TYPE=postgres
+            - INFURA_API_KEY=
+            - IRON_SESSION_PASSWORD=JJ1EnoEPyesNnpdcDVD4ujVG2XKXJLQx
+            - BACKEND_PRIVATE_KEY=ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+            - ETHEREUM_NETWORK=localhost
+            - API_URL=http://localhost:3000
+            - DASHBOARD_URL=http://localhost:3001
+            - SIWE_STATEMENT=You are using your Ethereum Wallet to sign in to Bandada.
         ports:
             - "3000:3000"
         networks:
@@ -47,23 +57,23 @@ services:
         depends_on:
             - api
 
-#    postgres:
-#         container_name: postgres
-#         image: postgres
-#         environment:
-#             POSTGRES_USER: root
-#             POSTGRES_PASSWORD: helloworld
-#             POSTGRES_DB: bandada
-#             PGDATA: /data/postgres
-#         volumes:
-#             - postgres:/data/postgres
-#             - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
-#         ports:
-#             - "5432:5432"
-#         restart: unless-stopped
-#         command: postgres -c listen_addresses='*'
-#         networks:
-#             - bandada
+    postgres:
+        container_name: postgres
+        image: postgres
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: helloworld
+            POSTGRES_DB: bandada
+            PGDATA: /data/postgres
+        volumes:
+            - postgres:/data/postgres
+            - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+        ports:
+            - "5432:5432"
+        restart: unless-stopped
+        command: postgres -c listen_addresses='*'
+        networks:
+            - bandada
 
 networks:
     bandada:

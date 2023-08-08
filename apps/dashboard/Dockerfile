@@ -5,9 +5,15 @@
 FROM node:18-alpine as builder
 RUN apk add --no-cache git
 
+ARG BUILD_LOCAL
+
 WORKDIR /builder
 COPY . .
-RUN yarn install --silent && yarn workspaces foreach -ptR --from '{dashboard,libs}' run build
+RUN yarn install --silent && yarn workspaces foreach -ptR --from '{libs}' run build
+RUN if [ "$BUILD_LOCAL" = "true" ]; \
+    then yarn run build:local; \
+    else yarn run build; \
+    fi  
 
 
 # Create image for the app by copying build artifacts from builder
