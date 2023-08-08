@@ -1,3 +1,7 @@
+# This docker file is for running the app in a local environment
+# Envs for api are set directly in this file
+# The dashboard and client will be built to point to "localhost" api
+
 version: "3.9"
 
 services:
@@ -11,7 +15,7 @@ services:
         image: bandada-api:latest
         restart: unless-stopped
         environment:
-            - DB_URL=postgres://root:helloworld@postgres:5432/postgres
+            - DB_URL=postgres://root:helloworld@postgres:5432/bandada
             - DB_TYPE=postgres
             - INFURA_API_KEY=
             - IRON_SESSION_PASSWORD=JJ1EnoEPyesNnpdcDVD4ujVG2XKXJLQx
@@ -30,6 +34,8 @@ services:
         build:
             context: ./
             dockerfile: ./apps/client/Dockerfile
+            args:
+                - BUILD_LOCAL=true
         image: bandada-client:latest
         restart: unless-stopped
         environment:
@@ -66,8 +72,8 @@ services:
             POSTGRES_DB: bandada
             PGDATA: /data/postgres
         volumes:
-            - postgres:/data/postgres
-            - ./database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+            - pgdb:/data/postgres
+            - ./database/seed.sql:/docker-entrypoint-initdb.d/1-schema.sql
         ports:
             - "5432:5432"
         restart: unless-stopped
@@ -81,4 +87,4 @@ networks:
         driver: bridge
 
 volumes:
-    postgres:
+    pgdb:

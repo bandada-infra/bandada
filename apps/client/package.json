@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "vite --port 3002",
         "build": "tsc && vite build --mode production",
+        "build:local": "tsc && vite build --mode local",
         "preview": "vite preview"
     },
     "dependencies": {

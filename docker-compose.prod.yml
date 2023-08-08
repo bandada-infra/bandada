@@ -1,3 +1,7 @@
+# This docker compose file is used to be run in a production line instance
+# Postgres DB is expected to be run externally
+# Set env vars in apps/api/.env
+
 version: "3.9"
 
 services:
