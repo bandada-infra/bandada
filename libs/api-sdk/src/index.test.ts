@@ -8,7 +8,8 @@ import {
     addMemberByInviteCode,
     removeMemberByApiKey
 } from "./groups"
-import { GroupResponse } from "./types"
+import { getInvite } from "./invites"
+import { GroupResponse, InviteResponse } from "./types"
 
 jest.mock("@bandada/utils", () => ({
     __esModule: true,
@@ -164,6 +165,39 @@ describe("Bandada API SDK", () => {
                     apiKey
                 )
                 expect(res).toBeUndefined()
+            })
+        })
+    })
+    describe("Invites", () => {
+        describe("# getInvite", () => {
+            it("Should return an invite", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve({
+                        code: "C5VAG4HD",
+                        isRedeemed: false,
+                        createdAt: "2023-08-09T18:10:02.000Z",
+                        group: {
+                            id: "95633257675970239314311768035433",
+                            name: "Group 1",
+                            description: "This is Group 1",
+                            adminId:
+                                "0x63229164c457584616006e31d1e171e6cdd4163695bc9c4bf0227095998ffa4c",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            reputationCriteria: null,
+                            apiEnabled: false,
+                            apiKey: null,
+                            createdAt: "2023-08-09T18:09:53.000Z",
+                            updatedAt: "2023-08-09T18:09:53.000Z"
+                        },
+                        groupName: "Group 1",
+                        groupId: "95633257675970239314311768035433"
+                    })
+                )
+
+                const inviteCode = "C5VAG4HD"
+                const invite: InviteResponse = await getInvite(inviteCode)
+                expect(invite.code).toBe(inviteCode)
             })
         })
     })

@@ -7,4 +7,5 @@ export {
     addMemberByInviteCode,
     removeMemberByApiKey
 } from "./groups"
+export { getInvite } from "./invites"
 export * from "./types"
