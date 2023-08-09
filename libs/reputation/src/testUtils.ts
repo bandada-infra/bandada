@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 if (process.env.NODE_ENV === "test") {
     jest.mock("@bandada/utils", () => ({
         __esModule: true,

@@ -43,7 +43,7 @@ export class ReputationService {
 
         if (!["github", "twitter"].includes(oAuthState.providerName)) {
             throw new BadRequestException(
-                `OAuth provider ${oAuthState.providerName}' is not supported`
+                `OAuth provider '${oAuthState.providerName}' is not supported`
             )
         }
 
@@ -103,8 +103,8 @@ export class ReputationService {
 
         const profile = await provider.getProfile(accessToken)
 
-        // Check if the same account has already joined a group.
-        const accountHash = id(profile.id + provider)
+        // Check if the same account has already joined the group.
+        const accountHash = id(profile.id + groupId)
 
         if (
             group.reputationAccounts.find(
@@ -112,7 +112,7 @@ export class ReputationService {
             )
         ) {
             throw new BadRequestException(
-                "OAuth account has already joined a group"
+                "OAuth account has already joined the group"
             )
         }
 

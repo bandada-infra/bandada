@@ -40,6 +40,7 @@ export default async (): Promise<Config.InitialOptions> => ({
     collectCoverageFrom: [
         "<rootDir>/**/*.ts",
         "!<rootDir>/**/main.ts",
+        "!<rootDir>/**/docSchemas/**.ts",
         "!<rootDir>/**/*.module.ts",
         "!<rootDir>/**/*.controller.ts",
         "!<rootDir>/**/*.dto.ts",

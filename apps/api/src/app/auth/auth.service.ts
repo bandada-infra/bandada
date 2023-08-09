@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import {
     Injectable,
     UnauthorizedException,
@@ -7,7 +6,7 @@ import {
 import { SiweMessage } from "siwe"
 import { v4 } from "uuid"
 import { AdminService } from "../admins/admins.service"
-import { SignInWithEthereumDTO } from "./dto/siwe-dto"
+import { SignInWithEthereumDTO } from "./dto/siwe.dto"
 
 @Injectable()
 export class AuthService {
@@ -22,19 +21,19 @@ export class AuthService {
             await siweMessage.validate(signature)
 
         if (nonce !== expectedNonce) {
-            throw new UnprocessableEntityException("Invalid nonce.")
+            throw new UnprocessableEntityException("Invalid nonce")
         }
 
         if (statement !== process.env.SIWE_STATEMENT) {
             throw new UnauthorizedException(
-                "Invalid statement used in the SIWE message."
+                "Invalid statement used in the SIWE message"
             )
         }
 
         // Assuming the auth was made from the dashboard
         if (domain !== new URL(process.env.DASHBOARD_URL).host) {
             throw new UnauthorizedException(
-                "Invalid domain used in the SIWE message."
+                "Invalid domain used in the SIWE message"
             )
         }
 

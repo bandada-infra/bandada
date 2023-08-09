@@ -15,7 +15,8 @@ jest.mock("@bandada/utils", () => ({
             status: true,
             logs: ["1"]
         })),
-        getGroups: jest.fn(() => [])
+        getGroups: jest.fn(() => []),
+        updateFingerprintDuration: jest.fn(() => null)
     })
 }))
 
@@ -75,17 +76,69 @@ describe("GroupsService", () => {
         })
     })
 
-    describe("# updateGroup", () => {
-        it("Should update a group", async () => {
-            const { description } = await groupsService.updateGroup(
-                groupId,
+    describe("# removeGroup", () => {
+        it("Should remove an existing group", async () => {
+            const { id } = await groupsService.createGroup(
                 {
-                    description: "This is a new description"
+                    name: "Group3",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
                 },
                 "admin"
             )
 
+            await groupsService.removeGroup(id, "admin")
+
+            const fun = groupsService.getGroup(id)
+
+            await expect(fun).rejects.toThrow(
+                `Group with id '${id}' does not exist`
+            )
+        })
+
+        it("Should not remove a group if the admin is the wrong one", async () => {
+            const fun = groupsService.removeGroup(groupId, "wrong-admin")
+
+            await expect(fun).rejects.toThrow("You are not the admin")
+        })
+    })
+
+    describe("# updateGroup", () => {
+        it("Should update a group", async () => {
+            const { id } = await groupsService.createGroup(
+                {
+                    name: "Group4",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    reputationCriteria: {
+                        id: "GITHUB_FOLLOWERS",
+                        criteria: {
+                            minFollowers: 12
+                        }
+                    }
+                },
+                "admin"
+            )
+
+            const { description, fingerprintDuration, reputationCriteria } =
+                await groupsService.updateGroup(
+                    id,
+                    {
+                        description: "This is a new description",
+                        fingerprintDuration: 1000,
+                        reputationCriteria: {
+                            id: "TWITTER_FOLLOWERS",
+                            minFollowers: 23
+                        }
+                    },
+                    "admin"
+                )
+
             expect(description).toContain("new")
+            expect(fingerprintDuration).toBe(1000)
+            expect(reputationCriteria.id).toBe("TWITTER_FOLLOWERS")
         })
 
         it("Should not update a group if the admin is the wrong one", async () => {
@@ -122,7 +175,7 @@ describe("GroupsService", () => {
         it("Should return a list of groups", async () => {
             const result = await groupsService.getGroups()
 
-            expect(result).toHaveLength(2)
+            expect(result).toHaveLength(3)
         })
 
         it("Should return a list of groups by admin", async () => {
@@ -167,6 +220,54 @@ describe("GroupsService", () => {
             const fun = groupsService.getGroup("Group2")
 
             await expect(fun).rejects.toThrow("does not exist")
+        })
+    })
+
+    describe("# updateApiKey", () => {
+        let group: Group
+
+        it("Should enable the API with a new API key", async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: true },
+                "admin"
+            )
+
+            const { apiKey } = await groupsService.getGroup(group.id)
+
+            expect(apiKey).toHaveLength(36)
+        })
+
+        it("Should update the api key of the group", async () => {
+            const apiKey = await groupsService.updateApiKey(group.id, "admin")
+
+            expect(apiKey).toHaveLength(36)
+        })
+
+        it("Should not update the api key if the admin is the wrong one", async () => {
+            const fun = groupsService.updateApiKey(groupId, "wrong-admin")
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${groupId}'`
+            )
+        })
+
+        it("Should not update the api key if the api is not enabled", async () => {
+            const fun = groupsService.updateApiKey(groupId, "admin")
+
+            await expect(fun).rejects.toThrow(
+                `Group '${groupId}' API key is not enabled`
+            )
         })
     })
 
@@ -244,7 +345,7 @@ describe("GroupsService", () => {
         })
     })
 
-    describe("# removeMember", () => {
+    describe("# removeMemberManually", () => {
         it("Should remove a member if they exist in the group", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
@@ -269,17 +370,22 @@ describe("GroupsService", () => {
 
             expect(members).toHaveLength(1)
 
-            const { members: newMembers } = await groupsService.removeMember(
-                _groupId,
-                "111000",
-                "admin"
-            )
+            const { members: newMembers } =
+                await groupsService.removeMemberManually(
+                    _groupId,
+                    "111000",
+                    "admin"
+                )
 
             expect(newMembers).toHaveLength(0)
         })
 
         it("Should throw error if member is not part of the group", async () => {
-            const fun = groupsService.removeMember(groupId, "00000", "admin")
+            const fun = groupsService.removeMemberManually(
+                groupId,
+                "00000",
+                "admin"
+            )
 
             await expect(fun).rejects.toThrow("is not a member of group")
         })
@@ -304,36 +410,13 @@ describe("GroupsService", () => {
                 inviteCode: invite.code
             })
 
-            const fun = groupsService.removeMember(_groupId, "111000", "rndom")
+            const fun = groupsService.removeMemberManually(
+                _groupId,
+                "111000",
+                "rndom"
+            )
 
             await expect(fun).rejects.toThrow("You are not the admin")
-        })
-    })
-
-    describe("# API access", () => {
-        let group: Group
-        let apiKey: string
-
-        it("Should generate a new API key", async () => {
-            group = await groupsService.createGroup(
-                {
-                    name: "Group2",
-                    description: "This is a new group",
-                    treeDepth: 16,
-                    fingerprintDuration: 3600
-                },
-                "admin"
-            )
-
-            await groupsService.updateGroup(
-                group.id,
-                { apiEnabled: true },
-                "admin"
-            )
-
-            apiKey = (await groupsService.getGroup(group.id)).apiKey
-
-            expect(apiKey.length).toBeGreaterThan(1)
         })
     })
 
@@ -371,7 +454,19 @@ describe("GroupsService", () => {
             expect(members).toHaveLength(1)
         })
 
-        it("Should delete a member from an existing group via API", async () => {
+        it("Should not add a member if they already exist", async () => {
+            const fun = groupsService.addMemberWithAPIKey(
+                group.id,
+                "123123",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Member '123123' already exists in the group '${group.id}'`
+            )
+        })
+
+        it("Should remove a member from an existing group via API", async () => {
             await groupsService.addMemberWithAPIKey(group.id, "100001", apiKey)
 
             const { members } = await groupsService.removeMemberWithAPIKey(
@@ -383,6 +478,18 @@ describe("GroupsService", () => {
             expect(members.map((m) => m.id)).not.toContain("100001")
         })
 
+        it("Should not remove a member if they does not exist", async () => {
+            const fun = groupsService.removeMemberWithAPIKey(
+                group.id,
+                "100001",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Member '100001' is not a member of group '${group.id}'`
+            )
+        })
+
         it("Should not add a member to an existing group if API is disabled", async () => {
             await groupsService.updateGroup(
                 group.id,
@@ -390,19 +497,31 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            const promise = groupsService.addMemberWithAPIKey(
+            const fun = groupsService.addMemberWithAPIKey(
                 groupId,
                 "100002",
                 apiKey
             )
 
-            await expect(promise).rejects.toThrow(
+            await expect(fun).rejects.toThrow(
+                "Invalid API key or API access not enabled for group"
+            )
+        })
+
+        it("Should not remove a member to an existing group if API is disabled", async () => {
+            const fun = groupsService.removeMemberWithAPIKey(
+                groupId,
+                "100001",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
                 "Invalid API key or API access not enabled for group"
             )
         })
     })
 
-    describe("# Add and remove member manually", () => {
+    describe("# addMemberManually", () => {
         let group: Group
 
         beforeAll(async () => {
@@ -427,48 +546,26 @@ describe("GroupsService", () => {
             expect(members).toHaveLength(1)
         })
 
-        it("Should delete a member from an existing group manually", async () => {
-            await groupsService.addMemberManually(group.id, "100001", "admin")
-
-            const { members } = await groupsService.removeMember(
+        it("Should not add a member if they already exists", async () => {
+            const fun = groupsService.addMemberManually(
                 group.id,
-                "100001",
+                "123123",
                 "admin"
             )
 
-            expect(members.map((m) => m.id)).not.toContain("100001")
+            await expect(fun).rejects.toThrow(
+                `Member '123123' already exists in the group '${group.id}'`
+            )
         })
-    })
 
-    describe("# Reputation Criteria", () => {
-        it("Should save the reputation criteria for the group", async () => {
-            const group = await groupsService.createGroup(
-                {
-                    name: "Group 1",
-                    description: "This is a new group",
-                    treeDepth: 16,
-                    fingerprintDuration: 3600
-                },
-                "admin"
-            )
-
-            const reputationCriteria = {
-                type: "GITHUB_REPO_COMMITS",
-                params: {
-                    repo: "https://github.com/privacy-scaling-explorations/sugesto",
-                    minCommits: 100
-                }
-            }
-
-            await groupsService.updateGroup(
+        it("Should not add a member if the admin is the wrong admin", async () => {
+            const fun = groupsService.addMemberManually(
                 group.id,
-                { reputationCriteria },
-                "admin"
+                "123123",
+                "wrong-admin"
             )
 
-            const updatedGroup = await groupsService.getGroup(group.id)
-
-            expect(updatedGroup).toHaveProperty("reputationCriteria")
+            await expect(fun).rejects.toThrow("You are not the admin")
         })
     })
 })
