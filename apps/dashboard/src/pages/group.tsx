@@ -372,9 +372,8 @@ export default function GroupPage(): JSX.Element {
                         </Heading>
 
                         <Button
-                            variant="link"
-                            color="balticSea.600"
-                            textDecoration="underline"
+                            variant="solid"
+                            colorScheme="secondary"
                             onClick={addMembersModal.onOpen}
                         >
                             Add member
