@@ -11,24 +11,23 @@ import {
     InputRightElement,
     Spinner,
     Text,
-    useDisclosure,
     VStack
 } from "@chakra-ui/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
-import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
+import { Link, useNavigate } from "react-router-dom"
 import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
-import CreateGroupModal from "../components/create-group-modal"
+import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
 import GroupCard from "../components/group-card"
 import { AuthContext } from "../context/auth-context"
 import { Group } from "../types"
 
 export default function GroupsPage(): JSX.Element {
     const { admin } = useContext(AuthContext)
-    const createGroupModal = useDisclosure()
     const [_isLoading, setIsLoading] = useState(false)
     const [_groups, setGroups] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
+    const navigate = useNavigate()
 
     useEffect(() => {
         ;(async () => {
@@ -56,21 +55,6 @@ export default function GroupsPage(): JSX.Element {
             }
         })()
     }, [admin])
-
-    const addGroup = useCallback(
-        (group?: Group) => {
-            if (!group) {
-                createGroupModal.onClose()
-
-                return
-            }
-
-            setGroups([group, ..._groups])
-
-            createGroupModal.onClose()
-        },
-        [_groups, createGroupModal]
-    )
 
     const filterGroup = useCallback(
         (group: Group) =>
@@ -122,7 +106,7 @@ export default function GroupsPage(): JSX.Element {
                     <Button
                         variant="solid"
                         colorScheme="primary"
-                        onClick={createGroupModal.onOpen}
+                        onClick={() => navigate("/groups/new")}
                     >
                         Add group
                     </Button>
@@ -153,25 +137,18 @@ export default function GroupsPage(): JSX.Element {
                                 a.name < b.name ? -1 : a.name > b.name ? 1 : 0
                             )
                             .map((group) => (
-                                <GridItem
-                                    borderRadius="8px"
-                                    borderColor="balticSea.200"
-                                    borderWidth="1px"
-                                    borderStyle="solid"
-                                    bgColor="balticSea.100"
+                                <Link
                                     key={group.id + group.name}
+                                    to={`/groups/${group.type}/${group.id}`}
                                 >
-                                    <GroupCard {...group} />
-                                </GridItem>
+                                    <GridItem>
+                                        <GroupCard {...group} />
+                                    </GridItem>
+                                </Link>
                             ))}
                     </Grid>
                 )}
             </VStack>
-
-            <CreateGroupModal
-                isOpen={createGroupModal.isOpen}
-                onClose={addGroup}
-            />
         </Container>
     )
 }

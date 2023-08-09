@@ -1,20 +1,23 @@
 import { getProvider } from "@bandada/reputation"
 import { Flex, Text } from "@chakra-ui/react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { addMemberByReputation, setOAuthState } from "../api/bandadaAPI"
 
 export default function ReputationPage() {
-    const [searchParams] = useSearchParams()
+    const [_searchParams] = useSearchParams()
+    const [_message, setMessage] = useState<string>(
+        "Joining reputation group..."
+    )
 
     useEffect(() => {
         ;(async () => {
-            if (searchParams.has("group") && searchParams.has("member")) {
-                const groupId = searchParams.get("group")
-                const memberId = searchParams.get("member")
-                const providerName = searchParams.get("provider")
+            if (_searchParams.has("group") && _searchParams.has("member")) {
+                const groupId = _searchParams.get("group")
+                const memberId = _searchParams.get("member")
+                const providerName = _searchParams.get("provider")
                 const clientRedirectUri =
-                    searchParams.get("redirect_uri") || undefined
+                    _searchParams.get("redirect_uri") || undefined
 
                 const state = await setOAuthState(
                     groupId as string,
@@ -28,7 +31,7 @@ export default function ReputationPage() {
                         `VITE_${providerName?.toUpperCase()}_CLIENT_ID`
                     ]
                     const redirectUri = import.meta.env[
-                        `VITE_${clientRedirectUri?.toUpperCase()}_REDIRECT_URI`
+                        `VITE_${providerName?.toUpperCase()}_REDIRECT_URI`
                     ]
 
                     const provider = getProvider(providerName as string)
@@ -43,25 +46,27 @@ export default function ReputationPage() {
                 }
             }
 
-            if (searchParams.has("code") && searchParams.has("state")) {
-                const oAuthCode = searchParams.get("code") as string
-                const oAuthState = searchParams.get("state") as string
+            if (_searchParams.has("code") && _searchParams.has("state")) {
+                const oAuthCode = _searchParams.get("code") as string
+                const oAuthState = _searchParams.get("state") as string
 
-                const redirectUri = await addMemberByReputation(
+                const clientRedirectUri = await addMemberByReputation(
                     oAuthState,
                     oAuthCode
                 )
 
-                if (redirectUri) {
-                    window.location.replace(redirectUri)
+                if (clientRedirectUri) {
+                    window.location.replace(clientRedirectUri)
+                } else {
+                    setMessage("You have joined the group!")
                 }
             }
         })()
-    }, [searchParams])
+    }, [_searchParams])
 
     return (
         <Flex flex="1" justify="center" align="center">
-            <Text>Joining reputation group...</Text>
+            <Text>{_message}</Text>
         </Flex>
     )
 }

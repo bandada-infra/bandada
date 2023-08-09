@@ -19,6 +19,11 @@ export class AuthController {
         return req.session.nonce
     }
 
+    @Get()
+    async(@Req() req: Request) {
+        return this.authService.isLoggedIn(req.session.adminId)
+    }
+
     @Post("")
     async signIn(@Body() body: SignInWithEthereumDTO, @Req() req: Request) {
         const { admin } = await this.authService.signIn(

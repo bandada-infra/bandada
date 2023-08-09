@@ -1,12 +1,12 @@
 import {
-    IsString,
+    IsBoolean,
+    IsJSON,
     IsNumber,
+    IsOptional,
+    IsString,
     Max,
     Min,
-    IsOptional,
-    MinLength,
-    IsBoolean,
-    IsObject
+    MinLength
 } from "class-validator"
 
 export class UpdateGroupDto {
@@ -30,6 +30,6 @@ export class UpdateGroupDto {
     readonly fingerprintDuration?: number
 
     @IsOptional()
-    @IsObject()
-    readonly reputationCriteria?: object
+    @IsJSON()
+    readonly reputationCriteria?: any
 }

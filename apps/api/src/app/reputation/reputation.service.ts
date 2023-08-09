@@ -118,7 +118,7 @@ export class ReputationService {
 
         // Check reputation.
         if (
-            !(await validateReputation(group.reputationCriteria, {
+            !(await validateReputation(JSON.parse(group.reputationCriteria), {
                 profile,
                 accessTokens: { [providerName]: accessToken }
             }))

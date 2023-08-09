@@ -7,7 +7,8 @@ import {
     Min,
     MinLength,
     NotContains,
-    IsNumberString
+    IsNumberString,
+    IsJSON
 } from "class-validator"
 
 export class CreateGroupDto {
@@ -34,4 +35,8 @@ export class CreateGroupDto {
     @IsNumber()
     @Min(0)
     readonly fingerprintDuration: number
+
+    @IsJSON()
+    @IsOptional()
+    readonly reputationCriteria?: any
 }

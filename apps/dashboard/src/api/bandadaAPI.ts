@@ -100,7 +100,8 @@ export async function createGroup(
     name: string,
     description: string,
     treeDepth: number,
-    fingerprintDuration: number
+    fingerprintDuration: number,
+    reputationCriteria?: any
 ): Promise<Group | null> {
     try {
         const group = await request(`${API_URL}/groups`, {
@@ -109,7 +110,8 @@ export async function createGroup(
                 name,
                 description,
                 treeDepth,
-                fingerprintDuration
+                fingerprintDuration,
+                reputationCriteria: JSON.stringify(reputationCriteria)
             }
         })
 
@@ -384,6 +386,28 @@ export async function logOut(): Promise<void | null> {
     try {
         await request(`${API_URL}/auth`, {
             method: "DELETE"
+        })
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return null
+    }
+}
+
+/**
+ * It returns true if the admin is logged in, false otherwise.
+ * @returns True or false.
+ */
+export async function isLoggedIn(): Promise<null | boolean> {
+    try {
+        return await request(`${API_URL}/auth`, {
+            method: "GET"
         })
     } catch (error: any) {
         console.error(error)

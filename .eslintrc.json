@@ -38,6 +38,7 @@
         "no-restricted-syntax": "off",
         "no-param-reassign": "off",
         "no-underscore-dangle": "off",
+        "react/require-default-props": "off",
         "consistent-return": "off",
         "class-methods-use-this": "off",
         "import/no-extraneous-dependencies": "off",

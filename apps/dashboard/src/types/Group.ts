@@ -13,12 +13,11 @@ export type Group = {
 }
 
 export type GroupSize = {
+    name: string
     description: string
     capacity: string
     useCases: string[]
     treeDepth: number
 }
-
-export type GroupSizes = Record<string, GroupSize>
 
 export default Group
