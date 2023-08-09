@@ -208,7 +208,7 @@ export class GroupsController {
         }
 
         // Remove as an admin.
-        await this.groupsService.removeMember(
+        await this.groupsService.removeMemberManually(
             groupId,
             memberId,
             req.session.adminId

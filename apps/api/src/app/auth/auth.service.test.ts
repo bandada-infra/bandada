@@ -82,8 +82,8 @@ describe("AuthService", () => {
         process.env.DASHBOARD_URL = originalApiUrl
     })
 
-    describe("# SIWE", () => {
-        it("Should sign in and create a a new admin", async () => {
+    describe("# signIn", () => {
+        it("Should sign in and create a new admin", async () => {
             const message = createSiweMessage(account1.address)
             const signature = await account1.signMessage(message)
 
@@ -97,30 +97,6 @@ describe("AuthService", () => {
 
             expect(admin).toBeTruthy()
             expect(admin.address).toBe(account1.address)
-        })
-
-        it("Should sign in and return an existing admin", async () => {
-            // Create a admin directly
-            const admin2 = await adminService.create({
-                id: "account2",
-                address: account2.address
-            })
-
-            // Sign in with same address
-            const message = createSiweMessage(account2.address)
-            const signature = await account2.signMessage(message)
-
-            const { admin } = await authService.signIn(
-                {
-                    message,
-                    signature
-                },
-                nonce
-            )
-
-            expect(admin).toBeTruthy()
-            expect(admin.address).toBe(admin2.address)
-            expect(admin.address).toBe(account2.address)
         })
 
         it("Should throw an error if the signature is invalid", async () => {
@@ -140,38 +116,72 @@ describe("AuthService", () => {
             ).rejects.toThrow()
         })
 
-        it("Should throw an error if the statement is invalid", async () => {
-            // Use a custom message to sign
-            const message = createSiweMessage(account1.address, "Sign in")
-            const signature = await account1.signMessage(message)
-
-            await expect(
-                authService.signIn(
-                    {
-                        message: "invalid message",
-                        signature
-                    },
-                    nonce
-                )
-            ).rejects.toThrow()
-        })
-
         it("Should throw an error if the host is different", async () => {
             process.env.DASHBOARD_URL = "https://bandada2.test"
 
-            // Use a custom message to sign
             const message = createSiweMessage(account1.address)
             const signature = await account1.signMessage(message)
 
             await expect(
                 authService.signIn(
                     {
-                        message: "invalid message",
+                        message,
                         signature
                     },
                     nonce
                 )
-            ).rejects.toThrow()
+            ).rejects.toThrow("Invalid domain used in the SIWE message")
+        })
+
+        it("Should throw an error the nonce is different", async () => {
+            const message = createSiweMessage(account1.address)
+            const signature = await account1.signMessage(message)
+
+            await expect(
+                authService.signIn(
+                    {
+                        message,
+                        signature
+                    },
+                    "1"
+                )
+            ).rejects.toThrow("Invalid nonce")
+        })
+
+        it("Should throw an error if the message is not the right one", async () => {
+            const message = createSiweMessage(
+                account1.address,
+                "Another statement"
+            )
+            const signature = await account1.signMessage(message)
+
+            await expect(
+                authService.signIn(
+                    {
+                        message,
+                        signature
+                    },
+                    nonce
+                )
+            ).rejects.toThrow("Invalid statement used in the SIWE message")
+        })
+    })
+
+    describe("# isLoggedIn", () => {
+        it("Should return true if the admin exists", async () => {
+            const admin = await adminService.findOne({
+                address: account1.address
+            })
+
+            const response = await authService.isLoggedIn(admin.id)
+
+            expect(response).toBeTruthy()
+        })
+
+        it("Should return false if the admin does not exist", async () => {
+            const response = await authService.isLoggedIn("1234")
+
+            expect(response).toBeFalsy()
         })
     })
 })

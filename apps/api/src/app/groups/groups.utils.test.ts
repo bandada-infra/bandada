@@ -2,7 +2,7 @@ import { mapGroupToResponseDTO } from "./groups.utils"
 
 describe("Groups utils", () => {
     describe("# mapGroupToResponseDTO", () => {
-        it("Should map the group members", async () => {
+        it("Should map the group data", async () => {
             const group = {
                 members: [
                     {
@@ -21,6 +21,16 @@ describe("Groups utils", () => {
             const { members } = mapGroupToResponseDTO({} as any)
 
             expect(members).toHaveLength(0)
+        })
+
+        it("Should map the group data with api keys if specified", async () => {
+            const { apiKey, apiEnabled } = mapGroupToResponseDTO(
+                { apiEnabled: true, apiKey: "123" } as any,
+                true
+            )
+
+            expect(apiEnabled).toBeTruthy()
+            expect(apiKey).toBe("123")
         })
     })
 })

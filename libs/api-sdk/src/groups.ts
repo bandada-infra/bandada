@@ -10,7 +10,8 @@ const config = {
     baseURL:
         process.env.NODE_ENV === "test"
             ? "http://localhost:3000"
-            : "https://api.bandada.appliedzkp.org/"
+            : /* istanbul ignore next */
+              "https://api.bandada.appliedzkp.org/"
 }
 
 /**

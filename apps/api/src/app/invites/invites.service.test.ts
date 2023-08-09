@@ -45,7 +45,7 @@ describe("InvitesService", () => {
         invitesService = await module.resolve(InvitesService)
         groupsService = await module.resolve(GroupsService)
 
-        const createdGroup = await groupsService.createGroup(
+        const group = await groupsService.createGroup(
             {
                 name: "Group1",
                 description: "This is a description",
@@ -54,7 +54,8 @@ describe("InvitesService", () => {
             },
             "admin"
         )
-        groupId = createdGroup.id
+
+        groupId = group.id
     })
 
     describe("# createInvite", () => {
@@ -74,6 +75,33 @@ describe("InvitesService", () => {
             const fun = invitesService.createInvite({ groupId }, "wrong-admin")
 
             await expect(fun).rejects.toThrow("You are not the admin")
+        })
+
+        it("Should not create an invite if the group is a reputation group", async () => {
+            const group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    reputationCriteria: {
+                        id: "GITHUB_FOLLOWERS",
+                        criteria: {
+                            minFollowers: 12
+                        }
+                    }
+                },
+                "admin"
+            )
+
+            const fun = invitesService.createInvite(
+                { groupId: group.id },
+                "admin"
+            )
+
+            await expect(fun).rejects.toThrow(
+                "Reputation groups cannot be accessed via invites"
+            )
         })
     })
 

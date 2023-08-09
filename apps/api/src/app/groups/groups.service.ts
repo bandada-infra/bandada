@@ -42,6 +42,7 @@ export class GroupsService {
 
         this._cacheGroups()
 
+        /* istanbul ignore next */
         if (process.env.NODE_ENV !== "test") {
             setTimeout(() => {
                 this._syncContractGroups()
@@ -240,7 +241,7 @@ export class GroupsService {
     }
 
     /**
-     * Add a member to the group manually as an admin
+     * Add a member to the group manually as an admin.
      * @param groupId ID of the group
      * @param memberId ID of the member to be added
      * @param adminId id of the admin making the request
@@ -328,13 +329,13 @@ export class GroupsService {
     }
 
     /**
-     * Delete a member from group
+     * Delete a member from a group.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
      * @param adminId Group admin id.
      * @returns Group data with removed member.
      */
-    async removeMember(
+    async removeMemberManually(
         groupId: string,
         memberId: string,
         adminId: string

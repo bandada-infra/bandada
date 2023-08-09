@@ -21,19 +21,19 @@ export class AuthService {
             await siweMessage.validate(signature)
 
         if (nonce !== expectedNonce) {
-            throw new UnprocessableEntityException("Invalid nonce.")
+            throw new UnprocessableEntityException("Invalid nonce")
         }
 
         if (statement !== process.env.SIWE_STATEMENT) {
             throw new UnauthorizedException(
-                "Invalid statement used in the SIWE message."
+                "Invalid statement used in the SIWE message"
             )
         }
 
         // Assuming the auth was made from the dashboard
         if (domain !== new URL(process.env.DASHBOARD_URL).host) {
             throw new UnauthorizedException(
-                "Invalid domain used in the SIWE message."
+                "Invalid domain used in the SIWE message"
             )
         }
 
