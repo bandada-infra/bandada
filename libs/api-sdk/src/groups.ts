@@ -1,18 +1,8 @@
 import { request } from "@bandada/utils"
 import { GroupResponse } from "./types"
+import { config } from "./config"
 
 const url = "/groups"
-
-const config = {
-    headers: {
-        "Content-Type": "application/json"
-    },
-    baseURL:
-        process.env.NODE_ENV === "test"
-            ? "http://localhost:3000"
-            : /* istanbul ignore next */
-              "https://api.bandada.appliedzkp.org/"
-}
 
 /**
  * Returns the list of groups.

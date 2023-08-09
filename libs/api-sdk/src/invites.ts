@@ -1,18 +1,8 @@
 import { request } from "@bandada/utils"
 import { InviteResponse } from "./types"
+import { config } from "./config"
 
 const url = "/invites"
-
-const config = {
-    headers: {
-        "Content-Type": "application/json"
-    },
-    baseURL:
-        process.env.NODE_ENV === "test"
-            ? "http://localhost:3000"
-            : /* istanbul ignore next */
-              "https://api.bandada.appliedzkp.org/"
-}
 
 /**
  * Returns a specific invite.
