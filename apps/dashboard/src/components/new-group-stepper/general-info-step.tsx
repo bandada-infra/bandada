@@ -8,6 +8,8 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
+    Tag,
+    TagLabel,
     Text,
     VStack
 } from "@chakra-ui/react"
@@ -69,25 +71,40 @@ export default function GeneralInfoStep({
                             px="20px"
                             py="15px"
                             borderTopRadius="8px"
-                            spacing="3"
+                            justify="space-between"
                         >
-                            <Icon
-                                color={
-                                    group.type === groupType
-                                        ? "classicRose.600"
-                                        : "balticSea.600"
-                                }
-                                boxSize="5"
-                                as={
-                                    groupType === "on-chain"
-                                        ? FiZap
-                                        : FiHardDrive
-                                }
-                            />
+                            <HStack spacing="3">
+                                <Icon
+                                    color={
+                                        group.type === groupType
+                                            ? "classicRose.600"
+                                            : "balticSea.600"
+                                    }
+                                    boxSize="5"
+                                    as={
+                                        groupType === "on-chain"
+                                            ? FiZap
+                                            : FiHardDrive
+                                    }
+                                />
 
-                            <Text>
-                                {capitalize(groupType.replaceAll("-", " "))}
-                            </Text>
+                                <Text>
+                                    {capitalize(groupType.replaceAll("-", " "))}
+                                </Text>
+                            </HStack>
+
+                            {group.type === groupType && (
+                                <Tag
+                                    colorScheme="primary"
+                                    borderRadius="full"
+                                    borderWidth={1}
+                                    borderColor="classicRose.900"
+                                    color="classicRose.900"
+                                    bgColor="classicRose.50"
+                                >
+                                    <TagLabel>selected</TagLabel>
+                                </Tag>
+                            )}
                         </HStack>
 
                         <Text color="balticSea.700" px="16px" py="10px">

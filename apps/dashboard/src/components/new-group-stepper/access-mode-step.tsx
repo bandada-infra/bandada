@@ -11,11 +11,14 @@ import {
     NumberInputField,
     NumberInputStepper,
     Select,
+    Tag,
+    TagLabel,
     Text,
     VStack
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { FiHardDrive, FiZap } from "react-icons/fi"
+import { BiPencil } from "react-icons/bi"
+import { GoGear } from "react-icons/go"
 import capitalize from "../../utils/capitalize"
 
 const accessModes = ["manual", "credentials"]
@@ -67,7 +70,7 @@ export default function AccessModeStep({
                         }
                         borderWidth="2px"
                         borderRadius="8px"
-                        w="252px"
+                        w="260px"
                         h="210px"
                         align="left"
                         spacing="0"
@@ -84,23 +87,38 @@ export default function AccessModeStep({
                             px="20px"
                             py="15px"
                             borderTopRadius="8px"
-                            spacing="3"
+                            justify="space-between"
                         >
-                            <Icon
-                                color={
-                                    _accessMode === accessMode
-                                        ? "classicRose.600"
-                                        : "balticSea.600"
-                                }
-                                boxSize="5"
-                                as={
-                                    accessMode === "on-chain"
-                                        ? FiZap
-                                        : FiHardDrive
-                                }
-                            />
+                            <HStack spacing="3">
+                                <Icon
+                                    color={
+                                        _accessMode === accessMode
+                                            ? "classicRose.600"
+                                            : "balticSea.600"
+                                    }
+                                    boxSize="5"
+                                    as={
+                                        accessMode === "manual"
+                                            ? BiPencil
+                                            : GoGear
+                                    }
+                                />
 
-                            <Text>{capitalize(accessMode)}</Text>
+                                <Text>{capitalize(accessMode)}</Text>
+                            </HStack>
+
+                            {_accessMode === accessMode && (
+                                <Tag
+                                    colorScheme="primary"
+                                    borderRadius="full"
+                                    borderWidth={1}
+                                    borderColor="classicRose.900"
+                                    color="classicRose.900"
+                                    bgColor="classicRose.50"
+                                >
+                                    <TagLabel>selected</TagLabel>
+                                </Tag>
+                            )}
                         </HStack>
 
                         <Text color="balticSea.700" px="16px" py="10px">
