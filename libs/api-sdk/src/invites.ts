@@ -1,7 +1,7 @@
 import { request } from "@bandada/utils"
 import { InviteResponse } from "./types"
 
-let url = "/invites"
+const url = "/invites"
 
 const config = {
     headers: {
@@ -20,9 +20,9 @@ const config = {
  * @returns Specific invite.
  */
 export async function getInvite(inviteCode: string): Promise<InviteResponse> {
-    url += `/${inviteCode}`
+    const requestUrl = `${url}/${inviteCode}`
 
-    const invite = await request(url, config)
+    const invite = await request(requestUrl, config)
 
     return invite
 }

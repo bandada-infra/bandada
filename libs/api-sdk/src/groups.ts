@@ -1,7 +1,7 @@
 import { request } from "@bandada/utils"
 import { GroupResponse } from "./types"
 
-let url = "/groups"
+const url = "/groups"
 
 const config = {
     headers: {
@@ -30,9 +30,9 @@ export async function getGroups(): Promise<GroupResponse[]> {
  * @returns Specific group.
  */
 export async function getGroup(groupId: string): Promise<GroupResponse> {
-    url += `/${groupId}`
+    const requestUrl = `${url}/${groupId}`
 
-    const group = await request(url, config)
+    const group = await request(requestUrl, config)
 
     return group
 }
@@ -47,9 +47,9 @@ export async function isGroupMember(
     groupId: string,
     memberId: string
 ): Promise<boolean> {
-    url += `/${groupId}/members/${memberId}`
+    const requestUrl = `${url}/${groupId}/members/${memberId}`
 
-    const isMember = await request(url, config)
+    const isMember = await request(requestUrl, config)
 
     return isMember
 }
@@ -64,9 +64,9 @@ export async function generateMerkleProof(
     groupId: string,
     memberId: string
 ): Promise<string> {
-    url += `/${groupId}/members/${memberId}/proof`
+    const requestUrl = `${url}/${groupId}/members/${memberId}/proof`
 
-    const merkleProof = await request(url, config)
+    const merkleProof = await request(requestUrl, config)
 
     return merkleProof
 }
@@ -83,7 +83,7 @@ export async function addMemberByApiKey(
     memberId: string,
     apiKey: string
 ): Promise<void> {
-    url += `/${groupId}/members/${memberId}`
+    const requestUrl = `${url}/${groupId}/members/${memberId}`
 
     const newConfig: any = {
         method: "post",
@@ -92,7 +92,7 @@ export async function addMemberByApiKey(
 
     newConfig.headers["x-api-key"] = apiKey
 
-    await request(url, newConfig)
+    await request(requestUrl, newConfig)
 }
 
 /**
@@ -107,9 +107,9 @@ export async function addMemberByInviteCode(
     memberId: string,
     inviteCode: string
 ): Promise<void> {
-    url += `/${groupId}/members/${memberId}`
+    const requestUrl = `${url}/${groupId}/members/${memberId}`
 
-    await request(url, {
+    await request(requestUrl, {
         method: "post",
         data: {
             inviteCode
@@ -129,7 +129,7 @@ export async function removeMemberByApiKey(
     memberId: string,
     apiKey: string
 ): Promise<void> {
-    url += `/${groupId}/members/${memberId}`
+    const requestUrl = `${url}/${groupId}/members/${memberId}`
 
     const newConfig: any = {
         method: "delete",
@@ -138,5 +138,5 @@ export async function removeMemberByApiKey(
 
     newConfig.headers["x-api-key"] = apiKey
 
-    await request(url, newConfig)
+    await request(requestUrl, newConfig)
 }
