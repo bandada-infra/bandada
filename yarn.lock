@@ -783,7 +783,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bandada/api-sdk@workspace:libs/api-sdk":
+"@bandada/api-sdk@0.12.0, @bandada/api-sdk@workspace:libs/api-sdk":
   version: 0.0.0-use.local
   resolution: "@bandada/api-sdk@workspace:libs/api-sdk"
   dependencies:
@@ -5109,16 +5109,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semaphore-protocol/identity@npm:3.4.0":
-  version: 3.4.0
-  resolution: "@semaphore-protocol/identity@npm:3.4.0"
+"@semaphore-protocol/identity@npm:3.10.1":
+  version: 3.10.1
+  resolution: "@semaphore-protocol/identity@npm:3.10.1"
   dependencies:
     "@ethersproject/bignumber": ^5.5.0
     "@ethersproject/keccak256": ^5.7.0
     "@ethersproject/random": ^5.5.1
     "@ethersproject/strings": ^5.6.1
     js-sha512: ^0.8.0
-  checksum: ac1c621196d972f8698591cf5fb9e60146f3223a87f77208f2931fc56749e68a14fbc01b7bc2a6abb69bbe69192f579c17db971f55381ba5fa50a561e232c57b
+  checksum: cb00d3bfea550500aa20ffba9a569c10dbe4f32356bff867f5429c2d0fa74f285c0334a10305407d6797308f8398ca23b8bd3170a0f418acca9461f034791682
   languageName: node
   linkType: hard
 
@@ -9114,11 +9114,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "client@workspace:apps/client"
   dependencies:
+    "@bandada/api-sdk": 0.12.0
     "@bandada/utils": 0.12.0
     "@chakra-ui/react": ^2.5.1
+    "@chakra-ui/theme-tools": ^2.0.16
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.10.6
-    "@semaphore-protocol/identity": 3.4.0
+    "@fontsource-variable/unbounded": ^5.0.5
+    "@semaphore-protocol/identity": 3.10.1
     "@types/react": ^18.0.27
     "@types/react-dom": ^18.0.10
     "@vitejs/plugin-react": ^3.1.0
@@ -9128,6 +9131,7 @@ __metadata:
     framer-motion: ^10.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-icons: ^4.10.1
     react-router-dom: ^6.8.1
     regenerator-runtime: ^0.13.11
     typescript: ^4.9.3
