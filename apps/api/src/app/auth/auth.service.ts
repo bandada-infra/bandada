@@ -49,4 +49,8 @@ export class AuthService {
 
         return { admin, siweMessage }
     }
+
+    async isLoggedIn(adminId: string): Promise<boolean> {
+        return !!(await this.adminService.findOne({ id: adminId }))
+    }
 }

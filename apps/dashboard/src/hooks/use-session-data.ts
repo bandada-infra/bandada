@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Admin } from "../types"
 import * as session from "../utils/session"
+import * as bandadaAPI from "../api/bandadaAPI"
 
 /**
  * Stores and retrieves the admin session data using
@@ -8,7 +9,15 @@ import * as session from "../utils/session"
  * @returns Functions to save and delete and admin data.
  */
 export default function useSessionData() {
-    const [admin, setAdmin] = useState<Admin | null>(session.getAdmin())
+    const [_admin, setAdmin] = useState<Admin | null>(session.getAdmin())
+
+    useEffect(() => {
+        ;(async () => {
+            if (!(await bandadaAPI.isLoggedIn())) {
+                setAdmin(null)
+            }
+        })()
+    }, [])
 
     const saveAdmin = useCallback((admin: Admin) => {
         session.saveAdmin(admin)
@@ -23,6 +32,6 @@ export default function useSessionData() {
     return {
         saveAdmin,
         deleteAdmin,
-        admin
+        admin: _admin
     }
 }

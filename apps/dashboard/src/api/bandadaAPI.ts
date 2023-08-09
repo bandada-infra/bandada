@@ -399,3 +399,25 @@ export async function logOut(): Promise<void | null> {
         return null
     }
 }
+
+/**
+ * It returns true if the admin is logged in, false otherwise.
+ * @returns True or false.
+ */
+export async function isLoggedIn(): Promise<null | boolean> {
+    try {
+        return await request(`${API_URL}/auth`, {
+            method: "GET"
+        })
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return null
+    }
+}
