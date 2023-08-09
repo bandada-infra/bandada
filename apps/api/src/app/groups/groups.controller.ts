@@ -144,7 +144,7 @@ export class GroupsController {
     @ApiHeader({ name: "x-api-key", required: false })
     @ApiOperation({
         description:
-            "Adds a member to a group using an API Key or an Invite Code."
+            "Adds a member to a group using an API Key or an Invite Code.\n\nNote:\n\nUse only the API Key or the Invite Code, do not use both at the same time.\n\nMake sure that the one that is not being used is empty. Then if using the API Key, remove the Request body to leave it empty and if using the Invite Code, make sure the API Key box is empty."
     })
     async addMember(
         @Param("group") groupId: string,
