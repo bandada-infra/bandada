@@ -7,4 +7,8 @@ for task in $tasks; do
   aws ecs update-service --cluster bandada --service $task --force-new-deployment --task-definition $task:$bandada_revision
 done
 
-aws ecs wait services-stable --cluster bandada --services $tasks
+for loop in {1..2}; do
+  aws ecs wait services-stable --cluster bandada --services $tasks && break || continue
+done
+
+exit 0
