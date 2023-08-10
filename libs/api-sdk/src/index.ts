@@ -1,11 +1,4 @@
-export {
-    getGroups,
-    getGroup,
-    isGroupMember,
-    generateMerkleProof,
-    addMemberByApiKey,
-    addMemberByInviteCode,
-    removeMemberByApiKey
-} from "./groups"
-export { getInvite } from "./invites"
+import ApiSdk from "./apiSdk"
+
 export * from "./types"
+export { ApiSdk }
