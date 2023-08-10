@@ -16,9 +16,9 @@ export default class ApiSdk {
     private _config: object
 
     /**
-     * Initializes the Ethers object with an Ethereum network or custom URL.
-     * @param networkOrEthereumURL Ethereum network or custom URL.
-     * @param options Ethers options.
+     * Initializes the ApiSdk object with a Supported URL or custom URL.
+     * @param url Supported URL or custom URL.
+     * @param config Request config.
      */
     constructor(
         url: SupportedUrl | string = SupportedUrl.PROD,
