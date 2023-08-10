@@ -34,7 +34,7 @@
             🔎 Issues
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://appliedzkp.org/discord">
+        <a href="https://pse.dev/discord">
             🗣️ Chat &amp; Support
         </a>
     </h4>

@@ -6,5 +6,5 @@ export const config = {
         process.env.NODE_ENV === "test"
             ? "http://localhost:3000"
             : /* istanbul ignore next */
-              "https://api.bandada.appliedzkp.org/"
+              "https://api.bandada.pse.dev/"
 }

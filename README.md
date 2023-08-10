@@ -314,4 +314,4 @@ To enable API access for a group, you can go to the group page in the dashboard,
 
 You can disable the API access anytime using the same toggle button.
 
-For a complete list of the endpoints you can use go to https://api.bandada.appliedzkp.org.
+For a complete list of the endpoints you can use go to https://api.bandada.pse.dev.
