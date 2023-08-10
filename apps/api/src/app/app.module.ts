@@ -11,7 +11,7 @@ import { AdminsModule } from "./admins/admins.module"
 import { AuthModule } from "./auth/auth.module"
 import { GroupsModule } from "./groups/groups.module"
 import { InvitesModule } from "./invites/invites.module"
-import { ReputationModule } from "./reputation/reputation.module"
+import { CredentialsModule } from "./credentials/credentials.module"
 
 type DB_TYPE = "mysql" | "sqlite" | "postgres"
 
@@ -21,7 +21,7 @@ type DB_TYPE = "mysql" | "sqlite" | "postgres"
         AdminsModule,
         InvitesModule,
         GroupsModule,
-        ReputationModule,
+        CredentialsModule,
         ThrottlerModule.forRoot({
             ttl: 60,
             limit: 10

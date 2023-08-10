@@ -118,20 +118,20 @@
         </tr>
         <tr>
             <td>
-                <a href="/libs/reputation">
-                    @bandada/reputation
+                <a href="/libs/credentials">
+                    @bandada/credentials
                 </a>
             </td>
             <td>
                 <!-- NPM version -->
-                <a href="https://npmjs.org/package/@bandada/reputation">
-                    <img src="https://img.shields.io/npm/v/@bandada/reputation.svg?style=flat-square" alt="NPM version" />
+                <a href="https://npmjs.org/package/@bandada/credentials">
+                    <img src="https://img.shields.io/npm/v/@bandada/credentials.svg?style=flat-square" alt="NPM version" />
                 </a>
             </td>
             <td>
                 <!-- Downloads -->
-                <a href="https://npmjs.org/package/@bandada/reputation">
-                    <img src="https://img.shields.io/npm/dm/@bandada/reputation.svg?style=flat-square" alt="Downloads" />
+                <a href="https://npmjs.org/package/@bandada/credentials">
+                    <img src="https://img.shields.io/npm/dm/@bandada/credentials.svg?style=flat-square" alt="Downloads" />
                 </a>
             </td>
         </tr>
@@ -300,11 +300,11 @@ Below are the ENV variables used by the `api`:
 | INFURA_API_KEY        | API Key for Infura. This is used for executing blockchain transactions.  |
 | BACKEND_PRIVATE_KEY   | Ethereum wallet private key used for making blockchain transactions.     |
 | SIWE_STATEMENT        | Statement used as a SIWE message.                                        |
-| GITHUB_CLIENT_ID      | Github client id used for reputation groups.                             |
-| GITHUB_CLIENT_SECRET  | Github client secret used for reputation groups.                         |
-| TWITTER_REDIRECT_URI  | Twitter redirect URL used for reputation groups.                         |
-| TWITTER_CLIENT_ID     | Twitter client id used for reputation groups.                            |
-| TWITTER_CLIENT_SECRET | Twitter client secret used for reputation groups.                        |
+| GITHUB_CLIENT_ID      | Github client id used for credential groups.                             |
+| GITHUB_CLIENT_SECRET  | Github client secret used for credential groups.                         |
+| TWITTER_REDIRECT_URI  | Twitter redirect URL used for credential groups.                         |
+| TWITTER_CLIENT_ID     | Twitter client id used for credential groups.                            |
+| TWITTER_CLIENT_SECRET | Twitter client secret used for credential groups.                        |
 
 ## API
 

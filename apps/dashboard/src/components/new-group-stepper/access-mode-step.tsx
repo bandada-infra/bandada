@@ -1,4 +1,4 @@
-import { validators } from "@bandada/reputation"
+import { validators } from "@bandada/credentials"
 import {
     Box,
     Button,
@@ -38,10 +38,10 @@ export default function AccessModeStep({
 }: AccessModeStepProps): JSX.Element {
     const [_accessMode, setAccessMode] = useState<AccessMode>("manual")
     const [_validator, setValidator] = useState<number>(0)
-    const [_reputationCriteria, setReputationCriteria] = useState<any>()
+    const [_credentials, setCredentials] = useState<any>()
 
     useEffect(() => {
-        setReputationCriteria({
+        setCredentials({
             id: validators[_validator].id,
             criteria: {}
         })
@@ -49,9 +49,9 @@ export default function AccessModeStep({
 
     useEffect(() => {
         if (_accessMode === "manual") {
-            setReputationCriteria(undefined)
+            setCredentials(undefined)
         } else {
-            setReputationCriteria({
+            setCredentials({
                 id: validators[_validator].id,
                 criteria: {}
             })
@@ -154,8 +154,8 @@ export default function AccessModeStep({
                         </Select>
                     </VStack>
 
-                    {_reputationCriteria &&
-                        _reputationCriteria.criteria &&
+                    {_credentials &&
+                        _credentials.criteria &&
                         Object.entries(validators[_validator].criteriaABI).map(
                             (parameter) => (
                                 <VStack
@@ -169,15 +169,15 @@ export default function AccessModeStep({
                                         <NumberInput
                                             size="lg"
                                             value={
-                                                _reputationCriteria.criteria[
+                                                _credentials.criteria[
                                                     parameter[0]
                                                 ]
                                             }
                                             onChange={(value) =>
-                                                setReputationCriteria({
-                                                    ..._reputationCriteria,
+                                                setCredentials({
+                                                    ..._credentials,
                                                     criteria: {
-                                                        ..._reputationCriteria.criteria,
+                                                        ..._credentials.criteria,
                                                         [parameter[0]]:
                                                             Number(value)
                                                     }
@@ -194,15 +194,15 @@ export default function AccessModeStep({
                                         <Input
                                             size="lg"
                                             value={
-                                                _reputationCriteria.criteria[
+                                                _credentials.criteria[
                                                     parameter[0]
                                                 ]
                                             }
                                             onChange={(event) =>
-                                                setReputationCriteria({
-                                                    ..._reputationCriteria,
+                                                setCredentials({
+                                                    ..._credentials,
                                                     criteria: {
-                                                        ..._reputationCriteria.criteria,
+                                                        ..._credentials.criteria,
                                                         [parameter[0]]:
                                                             event.target.value
                                                     }
@@ -223,7 +223,7 @@ export default function AccessModeStep({
                         >
                             Disclaimer: We will use a bit of your member’s data
                             to check if they meet the criteria and generate
-                            their reputation to join the group.
+                            their credentials to join the group.
                         </Text>
                     </Box>
                 </>
@@ -237,23 +237,22 @@ export default function AccessModeStep({
                     isDisabled={
                         !_accessMode ||
                         (_accessMode === "credentials" &&
-                            (!_reputationCriteria ||
-                                !_reputationCriteria.criteria ||
-                                Object.keys(_reputationCriteria.criteria)
-                                    .length !==
+                            (!_credentials ||
+                                !_credentials.criteria ||
+                                Object.keys(_credentials.criteria).length !==
                                     Object.keys(
                                         validators[_validator].criteriaABI
                                     ).length ||
-                                Object.values(
-                                    _reputationCriteria.criteria
-                                ).some((c) => c === undefined)))
+                                Object.values(_credentials.criteria).some(
+                                    (c) => c === undefined
+                                )))
                     }
                     variant="solid"
                     colorScheme="primary"
                     onClick={() => {
                         onSubmit({
                             ...group,
-                            reputationCriteria: _reputationCriteria
+                            credentials: _credentials
                         })
                     }}
                 >

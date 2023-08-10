@@ -7,7 +7,7 @@ export type GroupResponse = {
     fingerprintDuration: number
     createdAt: Date
     members: string[]
-    reputationCriteria: object
+    credentials: object
 }
 
 type Group = {
@@ -17,7 +17,7 @@ type Group = {
     adminId: string
     treeDepth: number
     fingerprintDuration: number
-    reputationCriteria: object
+    credentials: object
     apiEnabled: boolean
     apiKey: string
     createdAt: Date

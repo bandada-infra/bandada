@@ -63,7 +63,7 @@ export class GroupsService {
             description,
             treeDepth,
             fingerprintDuration,
-            reputationCriteria
+            credentials
         }: CreateGroupDto,
         adminId: string
     ): Promise<Group> {
@@ -79,7 +79,7 @@ export class GroupsService {
             description,
             treeDepth,
             fingerprintDuration,
-            reputationCriteria,
+            credentials,
             adminId,
             members: []
         })
@@ -133,7 +133,7 @@ export class GroupsService {
             description,
             treeDepth,
             apiEnabled,
-            reputationCriteria,
+            credentials,
             fingerprintDuration
         }: UpdateGroupDto,
         adminId: string
@@ -166,11 +166,11 @@ export class GroupsService {
             this._updateContractGroup(cachedGroup)
         }
 
-        if (group.reputationCriteria && reputationCriteria) {
-            group.reputationCriteria = reputationCriteria
+        if (group.credentials && credentials) {
+            group.credentials = credentials
         }
 
-        if (!group.reputationCriteria && apiEnabled !== undefined) {
+        if (!group.credentials && apiEnabled !== undefined) {
             group.apiEnabled = apiEnabled
 
             // Generate a new API key if it doesn't exist
@@ -437,7 +437,7 @@ export class GroupsService {
      */
     async getGroup(groupId: string): Promise<Group> {
         const group = await this.groupRepository.findOne({
-            relations: { members: true, reputationAccounts: true },
+            relations: { members: true, oAuthAccounts: true },
             where: { id: groupId }
         })
 

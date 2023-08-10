@@ -101,7 +101,7 @@ export async function createGroup(
     description: string,
     treeDepth: number,
     fingerprintDuration: number,
-    reputationCriteria?: any
+    credentials?: any
 ): Promise<Group | null> {
     try {
         const group = await request(`${API_URL}/groups`, {
@@ -111,7 +111,7 @@ export async function createGroup(
                 description,
                 treeDepth,
                 fingerprintDuration,
-                reputationCriteria: JSON.stringify(reputationCriteria)
+                credentials: JSON.stringify(credentials)
             }
         })
 
@@ -205,7 +205,7 @@ export async function removeGroup(groupId: string): Promise<void | null> {
 /**
  * It returns a random string to be used as a OAuth state, to to protect against
  * forgery attacks. It will be used to retrieve group, member, redirectURI and provider
- * before checking reputation and adding members.
+ * before checking credentials and adding members.
  * @param group The group id.
  * @param memberId The group member id.
  * @param redirectUri The URL where clients will be sent after authorization.
@@ -219,7 +219,7 @@ export async function setOAuthState(
     redirectUri?: string
 ): Promise<string | null> {
     try {
-        return await request(`${API_URL}/reputation/oauth-state`, {
+        return await request(`${API_URL}/credentials/oauth-state`, {
             method: "POST",
             data: {
                 groupId,
@@ -242,16 +242,16 @@ export async function setOAuthState(
 }
 
 /**
- * It adds a new member to an existing reputation group.
+ * It adds a new member to an existing credentials group.
  * @param oAuthState The OAuth state.
  * @param oAuthCode The OAuth code.
  */
-export async function addMemberByReputation(
+export async function addMemberByCredentials(
     oAuthState: string,
     oAuthCode: string
 ): Promise<string | null> {
     try {
-        return await request(`${API_URL}/reputation`, {
+        return await request(`${API_URL}/credentials`, {
             method: "POST",
             data: {
                 oAuthCode,

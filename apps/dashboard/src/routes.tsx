@@ -7,7 +7,7 @@ import GroupPage from "./pages/group"
 import GroupsPage from "./pages/groups"
 import HomePage from "./pages/home"
 import NewGroupPage from "./pages/new-group"
-import ReputationPage from "./pages/reputation"
+import CredentialsPage from "./pages/credentials"
 
 export default function Routes(): JSX.Element {
     const { admin } = useContext(AuthContext)
@@ -51,8 +51,8 @@ export default function Routes(): JSX.Element {
                     ]
                 },
                 {
-                    path: "reputation",
-                    element: <ReputationPage />
+                    path: "credentials",
+                    element: <CredentialsPage />
                 }
             ]),
         [admin]

@@ -16,7 +16,7 @@ CREATE TABLE groups (
     admin_id character varying NOT NULL,
     tree_depth integer NOT NULL,
     fingerprint_duration integer NOT NULL,
-    reputation_criteria text,
+    credentials text,
     api_enabled boolean NOT NULL DEFAULT false,
     api_key character varying,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
@@ -34,7 +34,7 @@ CREATE TABLE members (
 
 -- Table Definition ----------------------------------------------
 
-CREATE TABLE reputation_accounts (
+CREATE TABLE oauth_accounts (
     "accountHash" character varying PRIMARY KEY,
     group_id character varying(32) REFERENCES groups(id),
     CONSTRAINT "UQ_f053a0e63cc508da7d0eccc677b" UNIQUE ("accountHash", group_id)
@@ -53,4 +53,4 @@ CREATE TABLE invites (
 ALTER TABLE "groups" ADD FOREIGN KEY ("admin_id") REFERENCES "admins" ("id");
 ALTER TABLE "members" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 ALTER TABLE "invites" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
-ALTER TABLE "reputation_accounts" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
+ALTER TABLE "oauth_accounts" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
