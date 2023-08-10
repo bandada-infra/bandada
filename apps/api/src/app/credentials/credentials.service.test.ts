@@ -207,7 +207,7 @@ describe("CredentialsService", () => {
             const fun = credentialsService.addMember("code", _stateId)
 
             await expect(fun).rejects.toThrow(
-                `OAuth account does not match credential criteria`
+                `OAuth account does not match criteria`
             )
         })
     })

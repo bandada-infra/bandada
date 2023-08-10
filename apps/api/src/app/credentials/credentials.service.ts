@@ -124,7 +124,7 @@ export class CredentialsService {
             }))
         ) {
             throw new UnauthorizedException(
-                "OAuth account does not match credentials"
+                "OAuth account does not match criteria"
             )
         }
 
