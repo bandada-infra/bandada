@@ -24,6 +24,7 @@ const injectedConnector = new InjectedConnector({})
 
 export default function HomePage(): JSX.Element {
     const [_inviteCode, setInviteCode] = useState<string>("")
+    const [_credentialGroupId, setCredentialGroupId] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>(false)
     const { activate, active, library, account } =
         useWeb3React<providers.Web3Provider>()
@@ -39,9 +40,12 @@ export default function HomePage(): JSX.Element {
 
     useEffect(() => {
         const inviteCode = _searchParams.get("inviteCode")
+        const credentialGroupId = _searchParams.get("credentialGroupId")
 
         if (inviteCode) {
             setInviteCode(inviteCode)
+        } else if (credentialGroupId) {
+            setCredentialGroupId(credentialGroupId)
         }
     }, [_searchParams])
 
@@ -65,6 +69,7 @@ export default function HomePage(): JSX.Element {
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
                 const identityCommitment = identity.getCommitment().toString()
+
                 const hasJoined = await request(
                     `${import.meta.env.VITE_API_URL}/groups/${
                         invite.groupId
@@ -97,9 +102,40 @@ export default function HomePage(): JSX.Element {
         [account, library]
     )
 
+    const joinGroupByCredentials = useCallback(
+        async (groupId: string) => {
+            if (account && library) {
+                setLoading(true)
+
+                const { credentials } = await request(
+                    `${import.meta.env.VITE_API_URL}/groups/${groupId}`
+                )
+
+                const providerName = JSON.parse(credentials)
+                    .id.split("_")[0]
+                    .toLowerCase()
+
+                const signer = library.getSigner(account)
+
+                const message = `Sign this message to generate your Semaphore identity.`
+                const identity = new Identity(await signer.signMessage(message))
+                const identityCommitment = identity.getCommitment().toString()
+
+                window.open(
+                    `${
+                        import.meta.env.VITE_DASHBOARD_URL
+                    }/credentials?group=${groupId}&member=${identityCommitment}&provider=${providerName}`
+                )
+
+                setLoading(false)
+            }
+        },
+        [account, library]
+    )
+
     return (
-        <Container maxW="container.xl" pt="20" pb="20" px="8" centerContent>
-            <VStack spacing="20" pb="30px">
+        <Container maxW="container.md" pt="20" pb="20" px="8" centerContent>
+            <VStack spacing="20" pb="30px" w="100%">
                 <HStack mb="60px" justify="space-between" w="100%">
                     <HStack spacing="1">
                         <Image
@@ -133,7 +169,7 @@ export default function HomePage(): JSX.Element {
                 >
                     Join Bandada groups
                     <br />
-                    by invite .
+                    by invite or credentials
                 </Heading>
 
                 {!active ? (
@@ -152,8 +188,22 @@ export default function HomePage(): JSX.Element {
                                 size="lg"
                                 value={_inviteCode}
                                 placeholder="Paste your code here"
+                                onFocus={() => setCredentialGroupId("")}
                                 onChange={(event) =>
                                     setInviteCode(event.target.value)
+                                }
+                            />
+                        </VStack>
+
+                        <VStack align="left" w="100%" pb="10px">
+                            <Text>Credential group ID</Text>
+                            <Input
+                                size="lg"
+                                value={_credentialGroupId}
+                                placeholder="Paste the credential group id here"
+                                onFocus={() => setInviteCode("")}
+                                onChange={(event) =>
+                                    setCredentialGroupId(event.target.value)
                                 }
                             />
                         </VStack>
@@ -162,8 +212,12 @@ export default function HomePage(): JSX.Element {
                             width="100%"
                             colorScheme="secondary"
                             variant="solid"
-                            onClick={() => joinGroupByInvite(_inviteCode)}
-                            isDisabled={!_inviteCode}
+                            onClick={() =>
+                                _inviteCode
+                                    ? joinGroupByInvite(_inviteCode)
+                                    : joinGroupByCredentials(_credentialGroupId)
+                            }
+                            isDisabled={!_inviteCode && !_credentialGroupId}
                             isLoading={_loading}
                         >
                             Join group
