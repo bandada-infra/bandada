@@ -18,5 +18,5 @@ export class Group {
     @ApiProperty({ isArray: true })
     members: string
     @ApiProperty()
-    reputationCriteria: object
+    credentials: object
 }

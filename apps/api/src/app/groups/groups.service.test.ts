@@ -3,7 +3,7 @@ import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Invite } from "../invites/entities/invite.entity"
 import { InvitesService } from "../invites/invites.service"
-import { ReputationAccount } from "../reputation/entities/reputation-account.entity"
+import { OAuthAccount } from "../credentials/entities/credentials-account.entity"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
@@ -33,7 +33,7 @@ describe("GroupsService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [Group, Invite, Member, ReputationAccount],
+                        entities: [Group, Invite, Member, OAuthAccount],
                         synchronize: true
                     })
                 }),
@@ -112,7 +112,7 @@ describe("GroupsService", () => {
                     description: "This is a description",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
-                    reputationCriteria: {
+                    credentials: {
                         id: "GITHUB_FOLLOWERS",
                         criteria: {
                             minFollowers: 12
@@ -122,13 +122,13 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            const { description, fingerprintDuration, reputationCriteria } =
+            const { description, fingerprintDuration, credentials } =
                 await groupsService.updateGroup(
                     id,
                     {
                         description: "This is a new description",
                         fingerprintDuration: 1000,
-                        reputationCriteria: {
+                        credentials: {
                             id: "TWITTER_FOLLOWERS",
                             minFollowers: 23
                         }
@@ -138,7 +138,7 @@ describe("GroupsService", () => {
 
             expect(description).toContain("new")
             expect(fingerprintDuration).toBe(1000)
-            expect(reputationCriteria.id).toBe("TWITTER_FOLLOWERS")
+            expect(credentials.id).toBe("TWITTER_FOLLOWERS")
         })
 
         it("Should not update a group if the admin is the wrong one", async () => {

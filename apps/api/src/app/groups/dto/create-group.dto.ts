@@ -38,5 +38,5 @@ export class CreateGroupDto {
 
     @IsJSON()
     @IsOptional()
-    readonly reputationCriteria?: any
+    readonly credentials?: any
 }

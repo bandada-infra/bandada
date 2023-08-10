@@ -805,6 +805,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bandada/credentials@0.12.0, @bandada/credentials@workspace:libs/credentials":
+  version: 0.0.0-use.local
+  resolution: "@bandada/credentials@workspace:libs/credentials"
+  dependencies:
+    "@bandada/utils": 0.12.0
+    "@rollup/plugin-typescript": ^11.0.0
+    rimraf: ^4.1.2
+    rollup: ^3.17.2
+    rollup-plugin-cleanup: ^3.2.1
+    typescript: ^4.9.5
+  languageName: unknown
+  linkType: soft
+
 "@bandada/hardhat@workspace:libs/hardhat":
   version: 0.0.0-use.local
   resolution: "@bandada/hardhat@workspace:libs/hardhat"
@@ -824,19 +837,6 @@ __metadata:
     "@semaphore-protocol/contracts": 3.4.0
     ethers: ^5.4.7
     hardhat: ^2.11.0
-  languageName: unknown
-  linkType: soft
-
-"@bandada/reputation@0.12.0, @bandada/reputation@workspace:libs/reputation":
-  version: 0.0.0-use.local
-  resolution: "@bandada/reputation@workspace:libs/reputation"
-  dependencies:
-    "@bandada/utils": 0.12.0
-    "@rollup/plugin-typescript": ^11.0.0
-    rimraf: ^4.1.2
-    rollup: ^3.17.2
-    rollup-plugin-cleanup: ^3.2.1
-    typescript: ^4.9.5
   languageName: unknown
   linkType: soft
 
@@ -7610,7 +7610,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api@workspace:apps/api"
   dependencies:
-    "@bandada/reputation": 0.12.0
+    "@bandada/credentials": 0.12.0
     "@bandada/utils": 0.12.0
     "@ethersproject/hash": ^5.7.0
     "@nestjs/cli": ^9.0.0
@@ -9864,7 +9864,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:apps/dashboard"
   dependencies:
-    "@bandada/reputation": 0.12.0
+    "@bandada/credentials": 0.12.0
     "@bandada/utils": 0.12.0
     "@chakra-ui/react": ^2.5.1
     "@chakra-ui/theme-tools": ^2.0.16

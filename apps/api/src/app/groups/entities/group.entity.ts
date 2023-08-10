@@ -7,7 +7,7 @@ import {
     PrimaryColumn,
     UpdateDateColumn
 } from "typeorm"
-import { ReputationAccount } from "../../reputation/entities/reputation-account.entity"
+import { OAuthAccount } from "../../credentials/entities/credentials-account.entity"
 import { Member } from "./member.entity"
 
 @Entity("groups")
@@ -36,17 +36,17 @@ export class Group {
     })
     members: Member[]
 
-    @OneToMany(() => ReputationAccount, (account) => account.group, {
+    @OneToMany(() => OAuthAccount, (account) => account.group, {
         cascade: ["insert"]
     })
-    reputationAccounts: ReputationAccount[]
+    oAuthAccounts: OAuthAccount[]
 
     @Column({
         type: "simple-json",
-        name: "reputation_criteria",
+        name: "credentials",
         nullable: true
     })
-    reputationCriteria: any // TODO: Add correct type for reputationCriteria JSON
+    credentials: any // TODO: Add correct type for credentials JSON
 
     @Column({ name: "api_enabled", default: false })
     apiEnabled: boolean

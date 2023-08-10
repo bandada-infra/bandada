@@ -33,7 +33,7 @@ describe("Bandada API SDK", () => {
                             fingerprintDuration: 3600,
                             createdAt: "2023-07-15T08:21:05.000Z",
                             members: [],
-                            reputationCriteria: null
+                            credentials: null
                         }
                     ])
                 )
@@ -54,7 +54,7 @@ describe("Bandada API SDK", () => {
                         fingerprintDuration: 3600,
                         createdAt: "2023-07-15T08:21:05.000Z",
                         members: [],
-                        reputationCriteria: null
+                        credentials: null
                     })
                 )
 
@@ -184,7 +184,7 @@ describe("Bandada API SDK", () => {
                                 "0x63229164c457584616006e31d1e171e6cdd4163695bc9c4bf0227095998ffa4c",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
-                            reputationCriteria: null,
+                            credentials: null,
                             apiEnabled: false,
                             apiKey: null,
                             createdAt: "2023-08-09T18:09:53.000Z",

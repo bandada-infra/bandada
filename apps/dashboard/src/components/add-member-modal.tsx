@@ -3,7 +3,6 @@ import {
     AbsoluteCenter,
     Box,
     Button,
-    Code,
     Divider,
     Heading,
     Icon,
@@ -40,15 +39,23 @@ export default function AddMemberModal({
     const [_isLoading, setIsLoading] = useState(false)
     const {
         hasCopied,
-        value: _inviteLink,
-        setValue: setInviteLink,
+        value: _clientLink,
+        setValue: setClientLink,
         onCopy
     } = useClipboard("")
     const { data: signer } = useSigner()
 
     useEffect(() => {
         setMemberId("")
-    }, [group, isOpen, setInviteLink])
+
+        if (group.credentials) {
+            setClientLink(
+                `${import.meta.env.VITE_CLIENT_URL}?credentialGroupId=${
+                    group.id
+                }`
+            )
+        }
+    }, [group, setClientLink])
 
     const addMember = useCallback(async () => {
         if (!_memberId) {
@@ -105,8 +112,8 @@ export default function AddMemberModal({
             return
         }
 
-        setInviteLink(inviteLink)
-    }, [group, setInviteLink])
+        setClientLink(inviteLink)
+    }, [group, setClientLink])
 
     return (
         <Modal
@@ -122,7 +129,7 @@ export default function AddMemberModal({
                         New member
                     </Heading>
 
-                    {!group.reputationCriteria && (
+                    {!group.credentials && (
                         <Box mb="5px">
                             <Text my="10px" color="balticSea.800">
                                 Add member ID
@@ -150,85 +157,75 @@ export default function AddMemberModal({
                         </Box>
                     )}
 
-                    {group.type === "off-chain" &&
-                        !group.reputationCriteria && (
-                            <>
-                                <Box position="relative" py="8">
-                                    <Divider borderColor="balticSea.300" />
-                                    <AbsoluteCenter
-                                        fontSize="13px"
-                                        px="4"
-                                        bgColor="balticSea.50"
-                                    >
-                                        OR
-                                    </AbsoluteCenter>
-                                </Box>
+                    {group.type === "off-chain" && !group.credentials && (
+                        <Box position="relative" py="8">
+                            <Divider borderColor="balticSea.300" />
+                            <AbsoluteCenter
+                                fontSize="13px"
+                                px="4"
+                                bgColor="balticSea.50"
+                            >
+                                OR
+                            </AbsoluteCenter>
+                        </Box>
+                    )}
 
-                                <Box mb="30px">
-                                    <Text mb="10px" color="balticSea.800">
-                                        Share invite link
-                                    </Text>
-
-                                    <InputGroup size="lg">
-                                        <Input
-                                            pr="50px"
-                                            placeholder="Invite link"
-                                            value={_inviteLink}
-                                            isDisabled
-                                        />
-                                        <InputRightElement mr="5px">
-                                            <Tooltip
-                                                label={
-                                                    hasCopied
-                                                        ? "Copied!"
-                                                        : "Copy"
-                                                }
-                                                closeOnClick={false}
-                                                hasArrow
-                                            >
-                                                <IconButton
-                                                    variant="link"
-                                                    aria-label="Copy invite link"
-                                                    onClick={onCopy}
-                                                    onMouseDown={(e) =>
-                                                        e.preventDefault()
-                                                    }
-                                                    icon={
-                                                        <Icon
-                                                            color="sunsetOrange.600"
-                                                            boxSize="5"
-                                                            as={FiCopy}
-                                                        />
-                                                    }
-                                                />
-                                            </Tooltip>
-                                        </InputRightElement>
-                                    </InputGroup>
-
-                                    <Button
-                                        mt="10px"
-                                        variant="link"
-                                        color="balticSea.600"
-                                        textDecoration="underline"
-                                        onClick={generateInviteLink}
-                                    >
-                                        Generate new link
-                                    </Button>
-                                </Box>
-                            </>
-                        )}
-
-                    {group.reputationCriteria && (
-                        <>
-                            <Text mb="10px">
-                                To allow users to join your group, you can use
-                                the following Bandada URL:
+                    {group.type === "off-chain" && (
+                        <Box mb="30px">
+                            <Text mb="10px" color="balticSea.800">
+                                {!group.credentials
+                                    ? "Share invite link"
+                                    : "Share access link"}
                             </Text>
-                            <Code
-                                p="3"
-                                mb="20px"
-                            >{`${window.location.origin}/reputation?group=<groupID>&member=<memberID>&provider=<providerName>&redirect_uri=<redirectURI>`}</Code>
-                        </>
+
+                            <InputGroup size="lg">
+                                <Input
+                                    pr="50px"
+                                    placeholder={
+                                        !group.credentials
+                                            ? "Invite link"
+                                            : "Access link"
+                                    }
+                                    value={_clientLink}
+                                    isDisabled
+                                />
+                                <InputRightElement mr="5px">
+                                    <Tooltip
+                                        label={hasCopied ? "Copied!" : "Copy"}
+                                        closeOnClick={false}
+                                        hasArrow
+                                    >
+                                        <IconButton
+                                            variant="link"
+                                            aria-label="Copy invite link"
+                                            onClick={onCopy}
+                                            onMouseDown={(e) =>
+                                                e.preventDefault()
+                                            }
+                                            icon={
+                                                <Icon
+                                                    color="sunsetOrange.600"
+                                                    boxSize="5"
+                                                    as={FiCopy}
+                                                />
+                                            }
+                                        />
+                                    </Tooltip>
+                                </InputRightElement>
+                            </InputGroup>
+
+                            {!group.credentials && (
+                                <Button
+                                    mt="10px"
+                                    variant="link"
+                                    color="balticSea.600"
+                                    textDecoration="underline"
+                                    onClick={generateInviteLink}
+                                >
+                                    Generate new link
+                                </Button>
+                            )}
+                        </Box>
                     )}
 
                     <Button

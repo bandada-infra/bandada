@@ -8,7 +8,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@bandada/reputation": "0.12.0",
+        "@bandada/credentials": "0.12.0",
         "@bandada/utils": "0.12.0",
         "@chakra-ui/react": "^2.5.1",
         "@chakra-ui/theme-tools": "^2.0.16",

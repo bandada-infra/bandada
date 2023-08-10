@@ -4,7 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { Group } from "../groups/entities/group.entity"
 import { Member } from "../groups/entities/member.entity"
 import { GroupsService } from "../groups/groups.service"
-import { ReputationAccount } from "../reputation/entities/reputation-account.entity"
+import { OAuthAccount } from "../credentials/entities/credentials-account.entity"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 
@@ -32,7 +32,7 @@ describe("InvitesService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [Group, Invite, Member, ReputationAccount],
+                        entities: [Group, Invite, Member, OAuthAccount],
                         synchronize: true
                     })
                 }),
@@ -77,14 +77,14 @@ describe("InvitesService", () => {
             await expect(fun).rejects.toThrow("You are not the admin")
         })
 
-        it("Should not create an invite if the group is a reputation group", async () => {
+        it("Should not create an invite if the group is a credential group", async () => {
             const group = await groupsService.createGroup(
                 {
                     name: "Group2",
                     description: "This is a description",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
-                    reputationCriteria: {
+                    credentials: {
                         id: "GITHUB_FOLLOWERS",
                         criteria: {
                             minFollowers: 12
@@ -100,7 +100,7 @@ describe("InvitesService", () => {
             )
 
             await expect(fun).rejects.toThrow(
-                "Reputation groups cannot be accessed via invites"
+                "Credential groups cannot be accessed via invites"
             )
         })
     })

@@ -31,5 +31,5 @@ export class UpdateGroupDto {
 
     @IsOptional()
     @IsJSON()
-    readonly reputationCriteria?: any
+    readonly credentials?: any
 }

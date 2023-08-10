@@ -14,7 +14,7 @@ export class GroupResponse {
     @ApiProperty()
     fingerprintDuration: number
     @ApiProperty()
-    reputationCriteria: object
+    credentials: object
     @ApiProperty()
     apiEnabled: boolean
     @ApiProperty()

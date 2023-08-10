@@ -42,7 +42,7 @@ export default function FinalPreviewStep({
                 group.description,
                 group.treeDepth,
                 group.fingerprintDuration,
-                group.reputationCriteria
+                group.credentials
             )
 
             if (response === null) {

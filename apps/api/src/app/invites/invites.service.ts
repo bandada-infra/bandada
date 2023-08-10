@@ -40,9 +40,9 @@ export class InvitesService {
             )
         }
 
-        if (group.reputationCriteria) {
+        if (group.credentials) {
             throw new UnauthorizedException(
-                "Reputation groups cannot be accessed via invites"
+                "Credential groups cannot be accessed via invites"
             )
         }
 
