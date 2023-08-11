@@ -14,6 +14,7 @@ export default function useSessionData() {
     useEffect(() => {
         ;(async () => {
             if (!(await bandadaAPI.isLoggedIn())) {
+                session.deleteAdmin()
                 setAdmin(null)
             }
         })()
