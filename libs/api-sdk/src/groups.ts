@@ -10,6 +10,11 @@ const url = "/groups"
 export async function getGroups(config: object): Promise<GroupResponse[]> {
     const groups = await request(url, config)
 
+    groups.map((group: any) => ({
+        ...group,
+        credentials: JSON.parse(group.credentials)
+    }))
+
     return groups
 }
 
@@ -25,6 +30,8 @@ export async function getGroup(
     const requestUrl = `${url}/${groupId}`
 
     const group = await request(requestUrl, config)
+
+    group.credentials = JSON.parse(group.credentials)
 
     return group
 }
@@ -105,12 +112,15 @@ export async function addMemberByInviteCode(
 ): Promise<void> {
     const requestUrl = `${url}/${groupId}/members/${memberId}`
 
-    await request(requestUrl, {
+    const newConfig: any = {
         method: "post",
         data: {
             inviteCode
-        }
-    })
+        },
+        ...config
+    }
+
+    await request(requestUrl, newConfig)
 }
 
 /**

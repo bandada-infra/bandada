@@ -30,7 +30,7 @@ export default class ApiSdk {
             checkParameter(config, "config", "object")
             if (!config["baseURL"]) {
                 this._config = {
-                    baseUrl: url,
+                    baseURL: url,
                     ...config
                 }
             } else {
