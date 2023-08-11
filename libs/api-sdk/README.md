@@ -67,12 +67,40 @@ yarn add @bandada/api-sdk
 
 ## 📜 Usage
 
+\# **new ApiSdk**(url: SupportedUrl | string, config?: object): _ApiSdk_
+
+Creates a new instance of ApiSdk using the API URL and the [config](https://axios-http.com/docs/req_config).
+
+-   Creates a new instance using the Bandada API URL and the default config.
+
+```ts
+const apiSdk = new ApiSdk()
+```
+
+-   Creates a new instance using a custom API URL.
+
+```ts
+const apiSdk = new ApiSdk("https://example.com/api")
+```
+
+-   Creates a new instance using a custom API URL and config.
+
+```ts
+const url = "https://example.com/api"
+const config = {
+    headers: {
+        "Content-Type": "text/html"
+    }
+}
+const apiSdk = new ApiSdk(url, config)
+```
+
 \# **getGroups**(): _Promise\<GroupResponse[]>_
 
 Returns the list of groups.
 
 ```ts
-const groups = await getGroups()
+const groups = await apiSdk.getGroups()
 ```
 
 \# **getGroup**(): _Promise\<GroupResponse>_
@@ -82,7 +110,7 @@ Returns a specific group.
 ```ts
 const groupId = "10402173435763029700781503965100"
 
-const group = await getGroup(groupId)
+const group = await apiSdk.getGroup(groupId)
 ```
 
 \# **isGroupMember**(): _Promise\<boolean>_
@@ -93,7 +121,7 @@ Returns true if the member is in the group and false otherwise.
 const groupId = "10402173435763029700781503965100"
 const memberId = "1"
 
-const isMember = await isGroupMember(groupId, memberId)
+const isMember = await apiSdk.isGroupMember(groupId, memberId)
 ```
 
 \# **generateMerkleProof**(): _Promise\<string>_
@@ -104,7 +132,7 @@ Returns the Merkle Proof for a member in a group.
 const groupId = "10402173435763029700781503965100"
 const memberId = "1"
 
-const proof = await generateMerkleProof(groupId, memberId)
+const proof = await apiSdk.generateMerkleProof(groupId, memberId)
 ```
 
 \# **addMemberByApiKey**(): _Promise\<void>_
@@ -116,7 +144,7 @@ const groupId = "10402173435763029700781503965100"
 const memberId = "1"
 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-await addMemberByApiKey(groupId, memberId, apiKey)
+await apiSdk.addMemberByApiKey(groupId, memberId, apiKey)
 ```
 
 \# **addMemberByInviteCode**(): _Promise\<void>_
@@ -128,7 +156,7 @@ const groupId = "10402173435763029700781503965100"
 const memberId = "1"
 const inviteCode = "MQYS4UR5"
 
-await addMemberByInviteCode(groupId, memberId, inviteCode)
+await apiSdk.addMemberByInviteCode(groupId, memberId, inviteCode)
 ```
 
 \# **removeMemberByApiKey**(): _Promise\<void>_
@@ -140,5 +168,5 @@ const groupId = "10402173435763029700781503965100"
 const memberId = "1"
 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-await removeMemberByApiKey(groupId, memberId, apiKey)
+await apiSdk.removeMemberByApiKey(groupId, memberId, apiKey)
 ```
