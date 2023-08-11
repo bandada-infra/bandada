@@ -52,7 +52,23 @@
 | Groups are an important concept when we speak about privacy and zero knowledge technologies. They can be thought of as anonymity sets, and are a way to establish necessary trust between a set of participants. The goal of this project is to provide a comprehensive infrastructure to allow anyone to create and manage their own groups. |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
-## 📦 Packages
+Bandada consists of a beck-end to store the groups and provide the [**API**](/apps/api) and two front-ends: the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups. It also provides a set of JavaScript libraries to support developers.
+
+Two types of groups can be created from the dashboard: **manual** or **credential** groups. In the former you can add members by entering IDs directly or by creating invite links, while in the latter you can define credentials that members must prove they have in order to access the group.
+
+Once you create your manual group in the dashboard you can either create an **API key** to add or remove members or use the **invite codes** to add members with the [`@bandada/api-sdk`](/libs/api-sdk) library. Credential groups can instead be accessed by redirecting users to the appropriate page in the dashboard (i.e. `https://bandada.pse.dev/credentials?group=<groupId>&member=<memberId>&provider=<providerName>`).
+
+Bandada also provides a preset of credential **validators** that can, however, be extended with the [`@bandada/credentials`](/libs/credentials) library.
+
+For more information about our applications or libraries, please see the links below to go to the specific README files.
+
+## ⚙️ Applications
+
+-   API: [/apps/api](/apps/api)
+-   Dashboard: [/apps/dashboard](/apps/dashboard)
+-   Demo: [/apps/client](/apps/client)
+
+## 📦 Libraries
 
 <table>
     <th>Package</th>
