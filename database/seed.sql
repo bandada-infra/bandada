@@ -26,7 +26,7 @@ CREATE TABLE groups (
 -- Table Definition ----------------------------------------------
 
 CREATE TABLE members (
-    id character varying PRIMARY KEY,
+    id character varying NOT NULL,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     group_id character varying(32) REFERENCES groups(id),
     CONSTRAINT "UQ_db97b66d973228a2049c76f89e2" UNIQUE (id, group_id)
