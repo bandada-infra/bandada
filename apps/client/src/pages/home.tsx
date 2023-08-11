@@ -1,4 +1,3 @@
-import { request } from "@bandada/utils"
 import {
     Button,
     Container,
@@ -19,6 +18,12 @@ import { useCallback, useEffect, useState } from "react"
 import { FiGithub } from "react-icons/fi"
 import { useSearchParams } from "react-router-dom"
 import icon1Image from "../assets/icon1.svg"
+import {
+    addMemberByInviteCode,
+    getGroup,
+    getInvite,
+    isGroupMember
+} from "../utils/api"
 
 const injectedConnector = new InjectedConnector({})
 
@@ -54,12 +59,9 @@ export default function HomePage(): JSX.Element {
             if (account && library) {
                 setLoading(true)
 
-                const invite = await request(
-                    `${import.meta.env.VITE_API_URL}/invites/${inviteCode}`
-                )
+                const invite = await getInvite(inviteCode)
 
-                if (!invite) {
-                    alert("Some error occurred!")
+                if (invite === null) {
                     setLoading(false)
                     return
                 }
@@ -70,33 +72,36 @@ export default function HomePage(): JSX.Element {
                 const identity = new Identity(await signer.signMessage(message))
                 const identityCommitment = identity.getCommitment().toString()
 
-                const hasJoined = await request(
-                    `${import.meta.env.VITE_API_URL}/groups/${
-                        invite.groupId
-                    }/members/${identityCommitment}`
+                const hasJoined = await isGroupMember(
+                    invite.groupId,
+                    identityCommitment
                 )
 
-                if (hasJoined) {
-                    alert("You have already joined this group")
+                if (hasJoined === null) {
                     setLoading(false)
                     return
                 }
 
-                await request(
-                    `${import.meta.env.VITE_API_URL}/groups/${
-                        invite.groupId
-                    }/members/${identityCommitment}`,
-                    {
-                        method: "post",
-                        data: {
-                            inviteCode
-                        }
-                    }
+                if (hasJoined) {
+                    setLoading(false)
+                    alert("You have already joined this group")
+                    return
+                }
+
+                const response = await addMemberByInviteCode(
+                    invite.groupId,
+                    identityCommitment,
+                    inviteCode
                 )
 
-                alert("You have joined the group!")
+                if (response === null) {
+                    setLoading(false)
+                    return
+                }
+
                 setInviteCode("")
                 setLoading(false)
+                alert("You have joined the group!")
             }
         },
         [account, library]
@@ -107,12 +112,15 @@ export default function HomePage(): JSX.Element {
             if (account && library) {
                 setLoading(true)
 
-                const { credentials } = await request(
-                    `${import.meta.env.VITE_API_URL}/groups/${groupId}`
-                )
+                const group = await getGroup(groupId)
 
-                const providerName = JSON.parse(credentials)
-                    .id.split("_")[0]
+                if (group === null) {
+                    setLoading(false)
+                    return
+                }
+
+                const providerName = group.credentials.id
+                    .split("_")[0]
                     .toLowerCase()
 
                 const signer = library.getSigner(account)

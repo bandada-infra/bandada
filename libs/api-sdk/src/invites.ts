@@ -16,5 +16,7 @@ export async function getInvite(
 
     const invite = await request(requestUrl, config)
 
+    invite.group.credentials = JSON.parse(invite.group.credentials)
+
     return invite
 }
