@@ -14,7 +14,7 @@ import { Group } from "./group.entity"
 @Unique(["id", "group"])
 @Index(["id", "group"])
 export class Member {
-    @Column({ primary: true, unique: false })
+    @Column()
     id: string
 
     // In reality the relation group -> members is many-to-many.
