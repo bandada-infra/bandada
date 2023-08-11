@@ -31,6 +31,5 @@
     "dependencies": {
         "@openzeppelin/contracts": "4.7.3",
         "@semaphore-protocol/contracts": "3.4.0"
-    },
-    "stableVersion": "0.14.0"
+    }
 }
