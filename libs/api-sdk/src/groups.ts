@@ -1,6 +1,5 @@
 import { request } from "@bandada/utils"
 import { GroupResponse } from "./types"
-import { config } from "./config"
 
 const url = "/groups"
 
@@ -8,7 +7,7 @@ const url = "/groups"
  * Returns the list of groups.
  * @returns List of groups.
  */
-export async function getGroups(): Promise<GroupResponse[]> {
+export async function getGroups(config: object): Promise<GroupResponse[]> {
     const groups = await request(url, config)
 
     return groups
@@ -19,7 +18,10 @@ export async function getGroups(): Promise<GroupResponse[]> {
  * @param groupId Group id.
  * @returns Specific group.
  */
-export async function getGroup(groupId: string): Promise<GroupResponse> {
+export async function getGroup(
+    config: object,
+    groupId: string
+): Promise<GroupResponse> {
     const requestUrl = `${url}/${groupId}`
 
     const group = await request(requestUrl, config)
@@ -34,6 +36,7 @@ export async function getGroup(groupId: string): Promise<GroupResponse> {
  * @returns true or false.
  */
 export async function isGroupMember(
+    config: object,
     groupId: string,
     memberId: string
 ): Promise<boolean> {
@@ -51,6 +54,7 @@ export async function isGroupMember(
  * @returns the Merkle Proof.
  */
 export async function generateMerkleProof(
+    config: object,
     groupId: string,
     memberId: string
 ): Promise<string> {
@@ -69,6 +73,7 @@ export async function generateMerkleProof(
  * @returns undefined.
  */
 export async function addMemberByApiKey(
+    config: object,
     groupId: string,
     memberId: string,
     apiKey: string
@@ -93,6 +98,7 @@ export async function addMemberByApiKey(
  * @returns undefined.
  */
 export async function addMemberByInviteCode(
+    config: object,
     groupId: string,
     memberId: string,
     inviteCode: string
@@ -115,6 +121,7 @@ export async function addMemberByInviteCode(
  * @returns undefined.
  */
 export async function removeMemberByApiKey(
+    config: object,
     groupId: string,
     memberId: string,
     apiKey: string

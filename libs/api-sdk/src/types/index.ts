@@ -32,3 +32,8 @@ export type InviteResponse = {
     groupName: string
     groupId: string
 }
+
+export enum SupportedUrl {
+    DEV = "http://localhost:3000",
+    PROD = "https://api.bandada.pse.dev"
+}

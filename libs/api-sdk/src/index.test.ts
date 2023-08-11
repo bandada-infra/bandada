@@ -1,15 +1,6 @@
 import { request } from "@bandada/utils"
-import {
-    getGroups,
-    getGroup,
-    isGroupMember,
-    generateMerkleProof,
-    addMemberByApiKey,
-    addMemberByInviteCode,
-    removeMemberByApiKey
-} from "./groups"
-import { getInvite } from "./invites"
-import { GroupResponse, InviteResponse } from "./types"
+import ApiSdk from "./apiSdk"
+import { GroupResponse, InviteResponse, SupportedUrl } from "./types"
 
 jest.mock("@bandada/utils", () => ({
     __esModule: true,
@@ -19,6 +10,64 @@ jest.mock("@bandada/utils", () => ({
 const requestMocked = request as jest.MockedFunction<typeof request>
 
 describe("Bandada API SDK", () => {
+    let apiSdk: ApiSdk
+    describe("ApiSdk constructor", () => {
+        it("Should create new ApiSdk instance without url and config", () => {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                baseURL: SupportedUrl.PROD
+            }
+            apiSdk = new ApiSdk()
+            expect(apiSdk.url).toBe(SupportedUrl.PROD)
+            expect(JSON.stringify(apiSdk.config)).toBe(JSON.stringify(config))
+        })
+        it("Should create new ApiSdk instance with url and without config", () => {
+            const url = "htps://api.example.com"
+            const config = {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                baseURL: url
+            }
+            apiSdk = new ApiSdk(url)
+            expect(apiSdk.url).toBe(url)
+            expect(JSON.stringify(apiSdk.config)).toBe(JSON.stringify(config))
+        })
+        it("Should create new ApiSdk instance with url and config", () => {
+            const config = {
+                headers: {
+                    "Content-Type": "text/html"
+                },
+                baseURL: SupportedUrl.PROD
+            }
+            apiSdk = new ApiSdk(SupportedUrl.PROD, config)
+            expect(apiSdk.url).toBe(SupportedUrl.PROD)
+            expect(apiSdk.config).toBe(config)
+        })
+        it("Should throw and error because url and baseURL are not the same", () => {
+            const config = {
+                headers: {
+                    "Content-Type": "text/html"
+                },
+                baseURL: SupportedUrl.PROD
+            }
+            const fun = () => {
+                apiSdk = new ApiSdk(SupportedUrl.DEV, config)
+            }
+            expect(fun).toThrow("The url and baseURL should be the same")
+        })
+        it("Should add the baseURL to config", () => {
+            const config = {
+                headers: {
+                    "Content-Type": "text/html"
+                }
+            }
+            apiSdk = new ApiSdk(SupportedUrl.DEV, config)
+            expect(apiSdk.url).toBe(SupportedUrl.DEV)
+        })
+    })
     describe("Groups", () => {
         describe("#getGroups", () => {
             it("Should return all groups", async () => {
@@ -37,8 +86,8 @@ describe("Bandada API SDK", () => {
                         }
                     ])
                 )
-
-                const groups: GroupResponse[] = await getGroups()
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: GroupResponse[] = await apiSdk.getGroups()
                 expect(groups).toHaveLength(1)
             })
         })
@@ -57,9 +106,10 @@ describe("Bandada API SDK", () => {
                         credentials: null
                     })
                 )
-
                 const groupId = "10402173435763029700781503965100"
-                const group: GroupResponse = await getGroup(groupId)
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: GroupResponse = await apiSdk.getGroup(groupId)
                 expect(group.id).toBe(groupId)
             })
         })
@@ -72,7 +122,11 @@ describe("Bandada API SDK", () => {
                 const groupId = "10402173435763029700781503965100"
                 const memberId = "1"
 
-                const isMember: boolean = await isGroupMember(groupId, memberId)
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const isMember: boolean = await apiSdk.isGroupMember(
+                    groupId,
+                    memberId
+                )
                 expect(isMember).toBe(true)
             })
             it("Should return false because the member is not part of the group", async () => {
@@ -83,7 +137,11 @@ describe("Bandada API SDK", () => {
                 const groupId = "10402173435763029700781503965100"
                 const memberId = "2"
 
-                const isMember: boolean = await isGroupMember(groupId, memberId)
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const isMember: boolean = await apiSdk.isGroupMember(
+                    groupId,
+                    memberId
+                )
                 expect(isMember).toBe(false)
             })
         })
@@ -118,7 +176,9 @@ describe("Bandada API SDK", () => {
                 )
                 const groupId = "10402173435763029700781503965100"
                 const memberId = "1"
-                const proof: string = await generateMerkleProof(
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const proof: string = await apiSdk.generateMerkleProof(
                     groupId,
                     memberId
                 )
@@ -133,7 +193,12 @@ describe("Bandada API SDK", () => {
                 const memberId = "1"
                 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-                const res = await addMemberByApiKey(groupId, memberId, apiKey)
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = await apiSdk.addMemberByApiKey(
+                    groupId,
+                    memberId,
+                    apiKey
+                )
                 expect(res).toBeUndefined()
             })
             it("Should add a member to the group using an Invite Code", async () => {
@@ -143,7 +208,8 @@ describe("Bandada API SDK", () => {
                 const memberId = "1"
                 const inviteCode = "MQYS4UR5"
 
-                const res = await addMemberByInviteCode(
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = await apiSdk.addMemberByInviteCode(
                     groupId,
                     memberId,
                     inviteCode
@@ -159,7 +225,8 @@ describe("Bandada API SDK", () => {
                 const memberId = "1"
                 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-                const res = await removeMemberByApiKey(
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = await apiSdk.removeMemberByApiKey(
                     groupId,
                     memberId,
                     apiKey
@@ -196,7 +263,11 @@ describe("Bandada API SDK", () => {
                 )
 
                 const inviteCode = "C5VAG4HD"
-                const invite: InviteResponse = await getInvite(inviteCode)
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const invite: InviteResponse = await apiSdk.getInvite(
+                    inviteCode
+                )
                 expect(invite.code).toBe(inviteCode)
             })
         })
