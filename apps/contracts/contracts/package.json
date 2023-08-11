@@ -1,6 +1,6 @@
 {
     "name": "@bandada/contracts",
-    "version": "0.14.0",
+    "version": "1.0.0-alpha",
     "description": "Bandada smart contracts to manage off-chain groups and verify their zero-knowledge proofs.",
     "license": "MIT",
     "files": [
@@ -31,5 +31,6 @@
     "dependencies": {
         "@openzeppelin/contracts": "4.7.3",
         "@semaphore-protocol/contracts": "3.4.0"
-    }
+    },
+    "stableVersion": "0.14.0"
 }
