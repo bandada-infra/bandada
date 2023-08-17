@@ -37,8 +37,8 @@ export default function NavBar(): JSX.Element {
                 backgroundRepeat="no-repeat"
                 backgroundSize="450px"
             >
-                <HStack spacing="1">
-                    <a href="https://bandada.pse.dev">
+                <a href="https://bandada.pse.dev">
+                    <HStack spacing="1">
                         <Image
                             src={icon1Image}
                             htmlWidth="35px"
@@ -47,9 +47,8 @@ export default function NavBar(): JSX.Element {
                         <Heading fontSize="25px" as="h1">
                             bandada
                         </Heading>
-                    </a>
-                </HStack>
-
+                    </HStack>
+                </a>
                 <HStack spacing="4">
                     {
                         // <Button
