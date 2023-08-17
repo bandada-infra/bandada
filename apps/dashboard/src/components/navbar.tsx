@@ -38,14 +38,16 @@ export default function NavBar(): JSX.Element {
                 backgroundSize="450px"
             >
                 <HStack spacing="1">
-                    <Image
-                        src={icon1Image}
-                        htmlWidth="35px"
-                        alt="Bandada icon"
-                    />
-                    <Heading fontSize="25px" as="h1">
-                        bandada
-                    </Heading>
+                    <a href="https://bandada.pse.dev">
+                        <Image
+                            src={icon1Image}
+                            htmlWidth="35px"
+                            alt="Bandada icon"
+                        />
+                        <Heading fontSize="25px" as="h1">
+                            bandada
+                        </Heading>
+                    </a>
                 </HStack>
 
                 <HStack spacing="4">
