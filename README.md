@@ -52,7 +52,7 @@
 | Groups are an important concept when we speak about privacy and zero knowledge technologies. They can be thought of as anonymity sets, and are a way to establish necessary trust between a set of participants. The goal of this project is to provide a comprehensive infrastructure to allow anyone to create and manage their own groups. |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
-Bandada consists of a beck-end to store the groups and provide the [**API**](/apps/api), two front-ends: the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups, and the [**contracts**](/apps/contracts) Additionally, it also provides a set of JavaScript libraries to support developers.
+Bandada consists of a back-end to store the groups and provide the [**API**](/apps/api), two front-ends: the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups, and the [**contracts**](/apps/contracts) Additionally, it also provides a set of JavaScript libraries to support developers.
 
 Two types of groups can be created from the dashboard: **manual** or **credential** groups. In the former you can add members by entering IDs directly or by creating invite links, while in the latter you can define credentials that members must prove they have in order to access the group.
 
