@@ -142,9 +142,9 @@ export default function GeneralInfoStep({
                             size="lg"
                             minLength={10}
                             value={_groupDescription ?? ""}
-                            onChange={(event) =>
+                            onChange={(event) => {
                                 setGroupDescription(event.target.value)
-                            }
+                            }}
                             onBlur={() =>
                                 onSubmit(
                                     {
@@ -204,7 +204,8 @@ export default function GeneralInfoStep({
                         !_groupName ||
                         (group.type === "off-chain" &&
                             _fingerprintDuration === undefined) ||
-                        (group.type === "off-chain" && !_groupDescription)
+                        (group.type === "off-chain" && !_groupDescription) ||
+                        _groupDescription.length < 10
                     }
                     variant="solid"
                     colorScheme="primary"
