@@ -246,7 +246,7 @@ It will also automatically check that the modified files comply with ESLint and 
 
 ### Database
 
-Bandada require a SQL database to work, which is used by the `api` application.
+Bandada requires a SQL database to work, which is used by the `api` application.
 Bandada can work with Postgres and SQLite. Other SQL flavors should work but have not been tested yet.
 You can pass the connection URL to the database using the environment variable (see below).
 
@@ -268,7 +268,7 @@ docker-compose up -d
 
 #### Local development
 
-You can start dependencies essential for local development like a local ethereum network (with data persistance) and TheGraph node using the command below:
+You can start dependencies essential for local development like a local ethereum network (with data persistence) and TheGraph node using the command below:
 
 ```sh
 docker-compose -f docker-compose.dev.yml up -d
@@ -298,7 +298,7 @@ Bandada contract has been deployed to:             0x9fE46736679d2D9a65F0992F227
 BandadaSemaphore contract has been deployed to:    0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
 ```
 
-These values are set as defaults in `libs/utils/src/contract-addresses.ts`. If you change the contract and deploy again, new address need to be set here.
+These values are set as defaults in `libs/utils/src/contract-addresses.ts`. If you change the contract and deploy again, new address needs to be set here.
 
 To reset the local network or TheGraph node, you can stop the docker containers, and delete the respective folders inside `./.data`.
 
