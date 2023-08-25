@@ -91,7 +91,7 @@ validateCredentials(
 
 The library has been built to allow external devs to add their own validators. A validator is a simple file that exports 3 JavaScript values:
 
-1. `id`: The validater id. It must be unique and capitalized (snake case).
+1. `id`: The validator id. It must be unique and capitalized (snake case).
 2. `criteriaABI`: The criteria ABI. It contains the structure of your criteria with its types.
 3. `validate`: The validator handler. It usually consists of three steps: criteria types check, user data retrieval and credentials' validation.
 
@@ -115,7 +115,7 @@ const validator: Validator = {
     },
 
     /**
-     * It checks if a user has more then 'minFollowers' followers.
+     * It checks if a user has more than 'minFollowers' followers.
      * @param criteria The criteria used to check user's credentials.
      * @param context Utility functions and other context variables.
      * @returns True if the user meets the credentials.
