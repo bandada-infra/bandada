@@ -118,7 +118,7 @@ const contract = getContract(contractName, network)
 
 \# **getSemaphoreContract**(network: Network, privateKeyOrSigner?: string | Signer, apiKey?: string): _SemaphoreContract_
 
-Returns a new instance of the SemaphoreContract class. 
+Returns a new instance of the SemaphoreContract class.
 
 ```ts
 import { getSemaphoreContract } from "@bandada/utils"
@@ -128,7 +128,7 @@ const semaphore = getSemaphoreContract("localhost")
 
 \# **getBandadaContract**(network: Network, privateKeyOrSigner?: string | Signer, apiKey?: string): _BandadaContract_
 
-Returns a new instance of the BandadaContract class. 
+Returns a new instance of the BandadaContract class.
 
 ```ts
 import { getBandadaContract } from "@bandada/utils"
@@ -144,6 +144,20 @@ Returns an [Ethers](https://docs.ethers.org/) wallet.
 import { getWallet } from "@bandada/utils"
 
 const privateKey =
-  "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 const wallet = getWallet(privateKey)
+```
+
+\# **getContractAddresses**(networkName: Network): _{
+Bandada: string,
+Semaphore: string,
+BandadaSemaphore: string
+}_
+
+Returns the contract addresses for the Bandada, Semaphore and BandadaSemaphore smart contracts.
+
+```ts
+import { getContractAddresses } from "@bandada/utils"
+
+const addresses = getContractAddresses("goerli")
 ```
