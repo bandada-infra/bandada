@@ -86,8 +86,8 @@ export default function GroupCard({
                     mt="12px"
                     color={!description ? "balticSea.300" : "balticSea.600"}
                 >
-                    {description ||
-                        (type !== "on-chain" && "[no description yet]")}
+                    {type !== "on-chain" &&
+                        (description || "[no description yet]")}
                 </Text>
             </Box>
 
