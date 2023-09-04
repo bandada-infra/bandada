@@ -205,7 +205,8 @@ export default function GeneralInfoStep({
                         (group.type === "off-chain" &&
                             _fingerprintDuration === undefined) ||
                         (group.type === "off-chain" && !_groupDescription) ||
-                        _groupDescription.length < 10
+                        (group.type === "off-chain" &&
+                            _groupDescription.length < 10)
                     }
                     variant="solid"
                     colorScheme="primary"
