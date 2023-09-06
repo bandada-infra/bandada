@@ -98,7 +98,7 @@ export default function AddMemberModal({
                 setIsLoading(false)
                 onClose(_memberId)
             } catch (error) {
-                alert("Wrong network! Switch to Goerli!")
+                alert("Some error occurred! Check if you're on Goerli network and the transaction is signed and completed")
 
                 setIsLoading(false)
             }
