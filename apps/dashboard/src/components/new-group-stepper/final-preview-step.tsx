@@ -32,7 +32,7 @@ export default function FinalPreviewStep({
                 navigate("/groups")
             } catch (error) {
                 setLoading(false)
-                alert("Some error occurred!")
+                alert("Some error occurred! Check if you're on Goerli network and the transaction is signed and completed")
 
                 console.error(error)
             }
