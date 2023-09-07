@@ -66,7 +66,7 @@ export default function AddMemberModal({
 
         if (
             !window.confirm(
-                `Are you sure you want to add member '${_memberId}'?`
+                `Hare you sure you want to add member '${_memberId}'?`
             )
         ) {
             return
