@@ -88,7 +88,6 @@ export default function GroupPage(): JSX.Element {
         (memberId?: string) => {
             if (!memberId) {
                 addMembersModal.onClose()
-                // console.log("admin.address: " + admin.address + " _group.admin: " + _group.admin)
                 return
             }
 
@@ -131,7 +130,7 @@ export default function GroupPage(): JSX.Element {
     )
 
     const removeGroup = useCallback(async () => {
-        if (!window.confirm("Hare you sure you want to remove this group?")) {
+        if (!window.confirm("Are you sure you want to remove this group?")) {
             return
         }
 
@@ -144,7 +143,7 @@ export default function GroupPage(): JSX.Element {
 
     const generateApiKey = useCallback(async () => {
         if (
-            !window.confirm("Hare you sure you want to generate a new API key?")
+            !window.confirm("Are you sure you want to generate a new API key?")
         ) {
             return
         }
@@ -372,11 +371,12 @@ export default function GroupPage(): JSX.Element {
                             variant="solid"
                             colorScheme="secondary"
                             onClick={addMembersModal.onOpen}
-                            hidden={_group.admin !== admin.address.toLowerCase()}
+                            hidden={
+                                _group.admin !== admin.address.toLowerCase()
+                            }
                         >
                             Add member
-                            
-                        </Button> 
+                        </Button>
                     </HStack>
 
                     <HStack mt="30px" mb="20px">
