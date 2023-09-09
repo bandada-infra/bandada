@@ -241,15 +241,15 @@ export class GroupsService {
     }
 
     /**
-     * Add a member to the group manually as an admin.
+     * Add members to the group manually as an admin.
      * @param groupId ID of the group
-     * @param memberId ID of the member to be added
+     * @param memberIds Array of member IDs to be added
      * @param adminId id of the admin making the request
      * @returns Group
      */
-    async addMemberManually(
+    async addMembersManually(
         groupId: string,
-        memberId: string,
+        memberIds: string[],
         adminId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
@@ -260,25 +260,27 @@ export class GroupsService {
             )
         }
 
-        if (this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' already exists in the group '${groupId}'`
-            )
+        for (const memberId of memberIds) {
+            if (this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' already exists in the group '${groupId}'`
+                )
+            }
         }
 
-        return this.addMember(groupId, memberId)
+        return this.addMembers(groupId, memberIds)
     }
 
     /**
-     * Add a member to the group using API Key.
+     * Add members to the group using API Key.
      * @param groupId ID of the group
-     * @param memberId ID of the member to be added
+     * @param memberIds Array of member IDs to be added
      * @param apiKey API key for the group
      * @returns Group
      */
-    async addMemberWithAPIKey(
+    async addMembersWithAPIKey(
         groupId: string,
-        memberId: string,
+        memberIds: string[],
         apiKey: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
@@ -289,13 +291,15 @@ export class GroupsService {
             )
         }
 
-        if (this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' already exists in the group '${groupId}'`
-            )
+        for (const memberId of memberIds) {
+            if (this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' already exists in the group '${groupId}'`
+                )
+            }
         }
 
-        return this.addMember(groupId, memberId)
+        return this.addMembers(groupId, memberIds)
     }
 
     /**
@@ -322,6 +326,41 @@ export class GroupsService {
         Logger.log(
             `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
         )
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
+     * Add multiple members to the group.
+     * @param groupId ID of the group
+     * @param memberIds Array of member IDs to be added
+     * @returns Group
+     */
+    async addMembers(groupId: string, memberIds: string[]): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        // Prepare new members and attach them to the group
+        const newMembers = memberIds.map((memberId) => {
+            const member = new Member()
+            member.group = group
+            member.id = memberId
+            return member
+        })
+
+        group.members.push(...newMembers)
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        // Add all the members to the cached group at once
+        memberIds.forEach((memberId) => {
+            cachedGroup.addMember(memberId)
+            Logger.log(
+                `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
+            )
+        })
 
         this._updateContractGroup(cachedGroup)
 

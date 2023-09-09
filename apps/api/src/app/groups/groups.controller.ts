@@ -27,6 +27,7 @@ import { AuthGuard } from "../auth/auth.guard"
 import { stringifyJSON } from "../utils"
 import { Group, MerkleProof } from "./docSchemas"
 import { AddMemberDto } from "./dto/add-member.dto"
+import { AddMembersDto } from "./dto/add-members.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { GroupsService } from "./groups.service"
@@ -164,21 +165,56 @@ export class GroupsController {
         const apiKey = headers["x-api-key"] as string
 
         if (apiKey) {
-            await this.groupsService.addMemberWithAPIKey(
+            await this.groupsService.addMembersWithAPIKey(
                 groupId,
-                memberId,
+                [memberId],
                 apiKey
             )
             return
         }
 
         if (req.session.adminId) {
-            await this.groupsService.addMemberManually(
+            await this.groupsService.addMembersManually(
                 groupId,
-                memberId,
+                [memberId],
                 req.session.adminId
             )
 
+            return
+        }
+
+        throw new NotImplementedException()
+    }
+
+    @Post(":group/bulk-members")
+    @ApiBody({ type: AddMembersDto })
+    @ApiOperation({
+        description:
+            "Adds multiple members to a group. Requires either API Key in the headers or a valid session."
+    })
+    async addMembers(
+        @Param("group") groupId: string,
+        @Body() dto: AddMembersDto,
+        @Headers() headers: Headers,
+        @Req() req: Request
+    ): Promise<void | any> {
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            await this.groupsService.addMembersWithAPIKey(
+                groupId,
+                dto.memberIds,
+                apiKey
+            )
+            return
+        }
+
+        if (req.session.adminId) {
+            await this.groupsService.addMembersManually(
+                groupId,
+                dto.memberIds,
+                req.session.adminId
+            )
             return
         }
 

@@ -444,10 +444,10 @@ describe("GroupsService", () => {
             apiKey = (await groupsService.getGroup(group.id)).apiKey
         })
 
-        it("Should add a member to an existing group via API", async () => {
-            const { members } = await groupsService.addMemberWithAPIKey(
+        it("Should add members to an existing group via API", async () => {
+            const { members } = await groupsService.addMembersWithAPIKey(
                 group.id,
-                "123123",
+                ["123123", "456456"],
                 apiKey
             )
 
@@ -455,9 +455,9 @@ describe("GroupsService", () => {
         })
 
         it("Should not add a member if they already exist", async () => {
-            const fun = groupsService.addMemberWithAPIKey(
+            const fun = groupsService.addMembersWithAPIKey(
                 group.id,
-                "123123",
+                ["123123"],
                 apiKey
             )
 
@@ -467,7 +467,11 @@ describe("GroupsService", () => {
         })
 
         it("Should remove a member from an existing group via API", async () => {
-            await groupsService.addMemberWithAPIKey(group.id, "100001", apiKey)
+            await groupsService.addMembersWithAPIKey(
+                group.id,
+                ["100001"],
+                apiKey
+            )
 
             const { members } = await groupsService.removeMemberWithAPIKey(
                 group.id,
@@ -497,9 +501,9 @@ describe("GroupsService", () => {
                 "admin"
             )
 
-            const fun = groupsService.addMemberWithAPIKey(
+            const fun = groupsService.addMembersWithAPIKey(
                 groupId,
-                "100002",
+                ["100002"],
                 apiKey
             )
 
@@ -536,10 +540,10 @@ describe("GroupsService", () => {
             )
         })
 
-        it("Should add a member to an existing group manually", async () => {
-            const { members } = await groupsService.addMemberManually(
+        it("Should add members to an existing group manually", async () => {
+            const { members } = await groupsService.addMembersManually(
                 group.id,
-                "123123",
+                ["123123", "456456"],
                 "admin"
             )
 
@@ -547,9 +551,9 @@ describe("GroupsService", () => {
         })
 
         it("Should not add a member if they already exists", async () => {
-            const fun = groupsService.addMemberManually(
+            const fun = groupsService.addMembersManually(
                 group.id,
-                "123123",
+                ["123123"],
                 "admin"
             )
 
@@ -559,9 +563,9 @@ describe("GroupsService", () => {
         })
 
         it("Should not add a member if the admin is the wrong admin", async () => {
-            const fun = groupsService.addMemberManually(
+            const fun = groupsService.addMembersManually(
                 group.id,
-                "123123",
+                ["123123"],
                 "wrong-admin"
             )
 
