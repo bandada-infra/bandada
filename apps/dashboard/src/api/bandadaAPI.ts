@@ -298,6 +298,19 @@ export async function addMember(
 }
 
 /**
+ * It adds new members to an existing group.
+ * @param group The group id.
+ * @param memberIds The array of group member ids.
+ */
+export async function addMembers(
+    groupId: string,
+    memberIds: string[]
+): Promise<(void | null)[]> {
+    const promises = memberIds.map((memberId) => addMember(groupId, memberId))
+    return Promise.all(promises)
+}
+
+/**
  * It removes a member from a group.
  * @param group The group id.
  * @param memberId The group member id.

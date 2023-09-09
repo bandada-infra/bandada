@@ -83,14 +83,14 @@ export default function GroupPage(): JSX.Element {
     )
 
     const addMember = useCallback(
-        (memberId?: string) => {
-            if (!memberId) {
+        (memberIds?: string[]) => {
+            if (!memberIds || memberIds.length === 0) {
                 addMembersModal.onClose()
 
                 return
             }
 
-            _group!.members.push(memberId)
+            _group!.members.push(...memberIds)
 
             setGroup({ ..._group! })
 

@@ -23,10 +23,11 @@ import { FiCopy } from "react-icons/fi"
 import { useSigner } from "wagmi"
 import * as bandadaAPI from "../api/bandadaAPI"
 import { Group } from "../types"
+import parseMemberIds from "../utils/parseMemberIds"
 
 export type AddMemberModalProps = {
     isOpen: boolean
-    onClose: (value?: string) => void
+    onClose: (value?: string[]) => void
     group: Group
 }
 
@@ -35,7 +36,7 @@ export default function AddMemberModal({
     onClose,
     group
 }: AddMemberModalProps): JSX.Element {
-    const [_memberId, setMemberId] = useState<string>("")
+    const [_memberIds, setMemberIds] = useState<string>("")
     const [_isLoading, setIsLoading] = useState(false)
     const {
         hasCopied,
@@ -46,7 +47,7 @@ export default function AddMemberModal({
     const { data: signer } = useSigner()
 
     useEffect(() => {
-        setMemberId("")
+        setMemberIds("")
 
         if (group.credentials) {
             setClientLink(
@@ -58,30 +59,31 @@ export default function AddMemberModal({
     }, [group, setClientLink])
 
     const addMember = useCallback(async () => {
-        if (!_memberId) {
-            alert("Please enter a member id!")
-
+        const memberIds = parseMemberIds(_memberIds)
+        if (memberIds.length === 0) {
+            alert("Please enter at least one member id!")
             return
         }
 
-        if (
-            !window.confirm(
-                `Are you sure you want to add member '${_memberId}'?`
-            )
-        ) {
+        const confirmMessage = `
+Are you sure you want to add the following members?
+${memberIds.join("\n")}
+        `
+
+        if (!window.confirm(confirmMessage)) {
             return
         }
 
         setIsLoading(true)
 
         if (group.type === "off-chain") {
-            if ((await bandadaAPI.addMember(group.id, _memberId)) === null) {
+            if ((await bandadaAPI.addMembers(group.id, memberIds)) === null) {
                 setIsLoading(false)
                 return
             }
 
             setIsLoading(false)
-            onClose(_memberId)
+            onClose(memberIds)
         } else {
             if (!signer) {
                 alert("No valid signer for your transaction!")
@@ -93,17 +95,17 @@ export default function AddMemberModal({
             try {
                 const semaphore = getSemaphoreContract("goerli", signer as any)
 
-                await semaphore.addMember(group.name, _memberId)
+                await semaphore.addMembers(group.name, memberIds)
 
                 setIsLoading(false)
-                onClose(_memberId)
+                onClose(memberIds)
             } catch (error) {
                 alert("Some error occurred!")
 
                 setIsLoading(false)
             }
         }
-    }, [onClose, _memberId, group, signer])
+    }, [onClose, _memberIds, group, signer])
 
     const generateInviteLink = useCallback(async () => {
         const inviteLink = await bandadaAPI.generateMagicLink(group.id)
@@ -138,9 +140,9 @@ export default function AddMemberModal({
                             <Input
                                 placeholder="Paste member ID here"
                                 size="lg"
-                                value={_memberId}
+                                value={_memberIds}
                                 onChange={(event) =>
-                                    setMemberId(event.target.value)
+                                    setMemberIds(event.target.value)
                                 }
                             />
 
