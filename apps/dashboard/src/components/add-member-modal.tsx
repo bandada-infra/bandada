@@ -145,7 +145,7 @@ ${memberIds.join("\n")}
                             </Text>
 
                             <Textarea
-                                placeholder="Paste one or more member IDs separated by commas or spaces"
+                                placeholder="Paste one or more member IDs separated by commas, spaces, or newlines"
                                 size="lg"
                                 value={_memberIds}
                                 onChange={(event) =>
