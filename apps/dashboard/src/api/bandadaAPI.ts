@@ -328,6 +328,7 @@ export async function addMembers(
         return null
     }
 }
+
 /**
  * It removes a member from a group.
  * @param group The group id.
@@ -340,6 +341,38 @@ export async function removeMember(
     try {
         await request(`${API_URL}/groups/${groupId}/members/${memberId}`, {
             method: "DELETE"
+        })
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return null
+    }
+}
+
+/**
+ * It removes members from a group.
+ * @param group The group id.
+ * @param memberIds The array of group member ids.
+ */
+export async function removeMembers(
+    groupId: string,
+    memberIds: string[]
+): Promise<void | null> {
+    try {
+        await request(`${API_URL}/groups/${groupId}/members`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+                memberIds
+            })
         })
     } catch (error: any) {
         console.error(error)
