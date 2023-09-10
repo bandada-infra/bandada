@@ -15,6 +15,7 @@ import {
     ModalContent,
     ModalOverlay,
     Text,
+    Textarea,
     Tooltip,
     useClipboard
 } from "@chakra-ui/react"
@@ -65,9 +66,14 @@ export default function AddMemberModal({
             return
         }
 
+        const uniqueMemberIds = new Set(memberIds)
+        if (uniqueMemberIds.size !== memberIds.length) {
+            alert("Please ensure there are no repeated member IDs!")
+            return
+        }
+
         const confirmMessage = `
 Are you sure you want to add the following members?
-
 ${memberIds.join("\n")}
         `
 
@@ -135,16 +141,17 @@ ${memberIds.join("\n")}
                     {!group.credentials && (
                         <Box mb="5px">
                             <Text my="10px" color="balticSea.800">
-                                Add member ID
+                                Add member IDs
                             </Text>
 
-                            <Input
-                                placeholder="Paste member ID here"
+                            <Textarea
+                                placeholder="Paste one or more member IDs separated by commas or spaces"
                                 size="lg"
                                 value={_memberIds}
                                 onChange={(event) =>
                                     setMemberIds(event.target.value)
                                 }
+                                rows={5}
                             />
 
                             <Button
@@ -155,7 +162,7 @@ ${memberIds.join("\n")}
                                 onClick={addMember}
                                 isLoading={_isLoading}
                             >
-                                Add member
+                                Add members
                             </Button>
                         </Box>
                     )}

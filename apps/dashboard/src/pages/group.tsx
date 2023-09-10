@@ -134,7 +134,6 @@ export default function GroupPage(): JSX.Element {
 
             const confirmMessage = `
 Are you sure you want to remove the following members?
-
 ${memberIds.join("\n")}
         `
             if (!window.confirm(confirmMessage)) {
