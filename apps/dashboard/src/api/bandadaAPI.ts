@@ -307,7 +307,7 @@ export async function addMembers(
     memberIds: string[]
 ): Promise<void | null> {
     try {
-        await request(`${API_URL}/groups/${groupId}/bulk-members`, {
+        await request(`${API_URL}/groups/${groupId}/members`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
