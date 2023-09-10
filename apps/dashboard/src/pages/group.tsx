@@ -103,7 +103,7 @@ export default function GroupPage(): JSX.Element {
         async (memberId: string) => {
             if (
                 !window.confirm(
-                    `Hare you sure you want to remove member '${memberId}'?`
+                    `Are you sure you want to remove member '${memberId}'?`
                 )
             ) {
                 return
@@ -129,7 +129,7 @@ export default function GroupPage(): JSX.Element {
     )
 
     const removeGroup = useCallback(async () => {
-        if (!window.confirm("Hare you sure you want to remove this group?")) {
+        if (!window.confirm("Are you sure you want to remove this group?")) {
             return
         }
 
@@ -142,7 +142,7 @@ export default function GroupPage(): JSX.Element {
 
     const generateApiKey = useCallback(async () => {
         if (
-            !window.confirm("Hare you sure you want to generate a new API key?")
+            !window.confirm("Are you sure you want to generate a new API key?")
         ) {
             return
         }
