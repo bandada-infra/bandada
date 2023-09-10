@@ -409,12 +409,21 @@ export class GroupsService {
         memberId: string,
         adminId: string
     ): Promise<Group> {
-        if (!this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' is not a member of group '${groupId}'`
-            )
-        }
+        return this.removeMembersManually(groupId, [memberId], adminId)
+    }
 
+    /**
+     * Delete members from a group.
+     * @param groupId Group name.
+     * @param memberIds Array of member's identity commitments.
+     * @param adminId Group admin id.
+     * @returns Group data with removed member.
+     */
+    async removeMembersManually(
+        groupId: string,
+        memberIds: string[],
+        adminId: string
+    ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
         if (group.adminId !== adminId) {
@@ -423,17 +432,28 @@ export class GroupsService {
             )
         }
 
-        const member = group.members.find((m) => m.id === memberId)
+        const membersToRemove = []
 
-        await this.memberRepository.remove(member)
+        for (const memberId of memberIds) {
+            if (!this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' is not a member of group '${groupId}'`
+                )
+            }
+            const member = group.members.find((m) => m.id === memberId)
+            if (member) membersToRemove.push(member)
+        }
+
+        await this.memberRepository.remove(membersToRemove)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
-        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
-
-        Logger.log(
-            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
-        )
+        for (const memberId of memberIds) {
+            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+            Logger.log(
+                `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+            )
+        }
 
         this._updateContractGroup(cachedGroup)
 
@@ -451,6 +471,20 @@ export class GroupsService {
         memberId: string,
         apiKey: string
     ): Promise<Group> {
+        return this.removeMembersWithAPIKey(groupId, [memberId], apiKey)
+    }
+
+    /**
+     * Delete a member from group using API Key
+     * @param groupId Group name.
+     * @param memberIds Array of members' identity commitment.
+     * @returns Group data with removed member.
+     */
+    async removeMembersWithAPIKey(
+        groupId: string,
+        memberIds: string[],
+        apiKey: string
+    ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
         if (!group.apiEnabled || group.apiKey !== apiKey) {
@@ -459,23 +493,29 @@ export class GroupsService {
             )
         }
 
-        if (!this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' is not a member of group '${groupId}'`
-            )
+        const membersToRemove = []
+
+        for (const memberId of memberIds) {
+            if (!this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' is not a member of group '${groupId}'`
+                )
+            }
+            const member = group.members.find((m) => m.id === memberId)
+            if (member) membersToRemove.push(member)
         }
 
-        const member = group.members.find((m) => m.id === memberId)
-
-        await this.memberRepository.remove(member)
+        await this.memberRepository.remove(membersToRemove)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
-        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+        for (const memberId of memberIds) {
+            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
 
-        Logger.log(
-            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
-        )
+            Logger.log(
+                `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+            )
+        }
 
         this._updateContractGroup(cachedGroup)
 
