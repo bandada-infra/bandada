@@ -165,18 +165,18 @@ export class GroupsController {
         const apiKey = headers["x-api-key"] as string
 
         if (apiKey) {
-            await this.groupsService.addMembersWithAPIKey(
+            await this.groupsService.addMemberWithAPIKey(
                 groupId,
-                [memberId],
+                memberId,
                 apiKey
             )
             return
         }
 
         if (req.session.adminId) {
-            await this.groupsService.addMembersManually(
+            await this.groupsService.addMemberManually(
                 groupId,
-                [memberId],
+                memberId,
                 req.session.adminId
             )
 
@@ -186,7 +186,7 @@ export class GroupsController {
         throw new NotImplementedException()
     }
 
-    @Post(":group/bulk-members")
+    @Post(":group/members")
     @ApiBody({ type: AddMembersDto })
     @ApiOperation({
         description:

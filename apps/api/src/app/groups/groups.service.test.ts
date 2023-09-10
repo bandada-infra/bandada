@@ -444,10 +444,10 @@ describe("GroupsService", () => {
             apiKey = (await groupsService.getGroup(group.id)).apiKey
         })
 
-        it("Should add members to an existing group via API", async () => {
-            const { members } = await groupsService.addMembersWithAPIKey(
+        it("Should add a member to an existing group via API", async () => {
+            const { members } = await groupsService.addMemberWithAPIKey(
                 group.id,
-                ["123123", "456456"],
+                "123123",
                 apiKey
             )
 
@@ -540,10 +540,10 @@ describe("GroupsService", () => {
             )
         })
 
-        it("Should add members to an existing group manually", async () => {
-            const { members } = await groupsService.addMembersManually(
+        it("Should add a member to an existing group manually", async () => {
+            const { members } = await groupsService.addMemberManually(
                 group.id,
-                ["123123", "456456"],
+                "123123",
                 "admin"
             )
 

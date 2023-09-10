@@ -241,6 +241,21 @@ export class GroupsService {
     }
 
     /**
+     * Add a member to the group manually as an admin.
+     * @param groupId ID of the group
+     * @param memberIds Member's identity to be added
+     * @param adminId id of the admin making the request
+     * @returns Group
+     */
+    async addMemberManually(
+        groupId: string,
+        memberId: string,
+        adminId: string
+    ): Promise<Group> {
+        return this.addMembersManually(groupId, [memberId], adminId)
+    }
+
+    /**
      * Add members to the group manually as an admin.
      * @param groupId ID of the group
      * @param memberIds Array of member IDs to be added
@@ -269,6 +284,21 @@ export class GroupsService {
         }
 
         return this.addMembers(groupId, memberIds)
+    }
+
+    /**
+     * Add a member to the group using API Key.
+     * @param groupId ID of the group
+     * @param memberIds  Member's identity to be added
+     * @param apiKey API key for the group
+     * @returns Group
+     */
+    async addMemberWithAPIKey(
+        groupId: string,
+        memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        return this.addMembersWithAPIKey(groupId, [memberId], apiKey)
     }
 
     /**
