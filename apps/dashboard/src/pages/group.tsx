@@ -473,14 +473,18 @@ ${memberIds.join("\n")}
                             >
                                 <HStack justify="space-between" w="100%">
                                     <HStack>
-                                        <Checkbox
-                                            isChecked={_selectedMembers.includes(
-                                                memberId
-                                            )}
-                                            onChange={() =>
-                                                toggleMemberSelection(memberId)
-                                            }
-                                        />
+                                        {_group.type === "off-chain" && (
+                                            <Checkbox
+                                                isChecked={_selectedMembers.includes(
+                                                    memberId
+                                                )}
+                                                onChange={() =>
+                                                    toggleMemberSelection(
+                                                        memberId
+                                                    )
+                                                }
+                                            />
+                                        )}
                                         <Icon
                                             color="balticSea.300"
                                             boxSize="6"
@@ -531,34 +535,35 @@ ${memberIds.join("\n")}
                             </Flex>
                         ))
                     )}
-
-                    <Flex mt="20px" justify="space-between" align="center">
-                        <ButtonGroup>
+                    {_group.type === "off-chain" && (
+                        <Flex mt="20px" justify="space-between" align="center">
+                            <ButtonGroup>
+                                <Button
+                                    variant="solid"
+                                    colorScheme="tertiary"
+                                    onClick={handleSelectAll}
+                                >
+                                    Select All
+                                </Button>
+                                <Button
+                                    variant="solid"
+                                    colorScheme="tertiary"
+                                    onClick={handleDeselectAll}
+                                >
+                                    Deselect
+                                </Button>
+                            </ButtonGroup>
                             <Button
                                 variant="solid"
-                                colorScheme="tertiary"
-                                onClick={handleSelectAll}
+                                colorScheme="danger"
+                                isDisabled={_selectedMembers.length === 0}
+                                onClick={() => removeMembers(_selectedMembers)}
+                                size="sm"
                             >
-                                Select All
+                                Remove Selected Members
                             </Button>
-                            <Button
-                                variant="solid"
-                                colorScheme="tertiary"
-                                onClick={handleDeselectAll}
-                            >
-                                Deselect
-                            </Button>
-                        </ButtonGroup>
-                        <Button
-                            variant="solid"
-                            colorScheme="danger"
-                            isDisabled={_selectedMembers.length === 0}
-                            onClick={() => removeMembers(_selectedMembers)}
-                            size="sm"
-                        >
-                            Remove Selected Members
-                        </Button>
-                    </Flex>
+                        </Flex>
+                    )}
                 </Box>
             </HStack>
 
