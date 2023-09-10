@@ -67,6 +67,7 @@ export default function AddMemberModal({
 
         const confirmMessage = `
 Are you sure you want to add the following members?
+
 ${memberIds.join("\n")}
         `
 

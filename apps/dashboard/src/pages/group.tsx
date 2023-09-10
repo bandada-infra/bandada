@@ -1,6 +1,8 @@
 import {
     Box,
     Button,
+    ButtonGroup,
+    Checkbox,
     Container,
     Flex,
     Heading,
@@ -47,6 +49,7 @@ export default function GroupPage(): JSX.Element {
     const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
+    const [_selectedMembers, setSelectedMembers] = useState<string[]>([])
 
     useEffect(() => {
         ;(async () => {
@@ -122,6 +125,39 @@ export default function GroupPage(): JSX.Element {
         [_group]
     )
 
+    const removeMembers = useCallback(
+        async (memberIds: string[]) => {
+            if (memberIds.length === 0) {
+                alert(" No member is selected!")
+                return
+            }
+
+            const confirmMessage = `
+Are you sure you want to remove the following members?
+
+${memberIds.join("\n")}
+        `
+            if (!window.confirm(confirmMessage)) {
+                setSelectedMembers([])
+                return
+            }
+
+            if (
+                (await bandadaApi.removeMembers(_group!.id, memberIds)) === null
+            ) {
+                return
+            }
+
+            for (const memberId of memberIds) {
+                _group!.members = _group!.members.filter((m) => m !== memberId)
+            }
+
+            setSelectedMembers([])
+            setGroup({ ..._group! })
+        },
+        [_group]
+    )
+
     const filterMember = useCallback(
         (memberId: string) =>
             memberId.toLowerCase().includes(_searchMember.toLowerCase()),
@@ -158,6 +194,26 @@ export default function GroupPage(): JSX.Element {
         setApiKey(apiKey)
         setGroup({ ..._group! })
     }, [_group, setApiKey])
+
+    const toggleMemberSelection = (memberId: string) => {
+        if (_selectedMembers.includes(memberId)) {
+            setSelectedMembers((prev) => prev.filter((id) => id !== memberId))
+        } else {
+            setSelectedMembers((prev) => [...prev, memberId])
+        }
+    }
+
+    const handleSelectAll = () => {
+        const visibleMembers = _group!.members?.filter(filterMember)
+
+        if (visibleMembers) {
+            setSelectedMembers(visibleMembers)
+        }
+    }
+
+    const handleDeselectAll = () => {
+        setSelectedMembers([])
+    }
 
     return _group ? (
         <Container maxW="container.xl" pb="20" px="8">
@@ -353,7 +409,6 @@ export default function GroupPage(): JSX.Element {
                         </Box>
                     )}
                 </VStack>
-
                 <Box
                     flex="1"
                     bgColor="balticSea.50"
@@ -419,6 +474,14 @@ export default function GroupPage(): JSX.Element {
                             >
                                 <HStack justify="space-between" w="100%">
                                     <HStack>
+                                        <Checkbox
+                                            isChecked={_selectedMembers.includes(
+                                                memberId
+                                            )}
+                                            onChange={() =>
+                                                toggleMemberSelection(memberId)
+                                            }
+                                        />
                                         <Icon
                                             color="balticSea.300"
                                             boxSize="6"
@@ -469,6 +532,34 @@ export default function GroupPage(): JSX.Element {
                             </Flex>
                         ))
                     )}
+
+                    <Flex mt="20px" justify="space-between" align="center">
+                        <ButtonGroup>
+                            <Button
+                                variant="solid"
+                                colorScheme="tertiary"
+                                onClick={handleSelectAll}
+                            >
+                                Select All
+                            </Button>
+                            <Button
+                                variant="solid"
+                                colorScheme="tertiary"
+                                onClick={handleDeselectAll}
+                            >
+                                Deselect
+                            </Button>
+                        </ButtonGroup>
+                        <Button
+                            variant="solid"
+                            colorScheme="danger"
+                            isDisabled={_selectedMembers.length === 0}
+                            onClick={() => removeMembers(_selectedMembers)}
+                            size="sm"
+                        >
+                            Remove Selected Members
+                        </Button>
+                    </Flex>
                 </Box>
             </HStack>
 
