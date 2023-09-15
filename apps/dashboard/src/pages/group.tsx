@@ -372,6 +372,7 @@ export default function GroupPage(): JSX.Element {
                             colorScheme="secondary"
                             onClick={addMembersModal.onOpen}
                             hidden={
+                                !admin ||
                                 _group.admin !== admin.address.toLowerCase()
                             }
                         >
