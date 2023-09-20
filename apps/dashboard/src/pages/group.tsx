@@ -373,7 +373,10 @@ export default function GroupPage(): JSX.Element {
                             onClick={addMembersModal.onOpen}
                             hidden={
                                 !admin ||
-                                _group.admin !== admin.address.toLowerCase()
+                                (groupType === "off-chain"
+                                    ? _group.admin !== admin.id
+                                    : _group.admin !==
+                                      admin.address.toLowerCase())
                             }
                         >
                             Add member
