@@ -22,7 +22,7 @@ import {
     useDisclosure,
     VStack
 } from "@chakra-ui/react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useContext } from "react"
 import { CgProfile } from "react-icons/cg"
 import { FiCopy, FiSearch } from "react-icons/fi"
 import {
@@ -38,6 +38,7 @@ import AddMemberModal from "../components/add-member-modal"
 import { Group } from "../types"
 import shortenMemberId from "../utils/shortenMemberId"
 import shortenNumber from "../utils/shortenNumber"
+import { AuthContext } from "../context/auth-context"
 
 export default function GroupPage(): JSX.Element {
     const navigate = useNavigate()
@@ -47,6 +48,7 @@ export default function GroupPage(): JSX.Element {
     const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
+    const { admin } = useContext(AuthContext)
 
     useEffect(() => {
         ;(async () => {
@@ -86,7 +88,6 @@ export default function GroupPage(): JSX.Element {
         (memberId?: string) => {
             if (!memberId) {
                 addMembersModal.onClose()
-
                 return
             }
 
@@ -103,7 +104,7 @@ export default function GroupPage(): JSX.Element {
         async (memberId: string) => {
             if (
                 !window.confirm(
-                    `Hare you sure you want to remove member '${memberId}'?`
+                    `Are you sure you want to remove member '${memberId}'?`
                 )
             ) {
                 return
@@ -129,7 +130,7 @@ export default function GroupPage(): JSX.Element {
     )
 
     const removeGroup = useCallback(async () => {
-        if (!window.confirm("Hare you sure you want to remove this group?")) {
+        if (!window.confirm("Are you sure you want to remove this group?")) {
             return
         }
 
@@ -142,7 +143,7 @@ export default function GroupPage(): JSX.Element {
 
     const generateApiKey = useCallback(async () => {
         if (
-            !window.confirm("Hare you sure you want to generate a new API key?")
+            !window.confirm("Are you sure you want to generate a new API key?")
         ) {
             return
         }
@@ -366,11 +367,17 @@ export default function GroupPage(): JSX.Element {
                         <Heading fontSize="25px" as="h1">
                             Members
                         </Heading>
-
                         <Button
                             variant="solid"
                             colorScheme="secondary"
                             onClick={addMembersModal.onOpen}
+                            hidden={
+                                !admin ||
+                                (groupType === "off-chain"
+                                    ? _group.admin !== admin.id
+                                    : _group.admin !==
+                                      admin.address.toLowerCase())
+                            }
                         >
                             Add member
                         </Button>
