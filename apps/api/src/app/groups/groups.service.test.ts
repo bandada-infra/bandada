@@ -521,6 +521,113 @@ describe("GroupsService", () => {
         })
     })
 
+    describe("# Add and remove members via API", () => {
+        let group: Group
+        let apiKey: string
+
+        beforeAll(async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: true },
+                "admin"
+            )
+
+            apiKey = (await groupsService.getGroup(group.id)).apiKey
+        })
+
+        it("Should add a member to an existing group via API", async () => {
+            const { members } = await groupsService.addMembersWithAPIKey(
+                group.id,
+                ["123123", "456456", "789789"],
+                apiKey
+            )
+
+            expect(members).toHaveLength(3)
+        })
+
+        it("Should not add a member if they already exist", async () => {
+            const fun = groupsService.addMembersWithAPIKey(
+                group.id,
+                ["123123", "456456", "789789"],
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Member '123123' already exists in the group '${group.id}'`
+            )
+        })
+
+        it("Should remove members from an existing group via API", async () => {
+            await groupsService.addMembersWithAPIKey(
+                group.id,
+                ["100001", "100002", "100003"],
+                apiKey
+            )
+
+            const { members } = await groupsService.removeMembersWithAPIKey(
+                group.id,
+                ["100001", "100002", "100003"],
+                apiKey
+            )
+
+            expect(members.map((m) => m.id)).not.toContain("100001")
+            expect(members.map((m) => m.id)).not.toContain("100002")
+            expect(members.map((m) => m.id)).not.toContain("100003")
+        })
+
+        it("Should not remove a member if they does not exist", async () => {
+            const fun = groupsService.removeMembersWithAPIKey(
+                group.id,
+                ["100001"],
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Member '100001' is not a member of group '${group.id}'`
+            )
+        })
+
+        it("Should not add a member to an existing group if API is disabled", async () => {
+            await groupsService.updateGroup(
+                group.id,
+                { apiEnabled: false },
+                "admin"
+            )
+
+            const fun = groupsService.addMembersWithAPIKey(
+                groupId,
+                ["100002"],
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                "Invalid API key or API access not enabled for group"
+            )
+        })
+
+        it("Should not remove a member to an existing group if API is disabled", async () => {
+            const fun = groupsService.removeMembersWithAPIKey(
+                groupId,
+                ["100001"],
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                "Invalid API key or API access not enabled for group"
+            )
+        })
+    })
+
     describe("# addMemberManually", () => {
         let group: Group
 
@@ -562,6 +669,54 @@ describe("GroupsService", () => {
             const fun = groupsService.addMemberManually(
                 group.id,
                 "123123",
+                "wrong-admin"
+            )
+
+            await expect(fun).rejects.toThrow("You are not the admin")
+        })
+    })
+
+    describe("# addMembersManually", () => {
+        let group: Group
+
+        beforeAll(async () => {
+            group = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+        })
+
+        it("Should add members to an existing group manually", async () => {
+            const { members } = await groupsService.addMembersManually(
+                group.id,
+                ["123123", "456456", "789789"],
+                "admin"
+            )
+
+            expect(members).toHaveLength(3)
+        })
+
+        it("Should not add members if they already exists", async () => {
+            const fun = groupsService.addMembersManually(
+                group.id,
+                ["123123", "456456", "789789"],
+                "admin"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Member '123123' already exists in the group '${group.id}'`
+            )
+        })
+
+        it("Should not add a member if the admin is the wrong admin", async () => {
+            const fun = groupsService.addMembersManually(
+                group.id,
+                ["123123", "456456", "789789"],
                 "wrong-admin"
             )
 

@@ -243,13 +243,28 @@ export class GroupsService {
     /**
      * Add a member to the group manually as an admin.
      * @param groupId ID of the group
-     * @param memberId ID of the member to be added
+     * @param memberIds Member's identity to be added
      * @param adminId id of the admin making the request
      * @returns Group
      */
     async addMemberManually(
         groupId: string,
         memberId: string,
+        adminId: string
+    ): Promise<Group> {
+        return this.addMembersManually(groupId, [memberId], adminId)
+    }
+
+    /**
+     * Add members to the group manually as an admin.
+     * @param groupId ID of the group
+     * @param memberIds Array of member IDs to be added
+     * @param adminId id of the admin making the request
+     * @returns Group
+     */
+    async addMembersManually(
+        groupId: string,
+        memberIds: string[],
         adminId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
@@ -260,25 +275,42 @@ export class GroupsService {
             )
         }
 
-        if (this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' already exists in the group '${groupId}'`
-            )
+        for (const memberId of memberIds) {
+            if (this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' already exists in the group '${groupId}'`
+                )
+            }
         }
 
-        return this.addMember(groupId, memberId)
+        return this.addMembers(groupId, memberIds)
     }
 
     /**
      * Add a member to the group using API Key.
      * @param groupId ID of the group
-     * @param memberId ID of the member to be added
+     * @param memberIds  Member's identity to be added
      * @param apiKey API key for the group
      * @returns Group
      */
     async addMemberWithAPIKey(
         groupId: string,
         memberId: string,
+        apiKey: string
+    ): Promise<Group> {
+        return this.addMembersWithAPIKey(groupId, [memberId], apiKey)
+    }
+
+    /**
+     * Add members to the group using API Key.
+     * @param groupId ID of the group
+     * @param memberIds Array of member IDs to be added
+     * @param apiKey API key for the group
+     * @returns Group
+     */
+    async addMembersWithAPIKey(
+        groupId: string,
+        memberIds: string[],
         apiKey: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
@@ -289,13 +321,15 @@ export class GroupsService {
             )
         }
 
-        if (this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' already exists in the group '${groupId}'`
-            )
+        for (const memberId of memberIds) {
+            if (this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' already exists in the group '${groupId}'`
+                )
+            }
         }
 
-        return this.addMember(groupId, memberId)
+        return this.addMembers(groupId, memberIds)
     }
 
     /**
@@ -329,6 +363,41 @@ export class GroupsService {
     }
 
     /**
+     * Add multiple members to the group.
+     * @param groupId ID of the group
+     * @param memberIds Array of member IDs to be added
+     * @returns Group
+     */
+    async addMembers(groupId: string, memberIds: string[]): Promise<Group> {
+        const group = await this.getGroup(groupId)
+
+        // Prepare new members and attach them to the group
+        const newMembers = memberIds.map((memberId) => {
+            const member = new Member()
+            member.group = group
+            member.id = memberId
+            return member
+        })
+
+        group.members.push(...newMembers)
+        await this.groupRepository.save(group)
+
+        const cachedGroup = this.cachedGroups.get(groupId)
+
+        // Add all the members to the cached group at once
+        memberIds.forEach((memberId) => {
+            cachedGroup.addMember(memberId)
+            Logger.log(
+                `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
+            )
+        })
+
+        this._updateContractGroup(cachedGroup)
+
+        return group
+    }
+
+    /**
      * Delete a member from a group.
      * @param groupId Group name.
      * @param memberId Member's identity commitment.
@@ -340,12 +409,21 @@ export class GroupsService {
         memberId: string,
         adminId: string
     ): Promise<Group> {
-        if (!this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' is not a member of group '${groupId}'`
-            )
-        }
+        return this.removeMembersManually(groupId, [memberId], adminId)
+    }
 
+    /**
+     * Delete members from a group.
+     * @param groupId Group name.
+     * @param memberIds Array of member's identity commitments.
+     * @param adminId Group admin id.
+     * @returns Group data with removed member.
+     */
+    async removeMembersManually(
+        groupId: string,
+        memberIds: string[],
+        adminId: string
+    ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
         if (group.adminId !== adminId) {
@@ -354,17 +432,28 @@ export class GroupsService {
             )
         }
 
-        const member = group.members.find((m) => m.id === memberId)
+        const membersToRemove = []
 
-        await this.memberRepository.remove(member)
+        for (const memberId of memberIds) {
+            if (!this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' is not a member of group '${groupId}'`
+                )
+            }
+            const member = group.members.find((m) => m.id === memberId)
+            if (member) membersToRemove.push(member)
+        }
+
+        await this.memberRepository.remove(membersToRemove)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
-        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
-
-        Logger.log(
-            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
-        )
+        for (const memberId of memberIds) {
+            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+            Logger.log(
+                `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+            )
+        }
 
         this._updateContractGroup(cachedGroup)
 
@@ -382,6 +471,20 @@ export class GroupsService {
         memberId: string,
         apiKey: string
     ): Promise<Group> {
+        return this.removeMembersWithAPIKey(groupId, [memberId], apiKey)
+    }
+
+    /**
+     * Delete a member from group using API Key
+     * @param groupId Group name.
+     * @param memberIds Array of members' identity commitment.
+     * @returns Group data with removed member.
+     */
+    async removeMembersWithAPIKey(
+        groupId: string,
+        memberIds: string[],
+        apiKey: string
+    ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
         if (!group.apiEnabled || group.apiKey !== apiKey) {
@@ -390,23 +493,29 @@ export class GroupsService {
             )
         }
 
-        if (!this.isGroupMember(groupId, memberId)) {
-            throw new BadRequestException(
-                `Member '${memberId}' is not a member of group '${groupId}'`
-            )
+        const membersToRemove = []
+
+        for (const memberId of memberIds) {
+            if (!this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' is not a member of group '${groupId}'`
+                )
+            }
+            const member = group.members.find((m) => m.id === memberId)
+            if (member) membersToRemove.push(member)
         }
 
-        const member = group.members.find((m) => m.id === memberId)
-
-        await this.memberRepository.remove(member)
+        await this.memberRepository.remove(membersToRemove)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
-        cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+        for (const memberId of memberIds) {
+            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
 
-        Logger.log(
-            `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
-        )
+            Logger.log(
+                `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+            )
+        }
 
         this._updateContractGroup(cachedGroup)
 
