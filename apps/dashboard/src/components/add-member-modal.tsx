@@ -107,7 +107,9 @@ ${memberIds.join("\n")}
                 setIsLoading(false)
                 onClose(memberIds)
             } catch (error) {
-                alert("Some error occurred!")
+                alert(
+                    "Some error occurred! Check if you're on Goerli network and the transaction is signed and completed"
+                )
 
                 setIsLoading(false)
             }

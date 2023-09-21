@@ -24,7 +24,7 @@ import {
     useDisclosure,
     VStack
 } from "@chakra-ui/react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useContext } from "react"
 import { CgProfile } from "react-icons/cg"
 import { FiCopy, FiSearch } from "react-icons/fi"
 import {
@@ -40,6 +40,7 @@ import AddMemberModal from "../components/add-member-modal"
 import { Group } from "../types"
 import shortenMemberId from "../utils/shortenMemberId"
 import shortenNumber from "../utils/shortenNumber"
+import { AuthContext } from "../context/auth-context"
 
 export default function GroupPage(): JSX.Element {
     const navigate = useNavigate()
@@ -50,6 +51,7 @@ export default function GroupPage(): JSX.Element {
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
     const [_selectedMembers, setSelectedMembers] = useState<string[]>([])
+    const { admin } = useContext(AuthContext)
 
     useEffect(() => {
         ;(async () => {
@@ -89,7 +91,6 @@ export default function GroupPage(): JSX.Element {
         (memberIds?: string[]) => {
             if (!memberIds || memberIds.length === 0) {
                 addMembersModal.onClose()
-
                 return
             }
 
@@ -420,11 +421,17 @@ ${memberIds.join("\n")}
                         <Heading fontSize="25px" as="h1">
                             Members
                         </Heading>
-
                         <Button
                             variant="solid"
                             colorScheme="secondary"
                             onClick={addMembersModal.onOpen}
+                            hidden={
+                                !admin ||
+                                (groupType === "off-chain"
+                                    ? _group.admin !== admin.id
+                                    : _group.admin !==
+                                      admin.address.toLowerCase())
+                            }
                         >
                             Add member
                         </Button>
