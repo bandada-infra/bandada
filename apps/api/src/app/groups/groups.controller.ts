@@ -189,7 +189,7 @@ export class GroupsController {
 
     @Post(":group/members")
     @ApiBody({ type: AddMembersDto })
-    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({
         description:
             "Adds multiple members to a group. Requires either API Key in the headers or a valid session."
