@@ -147,6 +147,18 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 await apiSdk.addMemberByApiKey(groupId, memberId, apiKey)
 ```
 
+\# **addMembersByApiKey**(): _Promise\<void>_
+
+"Adds multiple members to a group using an API Key."
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberId = ["1","2","3"]
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.addMemberByApiKey(groupId, memberId, apiKey)
+```
+
 \# **addMemberByInviteCode**(): _Promise\<void>_
 
 Adds a member to a group using an Invite Code.
