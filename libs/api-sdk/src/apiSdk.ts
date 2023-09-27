@@ -6,6 +6,7 @@ import {
     isGroupMember,
     generateMerkleProof,
     addMemberByApiKey,
+    addMembersByApiKey,
     addMemberByInviteCode,
     removeMemberByApiKey
 } from "./groups"
@@ -131,6 +132,21 @@ export default class ApiSdk {
         apiKey: string
     ): Promise<void> {
         await addMemberByApiKey(this._config, groupId, memberId, apiKey)
+    }
+
+    /**
+     * Adds several member to a group using an API Key.
+     * @param groupId Group id.
+     * @param memberIds Member ids.
+     * @param apiKey API Key.
+     * @returns undefined.
+     */
+    async addMembersByApiKey(
+        groupId: string,
+        memberIds: string[],
+        apiKey: string
+    ): Promise<void> {
+        await addMembersByApiKey(this._config, groupId, memberIds, apiKey)
     }
 
     /**
