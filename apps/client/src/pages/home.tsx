@@ -183,13 +183,6 @@ export default function HomePage(): JSX.Element {
                 </Heading>
 
                 {!active ? (
-                    // <Button
-                    //     colorScheme="secondary"
-                    //     variant="solid"
-                    //     onClick={() => activate(injectedConnector)}
-                    // >
-                    //     Connect Metamask
-                    // </Button>
                         <div
                         style={{
                           display: 'flex',
