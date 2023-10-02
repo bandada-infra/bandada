@@ -115,7 +115,7 @@ export async function addMembersByApiKey(
     const newConfig: any = {
         method: "post",
         data: {
-            memberIds: memberIds
+            memberIds
         },
         ...config
     }
@@ -194,7 +194,7 @@ export async function removeMembersByApiKey(
     const newConfig: any = {
         method: "delete",
         data: {
-            memberIds: memberIds
+            memberIds
         },
         ...config
     }
