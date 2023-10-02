@@ -8,7 +8,8 @@ import {
     addMemberByApiKey,
     addMembersByApiKey,
     addMemberByInviteCode,
-    removeMemberByApiKey
+    removeMemberByApiKey,
+    removeMembersByApiKey
 } from "./groups"
 import { getInvite } from "./invites"
 
@@ -177,6 +178,21 @@ export default class ApiSdk {
         apiKey: string
     ): Promise<void> {
         await removeMemberByApiKey(this._config, groupId, memberId, apiKey)
+    }
+
+    /**
+     * Removes multiple members from a group using an API Key.
+     * @param groupId Group id.
+     * @param memberId Member id.
+     * @param apiKey API Key.
+     * @returns undefined.
+     */
+    async removeMembersByApiKey(
+        groupId: string,
+        memberId: string[],
+        apiKey: string
+    ): Promise<void> {
+        await removeMembersByApiKey(this._config, groupId, memberId, apiKey)
     }
 
     /**
