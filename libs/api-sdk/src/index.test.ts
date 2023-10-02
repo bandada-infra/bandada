@@ -217,21 +217,60 @@ describe("Bandada API SDK", () => {
                 expect(res).toBeUndefined()
             })
         })
-        describe("#removeMemberByApiKey", () => {
-            it("Should remove a member from a group using an API Key", async () => {
+        describe("#addMembers", () => {
+            it("Should add multiple members to the group using an API Key", async () => {
                 requestMocked.mockImplementationOnce(() => Promise.resolve())
 
                 const groupId = "10402173435763029700781503965100"
-                const memberId = "1"
+                const memberId = ["1", "2", "3"]
                 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const res = await apiSdk.removeMemberByApiKey(
+                const res = await apiSdk.addMembersByApiKey(
                     groupId,
                     memberId,
                     apiKey
                 )
                 expect(res).toBeUndefined()
+            })
+            describe("#removeMemberByApiKey", () => {
+                it("Should remove a member from a group using an API Key", async () => {
+                    requestMocked.mockImplementationOnce(() =>
+                        Promise.resolve()
+                    )
+
+                    const groupId = "10402173435763029700781503965100"
+                    const memberId = "1"
+                    const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                    apiSdk = new ApiSdk(SupportedUrl.DEV)
+                    const res = await apiSdk.removeMemberByApiKey(
+                        groupId,
+                        memberId,
+                        apiKey
+                    )
+                    expect(res).toBeUndefined()
+                })
+            })
+
+            describe("#removeMembersByApiKey", () => {
+                it("Should remove multiple members from a group using an API Key", async () => {
+                    requestMocked.mockImplementationOnce(() =>
+                        Promise.resolve()
+                    )
+
+                    const groupId = "10402173435763029700781503965100"
+                    const memberId = ["1", "2", "3"]
+                    const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                    apiSdk = new ApiSdk(SupportedUrl.DEV)
+                    const res = await apiSdk.removeMembersByApiKey(
+                        groupId,
+                        memberId,
+                        apiKey
+                    )
+                    expect(res).toBeUndefined()
+                })
             })
         })
     })
