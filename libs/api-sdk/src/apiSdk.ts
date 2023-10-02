@@ -136,7 +136,7 @@ export default class ApiSdk {
     }
 
     /**
-     * Adds several member to a group using an API Key.
+     * Adds several members to a group using an API Key.
      * @param groupId Group id.
      * @param memberIds Member ids.
      * @param apiKey API Key.
