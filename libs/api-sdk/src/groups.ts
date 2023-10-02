@@ -179,7 +179,7 @@ export async function removeMemberByApiKey(
 /**
  * Removes multiple members from a group using an API Key.
  * @param groupId Group id.
- * @param memberId Member id.
+ * @param memberIds Member ids.
  * @param apiKey API Key.
  * @returns undefined.
  */
