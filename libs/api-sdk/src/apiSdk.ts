@@ -183,16 +183,16 @@ export default class ApiSdk {
     /**
      * Removes multiple members from a group using an API Key.
      * @param groupId Group id.
-     * @param memberId Member id.
+     * @param memberIds Member ids.
      * @param apiKey API Key.
      * @returns undefined.
      */
     async removeMembersByApiKey(
         groupId: string,
-        memberId: string[],
+        memberIds: string[],
         apiKey: string
     ): Promise<void> {
-        await removeMembersByApiKey(this._config, groupId, memberId, apiKey)
+        await removeMembersByApiKey(this._config, groupId, memberIds, apiKey)
     }
 
     /**

@@ -222,13 +222,13 @@ describe("Bandada API SDK", () => {
                 requestMocked.mockImplementationOnce(() => Promise.resolve())
 
                 const groupId = "10402173435763029700781503965100"
-                const memberId = ["1", "2", "3"]
+                const memberIds = ["1", "2", "3"]
                 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
                 const res = await apiSdk.addMembersByApiKey(
                     groupId,
-                    memberId,
+                    memberIds,
                     apiKey
                 )
                 expect(res).toBeUndefined()
@@ -260,13 +260,13 @@ describe("Bandada API SDK", () => {
                     )
 
                     const groupId = "10402173435763029700781503965100"
-                    const memberId = ["1", "2", "3"]
+                    const memberIds = ["1", "2", "3"]
                     const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
                     apiSdk = new ApiSdk(SupportedUrl.DEV)
                     const res = await apiSdk.removeMembersByApiKey(
                         groupId,
-                        memberId,
+                        memberIds,
                         apiKey
                     )
                     expect(res).toBeUndefined()
