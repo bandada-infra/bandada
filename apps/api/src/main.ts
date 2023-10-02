@@ -3,6 +3,7 @@ import { NestFactory } from "@nestjs/core"
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger"
 import { ironSession } from "iron-session/express"
 import { AppModule } from "./app/app.module"
+import fetch from 'node-fetch';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
