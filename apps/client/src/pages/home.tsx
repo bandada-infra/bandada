@@ -183,15 +183,15 @@ export default function HomePage(): JSX.Element {
                 </Heading>
 
                 {!active ? (
-                        <div
+                    <div
                         style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          padding: 12,
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        padding: 12,
                         }}
-                      >
+                    >
                         <ConnectButton />
-                      </div>
+                    </div>
 
 
                 ) : (
