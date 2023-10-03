@@ -7,7 +7,6 @@ import Routes from "./routes"
 import theme from "./styles"
 import './polyfills';
 import '@rainbow-me/rainbowkit/styles.css';
-import './global.css';
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { configureChains,createConfig, WagmiConfig } from 'wagmi';

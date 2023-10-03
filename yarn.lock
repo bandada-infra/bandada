@@ -6745,9 +6745,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wagmi/core@npm:1.4.2":
-  version: 1.4.2
-  resolution: "@wagmi/core@npm:1.4.2"
+"@wagmi/core@npm:1.4.3":
+  version: 1.4.3
+  resolution: "@wagmi/core@npm:1.4.3"
   dependencies:
     "@wagmi/connectors": 3.1.2
     abitype: 0.8.7
@@ -6759,7 +6759,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 0a349d643153a1b966bf0a4198c1b5a06defdfff9b0686c3ffcd3e514f0301b03a58ee9de09e8e7323a70c5550691170bc296a3023046f8caeaacd2213c9ffe8
+  checksum: a8a0622324076bc3087eb05eb1d74652511433bc68e1972e24f699018140508e56473760c5de0a56c92f621aed52ef7e683f3e0aca34aec5428464d28559c27f
   languageName: node
   linkType: hard
 
@@ -21389,13 +21389,13 @@ __metadata:
   linkType: hard
 
 "wagmi@npm:^1.4.2":
-  version: 1.4.2
-  resolution: "wagmi@npm:1.4.2"
+  version: 1.4.3
+  resolution: "wagmi@npm:1.4.3"
   dependencies:
     "@tanstack/query-sync-storage-persister": ^4.27.1
     "@tanstack/react-query": ^4.28.0
     "@tanstack/react-query-persist-client": ^4.28.0
-    "@wagmi/core": 1.4.2
+    "@wagmi/core": 1.4.3
     abitype: 0.8.7
     use-sync-external-store: ^1.2.0
   peerDependencies:
@@ -21405,7 +21405,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: c663eb342d2dac5117bdac0cd7c9d93cb4f95254997348ac17cfc39424faffb71a8dfeae8900e1e9ab1a0b7b4c843d85288f9b2c0880131bb5d7e52d78de635d
+  checksum: df0dfddb898a59246c14e7053caeeea313801340d589e5545bad631ec47fc66e2cc1dafaaa7880c9947931efad442f834ed3d3c6b2d0952b586f6da575c3293f
   languageName: node
   linkType: hard
 
