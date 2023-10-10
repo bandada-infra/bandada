@@ -233,9 +233,27 @@ ${memberIds.join("\n")}
                 </Link>
             </HStack>
 
-            <Heading mt="20px" fontSize="31px">
-                {_group.name}
-            </Heading>
+            <VStack flex="1" align="start" spacing="6">
+                <Heading mt="20px" fontSize="31px">
+                    {_group.name}
+                </Heading>
+
+                {_group.description && (
+                    <Text mt="15px" color="balticSea.800">
+                        {_group.description}
+                    </Text>
+                )}
+                    <Button
+                                align="start"
+                                variant="solid"
+                                colorScheme="secondary"
+                                onClick={onCopy}
+                            >
+                                {hasCopied ? "Copied!" : "Copy group ID"}
+                                
+                    </Button>
+
+            </VStack>
 
             {_group.description && (
                 <Text mt="15px" color="balticSea.800">
