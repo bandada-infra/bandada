@@ -48,6 +48,9 @@ export default function GroupPage(): JSX.Element {
     const { groupId, groupType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
     const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
+    const { hasCopied: hasCopied2, onCopy: onCopy2 } = useClipboard(
+        groupId as string
+    )
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
     const [_selectedMembers, setSelectedMembers] = useState<string[]>([])
@@ -243,23 +246,14 @@ ${memberIds.join("\n")}
                         {_group.description}
                     </Text>
                 )}
-                    <Button
-                                align="start"
-                                variant="solid"
-                                colorScheme="secondary"
-                                onClick={onCopy}
-                            >
-                                {hasCopied ? "Copied!" : "Copy group ID"}
-                                
-                    </Button>
-
+                <Button
+                    variant="solid"
+                    colorScheme="secondary"
+                    onClick={onCopy2}
+                >
+                    {hasCopied2 ? "Copied!" : "Copy group ID"}
+                </Button>
             </VStack>
-
-            {_group.description && (
-                <Text mt="15px" color="balticSea.800">
-                    {_group.description}
-                </Text>
-            )}
 
             <HStack mt="30px" align="start" spacing="14">
                 <VStack flex="1" align="stretch" spacing="6">
@@ -352,7 +346,7 @@ ${memberIds.join("\n")}
                                             >
                                                 <IconButton
                                                     variant="link"
-                                                    aria-label="Copy invite link"
+                                                    aria-label="Copy API key"
                                                     onClick={onCopy}
                                                     onMouseDown={(e) =>
                                                         e.preventDefault()
