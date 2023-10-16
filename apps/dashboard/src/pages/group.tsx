@@ -305,21 +305,23 @@ ${memberIds.join("\n")}
                         <InputGroup size="lg" mt="10px">
                             <Input
                                 pr="50px"
-                                placeholder="API key"
+                                placeholder="Group ID"
                                 value={groupId}
                                 isDisabled
                             />
 
                             <InputRightElement mr="5px">
                                 <Tooltip
-                                    label={hasCopied2 ? "Copied!" : "Copy"}
+                                    label={
+                                        hasCopiedGroupId ? "Copied!" : "Copy"
+                                    }
                                     closeOnClick={false}
                                     hasArrow
                                 >
                                     <IconButton
                                         variant="link"
                                         aria-label="Copy Group id"
-                                        onClick={onCopy2}
+                                        onClick={onCopyGroupId}
                                         onMouseDown={(e) => e.preventDefault()}
                                         icon={
                                             <Icon
