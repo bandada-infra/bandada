@@ -15,6 +15,7 @@ CREATE TABLE groups (
     description character varying NOT NULL,
     admin_id character varying NOT NULL,
     tree_depth integer NOT NULL,
+    tree_root integer, /* TODO: make it NOT NULL */
     fingerprint_duration integer NOT NULL,
     credentials text,
     api_enabled boolean NOT NULL DEFAULT false,

@@ -28,6 +28,12 @@ export class Group {
     @Column({ name: "tree_depth" })
     treeDepth: number
 
+    @Column({
+        name: "tree_root",
+        nullable: true
+    })
+    treeRoot: number
+
     @Column({ name: "fingerprint_duration" })
     fingerprintDuration: number
 
