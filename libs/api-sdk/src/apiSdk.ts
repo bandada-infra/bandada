@@ -22,21 +22,17 @@ export default class ApiSdk {
      * @param url Supported URL or custom URL.
      * @param config Request config.
      */
-    constructor(
-        url: SupportedUrl | string = SupportedUrl.PROD,
-        config?: object
-    ) {
+    constructor(url: SupportedUrl | string = SupportedUrl.PROD, config?: any) {
         checkParameter(url, "url", "string")
 
         if (config) {
-            checkParameter(config, "config", "object")
-            if (!config["baseURL"]) {
+            if (!config.baseURL) {
                 this._config = {
                     baseURL: url,
                     ...config
                 }
             } else {
-                if (url !== config["baseURL"])
+                if (url !== config.baseURL)
                     throw new Error("The url and baseURL should be the same")
                 this._config = config
             }
