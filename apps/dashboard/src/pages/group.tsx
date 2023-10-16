@@ -306,7 +306,7 @@ ${memberIds.join("\n")}
                             <Input
                                 pr="50px"
                                 placeholder="API key"
-                                value={groupId as string}
+                                value={groupId}
                                 isDisabled
                             />
 
