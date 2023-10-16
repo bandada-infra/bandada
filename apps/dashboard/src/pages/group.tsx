@@ -48,7 +48,7 @@ export default function GroupPage(): JSX.Element {
     const { groupId, groupType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
     const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
-    const { hasCopied: hasCopied2, onCopy: onCopy2 } = useClipboard(
+    const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
         groupId as string
     )
     const [_searchMember, setSearchMember] = useState<string>("")
