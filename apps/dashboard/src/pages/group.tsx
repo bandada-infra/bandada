@@ -302,44 +302,36 @@ ${memberIds.join("\n")}
                     >
                         <Text fontSize="20px">Group ID</Text>
 
-                        {
-                            <>
-                                <InputGroup size="lg" mt="10px">
-                                    <Input
-                                        pr="50px"
-                                        placeholder="API key"
-                                        value={groupId as string}
-                                        isDisabled
-                                    />
+                        <InputGroup size="lg" mt="10px">
+                            <Input
+                                pr="50px"
+                                placeholder="API key"
+                                value={groupId as string}
+                                isDisabled
+                            />
 
-                                    <InputRightElement mr="5px">
-                                        <Tooltip
-                                            label={
-                                                hasCopied2 ? "Copied!" : "Copy"
-                                            }
-                                            closeOnClick={false}
-                                            hasArrow
-                                        >
-                                            <IconButton
-                                                variant="link"
-                                                aria-label="Copy API key"
-                                                onClick={onCopy2}
-                                                onMouseDown={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                                icon={
-                                                    <Icon
-                                                        color="sunsetOrange.600"
-                                                        boxSize="5"
-                                                        as={FiCopy}
-                                                    />
-                                                }
+                            <InputRightElement mr="5px">
+                                <Tooltip
+                                    label={hasCopied2 ? "Copied!" : "Copy"}
+                                    closeOnClick={false}
+                                    hasArrow
+                                >
+                                    <IconButton
+                                        variant="link"
+                                        aria-label="Copy API key"
+                                        onClick={onCopy2}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        icon={
+                                            <Icon
+                                                color="sunsetOrange.600"
+                                                boxSize="5"
+                                                as={FiCopy}
                                             />
-                                        </Tooltip>
-                                    </InputRightElement>
-                                </InputGroup>
-                            </>
-                        }
+                                        }
+                                    />
+                                </Tooltip>
+                            </InputRightElement>
+                        </InputGroup>
                     </Box>
                     )
                     {groupType === "off-chain" && !_group.credentials && (
