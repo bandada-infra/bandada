@@ -318,7 +318,7 @@ ${memberIds.join("\n")}
                                 >
                                     <IconButton
                                         variant="link"
-                                        aria-label="Copy API key"
+                                        aria-label="Copy Group id"
                                         onClick={onCopy2}
                                         onMouseDown={(e) => e.preventDefault()}
                                         icon={
