@@ -98,6 +98,34 @@ export async function addMemberByApiKey(
 }
 
 /**
+ * Adds members to a group using an API Key.
+ * @param groupId Group id.
+ * @param memberIds Member ids.
+ * @param apiKey API Key.
+ * @returns undefined.
+ */
+export async function addMembersByApiKey(
+    config: object,
+    groupId: string,
+    memberIds: string[],
+    apiKey: string
+): Promise<void> {
+    const requestUrl = `${url}/${groupId}/members`
+
+    const newConfig: any = {
+        method: "post",
+        data: {
+            memberIds
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    await request(requestUrl, newConfig)
+}
+
+/**
  * Adds a member to a group using an Invite Code.
  * @param groupId Group id.
  * @param memberId Member id.
@@ -140,6 +168,34 @@ export async function removeMemberByApiKey(
 
     const newConfig: any = {
         method: "delete",
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    await request(requestUrl, newConfig)
+}
+
+/**
+ * Removes multiple members from a group using an API Key.
+ * @param groupId Group id.
+ * @param memberIds Member ids.
+ * @param apiKey API Key.
+ * @returns undefined.
+ */
+export async function removeMembersByApiKey(
+    config: object,
+    groupId: string,
+    memberIds: string[],
+    apiKey: string
+): Promise<void> {
+    const requestUrl = `${url}/${groupId}/members`
+
+    const newConfig: any = {
+        method: "delete",
+        data: {
+            memberIds
+        },
         ...config
     }
 
