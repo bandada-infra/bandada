@@ -49,7 +49,7 @@ export default function GroupPage(): JSX.Element {
     const [_group, setGroup] = useState<Group | null>()
     const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
-        groupId as string
+        groupId || ""
     )
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
