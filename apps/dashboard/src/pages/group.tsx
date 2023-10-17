@@ -48,6 +48,9 @@ export default function GroupPage(): JSX.Element {
     const { groupId, groupType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
     const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
+    const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
+        groupId || ""
+    )
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
     const [_selectedMembers, setSelectedMembers] = useState<string[]>([])
@@ -233,15 +236,17 @@ ${memberIds.join("\n")}
                 </Link>
             </HStack>
 
-            <Heading mt="20px" fontSize="31px">
-                {_group.name}
-            </Heading>
+            <VStack flex="1" align="start" spacing="6">
+                <Heading mt="20px" fontSize="31px">
+                    {_group.name}
+                </Heading>
 
-            {_group.description && (
-                <Text mt="15px" color="balticSea.800">
-                    {_group.description}
-                </Text>
-            )}
+                {_group.description && (
+                    <Text mt="15px" color="balticSea.800">
+                        {_group.description}
+                    </Text>
+                )}
+            </VStack>
 
             <HStack mt="30px" align="start" spacing="14">
                 <VStack flex="1" align="stretch" spacing="6">
@@ -289,7 +294,48 @@ ${memberIds.join("\n")}
                             </Heading>
                         </Box>
                     </HStack>
+                    (
+                    <Box
+                        bgColor="balticSea.50"
+                        p="25px 30px 25px 30px"
+                        borderRadius="8px"
+                    >
+                        <Text fontSize="20px">Group ID</Text>
 
+                        <InputGroup size="lg" mt="10px">
+                            <Input
+                                pr="50px"
+                                placeholder="Group ID"
+                                value={groupId}
+                                isDisabled
+                            />
+
+                            <InputRightElement mr="5px">
+                                <Tooltip
+                                    label={
+                                        hasCopiedGroupId ? "Copied!" : "Copy"
+                                    }
+                                    closeOnClick={false}
+                                    hasArrow
+                                >
+                                    <IconButton
+                                        variant="link"
+                                        aria-label="Copy Group id"
+                                        onClick={onCopyGroupId}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        icon={
+                                            <Icon
+                                                color="sunsetOrange.600"
+                                                boxSize="5"
+                                                as={FiCopy}
+                                            />
+                                        }
+                                    />
+                                </Tooltip>
+                            </InputRightElement>
+                        </InputGroup>
+                    </Box>
+                    )
                     {groupType === "off-chain" && !_group.credentials && (
                         <Box
                             bgColor="balticSea.50"
@@ -334,7 +380,7 @@ ${memberIds.join("\n")}
                                             >
                                                 <IconButton
                                                     variant="link"
-                                                    aria-label="Copy invite link"
+                                                    aria-label="Copy API key"
                                                     onClick={onCopy}
                                                     onMouseDown={(e) =>
                                                         e.preventDefault()
@@ -364,9 +410,7 @@ ${memberIds.join("\n")}
                             )}
                         </Box>
                     )}
-
                     <Image src={image1} />
-
                     {_group.type === "off-chain" && (
                         <Box
                             bgColor="classicRose.50"
