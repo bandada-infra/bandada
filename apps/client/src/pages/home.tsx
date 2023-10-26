@@ -25,6 +25,8 @@ import {
     isGroupMember
 } from "../utils/api"
 
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+
 const injectedConnector = new InjectedConnector({})
 
 export default function HomePage(): JSX.Element {
@@ -181,13 +183,17 @@ export default function HomePage(): JSX.Element {
                 </Heading>
 
                 {!active ? (
-                    <Button
-                        colorScheme="secondary"
-                        variant="solid"
-                        onClick={() => activate(injectedConnector)}
+                    <div
+                        style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        padding: 12,
+                        }}
                     >
-                        Connect Metamask
-                    </Button>
+                        <ConnectButton />
+                    </div>
+
+
                 ) : (
                     <VStack w="400px" spacing="5">
                         <VStack align="left" w="100%">
