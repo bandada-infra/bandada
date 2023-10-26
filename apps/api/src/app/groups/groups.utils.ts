@@ -1,4 +1,3 @@
-import { Any } from "typeorm"
 import { Group } from "./entities/group.entity"
 
 export function mapGroupToResponseDTO(
