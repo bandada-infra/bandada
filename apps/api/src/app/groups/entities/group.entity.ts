@@ -9,6 +9,7 @@ import {
 } from "typeorm"
 import { OAuthAccount } from "../../credentials/entities/credentials-account.entity"
 import { Member } from "./member.entity"
+import { BigNumberish } from "ethers"
 
 @Entity("groups")
 export class Group {
@@ -27,6 +28,12 @@ export class Group {
 
     @Column({ name: "tree_depth" })
     treeDepth: number
+
+    @Column({
+        name: "tree_root",
+        nullable: true /* TODO: remove this */
+    })
+    treeRoot: string
 
     @Column({ name: "fingerprint_duration" })
     fingerprintDuration: number

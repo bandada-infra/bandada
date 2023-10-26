@@ -1,3 +1,4 @@
+import { Any } from "typeorm"
 import { Group } from "./entities/group.entity"
 
 export function mapGroupToResponseDTO(
@@ -10,6 +11,7 @@ export function mapGroupToResponseDTO(
         description: group.description,
         admin: group.adminId,
         treeDepth: group.treeDepth,
+        treeRoot: group.treeRoot,
         fingerprintDuration: group.fingerprintDuration,
         createdAt: group.createdAt,
         members: (group.members || []).map((m) => m.id),

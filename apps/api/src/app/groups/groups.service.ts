@@ -555,6 +555,8 @@ export class GroupsService {
                 `Group with id '${groupId}' does not exist`
             )
         }
+        /* group.treeRoot = BigNumber.from(this.cachedGroups.get(groupId).root).toNumber(); */
+        group.treeRoot = this.cachedGroups.get(groupId).root.toString()
 
         return group
     }
