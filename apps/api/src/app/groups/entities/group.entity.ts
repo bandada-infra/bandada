@@ -29,7 +29,7 @@ export class Group {
     treeDepth: number
 
     @Column({
-        name: "tree_root",
+        name: "tree_root"
     })
     treeRoot: string
 
