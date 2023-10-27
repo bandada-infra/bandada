@@ -341,11 +341,28 @@ export class GroupsService {
     async addMember(groupId: string, memberId: string): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        const member = new Member()
-        member.group = group
-        member.id = memberId
+        // Check if the member is already a group member.
+        const isMemberInGroup = group.members.some((m) => m.id === memberId)
 
-        group.members.push(member)
+        if (isMemberInGroup) {
+            throw new Error(
+                `Member '${memberId}' is already in the group '${group.name}'`
+            )
+        }
+
+        // Check if the member is already a member of another group.
+        let member = await this.memberRepository.findOne({
+            where: { id: memberId }
+        })
+
+        if (!member) {
+            member = new Member()
+            member.id = memberId
+
+            await this.memberRepository.save(member)
+        }
+
+        group.members = group.members.concat([member])
 
         await this.groupRepository.save(group)
 
@@ -371,20 +388,33 @@ export class GroupsService {
     async addMembers(groupId: string, memberIds: string[]): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        // Prepare new members and attach them to the group
-        const newMembers = memberIds.map((memberId) => {
-            const member = new Member()
-            member.group = group
-            member.id = memberId
-            return member
-        })
+        for (const memberId of memberIds) {
+            // Check if the member is already a group member.
+            const member = group.members.find((m) => m.id === memberId)
 
-        group.members.push(...newMembers)
+            if (!member) {
+                let newMember: Member
+
+                // Check if the member is already a member of another group.
+                const anotherGroupMember = await this.memberRepository.findOne({
+                    where: { id: memberId }
+                })
+
+                if (!anotherGroupMember) {
+                    newMember = new Member()
+                    newMember.id = memberId
+
+                    await this.memberRepository.save(newMember)
+                } else newMember = anotherGroupMember
+
+                group.members = group.members.concat([newMember])
+            }
+        }
+
         await this.groupRepository.save(group)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
-        // Add all the members to the cached group at once
         memberIds.forEach((memberId) => {
             cachedGroup.addMember(memberId)
             Logger.log(
@@ -440,15 +470,28 @@ export class GroupsService {
                     `Member '${memberId}' is not a member of group '${groupId}'`
                 )
             }
-            const member = group.members.find((m) => m.id === memberId)
+            const member: Member = group.members.find(
+                (m: Member) => m.id === memberId
+            )
+
             if (member) membersToRemove.push(member)
         }
-
-        await this.memberRepository.remove(membersToRemove)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
         for (const memberId of memberIds) {
+            // Check if the member is a group member.
+            const memberIndex = group.members.findIndex(
+                (m) => m.id === memberId
+            )
+
+            if (memberIndex !== -1) {
+                // Remove the member from the group.
+                group.members.splice(memberIndex, 1)
+
+                await this.groupRepository.save(group)
+            }
+
             cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
             Logger.log(
                 `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
@@ -501,17 +544,31 @@ export class GroupsService {
                     `Member '${memberId}' is not a member of group '${groupId}'`
                 )
             }
-            const member = group.members.find((m) => m.id === memberId)
+
+            // Check if the member is a group member.
+            const member: Member = group.members.find(
+                (m: Member) => m.id === memberId
+            )
+
             if (member) membersToRemove.push(member)
         }
-
-        await this.memberRepository.remove(membersToRemove)
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
         for (const memberId of memberIds) {
-            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+            Logger.log(memberId)
 
+            const memberIndex = group.members.findIndex(
+                (m) => m.id === memberId
+            )
+
+            if (memberIndex !== -1) {
+                // Remove the member from the group.
+                group.members.splice(memberIndex, 1)
+
+                await this.groupRepository.save(group)
+            }
+            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
             Logger.log(
                 `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
             )

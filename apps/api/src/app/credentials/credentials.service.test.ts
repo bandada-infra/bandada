@@ -162,9 +162,15 @@ describe("CredentialsService", () => {
         })
 
         it("Should add a member to a credential group", async () => {
+            const _stateId = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "125",
+                providerName: "twitter"
+            })
+
             const clientRedirectUri = await credentialsService.addMember(
                 "code",
-                stateId
+                _stateId
             )
 
             expect(clientRedirectUri).toBeUndefined()

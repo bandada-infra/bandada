@@ -3,6 +3,8 @@ import {
     CreateDateColumn,
     Entity,
     Index,
+    JoinTable,
+    ManyToMany,
     OneToMany,
     PrimaryColumn,
     UpdateDateColumn
@@ -31,8 +33,17 @@ export class Group {
     @Column({ name: "fingerprint_duration" })
     fingerprintDuration: number
 
-    @OneToMany(() => Member, (member) => member.group, {
-        cascade: ["insert"]
+    @ManyToMany(() => Member)
+    @JoinTable({
+        name: "memberships",
+        joinColumn: {
+            name: "group",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "member",
+            referencedColumnName: "id"
+        }
     })
     members: Member[]
 
