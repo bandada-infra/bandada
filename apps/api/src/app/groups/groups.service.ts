@@ -362,7 +362,7 @@ export class GroupsService {
             await this.memberRepository.save(member)
         }
 
-        group.members = group.members.concat([member])
+        group.members.push(member)
 
         await this.groupRepository.save(group)
 
@@ -388,28 +388,32 @@ export class GroupsService {
     async addMembers(groupId: string, memberIds: string[]): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        for (const memberId of memberIds) {
-            // Check if the member is already a group member.
-            const member = group.members.find((m) => m.id === memberId)
+        await Promise.all(
+            memberIds.map(async (memberId) => {
+                const member = group.members.find((m) => m.id === memberId)
 
-            if (!member) {
-                let newMember: Member
+                if (!member) {
+                    let newMember: Member
 
-                // Check if the member is already a member of another group.
-                const anotherGroupMember = await this.memberRepository.findOne({
-                    where: { id: memberId }
-                })
+                    // Check if the member is already a member of another group.
+                    const anotherGroupMember =
+                        await this.memberRepository.findOne({
+                            where: { id: memberId }
+                        })
 
-                if (!anotherGroupMember) {
-                    newMember = new Member()
-                    newMember.id = memberId
+                    if (!anotherGroupMember) {
+                        newMember = new Member()
+                        newMember.id = memberId
 
-                    await this.memberRepository.save(newMember)
-                } else newMember = anotherGroupMember
+                        await this.memberRepository.save(newMember)
+                    } else {
+                        newMember = anotherGroupMember
+                    }
 
-                group.members = group.members.concat([newMember])
-            }
-        }
+                    group.members.push(newMember)
+                }
+            })
+        )
 
         await this.groupRepository.save(group)
 
@@ -479,24 +483,26 @@ export class GroupsService {
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
-        for (const memberId of memberIds) {
-            // Check if the member is a group member.
-            const memberIndex = group.members.findIndex(
-                (m) => m.id === memberId
-            )
+        await Promise.all(
+            memberIds.map(async (memberId) => {
+                // Check if the member is a group member.
+                const memberIndex = group.members.findIndex(
+                    (m) => m.id === memberId
+                )
 
-            if (memberIndex !== -1) {
-                // Remove the member from the group.
-                group.members.splice(memberIndex, 1)
+                if (memberIndex !== -1) {
+                    // Remove the member from the group.
+                    group.members.splice(memberIndex, 1)
 
-                await this.groupRepository.save(group)
-            }
+                    await this.groupRepository.save(group)
+                }
 
-            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
-            Logger.log(
-                `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
-            )
-        }
+                cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+                Logger.log(
+                    `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+                )
+            })
+        )
 
         this._updateContractGroup(cachedGroup)
 
@@ -555,24 +561,26 @@ export class GroupsService {
 
         const cachedGroup = this.cachedGroups.get(groupId)
 
-        for (const memberId of memberIds) {
-            Logger.log(memberId)
+        await Promise.all(
+            memberIds.map(async (memberId) => {
+                // Check if the member is a group member.
+                const memberIndex = group.members.findIndex(
+                    (m) => m.id === memberId
+                )
 
-            const memberIndex = group.members.findIndex(
-                (m) => m.id === memberId
-            )
+                if (memberIndex !== -1) {
+                    // Remove the member from the group.
+                    group.members.splice(memberIndex, 1)
 
-            if (memberIndex !== -1) {
-                // Remove the member from the group.
-                group.members.splice(memberIndex, 1)
+                    await this.groupRepository.save(group)
+                }
 
-                await this.groupRepository.save(group)
-            }
-            cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
-            Logger.log(
-                `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
-            )
-        }
+                cachedGroup.removeMember(cachedGroup.indexOf(BigInt(memberId)))
+                Logger.log(
+                    `GroupsService: member '${memberId}' has been removed from the group '${group.name}'`
+                )
+            })
+        )
 
         this._updateContractGroup(cachedGroup)
 
