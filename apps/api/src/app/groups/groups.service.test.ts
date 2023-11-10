@@ -44,8 +44,6 @@ describe("GroupsService", () => {
         }).compile()
 
         groupsService = await module.resolve(GroupsService)
-        await groupsService.initialize()
-
         invitesService = await module.resolve(InvitesService)
 
         const { id } = await groupsService.createGroup(
@@ -723,19 +721,6 @@ describe("GroupsService", () => {
             )
 
             await expect(fun).rejects.toThrow("You are not the admin")
-        })
-    })
-
-    describe("# initialize", () => {
-        it("Should initialize the cached groups", async () => {
-            const currentCachedGroups = await groupsService.getGroups()
-
-            await groupsService.initialize()
-
-            const updatedCachedGroups = await groupsService.getGroups()
-
-            expect(currentCachedGroups).toHaveLength(updatedCachedGroups.length)
-            expect(currentCachedGroups).toStrictEqual(updatedCachedGroups)
         })
     })
 })

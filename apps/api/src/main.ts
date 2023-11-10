@@ -3,13 +3,9 @@ import { NestFactory } from "@nestjs/core"
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger"
 import { ironSession } from "iron-session/express"
 import { AppModule } from "./app/app.module"
-import { GroupsService } from "./app/groups/groups.service"
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
-
-    const groupService = app.get(GroupsService)
-    await groupService.initialize()
 
     app.useGlobalPipes(
         new ValidationPipe({
