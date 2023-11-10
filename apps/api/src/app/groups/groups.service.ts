@@ -39,19 +39,13 @@ export class GroupsService {
             process.env.BACKEND_PRIVATE_KEY as string,
             process.env.INFURA_API_KEY as string
         )
-    }
 
-    /**
-     * Initialises the service, caches groups and may sync contract
-     * groups if required.
-     */
-    async initialize() {
-        await this._cacheGroups()
+        this._cacheGroups()
 
         /* istanbul ignore next */
         if (process.env.NODE_ENV !== "test") {
-            setTimeout(async () => {
-                await this._syncContractGroups()
+            setTimeout(() => {
+                this._syncContractGroups()
             }, 5000)
         }
     }
