@@ -1,31 +1,10 @@
-import {
-    CreateDateColumn,
-    Entity,
-    ManyToOne,
-    Column,
-    Index,
-    Unique,
-    JoinColumn
-} from "typeorm"
-
-import { Group } from "./group.entity"
+import { CreateDateColumn, Entity, Index, PrimaryColumn } from "typeorm"
 
 @Entity("members")
-@Unique(["id", "group"])
-@Index(["id", "group"])
 export class Member {
-    @Column({ primary: true, unique: false })
+    @PrimaryColumn()
+    @Index({ unique: true })
     id: string
-
-    // In reality the relation group -> members is many-to-many.
-    // i.e we allow same member id to be part of many groups.
-    // But since this property is not used in any feature at the moment,
-    // it is treated as many-to-one in the code for simplicity.
-    @ManyToOne(() => Group, (group) => group.members, {
-        onDelete: "CASCADE"
-    })
-    @JoinColumn({ name: "group_id" })
-    group: Group
 
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date

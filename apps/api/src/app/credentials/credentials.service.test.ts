@@ -93,7 +93,7 @@ describe("CredentialsService", () => {
             const fun = credentialsService.setOAuthState({
                 groupId: _groupId,
                 memberId: "123",
-                providerName: "twitter"
+                providerName: "github"
             })
 
             await expect(fun).rejects.toThrow(
@@ -117,7 +117,7 @@ describe("CredentialsService", () => {
             stateId = await credentialsService.setOAuthState({
                 groupId,
                 memberId: "123",
-                providerName: "twitter"
+                providerName: "github"
             })
 
             expect(stateId).toHaveLength(36)
@@ -129,7 +129,7 @@ describe("CredentialsService", () => {
                     ({
                         getAccessToken: jest.fn(() => "123"),
                         getProfile: jest.fn(() => ({
-                            id: "id2"
+                            id: "id1"
                         }))
                     } as any)
             )
@@ -137,7 +137,7 @@ describe("CredentialsService", () => {
             const _stateId = await credentialsService.setOAuthState({
                 groupId,
                 memberId: "123",
-                providerName: "twitter"
+                providerName: "github"
             })
 
             await credentialsService.addMember("code", _stateId)
@@ -145,7 +145,7 @@ describe("CredentialsService", () => {
             const fun = credentialsService.setOAuthState({
                 groupId,
                 memberId: "123",
-                providerName: "twitter"
+                providerName: "github"
             })
 
             await expect(fun).rejects.toThrow(
@@ -162,26 +162,72 @@ describe("CredentialsService", () => {
         })
 
         it("Should add a member to a credential group", async () => {
+            const _stateId = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "124",
+                providerName: "github"
+            })
+
             const clientRedirectUri = await credentialsService.addMember(
                 "code",
-                stateId
+                _stateId
             )
 
             expect(clientRedirectUri).toBeUndefined()
         })
 
-        it("Should throw an error if the same OAuth account tries to join the same group", async () => {
-            const _stateId = await credentialsService.setOAuthState({
+        it("Should add the same credential with different identities in different groups", async () => {
+            const { id: _groupId } = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: JSON.stringify({
+                        id: "GITHUB_FOLLOWERS",
+                        criteria: {
+                            minFollowers: 12
+                        }
+                    })
+                },
+                "admin"
+            )
+
+            const _stateId1 = await credentialsService.setOAuthState({
                 groupId,
-                memberId: "124",
-                providerName: "twitter"
+                memberId: "125",
+                providerName: "github"
             })
 
-            const fun = credentialsService.addMember("code", _stateId)
+            const _stateId2 = await credentialsService.setOAuthState({
+                groupId: _groupId,
+                memberId: "126",
+                providerName: "github"
+            })
 
-            await expect(fun).rejects.toThrow(
-                `OAuth account has already joined the group`
+            ;(getProvider as any).mockImplementationOnce(
+                () =>
+                    ({
+                        getAccessToken: jest.fn(() => "123"),
+                        getProfile: jest.fn(() => ({
+                            id: "id2" // same OAuth account.
+                        }))
+                    } as any)
             )
+
+            const clientRedirectUri1 = await credentialsService.addMember(
+                "code",
+                _stateId1
+            )
+
+            expect(clientRedirectUri1).toBeUndefined()
+
+            const clientRedirectUri2 = await credentialsService.addMember(
+                "code",
+                _stateId2
+            )
+
+            expect(clientRedirectUri2).toBeUndefined()
         })
 
         it("Should throw an error if the OAuth account does not have enough credential", async () => {
@@ -200,14 +246,38 @@ describe("CredentialsService", () => {
 
             const _stateId = await credentialsService.setOAuthState({
                 groupId,
-                memberId: "124",
-                providerName: "twitter"
+                memberId: "127",
+                providerName: "github"
             })
 
             const fun = credentialsService.addMember("code", _stateId)
 
             await expect(fun).rejects.toThrow(
                 `OAuth account does not match criteria`
+            )
+        })
+
+        it("Should throw an error if the same OAuth account tries to join the same group", async () => {
+            ;(getProvider as any).mockImplementationOnce(
+                () =>
+                    ({
+                        getAccessToken: jest.fn(() => "123"),
+                        getProfile: jest.fn(() => ({
+                            id: "id2" // OAuth account already used to join the group.
+                        }))
+                    } as any)
+            )
+
+            const _stateId = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "128",
+                providerName: "github"
+            })
+
+            const fun = credentialsService.addMember("code", _stateId)
+
+            await expect(fun).rejects.toThrow(
+                `OAuth account has already joined the group`
             )
         })
     })
