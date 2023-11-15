@@ -8,8 +8,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@bandada/api-sdk": "1.0.0-beta",
-        "@bandada/utils": "1.0.0-beta",
+        "@bandada/api-sdk": "1.0.0-beta.1",
+        "@bandada/utils": "1.0.0-beta.1",
         "@chakra-ui/react": "^2.5.1",
         "@chakra-ui/theme-tools": "^2.0.16",
         "@emotion/react": "^11.10.6",

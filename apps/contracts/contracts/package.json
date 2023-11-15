@@ -1,6 +1,6 @@
 {
     "name": "@bandada/contracts",
-    "version": "1.0.0-beta",
+    "version": "1.0.0-beta.1",
     "description": "Bandada smart contracts to manage off-chain groups and verify their zero-knowledge proofs.",
     "license": "MIT",
     "files": [
