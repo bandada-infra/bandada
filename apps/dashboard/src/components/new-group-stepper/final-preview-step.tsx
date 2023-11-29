@@ -1,3 +1,4 @@
+import { formatBytes32String } from "@ethersproject/strings"
 import { getSemaphoreContract } from "@bandada/utils"
 import { Box, Button, Heading, HStack, VStack } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
@@ -29,7 +30,8 @@ export default function FinalPreviewStep({
 
                 await semaphore.createGroup(group.name, group.treeDepth, admin)
 
-                navigate("/groups")
+                const groupId = BigInt(formatBytes32String(group.name))
+                navigate(`/groups/on-chain/${groupId}`)
             } catch (error) {
                 setLoading(false)
                 alert(
@@ -53,8 +55,7 @@ export default function FinalPreviewStep({
 
                 return
             }
-
-            navigate("/groups")
+            navigate(`/groups/off-chain/${response.id}`)
         }
     }, [group, signer, navigate])
 
