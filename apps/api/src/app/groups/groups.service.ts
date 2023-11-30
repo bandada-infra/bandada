@@ -42,7 +42,7 @@ export class GroupsService {
     }
 
     /**
-     * Initialises the service, caches groups and may sync contract
+     * Initialises the service, caches groups and may sync contrac
      * groups if required.
      */
     async initialize() {
