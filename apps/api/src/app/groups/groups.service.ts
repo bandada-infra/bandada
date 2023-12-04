@@ -694,7 +694,7 @@ export class GroupsService {
             const cachedGroup = new CachedGroup(
                 group.id,
                 group.treeDepth,
-                group.members.map((m) => m.id)
+                group.members.map((m) => BigInt(m.id))
             )
 
             this.cachedGroups.set(group.id, cachedGroup)
