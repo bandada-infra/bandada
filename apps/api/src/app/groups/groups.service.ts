@@ -42,7 +42,7 @@ export class GroupsService {
     }
 
     /**
-     * Initialises the service, caches groups and may sync contrac
+     * Initialises the service, caches groups and may sync contract
      * groups if required.
      */
     async initialize() {
@@ -628,6 +628,12 @@ export class GroupsService {
         }
 
         return group
+    }
+
+    async getCachedGroups() {
+        console.log("Service", Array.from(this.cachedGroups.keys()))
+
+        return Array.from(this.cachedGroups.keys())
     }
 
     /**
