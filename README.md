@@ -246,7 +246,7 @@ It will also automatically check that the modified files comply with ESLint and 
 
 ### Database
 
-Bandada requires a SQL database to work, which is used by the `api` application.
+Bandada requires an SQL database to work, which is used by the `api` application.
 Bandada can work with Postgres and SQLite. Other SQL flavors should work but have not been tested yet.
 You can pass the connection URL to the database using the environment variable (see below).
 
@@ -260,7 +260,7 @@ yarn test
 
 ### Running in Docker
 
-You can also run Bandada using Docker by running below command in the project root:
+You can also run Bandada using Docker by running the below command in the project root:
 
 ```sh
 docker-compose up -d

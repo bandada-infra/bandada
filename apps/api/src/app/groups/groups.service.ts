@@ -630,6 +630,12 @@ export class GroupsService {
         return group
     }
 
+    async getCachedGroups() {
+        console.log("Service", Array.from(this.cachedGroups.keys()))
+
+        return Array.from(this.cachedGroups.keys())
+    }
+
     /**
      * Checks if a member belongs to a group.
      * @param groupId Group id.
