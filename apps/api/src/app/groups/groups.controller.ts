@@ -49,17 +49,6 @@ export class GroupsController {
         return groups.map((g) => mapGroupToResponseDTO(g))
     }
 
-    @Get("/cachedgroups")
-    @ApiOperation({ description: "Returns the cached groups." })
-    @ApiCreatedResponse()
-    async getCachedGroups() {
-        const groups = await this.groupsService.getCachedGroups()
-
-        console.log("Controller", groups)
-
-        return groups
-    }
-
     @Get(":group")
     @ApiOperation({ description: "Returns a specific group." })
     @ApiCreatedResponse({ type: Group })
