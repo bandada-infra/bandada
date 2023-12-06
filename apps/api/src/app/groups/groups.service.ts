@@ -691,10 +691,16 @@ export class GroupsService {
 
         /* istanbul ignore next */
         for (const group of groups) {
+            const members = []
+
+            for (const member of group.members) {
+                members.push(BigInt(member.id))
+            }
+
             const cachedGroup = new CachedGroup(
                 group.id,
                 group.treeDepth,
-                group.members.map((m) => BigInt(m.id))
+                members
             )
 
             this.cachedGroups.set(group.id, cachedGroup)
