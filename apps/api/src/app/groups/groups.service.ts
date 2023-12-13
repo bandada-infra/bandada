@@ -558,6 +558,8 @@ export class GroupsService {
         /* group.treeRoot = BigNumber.from(this.cachedGroups.get(groupId).root).toNumber(); */
         group.treeRoot = this.cachedGroups.get(groupId).root.toString()
 
+        group.fingerprint = this.cachedGroups.get(groupId).root.toString()
+
         return group
     }
 
