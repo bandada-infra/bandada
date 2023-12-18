@@ -13,9 +13,9 @@ on:
                     - enable
                     - disable
             environment:
-                description: 'Environment'
+                description: "Environment"
                 required: true
-                default: 'prod'
+                default: "prod"
                 type: choice
                 options:
                     - prod
