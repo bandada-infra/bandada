@@ -10,7 +10,10 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
 root.render(
     <AuthContextProvider>
-        <ChakraProvider theme={theme}>
+        <ChakraProvider
+            theme={theme}
+            toastOptions={{ defaultOptions: { position: "bottom" } }}
+        >
             <Routes />
         </ChakraProvider>
     </AuthContextProvider>

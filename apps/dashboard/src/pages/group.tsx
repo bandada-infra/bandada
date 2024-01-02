@@ -22,6 +22,7 @@ import {
     Tooltip,
     useClipboard,
     useDisclosure,
+    useToast,
     VStack
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState, useContext } from "react"
@@ -45,6 +46,7 @@ import { AuthContext } from "../context/auth-context"
 export default function GroupPage(): JSX.Element {
     const navigate = useNavigate()
     const addMembersModal = useDisclosure()
+    const toast = useToast()
     const { groupId, groupType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
     const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
@@ -102,8 +104,15 @@ export default function GroupPage(): JSX.Element {
             setGroup({ ..._group! })
 
             addMembersModal.onClose()
+
+            toast({
+                title: "Member(s) added.",
+                description: `The member(s) have been successfully added to the group.`,
+                status: "success",
+                duration: 3000
+            })
         },
-        [_group, addMembersModal]
+        [_group, addMembersModal, toast]
     )
 
     const removeMember = useCallback(
