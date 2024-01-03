@@ -106,8 +106,12 @@ export default function GroupPage(): JSX.Element {
             addMembersModal.onClose()
 
             toast({
-                title: "Member(s) added.",
-                description: `The member(s) have been successfully added to the group.`,
+                title:
+                    memberIds.length > 1 ? "Members added." : "Member added.",
+                description:
+                    memberIds.length > 1
+                        ? " The members have been successfully added to the group."
+                        : "The member has been successfully added to the group.",
                 status: "success",
                 duration: 3000
             })
