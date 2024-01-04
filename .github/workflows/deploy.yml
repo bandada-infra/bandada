@@ -12,6 +12,14 @@ on:
                 options:
                     - enable
                     - disable
+            environment:
+                description: "Environment"
+                required: true
+                default: "prod"
+                type: choice
+                options:
+                    - prod
+                    - stg
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,11 +30,21 @@ jobs:
         runs-on: ubuntu-latest
         env:
             DATA: ${{ github.event.inputs.build || 'enable' }}
+            DATA_ENV: ${{ github.event.inputs.environment || 'prod' }}
         permissions:
             id-token: write
             contents: read
 
         steps:
+            - name: Check branch
+              run: |
+                  if [ "${{ env.DATA_ENV }}" = "prod" ]; then
+                    if [ "$GITHUB_REF_NAME" != "main" ]; then
+                      echo "Operation not permitted"
+                      exit 1
+                    fi
+                  fi
+
             - name: Checkout
               uses: actions/checkout@v2
               with:
@@ -41,8 +59,8 @@ jobs:
 
             - name: Build and Push images to ECR
               run: |
-                  .github/scripts/build.sh ${{ env.DATA }}
+                  .github/scripts/build.sh ${{ env.DATA }} ${{ env.DATA_ENV }}
 
             - name: Create Deployment
               run: |
-                  .github/scripts/deploy.sh
+                  .github/scripts/deploy.sh ${{ env.DATA_ENV }}
