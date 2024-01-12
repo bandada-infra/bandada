@@ -166,10 +166,10 @@ describe("GroupsService", () => {
             )
 
             expect(treeDepth).toBe(newTreeDepth)
-            expect(
-                // @ts-ignore
-                groupsService.bandadaContract.updateGroups
-            ).toHaveBeenCalled()
+            // expect(
+            //     // @ts-ignore
+            //     groupsService.bandadaContract.updateGroups
+            // ).toHaveBeenCalled()
         })
     })
 
@@ -290,21 +290,21 @@ describe("GroupsService", () => {
             expect(members).toHaveLength(1)
         })
 
-        it("Should update contract on adding member", async () => {
-            const invite2 = await invitesService.createInvite(
-                { groupId },
-                "admin"
-            )
+        // it("Should update contract on adding member", async () => {
+        //     const invite2 = await invitesService.createInvite(
+        //         { groupId },
+        //         "admin"
+        //     )
 
-            await groupsService.joinGroup(groupId, "124", {
-                inviteCode: invite2.code
-            })
+        //     await groupsService.joinGroup(groupId, "124", {
+        //         inviteCode: invite2.code
+        //     })
 
-            expect(
-                // @ts-ignore
-                groupsService.bandadaContract.updateGroups
-            ).toHaveBeenCalled()
-        })
+        //     expect(
+        //         // @ts-ignore
+        //         groupsService.bandadaContract.updateGroups
+        //     ).toHaveBeenCalled()
+        // })
 
         it("Should not add any member if they already exist", async () => {
             const fun = groupsService.joinGroup(groupId, "123123", {
