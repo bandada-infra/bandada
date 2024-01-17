@@ -49,11 +49,11 @@ export class GroupsService {
         await this._cacheGroups()
 
         /* istanbul ignore next */
-        if (process.env.NODE_ENV !== "test") {
-            setTimeout(async () => {
-                await this._syncContractGroups()
-            }, 5000)
-        }
+        // if (process.env.NODE_ENV !== "test") {
+        //     setTimeout(async () => {
+        //         await this._syncContractGroups()
+        //     }, 5000)
+        // }
     }
 
     /**
@@ -96,7 +96,7 @@ export class GroupsService {
 
         this.cachedGroups.set(_groupId, cachedGroup)
 
-        this._updateFingerprintDuration(group.id, fingerprintDuration)
+        // this._updateFingerprintDuration(group.id, fingerprintDuration)
 
         Logger.log(
             `GroupsService: group '${name}' has been created with id '${_groupId}'`
@@ -169,7 +169,7 @@ export class GroupsService {
                 group.members.map((m) => m.id)
             )
             this.cachedGroups.set(groupId, cachedGroup)
-            this._updateContractGroup(cachedGroup)
+            // this._updateContractGroup(cachedGroup)
         }
 
         if (group.credentials && credentials) {
@@ -380,7 +380,7 @@ export class GroupsService {
             `GroupsService: member '${memberId}' has been added to the group '${group.name}'`
         )
 
-        this._updateContractGroup(cachedGroup)
+        // this._updateContractGroup(cachedGroup)
 
         return group
     }
@@ -432,7 +432,7 @@ export class GroupsService {
             )
         })
 
-        this._updateContractGroup(cachedGroup)
+        // this._updateContractGroup(cachedGroup)
 
         return group
     }
@@ -510,7 +510,7 @@ export class GroupsService {
             })
         )
 
-        this._updateContractGroup(cachedGroup)
+        // this._updateContractGroup(cachedGroup)
 
         return this.getGroup(groupId)
     }
@@ -588,7 +588,7 @@ export class GroupsService {
             })
         )
 
-        this._updateContractGroup(cachedGroup)
+        // this._updateContractGroup(cachedGroup)
 
         return this.getGroup(groupId)
     }
