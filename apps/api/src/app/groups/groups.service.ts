@@ -726,18 +726,18 @@ export class GroupsService {
      */
     /* istanbul ignore next */
     private async _updateContractGroup(group: CachedGroup): Promise<void> {
-        const tx = await this.bandadaContract.updateGroups([
-            {
-                id: BigInt(group.id),
-                fingerprint: BigInt(group.root)
-            }
-        ])
+        try {
+            await this.bandadaContract.updateGroups([
+                {
+                    id: BigInt(group.id),
+                    fingerprint: BigInt(group.root)
+                }
+            ])
 
-        if (tx.status && tx.logs.length === 1) {
             Logger.log(
                 `GroupsService: group '${group.id}' has been updated in the contract`
             )
-        } else {
+        } catch {
             Logger.error(`GroupsService: failed to update contract groups`)
         }
     }
