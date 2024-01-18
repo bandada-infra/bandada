@@ -14,7 +14,7 @@ const validator: Validator = {
     },
 
     /**
-     * It checks if a user has more then 'minCommits' commits in a specific repo.
+     * It checks if a user has greater than or equal to 'minCommits' commits in a specific repo.
      * @param criteria The criteria used to check user's credentials.
      * @param context Utility functions and other context variables.
      * @returns True if the user meets the criteria.
