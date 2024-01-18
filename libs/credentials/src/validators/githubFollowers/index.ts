@@ -12,7 +12,7 @@ const validator: Validator = {
     },
 
     /**
-     * It checks if a user has more then 'minFollowers' followers.
+     * It checks if a user has greater than or equal to 'minFollowers' followers.
      * @param criteria The criteria used to check user's credentials.
      * @param context Utility functions and other context variables.
      * @returns True if the user meets the criteria.
