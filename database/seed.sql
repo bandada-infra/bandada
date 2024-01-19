@@ -57,7 +57,6 @@ CREATE TABLE invites (
 );
 
 ALTER TABLE "groups" ADD FOREIGN KEY ("admin_id") REFERENCES "admins" ("id");
-ALTER TABLE "members" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 ALTER TABLE "invites" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 ALTER TABLE "oauth_accounts" ADD FOREIGN KEY ("group_id") REFERENCES "groups" ("id");
 
