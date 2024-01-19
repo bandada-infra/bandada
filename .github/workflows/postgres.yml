@@ -1,0 +1,51 @@
+name: Postgres
+on:
+    workflow_dispatch:
+        inputs:
+            environment:
+                description: "Environment"
+                required: true
+                default: "stg"
+                type: choice
+                options:
+                    - prod
+                    - stg
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    restore:
+        runs-on: ubuntu-latest
+        env:
+            DATA_ENV: ${{ github.event.inputs.environment || 'stg' }}
+        permissions:
+            id-token: write
+            contents: read
+
+        steps:
+            - name: Check branch
+              run: |
+                  if [ "${{ env.DATA_ENV }}" = "prod" ]; then
+                    if [ "$GITHUB_REF_NAME" != "main" ]; then
+                      echo "Operation not permitted"
+                      exit 1
+                    fi
+                  fi
+
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  persist-credentials: false
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                  role-to-assume: arn:aws:iam::490752553772:role/bandada-postgres-lambda-slc
+                  role-duration-seconds: 1800
+                  aws-region: eu-central-1
+
+            - name: Restore Database
+              run: |
+                  .github/scripts/postgres.sh ${{ env.DATA_ENV }} $GITHUB_REF_NAME
