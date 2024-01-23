@@ -190,6 +190,14 @@ cd bandada && yarn
 
 ## 📜 Usage
 
+### Copy the API environment variables
+
+Run this command to copy the [environment variables used by the API](https://github.com/privacy-scaling-explorations/bandada?tab=readme-ov-file#environment-variables):
+
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
 ### Starting applications
 
 Run the following command to start the applications in a development environment:
@@ -203,6 +211,14 @@ or the following command to start the applications in production mode:
 ```bash
 yarn start
 ```
+
+### Application urls
+
+| App                | Development           | Production                     | Staging                                |
+| ------------------ | --------------------- | ------------------------------ | -------------------------------------- |
+| Bandada API        | http://localhost:3000 | https://api.bandada.pse.dev    | https://api-staging.bandada.pse.dev    |
+| Bandada Dashboard  | http://localhost:3001 | https://bandada.pse.dev        | https://staging.bandada.pse.dev        |
+| Bandada Client App | http://localhost:3002 | https://client.bandada.pse.dev | https://client-staging.bandada.pse.dev |
 
 ### Building libraries/applications
 
