@@ -214,29 +214,11 @@ yarn start
 
 ### Application urls
 
--   Development environment
-
-Bandada API: http://localhost:3000
-
-Bandada Dashboard: http://localhost:3001
-
-Bandada Client App: http://localhost:3002
-
--   Production environment
-
-Bandada API: https://api.bandada.pse.dev
-
-Bandada Dashboard: https://bandada.pse.dev
-
-Bandada Client App: https://client.bandada.pse.dev
-
--   Staging environment
-
-Bandada API: https://api-staging.bandada.pse.dev
-
-Bandada Dashboard: https://staging.bandada.pse.dev
-
-Bandada Client App: https://client-staging.bandada.pse.dev
+| App                | Development           | Production                     | Staging                                |
+| ------------------ | --------------------- | ------------------------------ | -------------------------------------- |
+| Bandada API        | http://localhost:3000 | https://api.bandada.pse.dev    | https://api-staging.bandada.pse.dev    |
+| Bandada Dashboard  | http://localhost:3001 | https://bandada.pse.dev        | https://staging.bandada.pse.dev        |
+| Bandada Client App | http://localhost:3002 | https://client.bandada.pse.dev | https://client-staging.bandada.pse.dev |
 
 ### Building libraries/applications
 
