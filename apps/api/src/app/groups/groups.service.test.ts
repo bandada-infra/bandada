@@ -290,6 +290,7 @@ describe("GroupsService", () => {
             expect(members).toHaveLength(1)
         })
 
+        // eslint-disable-next-line
         // it("Should update contract on adding member", async () => {
         //     const invite2 = await invitesService.createInvite(
         //         { groupId },
