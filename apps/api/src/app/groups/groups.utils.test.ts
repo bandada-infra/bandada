@@ -26,12 +26,21 @@ describe("Groups utils", () => {
         it("Should map the group data with api keys if specified", async () => {
             const { apiKey, apiEnabled } = mapGroupToResponseDTO(
                 { apiEnabled: true, apiKey: "123" } as any,
-                "pending",
+                "12345",
                 true
             )
 
             expect(apiEnabled).toBeTruthy()
             expect(apiKey).toBe("123")
+        })
+
+        it("Should map the fingerprint correctly", async () => {
+            const { fingerprint } = mapGroupToResponseDTO(
+                {} as any,
+                "12345",
+            )
+
+            expect(fingerprint).toBe("12345")
         })
     })
 })
