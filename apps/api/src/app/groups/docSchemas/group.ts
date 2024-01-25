@@ -12,6 +12,8 @@ export class Group {
     @ApiProperty()
     treeDepth: number
     @ApiProperty()
+    fingerprint: string
+    @ApiProperty()
     fingerprintDuration: number
     @ApiProperty()
     createdAt: Date

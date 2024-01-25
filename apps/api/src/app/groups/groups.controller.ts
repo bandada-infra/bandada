@@ -45,8 +45,15 @@ export class GroupsController {
     @ApiCreatedResponse({ type: Group, isArray: true })
     async getGroups(@Query("adminId") adminId: string) {
         const groups = await this.groupsService.getGroups({ adminId })
+        const groupIds = groups.map((group) => group.id)
+        const fingerprints = await this.groupsService.getFingerprints(groupIds)
 
-        return groups.map((g) => mapGroupToResponseDTO(g))
+        return groups.map((group, index) => {
+            return {
+                group: group,
+                fingerprint: fingerprints[index]
+            }
+        })
     }
 
     @Get(":group")
@@ -54,9 +61,11 @@ export class GroupsController {
     @ApiCreatedResponse({ type: Group })
     async getGroup(@Param("group") groupId: string, @Req() req: Request) {
         const group = await this.groupsService.getGroup(groupId)
+        const fingerprint = await this.groupsService.getFingerprint(groupId)
 
         return mapGroupToResponseDTO(
             group,
+            fingerprint,
             req.session.adminId === group.adminId
         )
     }
@@ -69,9 +78,11 @@ export class GroupsController {
             dto,
             req.session.adminId
         )
+        const fingerprint = await this.groupsService.getFingerprint(group.id)
 
         return mapGroupToResponseDTO(
             group,
+            fingerprint,
             req.session.adminId === group.adminId
         )
     }
@@ -97,8 +108,11 @@ export class GroupsController {
             req.session.adminId
         )
 
+        const fingerprint = await this.groupsService.getFingerprint(groupId)
+
         return mapGroupToResponseDTO(
             group,
+            fingerprint,
             req.session.adminId === group.adminId
         )
     }

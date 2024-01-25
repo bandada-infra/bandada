@@ -2,6 +2,7 @@ import { Group } from "./entities/group.entity"
 
 export function mapGroupToResponseDTO(
     group: Group,
+    fingerprint: string = "",
     includeAPIKey: boolean = false
 ) {
     const dto = {
@@ -10,6 +11,7 @@ export function mapGroupToResponseDTO(
         description: group.description,
         admin: group.adminId,
         treeDepth: group.treeDepth,
+        fingerprint: fingerprint,
         fingerprintDuration: group.fingerprintDuration,
         createdAt: group.createdAt,
         members: (group.members || []).map((m) => m.id),

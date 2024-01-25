@@ -4,6 +4,7 @@ export type GroupResponse = {
     description: string
     admin: string
     treeDepth: number
+    fingerprint: string
     fingerprintDuration: number
     createdAt: Date
     members: string[]

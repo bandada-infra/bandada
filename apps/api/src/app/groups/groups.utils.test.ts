@@ -26,6 +26,7 @@ describe("Groups utils", () => {
         it("Should map the group data with api keys if specified", async () => {
             const { apiKey, apiEnabled } = mapGroupToResponseDTO(
                 { apiEnabled: true, apiKey: "123" } as any,
+                "pending",
                 true
             )
 
