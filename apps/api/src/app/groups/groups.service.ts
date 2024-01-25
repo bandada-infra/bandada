@@ -662,6 +662,15 @@ export class GroupsService {
     }
 
     /**
+     * Returns a group fingerprint.
+     * @param groupId Group id.
+     * @returns Group fingerprint.
+     */
+    async getFingerprint(groupId: string): Promise<string> {
+        return (await this.getFingerprints([groupId]))[0]
+    }
+
+    /**
      * Returns a list of fingerprints from a list of groups.
      * @param groupIds Array of group ids.
      * @returns Fingerprints from groups.
@@ -677,21 +686,6 @@ export class GroupsService {
         }
 
         return fingerprints
-    }
-
-    /**
-     * Returns a group fingerprint.
-     * @param groupId Group id.
-     * @returns Group fingerprint.
-     */
-
-    /*     async getFingerprint(groupId: string): Promise<string> {
-        const fingerprints  = await this.getFingerprints([groupId])
-
-        return fingerprints[0]
-    } */
-    async getFingerprint(groupId: string): Promise<string> {
-        return (await this.getFingerprints([groupId]))[0]
     }
 
     private async _updateFingerprintDuration(
