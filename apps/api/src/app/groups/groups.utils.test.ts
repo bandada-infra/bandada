@@ -35,10 +35,7 @@ describe("Groups utils", () => {
         })
 
         it("Should map the fingerprint correctly", async () => {
-            const { fingerprint } = mapGroupToResponseDTO(
-                {} as any,
-                "12345",
-            )
+            const { fingerprint } = mapGroupToResponseDTO({} as any, "12345")
 
             expect(fingerprint).toBe("12345")
         })
