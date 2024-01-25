@@ -11,7 +11,7 @@ export function mapGroupToResponseDTO(
         description: group.description,
         admin: group.adminId,
         treeDepth: group.treeDepth,
-        fingerprint: fingerprint,
+        fingerprint,
         fingerprintDuration: group.fingerprintDuration,
         createdAt: group.createdAt,
         members: (group.members || []).map((m) => m.id),
