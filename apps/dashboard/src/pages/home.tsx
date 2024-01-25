@@ -26,12 +26,7 @@ export default function HomePage(): JSX.Element {
 
     return (
         <VStack
-            bgColor={pathname === "/" ? "balticSea.950" : "inherit"}
-            bgGradient={
-                pathname !== "/"
-                    ? "linear(to-b, classicRose.200, balticSea.100)"
-                    : "inherit"
-            }
+            bgColor={pathname === "/" ? "balticSea.950" : "classicRose.200"}
             color={pathname === "/" ? "balticSea.50" : "inherit"}
             flex="1"
         >
