@@ -52,7 +52,7 @@
 | Bandada is a public good plug-and-play infrastructure that empowers anyone to create and manage privacy-preserving groups of anonymous individuals, without necessitating prior expertise. |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 
-Bandada comprises a versatile back-end, two user-friendly front-ends (the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups), Ethereum [**smart contracts**](/apps/contracts) for proof verification, and a collection of [**JavaScript libraries**](/libs/) for seamless integration. From the Bandada dashboard, you can effortlessly create two types of groups: **manual** and **credential** groups. In manual groups, you can add members directly or generate invite links while, in credential groups, members must demonstrate their credentials for access. Bandada provides developers with JavaScript libraries, including [`@bandada/api-sdk`](/libs/api-sdk/) for API key management. Additionally, it offers preset credential validators and the flexibility to extend functionality using the [`@bandada/credentials`](/libs/credentials/) library.
+Bandada comprises a versatile back-end, two user-friendly front-ends (the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups), Ethereum [**smart contracts**](/apps/contracts) for proof verification, and a collection of [**JavaScript libraries**](/libs/) for seamless integration. From the Bandada dashboard, you can effortlessly create two types of groups: **manual** and **credential** groups. In manual groups, you can add members directly or generate invite links while, in credential groups, members must demonstrate their credentials for access. Bandada provides developers with JavaScript libraries, including [`@bandada/api-sdk`](/libs/api-sdk/) for API key management. Furthermore, it provides preconfigured credential validators and allows for additional functionality through the [`@bandada/credentials`](/libs/credentials/) library. This feature allows for manual or automated management of both off-chain and on-chain groups by specifying eligibility criteria. It can be used for a variety of applications, such as organizing private organizational members, grouping contributors of a particular GitHub repository, or uniting holders of a specific NFT, among others.
 
 Please see the latest [documentation](https://pse-team.notion.site/Bandada-82d0d9d3c6b64b7bb2a09d4c7647c083) to learn more about Bandada.
 
@@ -229,36 +229,6 @@ Use the following command to start the applications in the production environmen
 yarn start
 ```
 
-### Code quality and formatting
-
-Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
-
-```bash
-yarn lint
-```
-
-Run [Prettier](https://prettier.io/) to check formatting rules:
-
-```bash
-yarn prettier
-```
-
-or to format the code automatically:
-
-```bash
-yarn prettier:write
-```
-
-### Conventional commits
-
-Bandada utilises [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which follow a standardised format for commit messages. To use this format, you can run the [command line utility](https://github.com/commitizen/cz-cli) by running:
-
-```bash
-yarn commit
-```
-
-The command will automatically verify that the modified files adhere to the rules of ESLint and Prettier.
-
 ### Testing
 
 Run [Jest](https://jestjs.io/) to test the code with coverage:
@@ -321,3 +291,35 @@ To enable API access for a group, go to the group page in the dashboard and togg
 ## 🔌 APIs endpoints
 
 To see the complete list of available endpoints, please visit https://api.bandada.pse.dev.
+
+## 👨‍💻 Contributing
+
+### Code quality and formatting
+
+Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
+
+```bash
+yarn lint
+```
+
+Run [Prettier](https://prettier.io/) to check formatting rules:
+
+```bash
+yarn prettier
+```
+
+or to format the code automatically:
+
+```bash
+yarn prettier:write
+```
+
+### Conventional commits
+
+Bandada utilises [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which follow a standardised format for commit messages. To use this format, you can run the [command line utility](https://github.com/commitizen/cz-cli) by running:
+
+```bash
+yarn commit
+```
+
+The command will automatically verify that the modified files adhere to the rules of ESLint and Prettier.
