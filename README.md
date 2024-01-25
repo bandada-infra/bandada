@@ -52,7 +52,7 @@
 | Bandada is a public good plug-and-play infrastructure that empowers anyone to create and manage privacy-preserving groups of anonymous individuals, without necessitating prior expertise. |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 
-Bandada comprises a versatile back-end, two user-friendly front-ends (the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups), Ethereum [**smart contracts**](/apps/contracts) for proof verification, and a collection of [**JavaScript libraries**](/libs/) for seamless integration. From the Bandada dashboard, you can effortlessly create two types of groups: **manual** and **credential** groups. In manual groups, you can add members directly or generate invite links while, in credential groups, members must demonstrate their credentials for access. Bandada provides developers with JavaScript libraries, including [`@bandada/api-sdk`](/libs/api-sdk/) for API key management. Furthermore, it provides preconfigured credential validators and allows for additional functionality through the [`@bandada/credentials`](/libs/credentials/) library. This feature allows for manual or automated management of both off-chain and on-chain groups by specifying eligibility criteria. It can be used for a variety of applications, such as organizing private organizational members, grouping contributors of a particular GitHub repository, or uniting holders of a specific NFT, among others.
+Bandada comprises a versatile back-end, two user-friendly front-ends (the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups), Ethereum [**smart contracts**](/apps/contracts) for proof verification, and a collection of [**JavaScript libraries**](/libs/) for seamless integration. From the Bandada dashboard, you can effortlessly create two types of groups: **manual** and **credential** groups. In manual groups, you can add members directly or generate invite links while, in credential groups, members must demonstrate their credentials for access. Bandada provides developers with JavaScript libraries, including [`@bandada/api-sdk`](/libs/api-sdk/) to make it easier to work with the APIs. Furthermore, it provides preconfigured credential validators and allows for additional functionality through the [`@bandada/credentials`](/libs/credentials/) library. This feature allows for manual or automated management of both off-chain and on-chain groups by specifying eligibility criteria. It can be used for a variety of applications, such as organizing private organizational members, grouping contributors of a particular GitHub repository, or uniting holders of a specific NFT, among others.
 
 Please see the latest [documentation](https://pse-team.notion.site/Bandada-82d0d9d3c6b64b7bb2a09d4c7647c083) to learn more about Bandada.
 
@@ -187,9 +187,6 @@ cd bandada && yarn
 ### Prerequisities
 
 -   [NodeJS](https://nodejs.org/en) >= v18.17.0
--   [Yarn](https://yarnpkg.com/) >= v3.4.1
--   [Docker](https://www.docker.com/) >= 4.26.1
--   [docker-compose](https://docs.docker.com/compose/) >= 2.24.2
 
 Each package and application brings its own set of environment variables. To getting started with Bandada, you can get rid of the configuration and just use the default settings. Copy the environment variables used by the [`api`](/apps/api/) application by running this command:
 
@@ -238,6 +235,11 @@ yarn test
 ```
 
 ## 🐳 Running in Docker
+
+### Prerequisities
+
+-   [Docker](https://www.docker.com/) >= 4.26.1
+-   [docker-compose](https://docs.docker.com/compose/) >= 2.24.2
 
 To run Bandada using [Docker](https://www.docker.com/), execute the following command in the project root:
 
