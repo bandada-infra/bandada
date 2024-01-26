@@ -225,7 +225,7 @@ export class GroupsService {
 
     /**
      * Join the group by redeeming invite code.
-     * @param groupId Group name.
+     * @param groupId Group id.
      * @param memberId Member's identity commitment.
      * @param dto Parameters used to add a group member.
      * @returns Group data with added member.
@@ -248,7 +248,7 @@ export class GroupsService {
 
     /**
      * Add a member to the group manually as an admin.
-     * @param groupId ID of the group
+     * @param groupId Group id.
      * @param memberIds Member's identity to be added
      * @param adminId id of the admin making the request
      * @returns Group
@@ -263,7 +263,7 @@ export class GroupsService {
 
     /**
      * Add members to the group manually as an admin.
-     * @param groupId ID of the group
+     * @param groupId Group id.
      * @param memberIds Array of member IDs to be added
      * @param adminId id of the admin making the request
      * @returns Group
@@ -294,7 +294,7 @@ export class GroupsService {
 
     /**
      * Add a member to the group using API Key.
-     * @param groupId ID of the group
+     * @param groupId Group id.
      * @param memberIds  Member's identity to be added
      * @param apiKey API key for the group
      * @returns Group
@@ -309,7 +309,7 @@ export class GroupsService {
 
     /**
      * Add members to the group using API Key.
-     * @param groupId ID of the group
+     * @param groupId Group id.
      * @param memberIds Array of member IDs to be added
      * @param apiKey API key for the group
      * @returns Group
@@ -340,7 +340,7 @@ export class GroupsService {
 
     /**
      * Add a member to the group.
-     * @param groupId ID of the group
+     * @param groupId Group id.
      * @param memberId ID of the member to be added
      * @returns Group
      */
@@ -387,7 +387,7 @@ export class GroupsService {
 
     /**
      * Add multiple members to the group.
-     * @param groupId ID of the group
+     * @param groupId Group id.
      * @param memberIds Array of member IDs to be added
      * @returns Group
      */
@@ -439,7 +439,7 @@ export class GroupsService {
 
     /**
      * Delete a member from a group.
-     * @param groupId Group name.
+     * @param groupId Group id.
      * @param memberId Member's identity commitment.
      * @param adminId Group admin id.
      * @returns Group data with removed member.
@@ -454,7 +454,7 @@ export class GroupsService {
 
     /**
      * Delete members from a group.
-     * @param groupId Group name.
+     * @param groupId Group id.
      * @param memberIds Array of member's identity commitments.
      * @param adminId Group admin id.
      * @returns Group data with removed member.
@@ -517,7 +517,7 @@ export class GroupsService {
 
     /**
      * Delete a member from group using API Key
-     * @param groupId Group name.
+     * @param groupId Group id.
      * @param memberId Member's identity commitment.
      * @returns Group data with removed member.
      */
@@ -531,7 +531,7 @@ export class GroupsService {
 
     /**
      * Delete a member from group using API Key
-     * @param groupId Group name.
+     * @param groupId Group id.
      * @param memberIds Array of members' identity commitment.
      * @returns Group data with removed member.
      */
@@ -612,7 +612,7 @@ export class GroupsService {
 
     /**
      * Returns a specific group.
-     * @param groupId Group name.
+     * @param groupId Group id.
      * @returns Specific group.
      */
     async getGroup(groupId: string): Promise<Group> {
@@ -659,6 +659,33 @@ export class GroupsService {
         const memberIndex = cachedGroup.indexOf(BigInt(member))
 
         return cachedGroup.generateMerkleProof(memberIndex)
+    }
+
+    /**
+     * Returns a group fingerprint.
+     * @param groupId Group id.
+     * @returns Group fingerprint.
+     */
+    async getFingerprint(groupId: string): Promise<string> {
+        return (await this.getFingerprints([groupId]))[0]
+    }
+
+    /**
+     * Returns a list of fingerprints from a list of groups.
+     * @param groupIds Array of group ids.
+     * @returns Fingerprints from groups.
+     */
+    async getFingerprints(groupIds: string[]): Promise<string[]> {
+        const fingerprints: string[] = []
+
+        for (const groupId of groupIds) {
+            const cachedGroup = this.cachedGroups.get(groupId)
+            if (cachedGroup) {
+                fingerprints.push(cachedGroup.root.toString())
+            }
+        }
+
+        return fingerprints
     }
 
     private async _updateFingerprintDuration(
