@@ -49,18 +49,12 @@
     </h4>
 </div>
 
-| Groups are an important concept when we speak about privacy and zero knowledge technologies. They can be thought of as anonymity sets, and are a way to establish necessary trust between a set of participants. The goal of this project is to provide a comprehensive infrastructure to allow anyone to create and manage their own groups. |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bandada is a public good plug-and-play infrastructure that empowers anyone to create and manage privacy-preserving groups of anonymous individuals, without necessitating prior expertise. |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 
-Bandada consists of a back-end to store the groups and provide the [**API**](/apps/api), two front-ends: the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups, and the [**contracts**](/apps/contracts) Additionally, it also provides a set of JavaScript libraries to support developers.
+Bandada comprises a versatile back-end, two user-friendly front-ends (the [**dashboard**](/apps/dashboard) to manage groups and members and a [**demo**](/apps/client) application to allow end-users to join the groups), Ethereum [**smart contracts**](/apps/contracts) for proof verification, and a collection of [**JavaScript libraries**](/libs/) for seamless integration. From the Bandada dashboard, you can effortlessly create two types of groups: **manual** and **credential** groups. In manual groups, you can add members directly or generate invite links while, in credential groups, members must demonstrate their credentials for access. Bandada provides developers with JavaScript libraries, including [`@bandada/api-sdk`](/libs/api-sdk/) to make it easier to work with the APIs. Furthermore, it provides preconfigured credential validators and allows for additional functionality through the [`@bandada/credentials`](/libs/credentials/) library. This feature allows for manual or automated management of both off-chain and on-chain groups by specifying eligibility criteria. It can be used for a variety of applications, such as organizing private organizational members, grouping contributors of a particular GitHub repository, or uniting holders of a specific NFT, among others.
 
-Two types of groups can be created from the dashboard: **manual** or **credential** groups. In the former you can add members by entering IDs directly or by creating invite links, while in the latter you can define credentials that members must prove they have in order to access the group.
-
-Once you create your manual group in the dashboard you can either create an **API key** to add or remove members or use the **invite codes** to add members with the [`@bandada/api-sdk`](/libs/api-sdk) library. Credential groups can instead be accessed by redirecting users to the appropriate page in the dashboard (i.e. `https://bandada.pse.dev/credentials?group=<groupId>&member=<memberId>&provider=<providerName>`).
-
-Bandada also provides a preset of credential **validators** that can, however, be extended with the [`@bandada/credentials`](/libs/credentials) library.
-
-For more information about our applications and libraries, use the links below to go to their specific README files.
+Please see the latest [documentation](https://pse-team.notion.site/Bandada-82d0d9d3c6b64b7bb2a09d4c7647c083) to learn more about Bandada.
 
 ## ⚙️ Applications
 
@@ -174,7 +168,29 @@ For more information about our applications and libraries, use the links below t
     <tbody>
 </table>
 
-## 🛠 Install
+## 🔧 Configuration
+
+### Prerequisities
+
+-   [NodeJS](https://nodejs.org/en) >= v18.17.0
+
+Each package and application brings its own set of environment variables. To getting started with Bandada, you can get rid of the configuration and just use the default settings. Copy the environment variables used by the [`api`](/apps/api/) application by running this command:
+
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
+**NB.** Bandada requires an SQL database (see [`api`](/apps/api/) application for usage). Currently, [PostgreSQL](https://www.postgresql.org/) and [SQLite](https://www.sqlite.org/index.html) (default) has been successfully tested (watch out that others SQL flavors may work but have not been tested). We are assuming you are using SQLite as the database.
+
+The applications will be deployed at the following URLs without any changes to the default configurations:
+
+| App                | Development           | Production                     | Staging                                |
+| ------------------ | --------------------- | ------------------------------ | -------------------------------------- |
+| Bandada API        | http://localhost:3000 | https://api.bandada.pse.dev    | https://api-staging.bandada.pse.dev    |
+| Bandada Dashboard  | http://localhost:3001 | https://bandada.pse.dev        | https://staging.bandada.pse.dev        |
+| Bandada Client App | http://localhost:3002 | https://client.bandada.pse.dev | https://client-staging.bandada.pse.dev |
+
+## 🛠 Installation
 
 Clone this repository:
 
@@ -190,45 +206,95 @@ cd bandada && yarn
 
 ## 📜 Usage
 
-### Copy the API environment variables
-
-Run this command to copy the [environment variables used by the API](https://github.com/privacy-scaling-explorations/bandada?tab=readme-ov-file#environment-variables):
-
-```bash
-cp apps/api/.env.example apps/api/.env
-```
-
-### Starting applications
-
-Run the following command to start the applications in a development environment:
-
-```bash
-yarn dev
-```
-
-or the following command to start the applications in production mode:
-
-```bash
-yarn start
-```
-
-### Application urls
-
-| App                | Development           | Production                     | Staging                                |
-| ------------------ | --------------------- | ------------------------------ | -------------------------------------- |
-| Bandada API        | http://localhost:3000 | https://api.bandada.pse.dev    | https://api-staging.bandada.pse.dev    |
-| Bandada Dashboard  | http://localhost:3001 | https://bandada.pse.dev        | https://staging.bandada.pse.dev        |
-| Bandada Client App | http://localhost:3002 | https://client.bandada.pse.dev | https://client-staging.bandada.pse.dev |
-
-### Building libraries/applications
-
-Run the following command to build the libraries/applications:
+To build the applications, libraries and compile the contracts, run the following command:
 
 ```bash
 yarn build
 ```
 
 A `dist` folder will be created in each library/application.
+
+To start the applications in a development environment, run the following command:
+
+```bash
+yarn dev
+```
+
+Use the following command to start the applications in the production environment:
+
+```bash
+yarn start
+```
+
+### Testing
+
+Run [Jest](https://jestjs.io/) to test the code with coverage:
+
+```bash
+yarn test
+```
+
+## 🐳 Running in Docker
+
+### Prerequisities
+
+-   [Docker](https://www.docker.com/) >= 4.26.1
+-   [docker-compose](https://docs.docker.com/compose/) >= 2.24.2
+
+To run Bandada using [Docker](https://www.docker.com/), execute the following command in the project root:
+
+```sh
+docker-compose up -d
+```
+
+### Local Development
+
+To begin local development, use the following command to start essential dependencies such as a local Ethereum network (with data persistence) and [TheGraph](https://thegraph.com/) node:
+
+```sh
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+The Ethereum node ([Ganache](https://trufflesuite.com/ganache/)) will run on port `8545` with accounts pre-funded with 100 ETH:
+
+```sh
+0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+# this is the same first account generated by Hardhat network as well.
+Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+```
+
+To deploy the contracts to the local network, use the command below:
+
+```sh
+yarn workspace contracts deploy:bandada-semaphore --network local
+```
+
+The contract addresses deployed in a new local network are:
+
+```sh
+Pairing library has been deployed to:               0x5FbDB2315678afecb367f032d93F642f64180aa3
+SemaphoreVerifier contract has been deployed to:    0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+Bandada contract has been deployed to:             0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
+BandadaSemaphore contract has been deployed to:    0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
+```
+
+Default values for contract addresses are set in `libs/utils/src/contract-addresses.ts`. If you make changes to the contract and redeploy, you will need to update the address here.
+
+To reset the local network or TheGraph node, stop the docker containers and delete the corresponding folders inside `./.data`.
+
+## 📡 Enable API Access for a Group
+
+Bandada offers APIs for retrieving group data and managing group members. As an admin of a manual or invitation group, you can use the API key to add or remove members.
+
+To enable API access for a group, go to the group page in the dashboard and toggle the **Enable API Access** button. Once enabled, a new API key will be generated for you. You can disable API access at any time using the same toggle button.
+
+![Enable API access toggle for off-chain group](https://file.notion.so/f/f/56f3d122-cf5c-44f7-badf-6384ac445e55/99d93ae4-713a-4449-93d5-0543e9f57889/Screenshot_from_2024-01-24_16-16-36.png?id=5f9c4aa7-d990-4b95-bb7b-f35d25057eb8&table=block&spaceId=56f3d122-cf5c-44f7-badf-6384ac445e55&expirationTimestamp=1706196071431&signature=NM1-lfvwzFlbJlsE3UpxZu-APppo5NtCIOpQfXBAGik&downloadName=Screenshot+from+2024-01-24+16-16-36.png)
+
+## 🔌 APIs endpoints
+
+To see the complete list of available endpoints, please visit https://api.bandada.pse.dev.
+
+## 👨‍💻 Contributing
 
 ### Code quality and formatting
 
@@ -244,7 +310,7 @@ Run [Prettier](https://prettier.io/) to check formatting rules:
 yarn prettier
 ```
 
-or to automatically format the code:
+or to format the code automatically:
 
 ```bash
 yarn prettier:write
@@ -252,99 +318,10 @@ yarn prettier:write
 
 ### Conventional commits
 
-Semaphore uses [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/). A [command line utility](https://github.com/commitizen/cz-cli) to commit using the correct syntax can be used by running:
+Bandada utilises [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which follow a standardised format for commit messages. To use this format, you can run the [command line utility](https://github.com/commitizen/cz-cli) by running:
 
 ```bash
 yarn commit
 ```
 
-It will also automatically check that the modified files comply with ESLint and Prettier rules.
-
-### Database
-
-Bandada requires an SQL database to work, which is used by the `api` application.
-Bandada can work with Postgres and SQLite. Other SQL flavors should work but have not been tested yet.
-You can pass the connection URL to the database using the environment variable (see below).
-
-### Testing
-
-Run [Jest](https://jestjs.io/) to test the code with coverage:
-
-```bash
-yarn test
-```
-
-### Running in Docker
-
-You can also run Bandada using Docker by running the below command in the project root:
-
-```sh
-docker-compose up -d
-```
-
-#### Local development
-
-You can start dependencies essential for local development like a local ethereum network (with data persistence) and TheGraph node using the command below:
-
-```sh
-docker-compose -f docker-compose.dev.yml up -d
-```
-
-The ethereum node (Ganache) will start on port `8545` and will have the following accounts pre-funded with 100 ETH:
-
-```sh
-0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-```
-
-This is the same first account generated by Hardhat network as well.
-
-Deploy the contracts to the local network using the below command:
-
-```sh
-yarn workspace contracts deploy:bandada-semaphore --network local
-```
-
-The addresses of contracts deployed in a fresh local network would be:
-
-```sh
-Pairing library has been deployed to:               0x5FbDB2315678afecb367f032d93F642f64180aa3
-SemaphoreVerifier contract has been deployed to:    0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
-Bandada contract has been deployed to:             0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
-BandadaSemaphore contract has been deployed to:    0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9
-```
-
-These values are set as defaults in `libs/utils/src/contract-addresses.ts`. If you change the contract and deploy again, new address needs to be set here.
-
-To reset the local network or TheGraph node, you can stop the docker containers, and delete the respective folders inside `./.data`.
-
-## Environment variables
-
-Below are the ENV variables used by the `api`:
-
-| Key                   | Description                                                              |
-| --------------------- | ------------------------------------------------------------------------ |
-| DB_TYPE               | Type of the SQL database - `postgres`/`sqlite`.                          |
-| DB_URL                | Connection string for the database. Path to DB file in case of `sqlite`. |
-| API_URL               | Public URL of the api.                                                   |
-| DASHBOARD_URL         | Public URL of the dashboard.                                             |
-| ETHEREUM_NETWORK      | Ethereum network where the contract is deployed.                         |
-| IRON_SESSION_PASSWORD | Secret password used for iron-session.                                   |
-| INFURA_API_KEY        | API Key for Infura. This is used for executing blockchain transactions.  |
-| BACKEND_PRIVATE_KEY   | Ethereum wallet private key used for making blockchain transactions.     |
-| SIWE_STATEMENT        | Statement used as a SIWE message.                                        |
-| GITHUB_CLIENT_ID      | Github client id used for credential groups.                             |
-| GITHUB_CLIENT_SECRET  | Github client secret used for credential groups.                         |
-| TWITTER_REDIRECT_URI  | Twitter redirect URL used for credential groups.                         |
-| TWITTER_CLIENT_ID     | Twitter client id used for credential groups.                            |
-| TWITTER_CLIENT_SECRET | Twitter client secret used for credential groups.                        |
-
-## API
-
-Bandada provides APIs to get groups data and manage group members. You can add or remove members in a group that you are admin of, using the API key.
-
-To enable API access for a group, you can go to the group page in the dashboard, and switch on the "Enable API Access" toggle button. Once the API is enabled, a new API key will be generated for you.
-
-You can disable the API access anytime using the same toggle button.
-
-For a complete list of the endpoints you can use go to https://api.bandada.pse.dev.
+The command will automatically verify that the modified files adhere to the rules of ESLint and Prettier.
