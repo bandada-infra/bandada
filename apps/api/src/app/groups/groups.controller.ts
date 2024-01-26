@@ -48,7 +48,9 @@ export class GroupsController {
         const groupIds = groups.map((group) => group.id)
         const fingerprints = await this.groupsService.getFingerprints(groupIds)
 
-        return groups.map((group, index) => mapGroupToResponseDTO(group, fingerprints[index]))
+        return groups.map((group, index) =>
+            mapGroupToResponseDTO(group, fingerprints[index])
+        )
     }
 
     @Get(":group")
