@@ -133,8 +133,10 @@ export default function GroupsPage(): JSX.Element {
                     >
                         {_groups
                             .filter(filterGroup)
-                            .sort((a, b) =>
-                                a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+                            .sort(
+                                (a, b) =>
+                                    new Date(b.createdAt).getTime() -
+                                    new Date(a.createdAt).getTime()
                             )
                             .map((group) => (
                                 <Link
