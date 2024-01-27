@@ -42,7 +42,6 @@ export default function GroupsPage(): JSX.Element {
                         }
                     }),
                     getOffchainGroups(admin.id).then((offchainGroups) => {
-                        console.log("Offchain Groups Response:", offchainGroups) // Log the response
                         if (offchainGroups) {
                             setGroups((groups) => [
                                 ...groups,
