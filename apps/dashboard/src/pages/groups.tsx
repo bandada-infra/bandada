@@ -37,7 +37,6 @@ export default function GroupsPage(): JSX.Element {
 
                 await Promise.all([
                     getOnchainGroups(admin.address).then((onchainGroups) => {
-                        
                         if (onchainGroups) {
                             setGroups((groups) => [...groups, ...onchainGroups])
                         }
