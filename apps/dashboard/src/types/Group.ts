@@ -10,6 +10,7 @@ export type Group = {
     admin: string
     apiEnabled?: boolean
     apiKey?: string
+    createdAt?: string 
 }
 
 export type GroupSize = {

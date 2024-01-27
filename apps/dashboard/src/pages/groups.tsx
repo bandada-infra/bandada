@@ -37,11 +37,13 @@ export default function GroupsPage(): JSX.Element {
 
                 await Promise.all([
                     getOnchainGroups(admin.address).then((onchainGroups) => {
+                        
                         if (onchainGroups) {
                             setGroups((groups) => [...groups, ...onchainGroups])
                         }
                     }),
                     getOffchainGroups(admin.id).then((offchainGroups) => {
+                        console.log("Offchain Groups Response:", offchainGroups) // Log the response
                         if (offchainGroups) {
                             setGroups((groups) => [
                                 ...groups,
@@ -135,8 +137,8 @@ export default function GroupsPage(): JSX.Element {
                             .filter(filterGroup)
                             .sort(
                                 (a, b) =>
-                                    new Date(b.createdAt).getTime() -
-                                    new Date(a.createdAt).getTime()
+                                    new Date(b.createdAt || "").getTime() - // Convert string to Date object
+                                    new Date(a.createdAt || "").getTime()
                             )
                             .map((group) => (
                                 <Link
