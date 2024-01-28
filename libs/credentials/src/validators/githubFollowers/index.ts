@@ -17,8 +17,10 @@ const validator: Validator = {
      * @param context Utility functions and other context variables.
      * @returns True if the user meets the criteria.
      */
-    async validate(criteria: Criteria, { profile }) {
-        return profile.followers >= criteria.minFollowers
+    async validate(criteria: Criteria, context) {
+        if ("profile" in context)
+            return context.profile.followers >= criteria.minFollowers
+        throw new Error("No profile object found")
     }
 }
 

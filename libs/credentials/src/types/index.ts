@@ -1,5 +1,7 @@
-export type Context = {
-    utils: {
+import { BigNumberish } from "ethers"
+
+export type Web2Context = {
+    utils?: {
         api: (endpoint: string) => Promise<any>
     }
     profile: any
@@ -8,10 +10,21 @@ export type Context = {
     }
 }
 
+export type BlockchainContext = {
+    address: BigNumberish
+    jsonRpcProvider: any
+    blockNumber?: bigint
+}
+
+export type Context = Web2Context | BlockchainContext
+
 export type Handler = (criteria: any, context: Context) => Promise<boolean>
 
 export interface Provider {
     name: string
+}
+
+export interface Web2Provider extends Provider {
     apiURL: string
     getAuthUrl: (clientId: string, state: string, redirectUri: string) => string
     getAccessToken: (
@@ -22,6 +35,11 @@ export interface Provider {
         redirectUri: string
     ) => Promise<string>
     getProfile: (accessToken: string) => Promise<any>
+}
+
+export interface BlockchainProvider extends Provider {
+    getAddress: (message: string, signature: string) => Promise<BigNumberish>
+    getJsonRpcProvider: (url: string) => Promise<any>
 }
 
 export interface Validator {
