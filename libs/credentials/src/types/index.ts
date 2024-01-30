@@ -13,7 +13,7 @@ export type Web2Context = {
 export type BlockchainContext = {
     address: BigNumberish
     jsonRpcProvider: any
-    blockNumber?: bigint
+    blockNumber?: number
 }
 
 export type Context = Web2Context | BlockchainContext
