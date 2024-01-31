@@ -1,7 +1,9 @@
 name: Deploy
 on:
     push:
-        branches: [main]
+        branches:
+            - main
+            - dev
     workflow_dispatch:
         inputs:
             build:
@@ -36,13 +38,25 @@ jobs:
             contents: read
 
         steps:
-            - name: Check branch
+            - name: Manipulate Environment
+              id: manipulate
               run: |
-                  if [ "${{ env.DATA_ENV }}" = "prod" ]; then
-                    if [ "$GITHUB_REF_NAME" != "main" ]; then
-                      echo "Operation not permitted"
-                      exit 1
-                    fi
+                  if [ "${{ github.event_name }}" = "push" ] && [ "$GITHUB_REF_NAME" = "main" ]; then
+                    echo "env=prod" >> $GITHUB_OUTPUT
+                  elif [ "${{ github.event_name }}" = "push" ] && [ "$GITHUB_REF_NAME" = "dev" ]; then
+                    echo "env=stg" >> $GITHUB_OUTPUT
+                  elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+                    echo "env=${{ env.DATA_ENV }}" >> $GITHUB_OUTPUT
+                  else
+                    echo "Operation not permitted"
+                    exit 1
+                  fi
+
+            - name: Check production branch
+              run: |
+                  if [ "${{ steps.manipulate.outputs.env }}" = "prod" ] && [ "$GITHUB_REF_NAME" != "main" ]; then
+                    echo "Operation not permitted"
+                    exit 1
                   fi
 
             - name: Checkout
@@ -59,8 +73,8 @@ jobs:
 
             - name: Build and Push images to ECR
               run: |
-                  .github/scripts/build.sh ${{ env.DATA }} ${{ env.DATA_ENV }}
+                  .github/scripts/build.sh ${{ env.DATA }} ${{ steps.manipulate.outputs.env }}
 
             - name: Create Deployment
               run: |
-                  .github/scripts/deploy.sh ${{ env.DATA_ENV }}
+                  .github/scripts/deploy.sh ${{ steps.manipulate.outputs.env }}
