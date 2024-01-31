@@ -28,7 +28,7 @@ describe("Credentials library", () => {
         it("Should add a validator to the list of supported validators", () => {
             addValidator({} as any)
 
-            expect(validators).toHaveLength(7)
+            expect(validators).toHaveLength(8)
         })
     })
 
@@ -36,7 +36,7 @@ describe("Credentials library", () => {
         it("Should add 2 validators to the list of supported validators", () => {
             addValidators([{} as any, {} as any])
 
-            expect(validators).toHaveLength(9)
+            expect(validators).toHaveLength(10)
         })
     })
 
