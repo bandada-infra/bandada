@@ -14,5 +14,9 @@ export class AddMemberDto {
 
     @IsOptional()
     @IsString()
+    readonly network: string
+
+    @IsOptional()
+    @IsString()
     readonly blockNumber: string
 }

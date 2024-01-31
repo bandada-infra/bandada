@@ -250,6 +250,7 @@ export async function addMemberByCredentials(
     oAuthState: string,
     oAuthCode: string,
     address: string,
+    network: string,
     blockNumber?: string
 ): Promise<string | null> {
     try {
@@ -259,6 +260,7 @@ export async function addMemberByCredentials(
                 oAuthCode,
                 oAuthState,
                 address,
+                network,
                 blockNumber
             }
         })

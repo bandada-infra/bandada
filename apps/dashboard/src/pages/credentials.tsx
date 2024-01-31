@@ -40,6 +40,7 @@ export default function CredentialsPage() {
                 const providerName = _searchParams.get("provider")
                 const clientRedirectUri =
                     _searchParams.get("redirect_uri") || undefined
+                const network = _searchParams.get("network")
                 const blockNumber = _searchParams.get("block")
 
                 const state = await setOAuthState(
@@ -65,6 +66,7 @@ export default function CredentialsPage() {
                             state,
                             "",
                             admin.address,
+                            network,
                             blockNumberVal
                         )
 

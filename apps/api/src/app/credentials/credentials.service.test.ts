@@ -141,7 +141,12 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            await credentialsService.addMember("code", _stateId, undefined)
+            await credentialsService.addMember(
+                "code",
+                _stateId,
+                undefined,
+                undefined
+            )
 
             const fun = credentialsService.setOAuthState({
                 groupId,
@@ -157,7 +162,12 @@ describe("CredentialsService", () => {
 
     describe("# addMember", () => {
         it("Should throw an error if the OAuth does not exist", async () => {
-            const fun = credentialsService.addMember("code", "123", undefined)
+            const fun = credentialsService.addMember(
+                "code",
+                "123",
+                undefined,
+                undefined
+            )
 
             await expect(fun).rejects.toThrow(`OAuth state does not exist`)
         })
@@ -172,6 +182,7 @@ describe("CredentialsService", () => {
             const clientRedirectUri = await credentialsService.addMember(
                 "code",
                 _stateId,
+                undefined,
                 undefined
             )
 
@@ -220,6 +231,7 @@ describe("CredentialsService", () => {
             const clientRedirectUri1 = await credentialsService.addMember(
                 "code",
                 _stateId1,
+                undefined,
                 undefined
             )
 
@@ -228,6 +240,7 @@ describe("CredentialsService", () => {
             const clientRedirectUri2 = await credentialsService.addMember(
                 "code",
                 _stateId2,
+                undefined,
                 undefined
             )
 
@@ -257,6 +270,7 @@ describe("CredentialsService", () => {
             const fun = credentialsService.addMember(
                 "code",
                 _stateId,
+                undefined,
                 undefined
             )
 
@@ -285,6 +299,7 @@ describe("CredentialsService", () => {
             const fun = credentialsService.addMember(
                 "code",
                 _stateId,
+                undefined,
                 undefined
             )
 

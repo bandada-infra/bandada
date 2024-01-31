@@ -47,7 +47,7 @@ export class CredentialsService {
             )
         }
 
-        if (!providers.map(p => p.name).includes(oAuthState.providerName)) {
+        if (!providers.map((p) => p.name).includes(oAuthState.providerName)) {
             throw new BadRequestException(
                 `OAuth provider '${oAuthState.providerName}' is not supported`
             )
@@ -81,6 +81,7 @@ export class CredentialsService {
         oAuthCode: string,
         oAuthState: string,
         address: string,
+        network: string,
         blockNumber?: string
     ): Promise<string> {
         if (!this.oAuthState.has(oAuthState)) {
@@ -105,12 +106,14 @@ export class CredentialsService {
         console.log("address", address)
 
         if (address) {
-            const web3providerURL =
-                process.env[`${providerName.toUpperCase()}_PROVIDER_URL`]
+            const web3providerRpcURL =
+                process.env[
+                    `${providerName.toUpperCase()}_${network.toUpperCase()}_RPC_URL`
+                ]
 
             const jsonRpcProvider = await (
                 provider as BlockchainProvider
-            ).getJsonRpcProvider(web3providerURL)
+            ).getJsonRpcProvider(web3providerRpcURL)
 
             const BlockNumberNumber = blockNumber
                 ? Number(blockNumber)
