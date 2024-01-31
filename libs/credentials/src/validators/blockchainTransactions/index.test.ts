@@ -18,9 +18,7 @@ describe("BlockchainTransactions", () => {
             },
             {
                 address: "0x",
-                jsonRpcProvider: {
-                    getTransactionCount: jest.fn().mockResolvedValue(12)
-                }
+                jsonRpcProvider: jsonRpcProviderMocked
             }
         )
 
