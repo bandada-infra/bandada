@@ -1,12 +1,14 @@
-import { providers } from "ethers"
 import { validateCredentials } from "../.."
 import blockchainTransactions from "./index"
 
 describe("BlockchainTransactions", () => {
-    const rpcUrl = "http://example.com"
+    const jsonRpcProviderMocked = {
+        getTransactionCount: jest.fn()
+    }
 
-    // eslint-disable-next-line
-    it.skip("Should return true if an account has greater than or equal to 10 transactions", async () => {
+    it("Should return true if an account has greater than or equal to 10 transactions", async () => {
+        jsonRpcProviderMocked.getTransactionCount.mockReturnValue(12)
+
         const result = await validateCredentials(
             {
                 id: blockchainTransactions.id,
@@ -16,25 +18,28 @@ describe("BlockchainTransactions", () => {
             },
             {
                 address: "0x",
-                jsonRpcProvider: new providers.JsonRpcProvider(rpcUrl)
+                jsonRpcProvider: {
+                    getTransactionCount: jest.fn().mockResolvedValue(12)
+                }
             }
         )
 
         expect(result).toBeTruthy()
     })
 
-    // eslint-disable-next-line
-    it.skip("Should return true if an account has greater than or equal to 10 transactions using the block number", async () => {
+    it("Should return true if an account has greater than or equal to 10 transactions using the block number", async () => {
+        jsonRpcProviderMocked.getTransactionCount.mockReturnValue(12)
+
         const result = await validateCredentials(
             {
                 id: blockchainTransactions.id,
                 criteria: {
-                    minTransactions: 46
+                    minTransactions: 10
                 }
             },
             {
                 address: "0x",
-                jsonRpcProvider: new providers.JsonRpcProvider(rpcUrl),
+                jsonRpcProvider: jsonRpcProviderMocked,
                 blockNumber: 4749638
             }
         )
