@@ -103,8 +103,6 @@ export class CredentialsService {
 
         let context
 
-        console.log("address", address)
-
         if (address) {
             const web3providerRpcURL =
                 process.env[
@@ -166,9 +164,6 @@ export class CredentialsService {
                 "OAuth account has already joined the group"
             )
         }
-
-        console.log("group.credentials", group.credentials)
-        console.log("context", context)
 
         // Check credentials.
         if (
