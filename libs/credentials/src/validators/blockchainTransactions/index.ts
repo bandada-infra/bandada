@@ -27,7 +27,7 @@ const validator: Validator = {
             )
             return transactionCount >= criteria.minTransactions
         }
-        throw new Error("No publicClient object found")
+        throw new Error("No address value found")
     }
 }
 
