@@ -18,6 +18,6 @@ export class CredentialsController {
     async addMemberByCredentials(
         @Body() dto: AddMemberDto
     ): Promise<void | any> {
-        return this.credentialsService.addMember(dto.oAuthCode, dto.oAuthState)
+        return this.credentialsService.addMember(dto.oAuthCode, dto.oAuthState, dto.address, dto.blockNumber)
     }
 }

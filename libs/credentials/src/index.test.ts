@@ -12,7 +12,7 @@ describe("Credentials library", () => {
         it("Should add a provider to the list of supported providers", () => {
             addProvider({} as any)
 
-            expect(providers).toHaveLength(3)
+            expect(providers).toHaveLength(4)
         })
     })
 
@@ -20,7 +20,7 @@ describe("Credentials library", () => {
         it("Should add 2 providers to the list of supported providers", () => {
             addProviders([{} as any, {} as any])
 
-            expect(providers).toHaveLength(5)
+            expect(providers).toHaveLength(6)
         })
     })
 
@@ -28,7 +28,7 @@ describe("Credentials library", () => {
         it("Should add a validator to the list of supported validators", () => {
             addValidator({} as any)
 
-            expect(validators).toHaveLength(6)
+            expect(validators).toHaveLength(7)
         })
     })
 
@@ -36,7 +36,7 @@ describe("Credentials library", () => {
         it("Should add 2 validators to the list of supported validators", () => {
             addValidators([{} as any, {} as any])
 
-            expect(validators).toHaveLength(8)
+            expect(validators).toHaveLength(9)
         })
     })
 

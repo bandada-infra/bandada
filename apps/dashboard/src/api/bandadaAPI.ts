@@ -248,14 +248,18 @@ export async function setOAuthState(
  */
 export async function addMemberByCredentials(
     oAuthState: string,
-    oAuthCode: string
+    oAuthCode: string,
+    address: string,
+    blockNumber?: string
 ): Promise<string | null> {
     try {
         return await request(`${API_URL}/credentials`, {
             method: "POST",
             data: {
                 oAuthCode,
-                oAuthState
+                oAuthState,
+                address,
+                blockNumber
             }
         })
     } catch (error: any) {
