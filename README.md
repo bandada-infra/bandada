@@ -288,7 +288,7 @@ Bandada offers APIs for retrieving group data and managing group members. As an 
 
 To enable API access for a group, go to the group page in the dashboard and toggle the **Enable API Access** button. Once enabled, a new API key will be generated for you. You can disable API access at any time using the same toggle button.
 
-![Enable API access toggle for off-chain group](https://file.notion.so/f/f/56f3d122-cf5c-44f7-badf-6384ac445e55/99d93ae4-713a-4449-93d5-0543e9f57889/Screenshot_from_2024-01-24_16-16-36.png?id=5f9c4aa7-d990-4b95-bb7b-f35d25057eb8&table=block&spaceId=56f3d122-cf5c-44f7-badf-6384ac445e55&expirationTimestamp=1706196071431&signature=NM1-lfvwzFlbJlsE3UpxZu-APppo5NtCIOpQfXBAGik&downloadName=Screenshot+from+2024-01-24+16-16-36.png)
+[Enable API access toggle for off-chain group](https://github.com/privacy-scaling-explorations/bandada/assets/20580910/e7106f24-39c8-422d-97a5-11756200ae03)
 
 ## 🔌 APIs endpoints
 
