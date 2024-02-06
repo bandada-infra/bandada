@@ -19,8 +19,8 @@ export class CredentialsController {
         @Body() dto: AddMemberDto
     ): Promise<void | any> {
         return this.credentialsService.addMember(
-            dto.oAuthCode,
             dto.oAuthState,
+            dto.oAuthCode,
             dto.address,
             dto.network,
             dto.blockNumber

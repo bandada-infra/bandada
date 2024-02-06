@@ -248,9 +248,9 @@ export async function setOAuthState(
  */
 export async function addMemberByCredentials(
     oAuthState: string,
-    oAuthCode: string,
-    address: string,
-    network: string,
+    oAuthCode?: string,
+    address?: string,
+    network?: string,
     blockNumber?: string
 ): Promise<string | null> {
     try {
