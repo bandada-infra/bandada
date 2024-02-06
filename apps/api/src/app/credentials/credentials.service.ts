@@ -3,7 +3,9 @@ import {
     getProvider,
     BlockchainProvider,
     Web2Provider,
-    providers
+    providers,
+    Web2Context,
+    BlockchainContext
 } from "@bandada/credentials"
 import { id } from "@ethersproject/hash"
 import {
@@ -101,7 +103,7 @@ export class CredentialsService {
 
         let accountHash: string
 
-        let context
+        let context: Web2Context | BlockchainContext
 
         if (address) {
             const web3providerRpcURL =
