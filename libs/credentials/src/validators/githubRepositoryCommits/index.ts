@@ -19,23 +19,26 @@ const validator: Validator = {
      * @param context Utility functions and other context variables.
      * @returns True if the user meets the criteria.
      */
-    async validate(criteria: Criteria, { utils, profile }) {
-        let allCommits = []
+    async validate(criteria: Criteria, context) {
+        if ("profile" in context && context.utils) {
+            let allCommits = []
 
-        for (let i = 0; allCommits.length % 100 === 0; i += 1) {
-            // eslint-disable-next-line no-await-in-loop
-            const commits = await utils.api(
-                `repos/${profile.login}/${criteria.repository}/commits?author=${profile.login}&per_page=100&page=${i}`
-            )
+            for (let i = 0; allCommits.length % 100 === 0; i += 1) {
+                // eslint-disable-next-line no-await-in-loop
+                const commits = await context.utils.api(
+                    `repos/${context.profile.login}/${criteria.repository}/commits?author=${context.profile.login}&per_page=100&page=${i}`
+                )
 
-            if (commits.length === 0) {
-                break
+                if (commits.length === 0) {
+                    break
+                }
+
+                allCommits = allCommits.concat(commits)
             }
 
-            allCommits = allCommits.concat(commits)
+            return allCommits.length >= criteria.minCommits
         }
-
-        return allCommits.length >= criteria.minCommits
+        throw new Error("No profile or utils object found")
     }
 }
 

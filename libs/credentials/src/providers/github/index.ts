@@ -1,7 +1,7 @@
 import { request } from "@bandada/utils"
-import { Provider } from "../.."
+import { Web2Provider } from "../.."
 
-const provider: Provider = {
+const provider: Web2Provider = {
     name: "github",
     apiURL: "https://api.github.com",
 

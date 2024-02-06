@@ -27,9 +27,11 @@ jest.mock("@bandada/credentials", () => ({
         getAccessToken: () => "123",
         getProfile: () => ({
             id: "id"
-        })
+        }),
+        getJsonRpcProvider: jest.fn()
     })),
-    validateCredentials: jest.fn(() => true)
+    validateCredentials: jest.fn(() => true),
+    providers: [{ name: "twitter" }, { name: "github" }, { name: "blockchain" }]
 }))
 
 describe("CredentialsService", () => {
@@ -140,7 +142,12 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            await credentialsService.addMember("code", _stateId)
+            await credentialsService.addMember(
+                "code",
+                _stateId,
+                undefined,
+                undefined
+            )
 
             const fun = credentialsService.setOAuthState({
                 groupId,
@@ -156,7 +163,12 @@ describe("CredentialsService", () => {
 
     describe("# addMember", () => {
         it("Should throw an error if the OAuth does not exist", async () => {
-            const fun = credentialsService.addMember("code", "123")
+            const fun = credentialsService.addMember(
+                "code",
+                "123",
+                undefined,
+                undefined
+            )
 
             await expect(fun).rejects.toThrow(`OAuth state does not exist`)
         })
@@ -170,7 +182,9 @@ describe("CredentialsService", () => {
 
             const clientRedirectUri = await credentialsService.addMember(
                 "code",
-                _stateId
+                _stateId,
+                undefined,
+                undefined
             )
 
             expect(clientRedirectUri).toBeUndefined()
@@ -217,14 +231,18 @@ describe("CredentialsService", () => {
 
             const clientRedirectUri1 = await credentialsService.addMember(
                 "code",
-                _stateId1
+                _stateId1,
+                undefined,
+                undefined
             )
 
             expect(clientRedirectUri1).toBeUndefined()
 
             const clientRedirectUri2 = await credentialsService.addMember(
                 "code",
-                _stateId2
+                _stateId2,
+                undefined,
+                undefined
             )
 
             expect(clientRedirectUri2).toBeUndefined()
@@ -250,7 +268,12 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            const fun = credentialsService.addMember("code", _stateId)
+            const fun = credentialsService.addMember(
+                "code",
+                _stateId,
+                undefined,
+                undefined
+            )
 
             await expect(fun).rejects.toThrow(
                 `OAuth account does not match criteria`
@@ -274,11 +297,69 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            const fun = credentialsService.addMember("code", _stateId)
+            const fun = credentialsService.addMember(
+                "code",
+                _stateId,
+                undefined,
+                undefined
+            )
 
             await expect(fun).rejects.toThrow(
                 `OAuth account has already joined the group`
             )
+        })
+
+        it("Should add a member to a credential group using the number of transactions", async () => {
+            const { id } = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: JSON.stringify({
+                        id: "BLOCKCHAIN_TRANSACTIONS",
+                        criteria: {
+                            minTransactions: 12
+                        }
+                    })
+                },
+                "admin"
+            )
+
+            groupId = id
+
+            const _stateId = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "1",
+                providerName: "blockchain"
+            })
+
+            const clientRedirectUri = await credentialsService.addMember(
+                "",
+                _stateId,
+                "0x",
+                "sepolia"
+            )
+
+            expect(clientRedirectUri).toBeUndefined()
+        })
+
+        it("Should add a member to a credential group using the number of transactions at a specific block number", async () => {
+            const _stateId = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "2",
+                providerName: "blockchain"
+            })
+
+            const clientRedirectUri = await credentialsService.addMember(
+                "",
+                _stateId,
+                "0x1",
+                "sepolia",
+                "1234"
+            )
+
+            expect(clientRedirectUri).toBeUndefined()
         })
     })
 })

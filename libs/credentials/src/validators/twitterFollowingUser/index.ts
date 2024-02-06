@@ -17,26 +17,29 @@ const validator: Validator = {
      * @param context Utility functions and other context variables.
      * @returns True if the user meets the criteria.
      */
-    async validate(criteria: Criteria, { utils, profile }) {
-        let allFollowing = []
-        let nextToken = null
+    async validate(criteria: Criteria, context) {
+        if ("profile" in context && context.utils) {
+            let allFollowing = []
+            let nextToken = null
 
-        for (let i = 0; nextToken !== undefined; i += 1) {
-            // eslint-disable-next-line no-await-in-loop
-            const { data: followingData, meta } = await utils.api(
-                `users/${profile.id}/following?max_results=1000${
-                    nextToken ? `&pagination_token=${nextToken}` : ""
-                }`
+            for (let i = 0; nextToken !== undefined; i += 1) {
+                // eslint-disable-next-line no-await-in-loop
+                const { data: followingData, meta } = await context.utils.api(
+                    `users/${context.profile.id}/following?max_results=1000${
+                        nextToken ? `&pagination_token=${nextToken}` : ""
+                    }`
+                )
+
+                nextToken = meta?.next_token
+
+                allFollowing = allFollowing.concat(followingData)
+            }
+
+            return allFollowing.some(
+                ({ username }) => username === criteria.username
             )
-
-            nextToken = meta?.next_token
-
-            allFollowing = allFollowing.concat(followingData)
         }
-
-        return allFollowing.some(
-            ({ username }) => username === criteria.username
-        )
+        throw new Error("No utils or profile object found")
     }
 }
 

@@ -4,7 +4,9 @@ import {
     githubPersonalStars,
     githubRepositoryCommits,
     twitterFollowers,
-    twitterFollowingUser
+    twitterFollowingUser,
+    blockchainTransactions,
+    blockchainBalance
 } from "./validators/index"
 
 const validators: Validator[] = [
@@ -12,7 +14,9 @@ const validators: Validator[] = [
     githubPersonalStars,
     githubRepositoryCommits,
     twitterFollowers,
-    twitterFollowingUser
+    twitterFollowingUser,
+    blockchainTransactions,
+    blockchainBalance
 ]
 
 export default validators

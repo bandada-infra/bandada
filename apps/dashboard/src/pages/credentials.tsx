@@ -1,13 +1,35 @@
-import { getProvider } from "@bandada/credentials"
-import { Flex, Text } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import {
+    getProvider,
+    blockchain,
+    Web2Provider,
+    twitter,
+    github
+} from "@bandada/credentials"
+import { Flex, Text, Button } from "@chakra-ui/react"
+import { useEffect, useState, useCallback, useContext } from "react"
 import { useSearchParams } from "react-router-dom"
+import { useConnectModal, useAccountModal } from "@rainbow-me/rainbowkit"
+import { useAccount } from "wagmi"
+import { shortenAddress } from "@bandada/utils"
 import { addMemberByCredentials, setOAuthState } from "../api/bandadaAPI"
+import { AuthContext } from "../context/auth-context"
 
 export default function CredentialsPage() {
     const [_searchParams] = useSearchParams()
     const [_message, setMessage] = useState<string>(
         "Joining credential group..."
+    )
+
+    const { address } = useAccount()
+    const { openConnectModal } = useConnectModal()
+    const { openAccountModal } = useAccountModal()
+    const [isBlockchain, setIsBlockchain] = useState(false)
+
+    const { admin } = useContext(AuthContext)
+
+    const isLoggedInAdmin = useCallback(
+        () => admin && admin.address === address,
+        [address, admin]
     )
 
     useEffect(() => {
@@ -18,6 +40,8 @@ export default function CredentialsPage() {
                 const providerName = _searchParams.get("provider")
                 const clientRedirectUri =
                     _searchParams.get("redirect_uri") || undefined
+                const network = _searchParams.get("network")
+                const blockNumber = _searchParams.get("block")
 
                 const state = await setOAuthState(
                     groupId as string,
@@ -26,7 +50,39 @@ export default function CredentialsPage() {
                     clientRedirectUri
                 )
 
-                if (state) {
+                setIsBlockchain(providerName === blockchain.name)
+
+                if (
+                    providerName === blockchain.name &&
+                    isLoggedInAdmin() &&
+                    state
+                ) {
+                    let blockNumberVal
+                    if (blockNumber) {
+                        blockNumberVal = blockNumber
+                    }
+                    if (state && admin && network) {
+                        const redirectUrl = await addMemberByCredentials(
+                            state,
+                            "",
+                            admin.address,
+                            network,
+                            blockNumberVal
+                        )
+
+                        if (redirectUrl) {
+                            window.location.replace(redirectUrl)
+                        } else {
+                            setMessage("You have joined the group!")
+                        }
+                    }
+                }
+
+                if (
+                    (providerName === twitter.name ||
+                        providerName === github.name) &&
+                    state
+                ) {
                     const clientId = import.meta.env[
                         `VITE_${providerName?.toUpperCase()}_CLIENT_ID`
                     ]
@@ -36,7 +92,7 @@ export default function CredentialsPage() {
 
                     const provider = getProvider(providerName as string)
 
-                    const authUrl = provider.getAuthUrl(
+                    const authUrl = (provider as Web2Provider).getAuthUrl(
                         clientId,
                         state,
                         redirectUri
@@ -52,7 +108,9 @@ export default function CredentialsPage() {
 
                 const clientRedirectUri = await addMemberByCredentials(
                     oAuthState,
-                    oAuthCode
+                    oAuthCode,
+                    "",
+                    ""
                 )
 
                 if (clientRedirectUri) {
@@ -62,11 +120,32 @@ export default function CredentialsPage() {
                 }
             }
         })()
-    }, [_searchParams])
+    }, [_searchParams, admin, isLoggedInAdmin])
 
     return (
-        <Flex flex="1" justify="center" align="center">
-            <Text>{_message}</Text>
-        </Flex>
+        <>
+            {isBlockchain && (
+                <Flex justifyContent="center" align="center" mt="10">
+                    <Button
+                        variant="solid"
+                        colorScheme="primary"
+                        onClick={
+                            !isLoggedInAdmin()
+                                ? openConnectModal
+                                : openAccountModal
+                        }
+                    >
+                        {!isLoggedInAdmin()
+                            ? "Connect Wallet"
+                            : `Connected as ${shortenAddress(
+                                  address as string
+                              )}`}
+                    </Button>
+                </Flex>
+            )}
+            <Flex flex="1" justify="center" align="center">
+                <Text>{_message}</Text>
+            </Flex>
+        </>
     )
 }

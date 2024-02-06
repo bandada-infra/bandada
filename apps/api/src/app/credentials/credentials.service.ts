@@ -1,4 +1,12 @@
-import { validateCredentials, getProvider } from "@bandada/credentials"
+import {
+    validateCredentials,
+    getProvider,
+    BlockchainProvider,
+    Web2Provider,
+    providers,
+    Web2Context,
+    BlockchainContext
+} from "@bandada/credentials"
 import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
@@ -41,7 +49,7 @@ export class CredentialsService {
             )
         }
 
-        if (!["github", "twitter"].includes(oAuthState.providerName)) {
+        if (!providers.map((p) => p.name).includes(oAuthState.providerName)) {
             throw new BadRequestException(
                 `OAuth provider '${oAuthState.providerName}' is not supported`
             )
@@ -71,7 +79,13 @@ export class CredentialsService {
      * @param OAuthState OAuth state to prevent forgery attacks.
      * @returns Redirect URI
      */
-    async addMember(oAuthCode: string, oAuthState: string): Promise<string> {
+    async addMember(
+        oAuthCode: string,
+        oAuthState: string,
+        address: string,
+        network: string,
+        blockNumber?: string
+    ): Promise<string> {
         if (!this.oAuthState.has(oAuthState)) {
             throw new BadRequestException(`OAuth state does not exist`)
         }
@@ -86,25 +100,62 @@ export class CredentialsService {
         const group = await this.groupsService.getGroup(groupId)
 
         const provider = getProvider(providerName)
-        const clientId = process.env[`${providerName.toUpperCase()}_CLIENT_ID`]
-        const clientSecret =
-            process.env[`${providerName.toUpperCase()}_CLIENT_SECRET`]
-        const redirectUri =
-            process.env[`${providerName.toUpperCase()}_REDIRECT_URI`]
 
-        // Exchange the OAuth code for a valid access token.
-        const accessToken = await provider.getAccessToken(
-            clientId,
-            clientSecret,
-            oAuthCode,
-            oAuthState,
-            redirectUri
-        )
+        let accountHash: string
 
-        const profile = await provider.getProfile(accessToken)
+        let context: Web2Context | BlockchainContext
 
-        // Check if the same account has already joined the group.
-        const accountHash = id(profile.id + groupId)
+        if (address) {
+            const web3providerRpcURL =
+                process.env[
+                    `${providerName.toUpperCase()}_${network.toUpperCase()}_RPC_URL`
+                ]
+
+            const jsonRpcProvider = await (
+                provider as BlockchainProvider
+            ).getJsonRpcProvider(web3providerRpcURL)
+
+            const BlockNumberNumber = blockNumber
+                ? Number(blockNumber)
+                : undefined
+
+            context = {
+                address,
+                jsonRpcProvider,
+                blockNumber: BlockNumberNumber
+            }
+
+            // Check if the same account has already joined the group.
+            accountHash = id(address + groupId)
+        } else {
+            const clientId =
+                process.env[`${providerName.toUpperCase()}_CLIENT_ID`]
+            const clientSecret =
+                process.env[`${providerName.toUpperCase()}_CLIENT_SECRET`]
+            const redirectUri =
+                process.env[`${providerName.toUpperCase()}_REDIRECT_URI`]
+
+            // Exchange the OAuth code for a valid access token.
+            const accessToken = await (provider as Web2Provider).getAccessToken(
+                clientId,
+                clientSecret,
+                oAuthCode,
+                oAuthState,
+                redirectUri
+            )
+
+            const profile = await (provider as Web2Provider).getProfile(
+                accessToken
+            )
+
+            context = {
+                profile,
+                accessTokens: { [providerName]: accessToken }
+            }
+
+            // Check if the same account has already joined the group.
+            accountHash = id(profile.id + groupId)
+        }
 
         if (
             group.oAuthAccounts.find(
@@ -118,10 +169,7 @@ export class CredentialsService {
 
         // Check credentials.
         if (
-            !(await validateCredentials(JSON.parse(group.credentials), {
-                profile,
-                accessTokens: { [providerName]: accessToken }
-            }))
+            !(await validateCredentials(JSON.parse(group.credentials), context))
         ) {
             throw new UnauthorizedException(
                 "OAuth account does not match criteria"

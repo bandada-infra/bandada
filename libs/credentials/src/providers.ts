@@ -1,6 +1,6 @@
 import { Provider } from "./types"
-import { github, twitter } from "./providers/index"
+import { github, twitter, blockchain } from "./providers/index"
 
-const providers: Provider[] = [github, twitter]
+const providers: Provider[] = [github, twitter, blockchain]
 
 export default providers
