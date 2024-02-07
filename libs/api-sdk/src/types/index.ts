@@ -42,5 +42,6 @@ export type InviteResponse = {
 
 export enum SupportedUrl {
     DEV = "http://localhost:3000",
-    PROD = "https://api.bandada.pse.dev"
+    PROD = "https://api.bandada.pse.dev",
+    STAGING = "https://api-staging.bandada.pse.dev"
 }
