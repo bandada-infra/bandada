@@ -23,10 +23,12 @@ const validator: Validator = {
         if ("profile" in context && context.utils) {
             let allCommits = []
 
+            const [repoOwner, repoName] = criteria.repository.split("/", 2)
+
             for (let i = 0; allCommits.length % 100 === 0; i += 1) {
                 // eslint-disable-next-line no-await-in-loop
                 const commits = await context.utils.api(
-                    `repos/${context.profile.login}/${criteria.repository}/commits?author=${context.profile.login}&per_page=100&page=${i}`
+                    `repos/${repoOwner}/${repoName}/commits?author=${context.profile.login}&per_page=100&page=${i}`
                 )
 
                 if (commits.length === 0) {
