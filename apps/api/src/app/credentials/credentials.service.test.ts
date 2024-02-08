@@ -143,10 +143,8 @@ describe("CredentialsService", () => {
             })
 
             await credentialsService.addMember(
-                "code",
                 _stateId,
-                undefined,
-                undefined
+                "code"
             )
 
             const fun = credentialsService.setOAuthState({
@@ -164,10 +162,8 @@ describe("CredentialsService", () => {
     describe("# addMember", () => {
         it("Should throw an error if the OAuth does not exist", async () => {
             const fun = credentialsService.addMember(
-                "code",
                 "123",
-                undefined,
-                undefined
+                "code"
             )
 
             await expect(fun).rejects.toThrow(`OAuth state does not exist`)
@@ -181,10 +177,8 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                "code",
                 _stateId,
-                undefined,
-                undefined
+                "code"
             )
 
             expect(clientRedirectUri).toBeUndefined()
@@ -230,19 +224,15 @@ describe("CredentialsService", () => {
             )
 
             const clientRedirectUri1 = await credentialsService.addMember(
-                "code",
                 _stateId1,
-                undefined,
-                undefined
+                "code"
             )
 
             expect(clientRedirectUri1).toBeUndefined()
 
             const clientRedirectUri2 = await credentialsService.addMember(
-                "code",
                 _stateId2,
-                undefined,
-                undefined
+                "code"
             )
 
             expect(clientRedirectUri2).toBeUndefined()
@@ -269,10 +259,8 @@ describe("CredentialsService", () => {
             })
 
             const fun = credentialsService.addMember(
-                "code",
                 _stateId,
-                undefined,
-                undefined
+                "code"
             )
 
             await expect(fun).rejects.toThrow(
@@ -298,10 +286,8 @@ describe("CredentialsService", () => {
             })
 
             const fun = credentialsService.addMember(
-                "code",
                 _stateId,
-                undefined,
-                undefined
+                "code"
             )
 
             await expect(fun).rejects.toThrow(
@@ -335,8 +321,8 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                "",
                 _stateId,
+                undefined,
                 "0x",
                 "sepolia"
             )
@@ -352,8 +338,8 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                "",
                 _stateId,
+                undefined,
                 "0x1",
                 "sepolia",
                 "1234"

@@ -80,10 +80,10 @@ export class CredentialsService {
      * @returns Redirect URI
      */
     async addMember(
-        oAuthCode: string,
         oAuthState: string,
-        address: string,
-        network: string,
+        oAuthCode?: string,
+        address?: string,
+        network?: string,
         blockNumber?: string
     ): Promise<string> {
         if (!this.oAuthState.has(oAuthState)) {
