@@ -142,12 +142,7 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            await credentialsService.addMember(
-                "code",
-                _stateId,
-                undefined,
-                undefined
-            )
+            await credentialsService.addMember(_stateId, "code")
 
             const fun = credentialsService.setOAuthState({
                 groupId,
@@ -163,12 +158,7 @@ describe("CredentialsService", () => {
 
     describe("# addMember", () => {
         it("Should throw an error if the OAuth does not exist", async () => {
-            const fun = credentialsService.addMember(
-                "code",
-                "123",
-                undefined,
-                undefined
-            )
+            const fun = credentialsService.addMember("123", "code")
 
             await expect(fun).rejects.toThrow(`OAuth state does not exist`)
         })
@@ -181,10 +171,8 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                "code",
                 _stateId,
-                undefined,
-                undefined
+                "code"
             )
 
             expect(clientRedirectUri).toBeUndefined()
@@ -230,19 +218,15 @@ describe("CredentialsService", () => {
             )
 
             const clientRedirectUri1 = await credentialsService.addMember(
-                "code",
                 _stateId1,
-                undefined,
-                undefined
+                "code"
             )
 
             expect(clientRedirectUri1).toBeUndefined()
 
             const clientRedirectUri2 = await credentialsService.addMember(
-                "code",
                 _stateId2,
-                undefined,
-                undefined
+                "code"
             )
 
             expect(clientRedirectUri2).toBeUndefined()
@@ -268,12 +252,7 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            const fun = credentialsService.addMember(
-                "code",
-                _stateId,
-                undefined,
-                undefined
-            )
+            const fun = credentialsService.addMember(_stateId, "code")
 
             await expect(fun).rejects.toThrow(
                 `OAuth account does not match criteria`
@@ -297,12 +276,7 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            const fun = credentialsService.addMember(
-                "code",
-                _stateId,
-                undefined,
-                undefined
-            )
+            const fun = credentialsService.addMember(_stateId, "code")
 
             await expect(fun).rejects.toThrow(
                 `OAuth account has already joined the group`
@@ -335,8 +309,8 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                "",
                 _stateId,
+                undefined,
                 "0x",
                 "sepolia"
             )
@@ -352,8 +326,8 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                "",
                 _stateId,
+                undefined,
                 "0x1",
                 "sepolia",
                 "1234"
