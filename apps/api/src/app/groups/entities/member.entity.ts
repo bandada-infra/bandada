@@ -1,10 +1,4 @@
-import {
-    CreateDateColumn,
-    Entity,
-    Index,
-    PrimaryColumn,
-    Timestamp
-} from "typeorm"
+import { CreateDateColumn, Entity, Index, PrimaryColumn } from "typeorm"
 
 @Entity("members")
 export class Member {
@@ -13,5 +7,5 @@ export class Member {
     id: string
 
     @CreateDateColumn({ name: "created_at" })
-    createdAt: Timestamp
+    createdAt: Date
 }

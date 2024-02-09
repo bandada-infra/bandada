@@ -1,5 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { Timestamp } from "typeorm"
 
 export class Group {
     @ApiProperty()
@@ -17,7 +16,7 @@ export class Group {
     @ApiProperty()
     fingerprintDuration: number
     @ApiProperty()
-    createdAt: Timestamp
+    createdAt: Date
     @ApiProperty({ isArray: true })
     members: string
     @ApiProperty()

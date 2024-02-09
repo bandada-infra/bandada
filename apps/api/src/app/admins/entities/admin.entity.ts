@@ -1,10 +1,4 @@
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryColumn,
-    Timestamp
-} from "typeorm"
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm"
 
 @Entity("admins")
 export class Admin {
@@ -19,5 +13,5 @@ export class Admin {
     username: string
 
     @CreateDateColumn({ name: "created_at" })
-    createdAt: Timestamp
+    createdAt: Date
 }

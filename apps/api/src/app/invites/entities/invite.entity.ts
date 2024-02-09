@@ -6,8 +6,7 @@ import {
     Index,
     JoinColumn,
     ManyToOne,
-    PrimaryGeneratedColumn,
-    Timestamp
+    PrimaryGeneratedColumn
 } from "typeorm"
 import { Group } from "../../groups/entities/group.entity"
 
@@ -30,5 +29,5 @@ export class Invite {
     group: Group
 
     @CreateDateColumn({ name: "created_at" })
-    createdAt: Timestamp
+    createdAt: Date
 }
