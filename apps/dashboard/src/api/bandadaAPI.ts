@@ -257,8 +257,8 @@ export async function addMemberByCredentials(
         return await request(`${API_URL}/credentials`, {
             method: "POST",
             data: {
-                oAuthCode,
                 oAuthState,
+                oAuthCode,
                 address,
                 network,
                 blockNumber
