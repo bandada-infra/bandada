@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
+import { Timestamp } from "typeorm"
 
 export class GroupResponse {
     @ApiProperty()
@@ -20,7 +21,7 @@ export class GroupResponse {
     @ApiProperty()
     apiKey: string
     @ApiProperty()
-    createdAt: Date
+    createdAt: Timestamp
     @ApiProperty()
-    updatedAt: Date
+    updatedAt: Timestamp
 }

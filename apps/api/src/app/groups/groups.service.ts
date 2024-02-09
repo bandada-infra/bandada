@@ -394,32 +394,31 @@ export class GroupsService {
     async addMembers(groupId: string, memberIds: string[]): Promise<Group> {
         const group = await this.getGroup(groupId)
 
-        await Promise.all(
-            memberIds.map(async (memberId) => {
-                const member = group.members.find((m) => m.id === memberId)
+        for (const memberId of memberIds) {
+            const member = group.members.find((m) => m.id === memberId)
 
-                if (!member) {
-                    let newMember: Member
+            if (!member) {
+                let newMember: Member
 
-                    // Check if the member is already a member of another group.
-                    const anotherGroupMember =
-                        await this.memberRepository.findOne({
-                            where: { id: memberId }
-                        })
+                // Check if the member is already a member of another group.
+                // eslint-disable-next-line
+                const anotherGroupMember = await this.memberRepository.findOne({
+                    where: { id: memberId }
+                })
 
-                    if (!anotherGroupMember) {
-                        newMember = new Member()
-                        newMember.id = memberId
+                if (!anotherGroupMember) {
+                    newMember = new Member()
+                    newMember.id = memberId
 
-                        await this.memberRepository.save(newMember)
-                    } else {
-                        newMember = anotherGroupMember
-                    }
-
-                    group.members.push(newMember)
+                    // eslint-disable-next-line
+                    await this.memberRepository.save(newMember)
+                } else {
+                    newMember = anotherGroupMember
                 }
-            })
-        )
+
+                group.members.push(newMember)
+            }
+        }
 
         await this.groupRepository.save(group)
 
@@ -606,7 +605,12 @@ export class GroupsService {
 
         return this.groupRepository.find({
             relations: { members: true },
-            where
+            where,
+            order: {
+                members: {
+                    createdAt: "ASC"
+                }
+            }
         })
     }
 
@@ -618,7 +622,12 @@ export class GroupsService {
     async getGroup(groupId: string): Promise<Group> {
         const group = await this.groupRepository.findOne({
             relations: { members: true, oAuthAccounts: true },
-            where: { id: groupId }
+            where: { id: groupId },
+            order: {
+                members: {
+                    createdAt: "ASC"
+                }
+            }
         })
 
         if (!group) {

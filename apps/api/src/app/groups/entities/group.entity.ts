@@ -7,6 +7,7 @@ import {
     ManyToMany,
     OneToMany,
     PrimaryColumn,
+    Timestamp,
     UpdateDateColumn
 } from "typeorm"
 import { OAuthAccount } from "../../credentials/entities/credentials-account.entity"
@@ -66,8 +67,8 @@ export class Group {
     apiKey: string
 
     @CreateDateColumn({ name: "created_at" })
-    createdAt: Date
+    createdAt: Timestamp
 
     @UpdateDateColumn({ name: "updated_at" })
-    updatedAt: Date
+    updatedAt: Timestamp
 }
