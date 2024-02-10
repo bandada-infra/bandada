@@ -4,5 +4,6 @@
         "baseUrl": ".",
         "declarationDir": "./types"
     },
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": ["**/*.test.ts"]
 }
