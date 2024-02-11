@@ -208,6 +208,11 @@ export default function AccessModeStep({
                                                     }
                                                 })
                                             }
+                                            placeholder={
+                                                parameter[0] === "repository"
+                                                    ? "<repo-owner>/<repo-name>"
+                                                    : undefined
+                                            }
                                         />
                                     )}
                                 </VStack>
