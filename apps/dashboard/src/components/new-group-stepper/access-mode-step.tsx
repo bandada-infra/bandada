@@ -208,6 +208,14 @@ export default function AccessModeStep({
                                                     }
                                                 })
                                             }
+                                            
+                                            placeholder={
+                                                parameter[0] === "repository"
+                                                    ? "Enter Repository Owner / Repository Name"
+                                                    : `Enter ${capitalize(parameter[0])}`
+                                            }
+                            
+                                           
                                         />
                                     )}
                                 </VStack>
