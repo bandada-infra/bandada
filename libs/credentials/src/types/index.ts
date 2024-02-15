@@ -1,5 +1,16 @@
 import { BigNumberish } from "ethers"
 
+export enum EASNetworks {
+    ETHEREUM = "ethereum",
+    ETHEREUM_SEPOLIA = "sepolia",
+    ARBITRUM = "arbitrum",
+    BASE = "base",
+    BASE_GOERLI = "base-goerli",
+    LINEA = "linea",
+    OPTIMISM = "optimism",
+    OPTIMISM_GOERLI = "optimism-goerli"
+}
+
 export type Web2Context = {
     utils?: {
         api: (endpoint: string) => Promise<any>
@@ -16,9 +27,19 @@ export type BlockchainContext = {
     blockNumber?: number
 }
 
-export type Context = Web2Context | BlockchainContext
+export type EASContext = {
+    recipient: BigNumberish
+    queryGraph: (query: string) => Promise<any>
+    attester?: BigNumberish
+    schemaId?: BigNumberish
+}
 
-export type Handler = (criteria: any, context: Context) => Promise<boolean>
+export type Context = Web2Context | BlockchainContext | EASContext
+
+export type Handler = (
+    criteria: any,
+    context: Context
+) => Promise<boolean> | boolean
 
 export interface Provider {
     name: string
@@ -40,6 +61,10 @@ export interface Web2Provider extends Provider {
 export interface BlockchainProvider extends Provider {
     getAddress: (message: string, signature: string) => Promise<BigNumberish>
     getJsonRpcProvider: (url: string) => Promise<any>
+}
+
+export interface EASProvider extends Provider {
+    queryGraph: (network: EASNetworks, query: string) => Promise<any>
 }
 
 export interface Validator {
