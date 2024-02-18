@@ -71,6 +71,42 @@ export default function AddMemberModal({
             alert("Please ensure there are no repeated member IDs!")
             return
         }
+        if (group.type === "on-chain" && group.members) {
+            const isHexadecimal = (str: string): boolean =>
+                /^0x[0-9A-Fa-f]+$/i.test(str)
+
+            const existingMembers = new Set(
+                group.members.map((memberId) => {
+                    // Check if member ID is hexadecimal
+                    if (isHexadecimal(memberId)) {
+                        return parseInt(memberId, 16) // Convert hexadecimal to decimal
+                    }
+                    return parseInt(memberId, 10) // Treat as decimal
+                })
+            )
+
+            const conflictingMembers = []
+
+            for (const memberId of memberIds) {
+                // Check if member ID is hexadecimal
+                const parsedMemberId = isHexadecimal(memberId)
+                    ? parseInt(memberId, 16)
+                    : parseInt(memberId, 10)
+
+                if (existingMembers.has(parsedMemberId)) {
+                    conflictingMembers.push(parsedMemberId)
+                }
+            }
+
+            if (conflictingMembers.length > 0) {
+                alert(
+                    `Member IDs ${conflictingMembers.join(
+                        ", "
+                    )} already exist in the group.`
+                )
+                return
+            }
+        }
 
         const confirmMessage = `
 Are you sure you want to add the following members?
