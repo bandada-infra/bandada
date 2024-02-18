@@ -230,6 +230,25 @@ ${memberIds.join("\n")}
     const handleDeselectAll = () => {
         setSelectedMembers([])
     }
+    let credentialsId = ""
+    let credentialsCriteria = ""
+    if (_group && _group.credentials) {
+        const credentialsObj = JSON.parse(_group.credentials)
+        credentialsId = `${credentialsObj.id}`
+
+        if (credentialsObj.criteria) {
+            for (const key in credentialsObj.criteria) {
+                if (
+                    Object.prototype.hasOwnProperty.call(
+                        credentialsObj.criteria,
+                        key
+                    )
+                ) {
+                    credentialsCriteria += `${key}:${credentialsObj.criteria[key]} `
+                }
+            }
+        }
+    }
 
     return _group ? (
         <Container maxW="container.xl" pb="20" px="8">
@@ -349,6 +368,29 @@ ${memberIds.join("\n")}
                         </InputGroup>
                     </Box>
                     )
+                    {groupType === "off-chain" && _group.credentials && (
+                        <Box
+                            bgColor="balticSea.50"
+                            p="25px 30px 25px 30px"
+                            borderRadius="8px"
+                        >
+                            <Text fontSize="20px">Credentials</Text>
+                            <Input
+                                pr="50px"
+                                placeholder="Credentials ID"
+                                mb="10px"
+                                mt="10px"
+                                value={credentialsId}
+                                isDisabled
+                            />
+                            <Input
+                                pr="50px"
+                                placeholder="Credentials Criteria"
+                                value={credentialsCriteria}
+                                isDisabled
+                            />
+                        </Box>
+                    )}
                     {groupType === "off-chain" && !_group.credentials && (
                         <Box
                             bgColor="balticSea.50"
