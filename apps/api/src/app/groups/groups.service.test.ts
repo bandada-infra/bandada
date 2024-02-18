@@ -694,25 +694,30 @@ describe("GroupsService", () => {
             )
         })
 
-        it("Should add members to an existing group manually", async () => {
+        it("Should add members to an existing group manually in order", async () => {
             const { members } = await groupsService.addMembersManually(
                 group.id,
-                ["123123", "456456", "789789"],
+                ["789789", "122121", "456456"],
                 "admin"
             )
 
             expect(members).toHaveLength(3)
+            expect(members.map((m) => m.id)).toEqual([
+                "789789",
+                "122121",
+                "456456"
+            ])
         })
 
         it("Should not add members if they already exists", async () => {
             const fun = groupsService.addMembersManually(
                 group.id,
-                ["123123", "456456", "789789"],
+                ["123123", "456456", "789790"],
                 "admin"
             )
 
             await expect(fun).rejects.toThrow(
-                `Member '123123' already exists in the group '${group.id}'`
+                `Member '456456' already exists in the group '${group.id}'`
             )
         })
 
