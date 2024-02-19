@@ -71,6 +71,36 @@ export default function AddMemberModal({
             alert("Please ensure there are no repeated member IDs!")
             return
         }
+        if (group.type === "on-chain" && group.members) {
+            const existingMembers = new Set(
+                group.members.map((memberId) => BigInt(memberId))
+            )
+
+            const conflictingMembers = []
+
+            for (const memberId of memberIds) {
+                const parsedMemberId = BigInt(memberId)
+
+                if (existingMembers.has(parsedMemberId)) {
+                    conflictingMembers.push(parsedMemberId)
+                }
+            }
+
+            if (conflictingMembers.length > 0) {
+                if (conflictingMembers.length === 1) {
+                    alert(
+                        `Member ID ${conflictingMembers[0]} already exists in the group.`
+                    )
+                } else {
+                    alert(
+                        `Member IDs ${conflictingMembers.join(
+                            ", "
+                        )} already exist in the group.`
+                    )
+                }
+                return
+            }
+        }
 
         const confirmMessage = `
 Are you sure you want to add the following members?
