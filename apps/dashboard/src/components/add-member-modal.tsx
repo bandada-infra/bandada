@@ -73,16 +73,13 @@ export default function AddMemberModal({
         }
         if (group.type === "on-chain" && group.members) {
             const existingMembers = new Set(
-                group.members.map((memberId) =>
-                    typeof memberId === "string" ? BigInt(memberId) : memberId
-                )
+                group.members.map((memberId) => BigInt(memberId))
             )
 
             const conflictingMembers = []
 
             for (const memberId of memberIds) {
-                const parsedMemberId =
-                    typeof memberId === "string" ? BigInt(memberId) : memberId
+                const parsedMemberId = BigInt(memberId)
 
                 if (existingMembers.has(parsedMemberId)) {
                     conflictingMembers.push(parsedMemberId)
@@ -90,11 +87,17 @@ export default function AddMemberModal({
             }
 
             if (conflictingMembers.length > 0) {
-                alert(
-                    `Member IDs ${conflictingMembers.join(
-                        ", "
-                    )} already exist in the group.`
-                )
+                if (conflictingMembers.length === 1) {
+                    alert(
+                        `Member ID ${conflictingMembers[0]} already exists in the group.`
+                    )
+                } else {
+                    alert(
+                        `Member IDs ${conflictingMembers.join(
+                            ", "
+                        )} already exist in the group.`
+                    )
+                }
                 return
             }
         }
