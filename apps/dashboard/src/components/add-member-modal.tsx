@@ -72,26 +72,17 @@ export default function AddMemberModal({
             return
         }
         if (group.type === "on-chain" && group.members) {
-            const isHexadecimal = (str: string): boolean =>
-                /^0x[0-9A-Fa-f]+$/i.test(str)
-
             const existingMembers = new Set(
-                group.members.map((memberId) => {
-                    // Check if member ID is hexadecimal
-                    if (isHexadecimal(memberId)) {
-                        return parseInt(memberId, 16) // Convert hexadecimal to decimal
-                    }
-                    return parseInt(memberId, 10) // Treat as decimal
-                })
+                group.members.map((memberId) =>
+                    typeof memberId === "string" ? BigInt(memberId) : memberId
+                )
             )
 
             const conflictingMembers = []
 
             for (const memberId of memberIds) {
-                // Check if member ID is hexadecimal
-                const parsedMemberId = isHexadecimal(memberId)
-                    ? parseInt(memberId, 16)
-                    : parseInt(memberId, 10)
+                const parsedMemberId =
+                    typeof memberId === "string" ? BigInt(memberId) : memberId
 
                 if (existingMembers.has(parsedMemberId)) {
                     conflictingMembers.push(parsedMemberId)
