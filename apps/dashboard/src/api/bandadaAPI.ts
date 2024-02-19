@@ -93,7 +93,7 @@ export async function createGroup(
                 name,
                 description,
                 treeDepth,
-                fingerprintDuration,
+                fingerprintDuration:null,
                 credentials: JSON.stringify(credentials)
             }
         })
@@ -101,7 +101,7 @@ export async function createGroup(
         return { ...group, type: "off-chain" }
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -124,7 +124,7 @@ export async function updateGroup(
         return { ...group, type: "off-chain" }
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -140,7 +140,7 @@ export async function generateApiKey(groupId: string): Promise<string | null> {
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -156,7 +156,7 @@ export async function removeGroup(groupId: string): Promise<void | null> {
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -189,7 +189,7 @@ export async function setOAuthState(
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -213,7 +213,7 @@ export async function addMemberByCredentials(
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -233,7 +233,7 @@ export async function addMember(
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -259,7 +259,7 @@ export async function addMembers(
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -279,7 +279,7 @@ export async function removeMember(
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -305,7 +305,7 @@ export async function removeMembers(
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -321,7 +321,7 @@ export async function getNonce(): Promise<string | null> {
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -349,7 +349,7 @@ export async function signIn({
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -364,7 +364,7 @@ export async function logOut(): Promise<void | null> {
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
@@ -380,7 +380,7 @@ export async function isLoggedIn(): Promise<null | boolean> {
         })
     } catch (error: any) {
         console.error(error)
-        createAlert(error)
+        createAlert(error.response.data)
         return null
     }
 }
