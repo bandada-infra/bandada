@@ -93,7 +93,7 @@ export async function createGroup(
                 name,
                 description,
                 treeDepth,
-                fingerprintDuration:null,
+                fingerprintDuration,
                 credentials: JSON.stringify(credentials)
             }
         })
