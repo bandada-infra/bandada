@@ -1,4 +1,4 @@
-export default function capitalize(data: { message: string; }) {
+export default function createAlert(data: { message: string; }) {
     if (data.message){
         alert(data.message);
     }else{
