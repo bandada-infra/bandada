@@ -6,7 +6,8 @@ import {
     twitterFollowers,
     twitterFollowingUser,
     blockchainTransactions,
-    blockchainBalance
+    blockchainBalance,
+    easAttestations
 } from "./validators/index"
 
 const validators: Validator[] = [
@@ -16,7 +17,8 @@ const validators: Validator[] = [
     twitterFollowers,
     twitterFollowingUser,
     blockchainTransactions,
-    blockchainBalance
+    blockchainBalance,
+    easAttestations
 ]
 
 export default validators

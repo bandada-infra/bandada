@@ -5,6 +5,7 @@ import twitterFollowers from "./twitterFollowers"
 import twitterFollowingUser from "./twitterFollowingUser"
 import blockchainTransactions from "./blockchainTransactions"
 import blockchainBalance from "./blockchainBalance"
+import easAttestations from "./easAttestations"
 
 export {
     githubFollowers,
@@ -13,5 +14,6 @@ export {
     twitterFollowingUser,
     githubPersonalStars,
     blockchainTransactions,
-    blockchainBalance
+    blockchainBalance,
+    easAttestations
 }

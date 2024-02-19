@@ -32,7 +32,7 @@ export default async function validateCredentials(
         })
     }
 
-    if ("getAddress" in provider) {
+    if ("getAddress" in provider || "queryGraph" in provider) {
         return validator.validate(criteria, {
             ...context
         })
