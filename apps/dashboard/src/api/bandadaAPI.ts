@@ -1,6 +1,7 @@
 import { request } from "@bandada/utils"
 import { SiweMessage } from "siwe"
 import { Group } from "../types"
+import createAlert from "../utils/createAlert"
 
 const API_URL = import.meta.env.VITE_API_URL
 const CLIENT_INVITES_URL = import.meta.env.VITE_CLIENT_INVITES_URL
@@ -29,13 +30,7 @@ export async function generateMagicLink(
         return (clientUrl || CLIENT_INVITES_URL).replace("\\", code)
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -55,13 +50,7 @@ export async function getGroups(adminId: string): Promise<Group[] | null> {
         }))
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -78,13 +67,7 @@ export async function getGroup(groupId: string): Promise<Group | null> {
         return { ...group, type: "off-chain" }
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -118,13 +101,7 @@ export async function createGroup(
         return { ...group, type: "off-chain" }
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -147,13 +124,7 @@ export async function updateGroup(
         return { ...group, type: "off-chain" }
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -169,13 +140,7 @@ export async function generateApiKey(groupId: string): Promise<string | null> {
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -191,13 +156,7 @@ export async function removeGroup(groupId: string): Promise<void | null> {
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -230,13 +189,7 @@ export async function setOAuthState(
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -266,13 +219,7 @@ export async function addMemberByCredentials(
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -292,13 +239,7 @@ export async function addMember(
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -324,13 +265,7 @@ export async function addMembers(
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -350,13 +285,7 @@ export async function removeMember(
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -382,13 +311,7 @@ export async function removeMembers(
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -404,13 +327,7 @@ export async function getNonce(): Promise<string | null> {
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -438,13 +355,7 @@ export async function signIn({
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -459,13 +370,7 @@ export async function logOut(): Promise<void | null> {
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
@@ -481,13 +386,7 @@ export async function isLoggedIn(): Promise<null | boolean> {
         })
     } catch (error: any) {
         console.error(error)
-
-        if (error.response) {
-            alert(error.response.statusText)
-        } else {
-            alert("Some error occurred!")
-        }
-
+        createAlert(error.response.data.message)
         return null
     }
 }
