@@ -32,6 +32,9 @@ export type EASContext = {
     queryGraph: (query: string) => Promise<any>
     attester?: BigNumberish
     schemaId?: BigNumberish
+    revocable?: boolean
+    revoked?: boolean
+    isOffchain?: boolean
 }
 
 export type Context = Web2Context | BlockchainContext | EASContext

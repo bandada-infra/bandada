@@ -19,24 +19,66 @@ const validator: Validator = {
      */
     async validate(criteria: Criteria, context: Context) {
         if ("recipient" in context) {
-            const { recipient } = context as EASContext
-
+            const {
+                recipient,
+                attester,
+                schemaId,
+                revocable,
+                revoked,
+                isOffchain
+            } = context as EASContext
             const getAttestations = (context as EASContext).queryGraph
 
             const attestations = await getAttestations(`
                 query {
                     attestations {
-                        id                    
                         recipient
+                        attester
+                        revocable
+                        revoked
+                        schemaId
+                        isOffchain
                     }
                 }
             `)
 
-            const recipientAttestations = attestations.filter(
-                (attestation: any) => attestation.recipient === recipient
+            const filteredAttestations = attestations.filter(
+                (attestation: any) => {
+                    // Mandatory recipient check.
+                    if (attestation.recipient !== recipient) return false
+
+                    // Optional criteria checks.
+                    if (
+                        attester !== undefined &&
+                        attestation.attester !== attester
+                    )
+                        return false
+                    if (
+                        schemaId !== undefined &&
+                        attestation.schemaId !== schemaId
+                    )
+                        return false
+                    if (
+                        revocable !== undefined &&
+                        attestation.revocable !== revocable
+                    )
+                        return false
+                    if (
+                        revoked !== undefined &&
+                        attestation.revoked !== revoked
+                    )
+                        return false
+                    if (
+                        isOffchain !== undefined &&
+                        attestation.isOffchain !== isOffchain
+                    )
+                        return false
+
+                    return true
+                }
             )
 
-            return recipientAttestations.length >= criteria.minAttestations
+            return filteredAttestations.length >= criteria.minAttestations
         }
 
         throw new Error("No recipient value found")
