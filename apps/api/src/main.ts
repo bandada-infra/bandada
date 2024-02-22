@@ -62,17 +62,25 @@ async function bootstrap() {
     // Add a custom title to the right side of the Swagger UI page
     document.addEventListener('DOMContentLoaded', function() {
         const customTitle = document.createElement('div');
-        customTitle.style.position = 'fixed';
-        customTitle.style.top = '130px';
-        customTitle.style.right = '40px';
+        customTitle.style.position = 'absolute';
+        customTitle.style.top = '27px';
         customTitle.style.padding = '10px';
         customTitle.style.color = 'black';
         customTitle.style.fontSize = '18px';
+        customTitle.style.padding = '0 20px';
+        customTitle.style.maxWidth = '1460px';
+        customTitle.style.display = 'flex';
+        customTitle.style.justifyContent = 'end';
+        customTitle.style.width = '100%';
+
 
         // Create a hyperlink element
         const link = document.createElement('a');
         link.href = 'https://github.com/privacy-scaling-explorations/bandada';
+        link.rel = 'noreferrer noopener nofollow';
+        link.target = '_blank'
         link.style.color = 'grey';
+        link.style.display = 'flex';
 
         // Create a text node for the link text
         const linkText = document.createTextNode('Github');
@@ -102,10 +110,18 @@ async function bootstrap() {
         // Append the link to the custom title
         customTitle.appendChild(link);
 
-        document.body.appendChild(customTitle);
+        const parentDiv = document.createElement('div');
+        parentDiv.style.display = 'flex';
+        parentDiv.style.justifyContent = 'center';
+        parentDiv.style.width = 'auto';
+
+
+        parentDiv.appendChild(customTitle)
+
+        document.body.appendChild(parentDiv);
     });
 `
-    };
+    }
 
     SwaggerModule.setup("/", app, document, configUI)
 
