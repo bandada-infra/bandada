@@ -51,8 +51,6 @@ export default function FinalPreviewStep({
 
             if (response === null) {
                 setLoading(false)
-                alert("Some error occurred!")
-
                 return
             }
             navigate(`/groups/off-chain/${response.id}`)
