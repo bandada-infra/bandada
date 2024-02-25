@@ -164,6 +164,7 @@ export default function GeneralInfoStep({
                         <Text>Fingerprint duration</Text>
 
                         <NumberInput
+                            min={0}
                             size="lg"
                             value={_fingerprintDuration}
                             onChange={(value) =>
