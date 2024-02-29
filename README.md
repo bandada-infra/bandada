@@ -170,7 +170,7 @@ Please see the latest [documentation](https://pse-team.notion.site/Bandada-82d0d
 
 ## 🔧 Configuration
 
-### Prerequisities
+### Prerequisites
 
 -   [NodeJS](https://nodejs.org/en) >= v18.17.0
 
@@ -236,7 +236,7 @@ yarn test
 
 ## 🐳 Running in Docker
 
-### Prerequisities
+### Prerequisites
 
 -   [Docker](https://www.docker.com/) >= 4.26.1
 -   [docker-compose](https://docs.docker.com/compose/) >= 2.24.2
