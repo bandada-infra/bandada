@@ -543,7 +543,7 @@ ${memberIds.join("\n")}
                             >
                                 <HStack justify="space-between" w="100%">
                                     <HStack>
-                                        {_group.type === "off-chain" && (
+                                        {_group.type === "off-chain" && isGroupAdmin && (
                                             <Checkbox
                                                 isChecked={_selectedMembers.includes(
                                                     memberId
@@ -568,7 +568,7 @@ ${memberIds.join("\n")}
                                         </Text>
                                     </HStack>
 
-                                    {_group.type === "off-chain" && (
+                                    {_group.type === "off-chain" && isGroupAdmin && (
                                         <Menu>
                                             <MenuButton
                                                 as={IconButton}
@@ -605,7 +605,7 @@ ${memberIds.join("\n")}
                             </Flex>
                         ))
                     )}
-                    {_group.type === "off-chain" && (
+                    {_group.type === "off-chain" && isGroupAdmin && (
                         <Flex mt="20px" justify="space-between" align="center">
                             <ButtonGroup>
                                 <Button
