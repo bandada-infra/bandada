@@ -3,12 +3,14 @@
 
 # Copy source code and build the project
 FROM node:18-alpine as builder
-RUN apk add --no-cache git
 
 WORKDIR /builder
-COPY . .
-RUN yarn install --silent && yarn workspaces foreach -ptR --from '{dashboard,libs}' run build
 
+COPY . .
+
+# Install dependencies only for the workspace needed
+RUN yarn workspaces focus dashboard @bandada/api-sdk @bandada/utils && \
+    yarn workspaces foreach -ptR --from '{dashboard, libs/credentials, libs/utils}' run build
 
 # Create image for the app by copying build artifacts from builder
 FROM nginx:stable-alpine as runner

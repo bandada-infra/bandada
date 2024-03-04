@@ -3,11 +3,15 @@
 
 # Copy source code and build the project
 FROM node:18-alpine as builder
-RUN apk add --no-cache git
 
 WORKDIR /builder
+
 COPY . .
-RUN yarn install --silent
+
+# Install dependencies only for the workspace needed
+RUN yarn workspaces focus api @bandada/credentials @bandada/utils && \
+    yarn workspaces foreach -ptR --from '{api, libs/credentials, lib/utils}' run build && \
+    yarn workspaces focus api --production
 
 
 # Create image for the app by copying build artifacts from builder
@@ -18,7 +22,9 @@ ARG PORT=3000
 ENV NODE_ENV=production
 
 WORKDIR /home/node/api
-COPY --chown=node:node  --from=builder /builder/ ./
+COPY --chown=node:node --from=builder /builder/node_modules ./apps/node_modules
+COPY --chown=node:node --from=builder /builder/apps/api ./apps/api
+COPY --chown=node:node --from=builder /builder/libs ./apps/libs
 
 EXPOSE ${PORT}
 CMD ["node", "./apps/api/dist/main.js"]
