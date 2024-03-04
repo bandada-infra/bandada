@@ -21,21 +21,6 @@ export default class ApiSdk {
      * Initializes the ApiSdk object with a Supported URL or custom URL.
      * @param url Supported URL or custom URL.
      * @param config [Axios](https://axios-http.com/docs/req_config) request config type.
-     * @example config const axiosConfig = {
-     *            method: 'get', // HTTP method (e.g., 'get', 'post', 'put', 'delete')
-     *            url: 'url.com', // URL of the request
-     *            params: { // Optional query parameters (key-value pairs)
-     *              id: 123,
-     *              page: 2
-     *            },
-     *            data: { // Optional data to be sent in the request body (depends on method)
-     *              name: 'John Doe',
-     *              age: 30
-     *            },
-     *            headers: { // Optional request headers (key-value pairs)
-     *              'Content-Type': 'application/json'
-     *            }
-     *          };
      */
     constructor(url: SupportedUrl | string = SupportedUrl.PROD, config?: any) {
         checkParameter(url, "url", "string")
