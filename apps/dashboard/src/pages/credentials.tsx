@@ -64,7 +64,7 @@ export default function CredentialsPage() {
                     if (state && admin && network) {
                         const redirectUrl = await addMemberByCredentials(
                             state,
-                            "",
+                            undefined,
                             admin.address,
                             network,
                             blockNumberVal
@@ -108,9 +108,7 @@ export default function CredentialsPage() {
 
                 const clientRedirectUri = await addMemberByCredentials(
                     oAuthState,
-                    oAuthCode,
-                    "",
-                    ""
+                    oAuthCode
                 )
 
                 if (clientRedirectUri) {
