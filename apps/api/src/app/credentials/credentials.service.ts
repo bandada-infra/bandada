@@ -78,7 +78,7 @@ export class CredentialsService {
      * @param OAuthState OAuth state to prevent forgery attacks.
      * @param oAuthCode OAuth code to exchange for an access token.
      * @param address Account address.
-     * @param network Network.
+     * @param network Network name.
      * @param blockNumber Block number.
      * @returns Redirect URI
      */
