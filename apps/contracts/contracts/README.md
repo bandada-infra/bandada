@@ -34,7 +34,7 @@
             🔎 Issues
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://pse.dev/discord">
+        <a href="https://discord.com/invite/sF5CT5rzrR">
             🗣️ Chat &amp; Support
         </a>
     </h4>
