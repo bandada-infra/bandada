@@ -543,18 +543,19 @@ ${memberIds.join("\n")}
                             >
                                 <HStack justify="space-between" w="100%">
                                     <HStack>
-                                        {_group.type === "off-chain" && (
-                                            <Checkbox
-                                                isChecked={_selectedMembers.includes(
-                                                    memberId
-                                                )}
-                                                onChange={() =>
-                                                    toggleMemberSelection(
+                                        {_group.type === "off-chain" &&
+                                            isGroupAdmin && (
+                                                <Checkbox
+                                                    isChecked={_selectedMembers.includes(
                                                         memberId
-                                                    )
-                                                }
-                                            />
-                                        )}
+                                                    )}
+                                                    onChange={() =>
+                                                        toggleMemberSelection(
+                                                            memberId
+                                                        )
+                                                    }
+                                                />
+                                            )}
                                         <Icon
                                             color="balticSea.300"
                                             boxSize="6"
@@ -568,44 +569,51 @@ ${memberIds.join("\n")}
                                         </Text>
                                     </HStack>
 
-                                    {_group.type === "off-chain" && (
-                                        <Menu>
-                                            <MenuButton
-                                                as={IconButton}
-                                                aria-label="Options"
-                                                icon={
-                                                    <Icon
-                                                        color="balticSea.300"
-                                                        boxSize="6"
-                                                        as={MdOutlineMoreVert}
-                                                    />
-                                                }
-                                                variant="link"
-                                            />
-                                            <MenuList>
-                                                <MenuItem
+                                    {_group.type === "off-chain" &&
+                                        isGroupAdmin && (
+                                            <Menu>
+                                                <MenuButton
+                                                    as={IconButton}
+                                                    aria-label="Options"
                                                     icon={
                                                         <Icon
-                                                            mt="5px"
                                                             color="balticSea.300"
                                                             boxSize="6"
-                                                            as={MdOutlineCancel}
+                                                            as={
+                                                                MdOutlineMoreVert
+                                                            }
                                                         />
                                                     }
-                                                    onClick={() =>
-                                                        removeMember(memberId)
-                                                    }
-                                                >
-                                                    Remove
-                                                </MenuItem>
-                                            </MenuList>
-                                        </Menu>
-                                    )}
+                                                    variant="link"
+                                                />
+                                                <MenuList>
+                                                    <MenuItem
+                                                        icon={
+                                                            <Icon
+                                                                mt="5px"
+                                                                color="balticSea.300"
+                                                                boxSize="6"
+                                                                as={
+                                                                    MdOutlineCancel
+                                                                }
+                                                            />
+                                                        }
+                                                        onClick={() =>
+                                                            removeMember(
+                                                                memberId
+                                                            )
+                                                        }
+                                                    >
+                                                        Remove
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </Menu>
+                                        )}
                                 </HStack>
                             </Flex>
                         ))
                     )}
-                    {_group.type === "off-chain" && (
+                    {_group.type === "off-chain" && isGroupAdmin && (
                         <Flex mt="20px" justify="space-between" align="center">
                             <ButtonGroup>
                                 <Button
