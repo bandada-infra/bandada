@@ -75,8 +75,11 @@ export class CredentialsService {
 
     /**
      * Add a member to the credential group if they meet the right credential criteria.
-     * @param oAuthCode OAuth code to exchange for an access token.
      * @param OAuthState OAuth state to prevent forgery attacks.
+     * @param oAuthCode OAuth code to exchange for an access token.
+     * @param address Account address.
+     * @param network Network name.
+     * @param blockNumber Block number.
      * @returns Redirect URI
      */
     async addMember(
