@@ -20,7 +20,7 @@ export default class ApiSdk {
     /**
      * Initializes the ApiSdk object with a Supported URL or custom URL.
      * @param url Supported URL or custom URL.
-     * @param config Request config.
+     * @param config [Axios](https://axios-http.com/docs/req_config) Request Config.
      */
     constructor(url: SupportedUrl | string = SupportedUrl.PROD, config?: any) {
         checkParameter(url, "url", "string")

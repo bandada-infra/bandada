@@ -57,6 +57,13 @@ export default function GroupPage(): JSX.Element {
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
     const [_selectedMembers, setSelectedMembers] = useState<string[]>([])
     const { admin } = useContext(AuthContext)
+    const isGroupAdmin = !!(
+        admin &&
+        _group &&
+        (groupType === "off-chain"
+            ? _group.admin === admin.id
+            : _group.admin === admin.address.toLowerCase())
+    )
 
     useEffect(() => {
         ;(async () => {
@@ -391,82 +398,87 @@ ${memberIds.join("\n")}
                             />
                         </Box>
                     )}
-                    {groupType === "off-chain" && !_group.credentials && (
-                        <Box
-                            bgColor="balticSea.50"
-                            p="25px 30px 25px 30px"
-                            borderRadius="8px"
-                        >
-                            <HStack justify="space-between">
-                                <Text fontSize="20px">Use API key</Text>
+                    {groupType === "off-chain" &&
+                        !_group.credentials &&
+                        isGroupAdmin && (
+                            <Box
+                                bgColor="balticSea.50"
+                                p="25px 30px 25px 30px"
+                                borderRadius="8px"
+                            >
+                                <HStack justify="space-between">
+                                    <Text fontSize="20px">Use API key</Text>
 
-                                <Switch
-                                    id="enable-api"
-                                    isChecked={_group.apiEnabled}
-                                    onChange={(event) =>
-                                        onApiAccessToggle(event.target.checked)
-                                    }
-                                />
-                            </HStack>
+                                    <Switch
+                                        id="enable-api"
+                                        isChecked={_group.apiEnabled}
+                                        onChange={(event) =>
+                                            onApiAccessToggle(
+                                                event.target.checked
+                                            )
+                                        }
+                                    />
+                                </HStack>
 
-                            <Text mt="10px" color="balticSea.700">
-                                Connect your app to your group using an API key.
-                            </Text>
+                                <Text mt="10px" color="balticSea.700">
+                                    Connect your app to your group using an API
+                                    key.
+                                </Text>
 
-                            {_group.apiEnabled && (
-                                <>
-                                    <InputGroup size="lg" mt="10px">
-                                        <Input
-                                            pr="50px"
-                                            placeholder="API key"
-                                            value={_group?.apiKey}
-                                            isDisabled
-                                        />
+                                {_group.apiEnabled && (
+                                    <>
+                                        <InputGroup size="lg" mt="10px">
+                                            <Input
+                                                pr="50px"
+                                                placeholder="API key"
+                                                value={_group?.apiKey}
+                                                isDisabled
+                                            />
 
-                                        <InputRightElement mr="5px">
-                                            <Tooltip
-                                                label={
-                                                    hasCopied
-                                                        ? "Copied!"
-                                                        : "Copy"
-                                                }
-                                                closeOnClick={false}
-                                                hasArrow
-                                            >
-                                                <IconButton
-                                                    variant="link"
-                                                    aria-label="Copy API key"
-                                                    onClick={onCopy}
-                                                    onMouseDown={(e) =>
-                                                        e.preventDefault()
+                                            <InputRightElement mr="5px">
+                                                <Tooltip
+                                                    label={
+                                                        hasCopied
+                                                            ? "Copied!"
+                                                            : "Copy"
                                                     }
-                                                    icon={
-                                                        <Icon
-                                                            color="sunsetOrange.600"
-                                                            boxSize="5"
-                                                            as={FiCopy}
-                                                        />
-                                                    }
-                                                />
-                                            </Tooltip>
-                                        </InputRightElement>
-                                    </InputGroup>
+                                                    closeOnClick={false}
+                                                    hasArrow
+                                                >
+                                                    <IconButton
+                                                        variant="link"
+                                                        aria-label="Copy API key"
+                                                        onClick={onCopy}
+                                                        onMouseDown={(e) =>
+                                                            e.preventDefault()
+                                                        }
+                                                        icon={
+                                                            <Icon
+                                                                color="sunsetOrange.600"
+                                                                boxSize="5"
+                                                                as={FiCopy}
+                                                            />
+                                                        }
+                                                    />
+                                                </Tooltip>
+                                            </InputRightElement>
+                                        </InputGroup>
 
-                                    <Button
-                                        mt="10px"
-                                        variant="link"
-                                        color="balticSea.600"
-                                        textDecoration="underline"
-                                        onClick={generateApiKey}
-                                    >
-                                        Generate new key
-                                    </Button>
-                                </>
-                            )}
-                        </Box>
-                    )}
+                                        <Button
+                                            mt="10px"
+                                            variant="link"
+                                            color="balticSea.600"
+                                            textDecoration="underline"
+                                            onClick={generateApiKey}
+                                        >
+                                            Generate new key
+                                        </Button>
+                                    </>
+                                )}
+                            </Box>
+                        )}
                     <Image src={image1} />
-                    {_group.type === "off-chain" && (
+                    {_group.type === "off-chain" && isGroupAdmin && (
                         <Box
                             bgColor="classicRose.50"
                             p="25px 30px 25px 30px"
@@ -524,13 +536,7 @@ ${memberIds.join("\n")}
                             variant="solid"
                             colorScheme="secondary"
                             onClick={addMembersModal.onOpen}
-                            hidden={
-                                !admin ||
-                                (groupType === "off-chain"
-                                    ? _group.admin !== admin.id
-                                    : _group.admin !==
-                                      admin.address.toLowerCase())
-                            }
+                            hidden={!isGroupAdmin}
                         >
                             Add member
                         </Button>
@@ -579,18 +585,19 @@ ${memberIds.join("\n")}
                             >
                                 <HStack justify="space-between" w="100%">
                                     <HStack>
-                                        {_group.type === "off-chain" && (
-                                            <Checkbox
-                                                isChecked={_selectedMembers.includes(
-                                                    memberId
-                                                )}
-                                                onChange={() =>
-                                                    toggleMemberSelection(
+                                        {_group.type === "off-chain" &&
+                                            isGroupAdmin && (
+                                                <Checkbox
+                                                    isChecked={_selectedMembers.includes(
                                                         memberId
-                                                    )
-                                                }
-                                            />
-                                        )}
+                                                    )}
+                                                    onChange={() =>
+                                                        toggleMemberSelection(
+                                                            memberId
+                                                        )
+                                                    }
+                                                />
+                                            )}
                                         <Icon
                                             color="balticSea.300"
                                             boxSize="6"
@@ -604,44 +611,51 @@ ${memberIds.join("\n")}
                                         </Text>
                                     </HStack>
 
-                                    {_group.type === "off-chain" && (
-                                        <Menu>
-                                            <MenuButton
-                                                as={IconButton}
-                                                aria-label="Options"
-                                                icon={
-                                                    <Icon
-                                                        color="balticSea.300"
-                                                        boxSize="6"
-                                                        as={MdOutlineMoreVert}
-                                                    />
-                                                }
-                                                variant="link"
-                                            />
-                                            <MenuList>
-                                                <MenuItem
+                                    {_group.type === "off-chain" &&
+                                        isGroupAdmin && (
+                                            <Menu>
+                                                <MenuButton
+                                                    as={IconButton}
+                                                    aria-label="Options"
                                                     icon={
                                                         <Icon
-                                                            mt="5px"
                                                             color="balticSea.300"
                                                             boxSize="6"
-                                                            as={MdOutlineCancel}
+                                                            as={
+                                                                MdOutlineMoreVert
+                                                            }
                                                         />
                                                     }
-                                                    onClick={() =>
-                                                        removeMember(memberId)
-                                                    }
-                                                >
-                                                    Remove
-                                                </MenuItem>
-                                            </MenuList>
-                                        </Menu>
-                                    )}
+                                                    variant="link"
+                                                />
+                                                <MenuList>
+                                                    <MenuItem
+                                                        icon={
+                                                            <Icon
+                                                                mt="5px"
+                                                                color="balticSea.300"
+                                                                boxSize="6"
+                                                                as={
+                                                                    MdOutlineCancel
+                                                                }
+                                                            />
+                                                        }
+                                                        onClick={() =>
+                                                            removeMember(
+                                                                memberId
+                                                            )
+                                                        }
+                                                    >
+                                                        Remove
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </Menu>
+                                        )}
                                 </HStack>
                             </Flex>
                         ))
                     )}
-                    {_group.type === "off-chain" && (
+                    {_group.type === "off-chain" && isGroupAdmin && (
                         <Flex mt="20px" justify="space-between" align="center">
                             <ButtonGroup>
                                 <Button
