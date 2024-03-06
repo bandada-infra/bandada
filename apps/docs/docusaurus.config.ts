@@ -109,11 +109,11 @@ const config: Config = {
                         },
                         {
                             label: "Boilerplate",
-                            href: "https://github.com/vplasencia/bandada-semaphore-demo"
+                            href: "https://github.com/bandada-infra/bandada-semaphore-demo"
                         },
                         {
                             label: "API SDK demo",
-                            href: "https://github.com/vplasencia/bandada-sdk-demo"
+                            href: "https://github.com/bandada-infra/bandada-sdk-demo"
                         }
                     ]
                 }

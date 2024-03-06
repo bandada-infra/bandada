@@ -9,7 +9,7 @@ import TabItem from "@theme/TabItem"
 
 [The API SDK JavaScript package](https://github.com/privacy-scaling-explorations/bandada/tree/main/libs/api-sdk) provides a list of functions to make it easier to work with the Bandada API. 
 
-Example of project using the API SDK library: [bandada-api-sdk-demo](https://github.com/vplasencia/bandada-sdk-demo).
+Example of project using the API SDK library: [bandada-api-sdk-demo](https://github.com/bandada-infra/bandada-sdk-demo).
 
 ## Install library
 
