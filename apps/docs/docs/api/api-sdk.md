@@ -1,0 +1,211 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from "@theme/Tabs"
+import TabItem from "@theme/TabItem"
+
+# API SDK
+
+[The API SDK JavaScript package](https://github.com/privacy-scaling-explorations/bandada/tree/main/libs/api-sdk) provides a list of functions to make it easier to work with the Bandada API. 
+
+Example of project using the API SDK library: [bandada-api-sdk-demo](https://github.com/vplasencia/bandada-sdk-demo).
+
+## Install library
+
+<Tabs
+defaultValue="npm"
+groupId="package-managers"
+values={[
+{label: 'npm', value: 'npm'},
+{label: 'Yarn', value: 'yarn'},
+{label: 'pnpm', value: 'pnpm'}
+]}>
+<TabItem value="npm">
+
+```bash
+npm install @bandada/api-sdk
+```
+
+</TabItem>
+<TabItem value="yarn">
+
+```bash
+yarn add @bandada/api-sdk
+```
+
+</TabItem>
+<TabItem value="pnpm">
+
+```bash
+pnpm add @bandada/api-sdk
+```
+
+</TabItem>
+</Tabs>
+
+## Create a new instance
+
+\# **new ApiSdk**(url: SupportedUrl | string, config?: object): _ApiSdk_
+
+Creates a new instance of ApiSdk using the API URL and the [config](https://axios-http.com/docs/req_config).
+
+-   Creates a new instance using the production Bandada API URL and the default config.
+
+This is what you need if you are using the production Bandada API.
+
+```ts
+import { ApiSdk } from "@bandada/api-sdk"
+
+const apiSdk = new ApiSdk()
+```
+
+-   Creates a new instance using a [Supported URL](https://github.com/privacy-scaling-explorations/bandada/blob/main/libs/api-sdk/src/types/index.ts#L43). 
+
+This is useful when working with the development environment.
+
+```ts
+import { ApiSdk, SupportedUrl } from "@bandada/api-sdk"
+
+const apiSdk = new ApiSdk(SupportedUrl.DEV)
+```
+
+-   Creates a new instance using a custom API URL.
+
+```ts
+import { ApiSdk } from "@bandada/api-sdk"
+
+const apiSdk = new ApiSdk("https://example.com/api")
+```
+
+-   Creates a new instance using a custom API URL and config.
+
+```ts
+import { ApiSdk } from "@bandada/api-sdk"
+
+const url = "https://example.com/api"
+const config = {
+    headers: {
+        "Content-Type": "text/html"
+    }
+}
+const apiSdk = new ApiSdk(url, config)
+```
+
+## Get groups
+
+\# **getGroups**(): _Promise\<GroupResponse[]>_
+
+Returns the list of groups.
+
+```ts
+const groups = await apiSdk.getGroups()
+```
+
+## Get group
+
+\# **getGroup**(): _Promise\<GroupResponse>_
+
+Returns a specific group.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+
+const group = await apiSdk.getGroup(groupId)
+```
+
+## Is group member
+
+\# **isGroupMember**(): _Promise\<boolean>_
+
+Returns true if the member is in the group and false otherwise.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberId = "1"
+
+const isMember = await apiSdk.isGroupMember(groupId, memberId)
+```
+
+## Generate merkle proof
+
+\# **generateMerkleProof**(): _Promise\<string>_
+
+Returns the Merkle Proof for a member in a group.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberId = "1"
+
+const proof = await apiSdk.generateMerkleProof(groupId, memberId)
+```
+
+## Add member using an API Key
+
+\# **addMemberByApiKey**(): _Promise\<void>_
+
+Adds a member to a group using an API Key.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberId = "1"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.addMemberByApiKey(groupId, memberId, apiKey)
+```
+
+## Add members using an API Key
+
+\# **addMembersByApiKey**(): _Promise\<void>_
+
+Adds multiple members to a group using an API Key.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberIds = ["1", "2", "3"]
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.addMembersByApiKey(groupId, memberIds, apiKey)
+```
+
+## Add member using an invite code
+
+\# **addMemberByInviteCode**(): _Promise\<void>_
+
+Adds a member to a group using an Invite Code.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberId = "1"
+const inviteCode = "MQYS4UR5"
+
+await apiSdk.addMemberByInviteCode(groupId, memberId, inviteCode)
+```
+
+## Remove member using an API Key
+
+\# **removeMemberByApiKey**(): _Promise\<void>_
+
+Removes a member from a group using an API Key.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberId = "1"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.removeMemberByApiKey(groupId, memberId, apiKey)
+```
+
+## Remove members using an API Key
+
+\# **removeMembersByApiKey**(): _Promise\<void>_
+
+Removes multiple members from a group using an API Key.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const memberIds = ["1", "2", "3"]
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.removeMembersByApiKey(groupId, memberIds, apiKey)
+```
