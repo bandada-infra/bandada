@@ -86,3 +86,7 @@ typechain
 !.yarn/versions
 
 *.db
+
+# Docusaurus generated files
+.docusaurus
+.cache-loader

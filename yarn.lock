@@ -11344,6 +11344,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bandada-docs@workspace:apps/docs":
+  version: 0.0.0-use.local
+  resolution: "bandada-docs@workspace:apps/docs"
+  dependencies:
+    "@docusaurus/core": 3.1.1
+    "@docusaurus/module-type-aliases": 3.1.1
+    "@docusaurus/preset-classic": 3.1.1
+    "@docusaurus/tsconfig": 3.1.1
+    "@docusaurus/types": 3.1.1
+    "@mdx-js/react": ^3.0.0
+    clsx: ^2.0.0
+    prism-react-renderer: ^2.3.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+    typescript: ~5.2.2
+  languageName: unknown
+  linkType: soft
+
 "bandada@workspace:.":
   version: 0.0.0-use.local
   resolution: "bandada@workspace:."
@@ -14427,25 +14445,6 @@ __metadata:
   checksum: 64c06457f0c6e143f7a0946e0aeb8de1c5f752217cfa143ef527467c00a6d78db1835cfdb6bb68333d9f9a4963cf23f410439b5262a8935cce1236f45e344b81
   languageName: node
   linkType: hard
-
-"docs@workspace:apps/docs":
-  version: 0.0.0-use.local
-  resolution: "docs@workspace:apps/docs"
-  dependencies:
-    "@docusaurus/core": 3.1.1
-    "@docusaurus/module-type-aliases": 3.1.1
-    "@docusaurus/preset-classic": 3.1.1
-    "@docusaurus/tsconfig": 3.1.1
-    "@docusaurus/types": 3.1.1
-    "@mdx-js/react": ^3.0.0
-    clsx: ^2.0.0
-    prettier: ^3.2.5
-    prism-react-renderer: ^2.3.0
-    react: ^18.0.0
-    react-dom: ^18.0.0
-    typescript: ~5.2.2
-  languageName: unknown
-  linkType: soft
 
 "doctrine@npm:^2.1.0":
   version: 2.1.0
@@ -24546,15 +24545,6 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: c173064bf3df57b6d93d19aa98753b9b9dd7657212e33b41ada8e2e9f9884066bb9ca0b4005b89b3ab137efffdf8fbe0b462785aba20364798ff4303aadda57e
-  languageName: node
-  linkType: hard
-
-"prettier@npm:^3.2.5":
-  version: 3.2.5
-  resolution: "prettier@npm:3.2.5"
-  bin:
-    prettier: bin/prettier.cjs
-  checksum: 2ee4e1417572372afb7a13bb446b34f20f1bf1747db77cf6ccaf57a9be005f2f15c40f903d41a6b79eec3f57fff14d32a20fb6dee1f126da48908926fe43c311
   languageName: node
   linkType: hard
 
