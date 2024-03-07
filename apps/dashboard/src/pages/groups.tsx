@@ -11,21 +11,28 @@ import {
     InputRightElement,
     Spinner,
     Text,
-    VStack
+    VStack,
+    Stack,
+    Link as ChakraLink
 } from "@chakra-ui/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
 import { Link, useNavigate } from "react-router-dom"
 import { getGroups as getOffchainGroups } from "../api/bandadaAPI"
-import { getGroups as getOnchainGroups } from "../api/semaphoreAPI"
+import {
+    getGroups as getOnchainGroups,
+    getGoerliGroups
+} from "../api/semaphoreAPI"
 import GroupCard from "../components/group-card"
 import { AuthContext } from "../context/auth-context"
 import { Group } from "../types"
+import GoerliGroupCard from "../components/goerli-group"
 
 export default function GroupsPage(): JSX.Element {
     const { admin } = useContext(AuthContext)
     const [_isLoading, setIsLoading] = useState(false)
     const [_groups, setGroups] = useState<Group[]>([])
+    const [_goerliGroups, setGoerliGroups] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
     const navigate = useNavigate()
 
@@ -50,6 +57,11 @@ export default function GroupsPage(): JSX.Element {
                         }
                     })
                 ])
+
+                const goerliGroups = await getGoerliGroups(admin.address)
+                if (goerliGroups) {
+                    setGoerliGroups((groups) => [...groups, ...goerliGroups])
+                }
 
                 setIsLoading(false)
             }
@@ -149,6 +161,36 @@ export default function GroupsPage(): JSX.Element {
                                 </Link>
                             ))}
                     </Grid>
+                )}
+
+                {!_isLoading && _goerliGroups.length > 0 && (
+                    <Box>
+                        <Text fontSize="22px" mt="5">
+                            Groups on Goerli (name/id)
+                        </Text>
+                        <Text mt="2">The Goerli network is deprecated.</Text>
+                        <Stack spacing="5" my="5">
+                            {_goerliGroups.map((group) => (
+                                <GoerliGroupCard
+                                    key={group.id}
+                                    name={group.name}
+                                    id={group.id}
+                                />
+                            ))}
+                        </Stack>
+                        <Text>
+                            To fetch more information about the Goerli groups
+                            you can use the{" "}
+                            <ChakraLink
+                                href="https://docs.semaphore.pse.dev/V3/guides/fetching-data"
+                                isExternal
+                                textDecoration="underline"
+                            >
+                                @semaphore-protocol/data
+                            </ChakraLink>{" "}
+                            package.
+                        </Text>
+                    </Box>
                 )}
             </VStack>
         </Container>
