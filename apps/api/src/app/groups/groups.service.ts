@@ -1,4 +1,4 @@
-import { BandadaContract, getBandadaContract, Network } from "@bandada/utils"
+// import { BandadaContract, getBandadaContract, Network } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
@@ -23,7 +23,7 @@ import { MerkleProof } from "./types"
 @Injectable()
 export class GroupsService {
     private cachedGroups: Map<string, CachedGroup>
-    private bandadaContract: BandadaContract
+    // private bandadaContract: BandadaContract
 
     constructor(
         @InjectRepository(Group)
@@ -34,11 +34,11 @@ export class GroupsService {
         private readonly invitesService: InvitesService
     ) {
         this.cachedGroups = new Map()
-        this.bandadaContract = getBandadaContract(
-            process.env.ETHEREUM_NETWORK as Network,
-            process.env.BACKEND_PRIVATE_KEY as string,
-            process.env.INFURA_API_KEY as string
-        )
+        // this.bandadaContract = getBandadaContract(
+        //     process.env.ETHEREUM_NETWORK as Network,
+        //     process.env.BACKEND_PRIVATE_KEY as string,
+        //     process.env.INFURA_API_KEY as string
+        // )
     }
 
     /**
@@ -697,24 +697,24 @@ export class GroupsService {
         return fingerprints
     }
 
-    private async _updateFingerprintDuration(
-        groupId: string,
-        duration: number
-    ): Promise<void> {
-        try {
-            await this.bandadaContract.updateFingerprintDuration(
-                BigInt(groupId),
-                BigInt(duration)
-            )
-            Logger.log(
-                `GroupsService: group '${groupId}' fingerprint duration has been updated in the contract`
-            )
-        } catch {
-            Logger.log(
-                `GroupsService: failed to update fingerprint duration contract groups`
-            )
-        }
-    }
+    // private async _updateFingerprintDuration(
+    //     groupId: string,
+    //     duration: number
+    // ): Promise<void> {
+    //     try {
+    //         await this.bandadaContract.updateFingerprintDuration(
+    //             BigInt(groupId),
+    //             BigInt(duration)
+    //         )
+    //         Logger.log(
+    //             `GroupsService: group '${groupId}' fingerprint duration has been updated in the contract`
+    //         )
+    //     } catch {
+    //         Logger.log(
+    //             `GroupsService: failed to update fingerprint duration contract groups`
+    //         )
+    //     }
+    // }
 
     private async _cacheGroups() {
         const groups = await this.getGroups()
@@ -739,42 +739,42 @@ export class GroupsService {
         Logger.log(`GroupsService: ${groups.length} groups have been cached`)
     }
 
-    /**
-     * If the off-chain groups roots don't match the contract's ones, it updates them.
-     */
-    /* istanbul ignore next */
-    private async _syncContractGroups() {
-        const contractGroups = await this.bandadaContract.getGroups()
-        const fingerprints = new Set(
-            contractGroups.map(({ fingerprint }) => fingerprint.toString())
-        )
+    // /**
+    //  * If the off-chain groups roots don't match the contract's ones, it updates them.
+    //  */
+    // /* istanbul ignore next */
+    // private async _syncContractGroups() {
+    //     const contractGroups = await this.bandadaContract.getGroups()
+    //     const fingerprints = new Set(
+    //         contractGroups.map(({ fingerprint }) => fingerprint.toString())
+    //     )
 
-        for (const [, group] of this.cachedGroups) {
-            if (!fingerprints.has(group.root.toString())) {
-                this._updateContractGroup(group)
-            }
-        }
-    }
+    //     for (const [, group] of this.cachedGroups) {
+    //         if (!fingerprints.has(group.root.toString())) {
+    //             this._updateContractGroup(group)
+    //         }
+    //     }
+    // }
 
-    /**
-     * Update the fingerprint of the group in the contract.
-     * @param group Off-chain group.
-     */
-    /* istanbul ignore next */
-    private async _updateContractGroup(group: CachedGroup): Promise<void> {
-        try {
-            await this.bandadaContract.updateGroups([
-                {
-                    id: BigInt(group.id),
-                    fingerprint: BigInt(group.root)
-                }
-            ])
+    // /**
+    //  * Update the fingerprint of the group in the contract.
+    //  * @param group Off-chain group.
+    //  */
+    // /* istanbul ignore next */
+    // private async _updateContractGroup(group: CachedGroup): Promise<void> {
+    //     try {
+    //         await this.bandadaContract.updateGroups([
+    //             {
+    //                 id: BigInt(group.id),
+    //                 fingerprint: BigInt(group.root)
+    //             }
+    //         ])
 
-            Logger.log(
-                `GroupsService: group '${group.id}' has been updated in the contract`
-            )
-        } catch {
-            Logger.error(`GroupsService: failed to update contract groups`)
-        }
-    }
+    //         Logger.log(
+    //             `GroupsService: group '${group.id}' has been updated in the contract`
+    //         )
+    //     } catch {
+    //         Logger.error(`GroupsService: failed to update contract groups`)
+    //     }
+    // }
 }
