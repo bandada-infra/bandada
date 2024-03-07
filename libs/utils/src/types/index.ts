@@ -2,8 +2,8 @@
 export type Network =
     | "localhost"
     // | "homestead"
-    | "goerli"
-// | "sepolia"
+    // | "goerli"
+    | "sepolia"
 // | "arbitrum"
 // | "arbitrum-goerli"
 // | "matic"

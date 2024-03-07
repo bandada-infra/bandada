@@ -74,7 +74,7 @@ export default function HomePage(): JSX.Element {
                                         </HStack>
                                     </Link>
                                     <Link
-                                        href={`https://goerli.etherscan.io/address/${CONTRACT_ADDRESSES.goerli.Bandada}`}
+                                        href={`https://sepolia.etherscan.io/address/${CONTRACT_ADDRESSES.sepolia.Bandada}`}
                                         isExternal
                                     >
                                         <HStack spacing="1">

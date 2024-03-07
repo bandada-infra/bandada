@@ -15,7 +15,7 @@ import {
 import React, { ReactNode, useEffect, useMemo, useState } from "react"
 import { SiweMessage } from "siwe"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
-import { goerli } from "wagmi/chains"
+import { sepolia } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
 import { getNonce, logOut, signIn } from "../api/bandadaAPI"
 import useSessionData from "../hooks/use-session-data"
@@ -83,7 +83,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     )
 
     const { chains, provider, webSocketProvider } = configureChains(
-        [goerli],
+        [sepolia],
         [publicProvider()]
     )
 

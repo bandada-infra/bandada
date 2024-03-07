@@ -130,7 +130,7 @@ ${memberIds.join("\n")}
             }
 
             try {
-                const semaphore = getSemaphoreContract("goerli", signer as any)
+                const semaphore = getSemaphoreContract("sepolia", signer as any)
 
                 await semaphore.addMembers(group.name, memberIds)
 
@@ -138,7 +138,7 @@ ${memberIds.join("\n")}
                 onClose(memberIds)
             } catch (error) {
                 alert(
-                    "Some error occurred! Check if you're on Goerli network and the transaction is signed and completed"
+                    "Some error occurred! Check if you're on Sepolia network and the transaction is signed and completed"
                 )
 
                 setIsLoading(false)

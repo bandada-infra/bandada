@@ -26,9 +26,9 @@ function getNetworks(): NetworksUserConfig {
             chainId: 1337,
             accounts
         },
-        goerli: {
-            url: `https://goerli.infura.io/v3/${infuraApiKey}`,
-            chainId: 5,
+        sepolia: {
+            url: `https://sepolia.infura.io/v3/${infuraApiKey}`,
+            chainId: 11155111,
             accounts
         },
         arbitrum: {
