@@ -8,7 +8,7 @@
     "private": true,
     "scripts": {
         "start": "yarn workspaces foreach -pi run start",
-        "dev": "yarn workspaces foreach -pi run dev",
+        "dev": "yarn workspaces foreach --exclude contracts -pi run dev",
         "test": "jest && yarn workspace contracts test",
         "test:coverage": "yarn test:jest:coverage && yarn test:contracts:coverage",
         "test:jest:coverage": "jest --coverage",
