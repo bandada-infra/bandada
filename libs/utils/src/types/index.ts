@@ -2,7 +2,6 @@
 export type Network =
     | "localhost"
     // | "homestead"
-    // | "goerli"
     | "sepolia"
 // | "arbitrum"
 // | "arbitrum-goerli"
