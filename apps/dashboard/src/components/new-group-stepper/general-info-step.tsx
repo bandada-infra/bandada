@@ -204,10 +204,10 @@ export default function GeneralInfoStep({
                         !group.type ||
                         !_groupName ||
                         (group.type === "off-chain" &&
-                            _fingerprintDuration === undefined) ||
-                        (group.type === "off-chain" && !_groupDescription) ||
-                        (group.type === "off-chain" &&
-                            _groupDescription.length < 10) ||
+                            (_fingerprintDuration === undefined ||
+                                Number.isNaN(_fingerprintDuration) ||
+                                !_groupDescription ||
+                                _groupDescription.length < 10)) ||
                         _fingerprintDuration < 0
                     }
                     variant="solid"
