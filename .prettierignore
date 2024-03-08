@@ -33,3 +33,9 @@ artifacts
 typechain
 typechain-types
 hardhat-dependency-compiler
+
+# Docusaurus cache and generated files
+.docusaurus
+.cache-loader
+
+!apps/docs

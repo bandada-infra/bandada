@@ -1,0 +1,18 @@
+[
+    {
+        "title": "Bandada: a Tool to Manage Groups",
+        "eventName": "PROGCRYPTO",
+        "date": "2023-11-16",
+        "speakers": ["Vivian Plasencia"],
+        "url": "https://youtu.be/M7OenOdBEDc",
+        "thumbnail": "https://img.youtube.com/vi/M7OenOdBEDc/0.jpg"
+    },
+    {
+        "title": "Manage Groups with Bandada",
+        "eventName": "ETHGlobal - Circuit Breaker",
+        "date": "2024-02-02",
+        "speakers": ["Giacomo Corrias | 0xjei"],
+        "url": "https://youtu.be/M7CJ3hYx2pg",
+        "thumbnail": "https://img.youtube.com/vi/M7CJ3hYx2pg/0.jpg"
+    }
+]

@@ -7,7 +7,7 @@
     "bugs": "https://github.com/privacy-scaling-explorations/bandada/issues",
     "private": true,
     "scripts": {
-        "start": "yarn workspaces foreach -pi run start",
+        "start": "yarn workspaces foreach --exclude bandada-docs -pi run start",
         "dev": "yarn workspaces foreach -pi run dev",
         "test": "jest && yarn workspace contracts test",
         "test:coverage": "yarn test:jest:coverage && yarn test:contracts:coverage",
