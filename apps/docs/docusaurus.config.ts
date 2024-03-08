@@ -8,15 +8,15 @@ const config: Config = {
     favicon: "img/favicon.ico",
 
     // Set the production url of your site here
-    url: "https://your-docusaurus-site.example.com",
+    url: "https://bandada-docs.vercel.app",
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: "/",
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: "facebook", // Usually your GitHub org/user name.
-    projectName: "docusaurus", // Usually your repo name.
+    organizationName: "bandada-infra", // Usually your GitHub org/user name.
+    projectName: "bandada", // Usually your repo name.
 
     onBrokenLinks: "warn",
     onBrokenMarkdownLinks: "warn",
@@ -39,7 +39,7 @@ const config: Config = {
                     // Please change this to your repo.
                     // Remove this to remove the "edit this page" links.
                     editUrl:
-                        "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/"
+                        "https://github.com/bandada-infra/bandada/edit/main/apps/docs"
                 },
                 blog: false,
                 theme: {
