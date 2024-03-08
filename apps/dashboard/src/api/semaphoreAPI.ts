@@ -63,3 +63,38 @@ export async function getGroup(groupId: string): Promise<Group | null> {
         return null
     }
 }
+
+/**
+ * It returns the Semaphore on-chain groups on Goerli for a specific admin.
+ * @param adminAddress The admin address.
+ * @returns The list of groups.
+ */
+export async function getGoerliGroups(
+    adminAddress: string
+): Promise<Group[] | null> {
+    const goerliSubgraph = new SemaphoreSubgraph("goerli")
+
+    try {
+        const groups = await goerliSubgraph.getGroups({
+            members: true,
+            filters: { admin: adminAddress }
+        })
+
+        return groups.map((group) => {
+            const groupName = parseGroupName(group.id)
+
+            return {
+                id: group.id,
+                name: groupName,
+                treeDepth: group.merkleTree.depth,
+                members: group.members as string[],
+                admin: group.admin as string,
+                type: "on-chain"
+            }
+        })
+    } catch (error) {
+        console.error(error)
+
+        return null
+    }
+}

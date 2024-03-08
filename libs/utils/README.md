@@ -159,5 +159,5 @@ Returns the contract addresses for the Bandada, Semaphore and BandadaSemaphore s
 ```ts
 import { getContractAddresses } from "@bandada/utils"
 
-const addresses = getContractAddresses("goerli")
+const addresses = getContractAddresses("sepolia")
 ```

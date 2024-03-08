@@ -1,15 +1,5 @@
 // Supported networks: https://docs.ethers.org/v5/api/providers/api-providers/#InfuraProvider
-export type Network =
-    | "localhost"
-    // | "homestead"
-    | "goerli"
-// | "sepolia"
-// | "arbitrum"
-// | "arbitrum-goerli"
-// | "matic"
-// | "maticmum"
-// | "optimism"
-// | "optimism-goerli"
+export type Network = "localhost" | "sepolia"
 
 export type ContractName = "Bandada" | "Semaphore" | "BandadaSemaphore"
 

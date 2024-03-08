@@ -98,4 +98,4 @@ yarn deploy:bandada
 yarn deploy:bandada-semaphore
 ```
 
-If you want to deploy contracts on Goerli or Arbitrum, remember to provide a valid private key and an Infura API in your `.env` file.
+If you want to deploy contracts on Sepolia or Arbitrum, remember to provide a valid private key and an Infura API in your `.env` file.
