@@ -20,9 +20,9 @@ export function getAdmin() {
 
     if (admin) {
         try {
-            return JSON.parse(admin);
+            return JSON.parse(admin)
         } catch (error) {
-            console.error("Failed to parse admin data:", error);
+            console.error("Failed to parse admin data:", error)
         }
     }
 
