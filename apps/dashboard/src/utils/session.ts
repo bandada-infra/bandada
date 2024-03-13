@@ -19,7 +19,11 @@ export function getAdmin() {
     const admin = localStorage.getItem("admin")
 
     if (admin) {
-        return JSON.parse(admin)
+        try {
+            return JSON.parse(admin)
+        } catch (error) {
+            console.error("Failed to parse admin data:", error)
+        }
     }
 
     return null
