@@ -19,7 +19,7 @@ export default function RenderArticles(): JSX.Element {
                         >
                             {article.title}
                         </a>{" "}
-                        - {article.authors.join(", ")}{" "}
+                        - {article.authors.join(", ")} (<i>{article.date}</i>)
                     </div>
                 ))}
         </div>
