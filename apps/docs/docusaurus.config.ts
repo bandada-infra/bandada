@@ -8,7 +8,7 @@ const config: Config = {
     favicon: "img/favicon.ico",
 
     // Set the production url of your site here
-    url: "https://bandada-docs.vercel.app",
+    url: "https://docs.bandada.pse.dev",
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: "/",
@@ -50,8 +50,11 @@ const config: Config = {
     ],
 
     themeConfig: {
-        // Replace with your project's social card
-        image: "img/docusaurus-social-card.jpg",
+        // Social media card
+        image: "img/social-media.png",
+        colorMode: {
+            defaultMode: "dark"
+        },
         navbar: {
             title: "bandada",
             logo: {
@@ -65,7 +68,7 @@ const config: Config = {
                     position: "right"
                 },
                 {
-                    href: "https://github.com/facebook/docusaurus",
+                    href: "https://github.com/bandada-infra",
                     label: "GitHub",
                     position: "right"
                 }
