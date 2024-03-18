@@ -22,8 +22,7 @@ export class CredentialsController {
             dto.oAuthState,
             dto.oAuthCode,
             dto.address,
-            dto.network,
-            dto.blockNumber
+            dto.network
         )
     }
 }

@@ -86,8 +86,7 @@ export class CredentialsService {
         oAuthState: string,
         oAuthCode?: string,
         address?: string,
-        network?: string,
-        blockNumber?: string
+        network?: string
     ): Promise<string> {
         if (!this.oAuthState.has(oAuthState)) {
             throw new BadRequestException(`OAuth state does not exist`)
@@ -118,14 +117,9 @@ export class CredentialsService {
                 provider as BlockchainProvider
             ).getJsonRpcProvider(web3providerRpcURL)
 
-            const BlockNumberNumber = blockNumber
-                ? Number(blockNumber)
-                : undefined
-
             context = {
                 address,
-                jsonRpcProvider,
-                blockNumber: BlockNumberNumber
+                jsonRpcProvider
             }
 
             // Check if the same account has already joined the group.

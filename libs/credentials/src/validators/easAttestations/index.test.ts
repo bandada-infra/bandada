@@ -54,11 +54,11 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 3
+                    minAttestations: 3,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8"
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
                 queryGraph: queryGraphMocked.queryGraph
             }
         )
@@ -71,18 +71,18 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 1
+                    minAttestations: 1,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
+                    attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
+                    revocable: true,
+                    revoked: false,
+                    isOffchain: false
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
-                queryGraph: queryGraphMocked.queryGraph,
-                attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
-                schemaId:
-                    "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-                revocable: true,
-                revoked: false,
-                isOffchain: false
+                queryGraph: queryGraphMocked.queryGraph
             }
         )
 
@@ -94,18 +94,18 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 1
+                    minAttestations: 1,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
+                    attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d4",
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
+                    revocable: true,
+                    revoked: false,
+                    isOffchain: false
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
-                queryGraph: queryGraphMocked.queryGraph,
-                attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d4",
-                schemaId:
-                    "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-                revocable: true,
-                revoked: false,
-                isOffchain: false
+                queryGraph: queryGraphMocked.queryGraph
             }
         )
 
@@ -117,18 +117,18 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 1
+                    minAttestations: 1,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
+                    attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5d",
+                    revocable: true,
+                    revoked: false,
+                    isOffchain: false
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
-                queryGraph: queryGraphMocked.queryGraph,
-                attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
-                schemaId:
-                    "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5d",
-                revocable: true,
-                revoked: false,
-                isOffchain: false
+                queryGraph: queryGraphMocked.queryGraph
             }
         )
 
@@ -140,18 +140,18 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 1
+                    minAttestations: 1,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
+                    attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
+                    revocable: false,
+                    revoked: false,
+                    isOffchain: false
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
-                queryGraph: queryGraphMocked.queryGraph,
-                attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
-                schemaId:
-                    "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-                revocable: false,
-                revoked: false,
-                isOffchain: false
+                queryGraph: queryGraphMocked.queryGraph
             }
         )
 
@@ -163,18 +163,18 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 1
+                    minAttestations: 1,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
+                    attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
+                    revocable: true,
+                    revoked: true,
+                    isOffchain: false
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
-                queryGraph: queryGraphMocked.queryGraph,
-                attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
-                schemaId:
-                    "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-                revocable: true,
-                revoked: true,
-                isOffchain: false
+                queryGraph: queryGraphMocked.queryGraph
             }
         )
 
@@ -186,18 +186,18 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 1
+                    minAttestations: 1,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
+                    attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
+                    revocable: true,
+                    revoked: false,
+                    isOffchain: true
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae8",
-                queryGraph: queryGraphMocked.queryGraph,
-                attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
-                schemaId:
-                    "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
-                revocable: true,
-                revoked: false,
-                isOffchain: true
+                queryGraph: queryGraphMocked.queryGraph
             }
         )
 
@@ -209,11 +209,11 @@ describe("EASAttestations", () => {
             {
                 id: easAttestations.id,
                 criteria: {
-                    minAttestations: 3
+                    minAttestations: 3,
+                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae9"
                 }
             },
             {
-                recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae9",
                 queryGraph: queryGraphMocked.queryGraph
             }
         )
@@ -221,7 +221,7 @@ describe("EASAttestations", () => {
         expect(result).toBeFalsy()
     })
 
-    it("Should throw an error if a criteria parameter is missing", async () => {
+    it("Should throw an error if a mandatory criteria parameter is missing", async () => {
         const fun = () =>
             validateCredentials(
                 {
@@ -229,7 +229,6 @@ describe("EASAttestations", () => {
                     criteria: {}
                 },
                 {
-                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae9",
                     queryGraph: queryGraphMocked.queryGraph
                 }
             )
@@ -246,11 +245,11 @@ describe("EASAttestations", () => {
                     id: easAttestations.id,
                     criteria: {
                         minAttestations: 1,
+                        recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae9",
                         test: 123
                     }
                 },
                 {
-                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae9",
                     queryGraph: queryGraphMocked.queryGraph
                 }
             )
@@ -266,11 +265,11 @@ describe("EASAttestations", () => {
                 {
                     id: easAttestations.id,
                     criteria: {
-                        minAttestations: "1"
+                        minAttestations: "1",
+                        recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae9"
                     }
                 },
                 {
-                    recipient: "0x9aB3971e1b065701C72C5f3cAFbF33118dC51ae9",
                     queryGraph: queryGraphMocked.queryGraph
                 }
             )

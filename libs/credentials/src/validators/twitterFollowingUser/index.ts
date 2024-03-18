@@ -8,7 +8,10 @@ const validator: Validator = {
     id: "TWITTER_FOLLOWING_USER",
 
     criteriaABI: {
-        username: "string"
+        username: {
+            type: "string",
+            optional: false
+        }
     },
 
     /**

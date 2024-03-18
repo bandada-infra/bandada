@@ -8,7 +8,10 @@ const validator: Validator = {
     id: "GITHUB_FOLLOWERS",
 
     criteriaABI: {
-        minFollowers: "number"
+        minFollowers: {
+            type: "number",
+            optional: false
+        }
     },
 
     /**
