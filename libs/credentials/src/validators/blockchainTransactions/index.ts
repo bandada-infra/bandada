@@ -2,7 +2,7 @@ import { BlockchainContext, Validator } from "../.."
 
 export type Criteria = {
     minTransactions: number
-    blockNumber: number
+    blockNumber?: number
 }
 
 const validator: Validator = {
