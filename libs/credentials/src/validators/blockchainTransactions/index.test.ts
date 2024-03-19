@@ -32,13 +32,13 @@ describe("BlockchainTransactions", () => {
             {
                 id: blockchainTransactions.id,
                 criteria: {
-                    minTransactions: 10
+                    minTransactions: 10,
+                    blockNumber: 4749638
                 }
             },
             {
                 address: "0x",
-                jsonRpcProvider: jsonRpcProviderMocked,
-                blockNumber: 4749638
+                jsonRpcProvider: jsonRpcProviderMocked
             }
         )
 

@@ -329,8 +329,7 @@ describe("CredentialsService", () => {
                 _stateId,
                 undefined,
                 "0x1",
-                "sepolia",
-                "1234"
+                "sepolia"
             )
 
             expect(clientRedirectUri).toBeUndefined()

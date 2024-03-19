@@ -7,7 +7,9 @@
 export default function checkCriteria(criteria: any, criteriaABI: any) {
     for (const parameter in criteriaABI) {
         if (Object.prototype.hasOwnProperty.call(criteriaABI, parameter)) {
-            if (criteria[parameter] === undefined) {
+            const isOptional = criteriaABI[parameter].optional
+
+            if (!isOptional && criteria[parameter] === undefined) {
                 throw Error(`Parameter '${parameter}' has not been defined`)
             }
         }
@@ -28,10 +30,10 @@ export default function checkCriteria(criteria: any, criteriaABI: any) {
                 value !== null &&
                 !Array.isArray(value)
             ) {
-                checkCriteria(value, criteriaABI[parameter])
-            } else if (typeof value !== criteriaABI[parameter]) {
+                checkCriteria(value, criteriaABI[parameter].type)
+            } else if (typeof value !== criteriaABI[parameter].type) {
                 throw TypeError(
-                    `Parameter '${parameter}' is not a ${criteriaABI[parameter]}`
+                    `Parameter '${parameter}' is not a ${criteriaABI[parameter].type}`
                 )
             }
         }

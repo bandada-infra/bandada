@@ -3,13 +3,21 @@ import { BlockchainContext, Validator } from "../.."
 
 export type Criteria = {
     minBalance: string
+    blockNumber?: number
 }
 
 const validator: Validator = {
     id: "BLOCKCHAIN_BALANCE",
 
     criteriaABI: {
-        minBalance: "string"
+        minBalance: {
+            type: "string",
+            optional: false
+        },
+        blockNumber: {
+            type: "number",
+            optional: true
+        }
     },
 
     /**
@@ -20,11 +28,16 @@ const validator: Validator = {
      */
     async validate(criteria: Criteria, context) {
         if ("address" in context) {
+            const blockNumber =
+                criteria.blockNumber !== undefined
+                    ? criteria.blockNumber
+                    : undefined
+
             const balance = await (
                 context as BlockchainContext
             ).jsonRpcProvider.getBalance(
                 (context as BlockchainContext).address,
-                (context as BlockchainContext).blockNumber
+                blockNumber
             )
             return balance >= BigNumber.from(criteria.minBalance)
         }

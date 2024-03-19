@@ -8,7 +8,10 @@ const validator: Validator = {
     id: "GITHUB_PERSONAL_STARS",
 
     criteriaABI: {
-        minStars: "number"
+        minStars: {
+            type: "number",
+            optional: false
+        }
     },
 
     /**

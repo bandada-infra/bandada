@@ -9,8 +9,14 @@ const validator: Validator = {
     id: "GITHUB_REPOSITORY_COMMITS",
 
     criteriaABI: {
-        repository: "string",
-        minCommits: "number"
+        minCommits: {
+            type: "number",
+            optional: false
+        },
+        repository: {
+            type: "string",
+            optional: false
+        }
     },
 
     /**

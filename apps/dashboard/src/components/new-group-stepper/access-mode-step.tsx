@@ -2,6 +2,7 @@ import { validators } from "@bandada/credentials"
 import {
     Box,
     Button,
+    Checkbox,
     HStack,
     Icon,
     Input,
@@ -157,15 +158,21 @@ export default function AccessModeStep({
                     {_credentials &&
                         _credentials.criteria &&
                         Object.entries(validators[_validator].criteriaABI).map(
-                            (parameter) => (
+                            (parameter: any) => (
                                 <VStack
                                     align="left"
                                     pt="20px"
                                     key={parameter[0]}
                                 >
-                                    <Text>{capitalize(parameter[0])}</Text>
+                                    <Text>
+                                        {capitalize(
+                                            `${parameter[0]}${
+                                                parameter[1].optional ? "" : "*"
+                                            }`
+                                        )}
+                                    </Text>
 
-                                    {parameter[1] === "number" ? (
+                                    {parameter[1].type === "number" && (
                                         <NumberInput
                                             size="lg"
                                             value={
@@ -190,7 +197,8 @@ export default function AccessModeStep({
                                                 <NumberDecrementStepper />
                                             </NumberInputStepper>
                                         </NumberInput>
-                                    ) : (
+                                    )}
+                                    {parameter[1].type === "string" && (
                                         <Input
                                             size="lg"
                                             value={
@@ -212,6 +220,25 @@ export default function AccessModeStep({
                                                 parameter[0] === "repository"
                                                     ? "<repo-owner>/<repo-name>"
                                                     : undefined
+                                            }
+                                        />
+                                    )}
+                                    {parameter[1].type === "boolean" && (
+                                        <Checkbox
+                                            isChecked={
+                                                _credentials.criteria[
+                                                    parameter[0]
+                                                ]
+                                            }
+                                            onChange={(e) =>
+                                                setCredentials({
+                                                    ..._credentials,
+                                                    criteria: {
+                                                        ..._credentials.criteria,
+                                                        [parameter[0]]:
+                                                            e.target.checked
+                                                    }
+                                                })
                                             }
                                         />
                                     )}
@@ -244,12 +271,14 @@ export default function AccessModeStep({
                         (_accessMode === "credentials" &&
                             (!_credentials ||
                                 !_credentials.criteria ||
-                                Object.keys(_credentials.criteria).length !==
-                                    Object.keys(
-                                        validators[_validator].criteriaABI
-                                    ).length ||
-                                Object.values(_credentials.criteria).some(
-                                    (c) => c === undefined
+                                Object.entries(
+                                    validators[_validator].criteriaABI
+                                ).some(
+                                    ([key, { optional }]: any) =>
+                                        !optional &&
+                                        (_credentials.criteria[key] ===
+                                            undefined ||
+                                            !_credentials.criteria[key])
                                 )))
                     }
                     variant="solid"

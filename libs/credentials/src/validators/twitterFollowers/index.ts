@@ -8,7 +8,10 @@ const validator: Validator = {
     id: "TWITTER_FOLLOWERS",
 
     criteriaABI: {
-        minFollowers: "number"
+        minFollowers: {
+            type: "number",
+            optional: false
+        }
     },
 
     /**

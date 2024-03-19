@@ -33,13 +33,13 @@ describe("BlockchainBalance", () => {
             {
                 id: blockchainBalance.id,
                 criteria: {
-                    minBalance: "10"
+                    minBalance: "10",
+                    blockNumber: 4749638
                 }
             },
             {
                 address: "0x",
-                jsonRpcProvider: jsonRpcProviderMocked,
-                blockNumber: 4749638
+                jsonRpcProvider: jsonRpcProviderMocked
             }
         )
 

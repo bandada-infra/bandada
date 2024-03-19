@@ -2,13 +2,46 @@ import { Context, EASContext, Validator } from "../.."
 
 export type Criteria = {
     minAttestations: number
+    recipient: string
+    attester?: string
+    schemaId?: string
+    revocable?: boolean
+    revoked?: boolean
+    isOffchain?: boolean
 }
 
 const validator: Validator = {
     id: "EAS_ATTESTATIONS",
 
     criteriaABI: {
-        minAttestations: "number"
+        minAttestations: {
+            type: "number",
+            optional: false
+        },
+        recipient: {
+            type: "string",
+            optional: false
+        },
+        attester: {
+            type: "string",
+            optional: true
+        },
+        schemaId: {
+            type: "string",
+            optional: true
+        },
+        revocable: {
+            type: "boolean",
+            optional: true
+        },
+        revoked: {
+            type: "boolean",
+            optional: true
+        },
+        isOffchain: {
+            type: "boolean",
+            optional: true
+        }
     },
 
     /**
@@ -18,7 +51,9 @@ const validator: Validator = {
      * @returns True if the user meets the criteria.
      */
     async validate(criteria: Criteria, context: Context) {
-        if ("recipient" in context) {
+        if ("queryGraph" in context) {
+            const getAttestations = (context as EASContext).queryGraph
+
             const {
                 recipient,
                 attester,
@@ -26,8 +61,7 @@ const validator: Validator = {
                 revocable,
                 revoked,
                 isOffchain
-            } = context as EASContext
-            const getAttestations = (context as EASContext).queryGraph
+            } = criteria
 
             const attestations = await getAttestations(`
                 query {
@@ -44,10 +78,9 @@ const validator: Validator = {
 
             const filteredAttestations = attestations.filter(
                 (attestation: any) => {
-                    // Mandatory recipient check.
+                    // Criteria checks.
                     if (attestation.recipient !== recipient) return false
 
-                    // Optional criteria checks.
                     if (
                         attester !== undefined &&
                         attestation.attester !== attester
