@@ -9053,6 +9053,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^9.0.8":
+  version: 9.0.8
+  resolution: "@types/uuid@npm:9.0.8"
+  checksum: 10/b8c60b7ba8250356b5088302583d1704a4e1a13558d143c549c408bf8920535602ffc12394ede77f8a8083511b023704bc66d1345792714002bfa261b17c5275
+  languageName: node
+  linkType: hard
+
 "@types/validator@npm:^13.7.10":
   version: 13.7.12
   resolution: "@types/validator@npm:13.7.12"
@@ -10708,6 +10715,7 @@ __metadata:
     "@semaphore-protocol/group": "npm:3.10.0"
     "@types/express": "npm:^4.17.13"
     "@types/node": "npm:18.11.18"
+    "@types/uuid": "npm:^9.0.8"
     class-transformer: "npm:^0.5.1"
     class-validator: "npm:^0.14.0"
     dotenv: "npm:^16.0.3"
