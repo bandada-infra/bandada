@@ -1,13 +1,14 @@
 import { Global, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { Admin } from "./entities/admin.entity"
-import { AdminService } from "./admins.service"
+import { AdminsService } from "./admins.service"
+import { AdminsController } from "./admins.controller"
 
 @Global()
 @Module({
     imports: [TypeOrmModule.forFeature([Admin])],
-    exports: [AdminService],
-    providers: [AdminService],
-    controllers: []
+    exports: [AdminsService],
+    providers: [AdminsService],
+    controllers: [AdminsController]
 })
 export class AdminsModule {}

@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm"
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryColumn,
+    UpdateDateColumn
+} from "typeorm"
 
 @Entity("admins")
 export class Admin {
@@ -12,6 +18,15 @@ export class Admin {
     @Column({ unique: true })
     username: string
 
+    @Column({ name: "api_key", nullable: true })
+    apiKey: string
+
+    @Column({ name: "api_enabled", default: false })
+    apiEnabled: boolean
+
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date
+
+    @UpdateDateColumn({ name: "updated_at" })
+    updatedAt: Date
 }

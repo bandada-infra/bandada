@@ -7,6 +7,7 @@ import { GroupsService } from "../groups/groups.service"
 import { OAuthAccount } from "../credentials/entities/credentials-account.entity"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
+import { AdminsModule } from "../admins/admins.module"
 
 jest.mock("@bandada/utils", () => ({
     __esModule: true,
@@ -37,7 +38,8 @@ describe("InvitesService", () => {
                     })
                 }),
                 TypeOrmModule.forFeature([Group, Invite, Member]),
-                ScheduleModule.forRoot()
+                ScheduleModule.forRoot(),
+                AdminsModule
             ],
             providers: [GroupsService, InvitesService]
         }).compile()
