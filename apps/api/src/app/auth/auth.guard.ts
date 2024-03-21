@@ -5,11 +5,11 @@ import {
     Injectable,
     UnauthorizedException
 } from "@nestjs/common"
-import { AdminService } from "../admins/admins.service"
+import { AdminsService } from "../admins/admins.service"
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    constructor(private adminService: AdminService) {}
+    constructor(private adminsService: AdminsService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest()
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
         }
 
         try {
-            const admin = await this.adminService.findOne({ id: adminId })
+            const admin = await this.adminsService.findOne({ id: adminId })
 
             req["admin"] = admin
         } catch {

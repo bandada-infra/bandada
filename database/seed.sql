@@ -4,7 +4,10 @@ CREATE TABLE admins (
     id character varying PRIMARY KEY,
     address character varying NOT NULL UNIQUE,
     username character varying NOT NULL UNIQUE,
-    created_at timestamp without time zone NOT NULL DEFAULT now()
+    api_key character varying,
+    api_enabled boolean NOT NULL DEFAULT false,
+    created_at timestamp without time zone NOT NULL DEFAULT now(),
+    updated_at timestamp without time zone NOT NULL DEFAULT now()
 );
 
 -- Table Definition ----------------------------------------------
@@ -17,8 +20,6 @@ CREATE TABLE groups (
     tree_depth integer NOT NULL,
     fingerprint_duration integer NOT NULL,
     credentials text,
-    api_enabled boolean NOT NULL DEFAULT false,
-    api_key character varying,
     created_at timestamp without time zone NOT NULL DEFAULT now(),
     updated_at timestamp without time zone NOT NULL DEFAULT now()
 );

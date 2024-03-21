@@ -5,12 +5,12 @@ import {
 } from "@nestjs/common"
 import { SiweMessage } from "siwe"
 import { v4 } from "uuid"
-import { AdminService } from "../admins/admins.service"
+import { AdminsService } from "../admins/admins.service"
 import { SignInWithEthereumDTO } from "./dto/siwe.dto"
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly adminService: AdminService) {}
+    constructor(private readonly adminsService: AdminsService) {}
 
     async signIn(
         { message, signature }: SignInWithEthereumDTO,
@@ -37,10 +37,10 @@ export class AuthService {
             )
         }
 
-        let admin = await this.adminService.findOne({ address })
+        let admin = await this.adminsService.findOne({ address })
 
         if (!admin) {
-            admin = await this.adminService.create({
+            admin = await this.adminsService.create({
                 id: v4(),
                 address
             })
@@ -50,6 +50,6 @@ export class AuthService {
     }
 
     async isLoggedIn(adminId: string): Promise<boolean> {
-        return !!(await this.adminService.findOne({ id: adminId }))
+        return !!(await this.adminsService.findOne({ id: adminId }))
     }
 }

@@ -12,8 +12,8 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
-import { v4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
+import { AdminsService } from "../admins/admins.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
@@ -31,7 +31,8 @@ export class GroupsService {
         @InjectRepository(Member)
         private readonly memberRepository: Repository<Member>,
         @Inject(forwardRef(() => InvitesService))
-        private readonly invitesService: InvitesService
+        private readonly invitesService: InvitesService,
+        private readonly adminsService: AdminsService
     ) {
         this.cachedGroups = new Map()
         // this.bandadaContract = getBandadaContract(
@@ -138,7 +139,6 @@ export class GroupsService {
         {
             description,
             treeDepth,
-            apiEnabled,
             credentials,
             fingerprintDuration
         }: UpdateGroupDto,
@@ -176,51 +176,11 @@ export class GroupsService {
             group.credentials = credentials
         }
 
-        if (!group.credentials && apiEnabled !== undefined) {
-            group.apiEnabled = apiEnabled
-
-            // Generate a new API key if it doesn't exist
-            if (!group.apiKey) {
-                group.apiKey = v4()
-            }
-        }
-
         await this.groupRepository.save(group)
 
         Logger.log(`GroupsService: group '${group.name}' has been updated`)
 
         return group
-    }
-
-    /**
-     * Updates the group api key.
-     * @param groupId Group id.
-     * @param adminId Group admin id.
-     */
-    async updateApiKey(groupId: string, adminId: string): Promise<string> {
-        const group = await this.getGroup(groupId)
-
-        if (group.adminId !== adminId) {
-            throw new UnauthorizedException(
-                `You are not the admin of the group '${groupId}'`
-            )
-        }
-
-        if (!group.apiEnabled) {
-            throw new UnauthorizedException(
-                `Group '${groupId}' API key is not enabled`
-            )
-        }
-
-        group.apiKey = v4()
-
-        await this.groupRepository.save(group)
-
-        Logger.log(
-            `GroupsService: group '${group.name}' APIs have been updated`
-        )
-
-        return group.apiKey
     }
 
     /**
@@ -320,8 +280,15 @@ export class GroupsService {
         apiKey: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
+        const admin = await this.adminsService.findOne({ id: group.adminId })
 
-        if (!group.apiEnabled || group.apiKey !== apiKey) {
+        if (!admin) {
+            throw new BadRequestException(
+                `Invalid admin for group '${groupId}'`
+            )
+        }
+
+        if (!admin.apiEnabled || admin.apiKey !== apiKey) {
             throw new BadRequestException(
                 `Invalid API key or API access not enabled for group '${groupId}'`
             )
@@ -540,8 +507,15 @@ export class GroupsService {
         apiKey: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
+        const admin = await this.adminsService.findOne({ id: group.adminId })
 
-        if (!group.apiEnabled || group.apiKey !== apiKey) {
+        if (!admin) {
+            throw new BadRequestException(
+                `Invalid admin for group '${groupId}'`
+            )
+        }
+
+        if (!admin.apiEnabled || admin.apiKey !== apiKey) {
             throw new BadRequestException(
                 `Invalid API key or API access not enabled for group '${groupId}'`
             )
