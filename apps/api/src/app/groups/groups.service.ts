@@ -107,6 +107,149 @@ export class GroupsService {
     }
 
     /**
+     * Create a group using API Key.
+     * @param dto External parameters used to create a new group.
+     * @param adminId Admin id.
+     * @param apiKey The API Key.
+     * @returns Created group.
+     */
+    async createGroupWithAPIKey(
+        dto: CreateGroupDto,
+        adminId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const groups = await this.createGroupsWithAPIKey([dto], adminId, apiKey)
+
+        return groups.at(0)
+    }
+
+    /**
+     * Create groups using API Key.
+     * @param dtos External parameters used to create new groups.
+     * @param adminId Admin id.
+     * @param apiKey The API Key.
+     * @returns Created groups.
+     */
+    async createGroupsWithAPIKey(
+        dtos: Array<CreateGroupDto>,
+        adminId: string,
+        apiKey: string
+    ): Promise<Array<Group>> {
+        const newGroups: Array<Group> = []
+
+        const admin = await this.adminsService.findOne({ id: adminId })
+
+        if (!admin) {
+            throw new BadRequestException(`Invalid admin for new groups`)
+        }
+
+        if (!admin.apiEnabled || admin.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        }
+
+        for await (const dto of dtos) {
+            const {
+                id: groupId,
+                name,
+                description,
+                treeDepth,
+                fingerprintDuration,
+                credentials
+            } = dto
+
+            const _groupId =
+                groupId ||
+                BigInt(id(name + adminId))
+                    .toString()
+                    .slice(0, 32)
+
+            const group = this.groupRepository.create({
+                id: _groupId,
+                name,
+                description,
+                treeDepth,
+                fingerprintDuration,
+                credentials,
+                adminId,
+                members: []
+            })
+
+            await this.groupRepository.save(group)
+
+            const cachedGroup = new CachedGroup(group.id, group.treeDepth)
+
+            this.cachedGroups.set(_groupId, cachedGroup)
+
+            // this._updateFingerprintDuration(group.id, fingerprintDuration)
+
+            Logger.log(
+                `GroupsService: group '${name}' has been created with id '${_groupId}'`
+            )
+
+            newGroups.push(group)
+        }
+
+        return newGroups
+    }
+
+    /**
+     * Remove a group using API Key.
+     * @param groupId Group id.
+     * @param adminId Admin id.
+     * @param apiKey the api key.
+     * @returns Created group.
+     */
+    async removeGroupWithAPIKey(
+        groupId: string,
+        adminId: string,
+        apiKey: string
+    ): Promise<void> {
+        return this.removeGroupsWithAPIKey([groupId], adminId, apiKey)
+    }
+
+    /**
+     * Remove groups using API Key.
+     * @param groupsIds Groups identifiers.
+     * @param adminId Admin id.
+     * @param apiKey the api key.
+     */
+    async removeGroupsWithAPIKey(
+        groupsIds: Array<string>,
+        adminId: string,
+        apiKey: string
+    ): Promise<void> {
+        const admin = await this.adminsService.findOne({ id: adminId })
+
+        if (!admin) {
+            throw new BadRequestException(`Invalid admin for groups`)
+        }
+
+        if (!admin.apiEnabled || admin.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        }
+
+        for await (const groupId of groupsIds) {
+            const group = await this.getGroup(groupId)
+
+            if (group.adminId !== adminId) {
+                throw new UnauthorizedException(
+                    `You are not the admin of the group '${groupId}'`
+                )
+            }
+
+            await this.groupRepository.remove(group)
+
+            this.cachedGroups.delete(groupId)
+
+            Logger.log(`GroupsService: group '${group.name}' has been removed`)
+        }
+    }
+
+    /**
      * Removes a group.
      * @param groupId Group id.
      * @param adminId Admin id.
@@ -290,7 +433,7 @@ export class GroupsService {
 
         if (!admin.apiEnabled || admin.apiKey !== apiKey) {
             throw new BadRequestException(
-                `Invalid API key or API access not enabled for group '${groupId}'`
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
             )
         }
 
@@ -517,7 +660,7 @@ export class GroupsService {
 
         if (!admin.apiEnabled || admin.apiKey !== apiKey) {
             throw new BadRequestException(
-                `Invalid API key or API access not enabled for group '${groupId}'`
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
             )
         }
 
