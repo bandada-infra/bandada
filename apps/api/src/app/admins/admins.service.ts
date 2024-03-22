@@ -1,10 +1,6 @@
 /* istanbul ignore file */
 import { id } from "@ethersproject/hash"
-import {
-    BadRequestException,
-    Injectable,
-    Logger
-} from "@nestjs/common"
+import { BadRequestException, Injectable, Logger } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindOptionsWhere, Repository } from "typeorm"
 import { v4 } from "uuid"
@@ -18,7 +14,7 @@ export class AdminsService {
     constructor(
         @InjectRepository(Admin)
         private readonly adminRepository: Repository<Admin>
-    ) { }
+    ) {}
 
     public async create(payload: CreateAdminDTO): Promise<Admin> {
         const username = payload.username || payload.address.slice(-5)
@@ -39,7 +35,7 @@ export class AdminsService {
 
     /**
      * Updates the API key for a given admin based on the specified actions.
-     * 
+     *
      * @param {UpdateApiKeyDTO} updateApiKeyDTO The DTO containing the admin ID and the action to be performed.
      * @returns {Promise<string>} The API key of the admin after the update operation. If the API key is disabled, the return value might not be meaningful.
      * @throws {BadRequestException} If the admin ID does not correspond to an existing admin, if the admin does not have an API key when trying to enable it, or if the action is unsupported.

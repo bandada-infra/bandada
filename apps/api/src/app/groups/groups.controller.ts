@@ -55,16 +55,11 @@ export class GroupsController {
     @Get(":group")
     @ApiOperation({ description: "Returns a specific group." })
     @ApiCreatedResponse({ type: Group })
-    async getGroup(
-        @Param("group") groupId: string
-    ) {
+    async getGroup(@Param("group") groupId: string) {
         const group = await this.groupsService.getGroup(groupId)
         const fingerprint = await this.groupsService.getFingerprint(groupId)
 
-        return mapGroupToResponseDTO(
-            group,
-            fingerprint
-        )
+        return mapGroupToResponseDTO(group, fingerprint)
     }
 
     @Post()
@@ -77,10 +72,7 @@ export class GroupsController {
         )
         const fingerprint = await this.groupsService.getFingerprint(group.id)
 
-        return mapGroupToResponseDTO(
-            group,
-            fingerprint
-        )
+        return mapGroupToResponseDTO(group, fingerprint)
     }
 
     @Delete(":group")
@@ -106,10 +98,7 @@ export class GroupsController {
 
         const fingerprint = await this.groupsService.getFingerprint(groupId)
 
-        return mapGroupToResponseDTO(
-            group,
-            fingerprint
-        )
+        return mapGroupToResponseDTO(group, fingerprint)
     }
 
     @Get(":group/members/:member")
