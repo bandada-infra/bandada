@@ -17,7 +17,7 @@ import {
     MenuButton,
     MenuItem,
     MenuList,
-    Switch,
+    // Switch,
     Text,
     Tooltip,
     useClipboard,
@@ -49,7 +49,7 @@ export default function GroupPage(): JSX.Element {
     const toast = useToast()
     const { groupId, groupType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
-    const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
+    // const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
         groupId || ""
     )
@@ -77,27 +77,33 @@ export default function GroupPage(): JSX.Element {
                     return
                 }
 
-                setApiKey(group.apiKey || "")
+                // @todo needs refactoring to support the new logic.
+                // setApiKey(group.apiKey || "")
                 setGroup(group)
             }
         })()
-    }, [groupId, groupType, setApiKey])
+    }, [
+        groupId,
+        groupType
+        // setApiKey
+    ])
 
-    const onApiAccessToggle = useCallback(
-        async (apiEnabled: boolean) => {
-            const group = await bandadaApi.updateGroup(_group!.id as string, {
-                apiEnabled
-            })
+    // const onApiAccessToggle = useCallback(
+    //     async (apiEnabled: boolean) => {
+    //         const group = await bandadaApi.updateGroup(_group!.id as string, {
+    //             apiEnabled
+    //         })
 
-            if (group === null) {
-                return
-            }
+    //         if (group === null) {
+    //             return
+    //         }
 
-            setApiKey(group.apiKey!)
-            setGroup(group)
-        },
-        [_group, setApiKey]
-    )
+    //         // @todo needs refactoring to support the new logic.
+    //         // setApiKey(group.apiKey!)
+    //         setGroup(group)
+    //     },
+    //     [_group, setApiKey]
+    // )
 
     const addMember = useCallback(
         (memberIds?: string[]) => {
@@ -199,24 +205,24 @@ ${memberIds.join("\n")}
         navigate("/groups")
     }, [_group, navigate])
 
-    const generateApiKey = useCallback(async () => {
-        if (
-            !window.confirm("Are you sure you want to generate a new API key?")
-        ) {
-            return
-        }
+    // const generateApiKey = useCallback(async () => {
+    //     if (
+    //         !window.confirm("Are you sure you want to generate a new API key?")
+    //     ) {
+    //         return
+    //     }
 
-        const apiKey = await bandadaApi.generateApiKey(_group!.id)
+    //     const apiKey = await bandadaApi.generateApiKey(_group!.id)
 
-        if (apiKey === null) {
-            return
-        }
+    //     if (apiKey === null) {
+    //         return
+    //     }
 
-        _group!.apiKey = apiKey
+    //     _group!.apiKey = apiKey
 
-        setApiKey(apiKey)
-        setGroup({ ..._group! })
-    }, [_group, setApiKey])
+    //     setApiKey(apiKey)
+    //     setGroup({ ..._group! })
+    // }, [_group, setApiKey])
 
     const toggleMemberSelection = (memberId: string) => {
         if (_selectedMembers.includes(memberId)) {
@@ -398,7 +404,7 @@ ${memberIds.join("\n")}
                             />
                         </Box>
                     )}
-                    {groupType === "off-chain" &&
+                    {/* {groupType === "off-chain" &&
                         !_group.credentials &&
                         isGroupAdmin && (
                             <Box
@@ -476,7 +482,7 @@ ${memberIds.join("\n")}
                                     </>
                                 )}
                             </Box>
-                        )}
+                        )} */}
                     <Image src={image1} />
                     {_group.type === "off-chain" && isGroupAdmin && (
                         <Box

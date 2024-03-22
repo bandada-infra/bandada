@@ -111,39 +111,41 @@ export async function createGroup(
  * @param group The group id.
  * @param memberId The group member id.
  */
-export async function updateGroup(
-    groupId: string,
-    { apiEnabled }: { apiEnabled: boolean }
-): Promise<Group | null> {
-    try {
-        const group = await request(`${API_URL}/groups/${groupId}`, {
-            method: "PATCH",
-            data: { apiEnabled }
-        })
+// @todo needs refactoring to support the new logic.
+// export async function updateGroup(
+//     groupId: string,
+//     { apiEnabled }: { apiEnabled: boolean }
+// ): Promise<Group | null> {
+//     try {
+//         const group = await request(`${API_URL}/groups/${groupId}`, {
+//             method: "PATCH",
+//             data: { apiEnabled }
+//         })
 
-        return { ...group, type: "off-chain" }
-    } catch (error: any) {
-        console.error(error)
-        createAlert(error.response.data.message)
-        return null
-    }
-}
+//         return { ...group, type: "off-chain" }
+//     } catch (error: any) {
+//         console.error(error)
+//         createAlert(error.response.data.message)
+//         return null
+//     }
+// }
 
 /**
  * It generates a new API key.
  * @param group The group id.
  */
-export async function generateApiKey(groupId: string): Promise<string | null> {
-    try {
-        return await request(`${API_URL}/groups/${groupId}/api-key`, {
-            method: "PATCH"
-        })
-    } catch (error: any) {
-        console.error(error)
-        createAlert(error.response.data.message)
-        return null
-    }
-}
+// @todo needs refactoring to support the new logic.
+// export async function generateApiKey(groupId: string): Promise<string | null> {
+//     try {
+//         return await request(`${API_URL}/groups/${groupId}/api-key`, {
+//             method: "PATCH"
+//         })
+//     } catch (error: any) {
+//         console.error(error)
+//         createAlert(error.response.data.message)
+//         return null
+//     }
+// }
 
 /**
  * It removes a group.
