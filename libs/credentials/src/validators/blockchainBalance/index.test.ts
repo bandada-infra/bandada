@@ -14,7 +14,8 @@ describe("BlockchainBalance", () => {
             {
                 id: blockchainBalance.id,
                 criteria: {
-                    minBalance: "10"
+                    minBalance: "10",
+                    network: "sepolia"
                 }
             },
             {
@@ -34,6 +35,7 @@ describe("BlockchainBalance", () => {
                 id: blockchainBalance.id,
                 criteria: {
                     minBalance: "10",
+                    network: "sepolia",
                     blockNumber: 4749638
                 }
             },
@@ -71,6 +73,7 @@ describe("BlockchainBalance", () => {
                     id: blockchainBalance.id,
                     criteria: {
                         minBalance: "100",
+                        network: "sepolia",
                         minStars: 200
                     }
                 },
@@ -91,7 +94,8 @@ describe("BlockchainBalance", () => {
                 {
                     id: blockchainBalance.id,
                     criteria: {
-                        minBalance: 100
+                        minBalance: 100,
+                        network: "sepolia"
                     }
                 },
                 {

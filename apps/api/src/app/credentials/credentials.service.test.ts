@@ -293,7 +293,8 @@ describe("CredentialsService", () => {
                     credentials: JSON.stringify({
                         id: "BLOCKCHAIN_TRANSACTIONS",
                         criteria: {
-                            minTransactions: 12
+                            minTransactions: 12,
+                            network: "sepolia"
                         }
                     })
                 },
@@ -311,8 +312,7 @@ describe("CredentialsService", () => {
             const clientRedirectUri = await credentialsService.addMember(
                 _stateId,
                 undefined,
-                "0x",
-                "sepolia"
+                "0x"
             )
 
             expect(clientRedirectUri).toBeUndefined()
@@ -328,8 +328,7 @@ describe("CredentialsService", () => {
             const clientRedirectUri = await credentialsService.addMember(
                 _stateId,
                 undefined,
-                "0x1",
-                "sepolia"
+                "0x1"
             )
 
             expect(clientRedirectUri).toBeUndefined()

@@ -40,8 +40,6 @@ export default function CredentialsPage() {
                 const providerName = _searchParams.get("provider")
                 const clientRedirectUri =
                     _searchParams.get("redirect_uri") || undefined
-                const network = _searchParams.get("network")
-                const blockNumber = _searchParams.get("block")
 
                 const state = await setOAuthState(
                     groupId as string,
@@ -57,17 +55,11 @@ export default function CredentialsPage() {
                     isLoggedInAdmin() &&
                     state
                 ) {
-                    let blockNumberVal
-                    if (blockNumber) {
-                        blockNumberVal = blockNumber
-                    }
-                    if (state && admin && network) {
+                    if (state && admin) {
                         const redirectUrl = await addMemberByCredentials(
                             state,
                             undefined,
-                            admin.address,
-                            network,
-                            blockNumberVal
+                            admin.address
                         )
 
                         if (redirectUrl) {

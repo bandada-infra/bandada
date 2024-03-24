@@ -21,8 +21,7 @@ export class CredentialsController {
         return this.credentialsService.addMember(
             dto.oAuthState,
             dto.oAuthCode,
-            dto.address,
-            dto.network
+            dto.address
         )
     }
 }

@@ -3,6 +3,7 @@ import { BlockchainContext, Validator } from "../.."
 
 export type Criteria = {
     minBalance: string
+    network: string
     blockNumber?: number
 }
 
@@ -11,6 +12,10 @@ const validator: Validator = {
 
     criteriaABI: {
         minBalance: {
+            type: "string",
+            optional: false
+        },
+        network: {
             type: "string",
             optional: false
         },
