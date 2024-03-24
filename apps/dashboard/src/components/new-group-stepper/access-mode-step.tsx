@@ -1,4 +1,9 @@
-import { validators } from "@bandada/credentials"
+import {
+    validators,
+    providers,
+    Provider,
+    BlockchainProvider
+} from "@bandada/credentials"
 import {
     Box,
     Button,
@@ -198,31 +203,69 @@ export default function AccessModeStep({
                                             </NumberInputStepper>
                                         </NumberInput>
                                     )}
-                                    {parameter[1].type === "string" && (
-                                        <Input
-                                            size="lg"
-                                            value={
-                                                _credentials.criteria[
-                                                    parameter[0]
-                                                ]
-                                            }
-                                            onChange={(event) =>
-                                                setCredentials({
-                                                    ..._credentials,
-                                                    criteria: {
-                                                        ..._credentials.criteria,
-                                                        [parameter[0]]:
-                                                            event.target.value
-                                                    }
-                                                })
-                                            }
-                                            placeholder={
-                                                parameter[0] === "repository"
-                                                    ? "<repo-owner>/<repo-name>"
-                                                    : undefined
-                                            }
-                                        />
-                                    )}
+                                    {parameter[0] !== "network" &&
+                                        parameter[1].type === "string" && (
+                                            <Input
+                                                size="lg"
+                                                value={
+                                                    _credentials.criteria[
+                                                        parameter[0]
+                                                    ]
+                                                }
+                                                onChange={(event) =>
+                                                    setCredentials({
+                                                        ..._credentials,
+                                                        criteria: {
+                                                            ..._credentials.criteria,
+                                                            [parameter[0]]:
+                                                                event.target
+                                                                    .value
+                                                        }
+                                                    })
+                                                }
+                                                placeholder={
+                                                    parameter[0] ===
+                                                    "repository"
+                                                        ? "<repo-owner>/<repo-name>"
+                                                        : undefined
+                                                }
+                                            />
+                                        )}
+                                    {validators[_validator].id.includes(
+                                        "BLOCKCHAIN"
+                                    ) &&
+                                        parameter[0] === "network" &&
+                                        parameter[1].type === "string" && (
+                                            <Select
+                                                size="lg"
+                                                placeholder="Select network"
+                                                onChange={(event) =>
+                                                    setCredentials({
+                                                        ..._credentials,
+                                                        criteria: {
+                                                            ..._credentials.criteria,
+                                                            [parameter[0]]:
+                                                                event.target
+                                                                    .value
+                                                        }
+                                                    })
+                                                }
+                                            >
+                                                {(
+                                                    providers.find(
+                                                        (provider: Provider) =>
+                                                            provider.name ===
+                                                            "blockchain"
+                                                    ) as BlockchainProvider
+                                                ).supportedNetworks.map(
+                                                    (network: string) => (
+                                                        <option value={network}>
+                                                            {network}
+                                                        </option>
+                                                    )
+                                                )}
+                                            </Select>
+                                        )}
                                     {parameter[1].type === "boolean" && (
                                         <Checkbox
                                             isChecked={

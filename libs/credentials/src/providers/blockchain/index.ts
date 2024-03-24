@@ -18,7 +18,14 @@ const provider: BlockchainProvider = {
         const jsonRpcProvider = getJsonRpcProvider(url)
 
         return jsonRpcProvider
-    }
+    },
+
+    supportedNetworks: [
+        "Sepolia",
+        "Polygon Mumbai",
+        "Optimism Sepolia",
+        "Arbitrum Sepolia"
+    ]
 }
 
 export default provider

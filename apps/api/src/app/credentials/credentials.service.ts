@@ -106,9 +106,13 @@ export class CredentialsService {
 
         if (address) {
             const { network } = JSON.parse(group.credentials).criteria
+            const networkEnvVariableName = (network as string)
+                .split(" ")
+                .join("_")
+                .toUpperCase()
             const web3providerRpcURL =
                 process.env[
-                    `${providerName.toUpperCase()}_${network.toUpperCase()}_RPC_URL`
+                    `${providerName.toUpperCase()}_${networkEnvVariableName}_RPC_URL`
                 ]
 
             const jsonRpcProvider = await (

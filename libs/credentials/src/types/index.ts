@@ -57,6 +57,7 @@ export interface Web2Provider extends Provider {
 export interface BlockchainProvider extends Provider {
     getAddress: (message: string, signature: string) => Promise<BigNumberish>
     getJsonRpcProvider: (url: string) => Promise<any>
+    supportedNetworks: string[]
 }
 
 export interface EASProvider extends Provider {
