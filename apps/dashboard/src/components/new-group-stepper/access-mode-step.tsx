@@ -231,10 +231,7 @@ export default function AccessModeStep({
                                                 }
                                             />
                                         )}
-                                    {validators[_validator].id.includes(
-                                        "BLOCKCHAIN"
-                                    ) &&
-                                        parameter[0] === "network" &&
+                                    {parameter[0] === "network" &&
                                         parameter[1].type === "string" && (
                                             <Select
                                                 size="lg"
