@@ -8,7 +8,7 @@ import getWallet from "./getWallet"
 import getBandadaContract, { BandadaContract } from "./getBandadaContract"
 import request from "./request"
 import shortenAddress from "./shortenAddress"
-import { blockchainCredentialNetworks } from "./getSupportedNetworks"
+import { blockchainCredentialSupportedNetworks } from "./getSupportedNetworks"
 
 export * from "./types/index"
 export {
@@ -25,5 +25,5 @@ export {
     getContractAddresses,
     SemaphoreABI,
     BandadaABI,
-    blockchainCredentialNetworks
+    blockchainCredentialSupportedNetworks
 }

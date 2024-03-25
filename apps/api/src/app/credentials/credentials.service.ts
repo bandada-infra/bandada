@@ -7,7 +7,7 @@ import {
     Web2Context,
     BlockchainContext
 } from "@bandada/credentials"
-import { blockchainCredentialNetworks } from "@bandada/utils"
+import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
@@ -109,7 +109,7 @@ export class CredentialsService {
             const { network } = JSON.parse(group.credentials).criteria
 
             if (
-                !blockchainCredentialNetworks.some(
+                !blockchainCredentialSupportedNetworks.some(
                     (n) => n.toLowerCase() === network.toLowerCase()
                 )
             ) {

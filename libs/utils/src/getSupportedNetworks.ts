@@ -1,4 +1,4 @@
-export const blockchainCredentialNetworks: string[] = [
+export const blockchainCredentialSupportedNetworks: string[] = [
     "Sepolia",
     "Polygon Mumbai",
     "Optimism Sepolia",

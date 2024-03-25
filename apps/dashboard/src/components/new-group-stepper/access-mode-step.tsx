@@ -1,5 +1,5 @@
 import { validators } from "@bandada/credentials"
-import { blockchainCredentialNetworks } from "@bandada/utils"
+import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
 import {
     Box,
     Button,
@@ -244,7 +244,7 @@ export default function AccessModeStep({
                                                     })
                                                 }
                                             >
-                                                {blockchainCredentialNetworks.map(
+                                                {blockchainCredentialSupportedNetworks.map(
                                                     (network: string) => (
                                                         <option value={network}>
                                                             {network}
