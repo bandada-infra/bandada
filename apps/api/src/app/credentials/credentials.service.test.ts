@@ -18,7 +18,8 @@ jest.mock("@bandada/utils", () => ({
             logs: ["1"]
         }),
         getGroups: () => []
-    })
+    }),
+    blockchainCredentialNetworks: ["Sepolia"]
 }))
 
 jest.mock("@bandada/credentials", () => ({

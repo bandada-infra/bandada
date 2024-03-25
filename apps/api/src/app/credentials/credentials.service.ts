@@ -7,6 +7,7 @@ import {
     Web2Context,
     BlockchainContext
 } from "@bandada/credentials"
+import { blockchainCredentialNetworks } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
@@ -106,14 +107,21 @@ export class CredentialsService {
 
         if (address) {
             const { network } = JSON.parse(group.credentials).criteria
+
+            if (
+                !blockchainCredentialNetworks.some(
+                    (n) => n.toLowerCase() === network.toLowerCase()
+                )
+            ) {
+                throw new BadRequestException(`The network is not supported`)
+            }
+
             const networkEnvVariableName = (network as string)
                 .split(" ")
                 .join("_")
                 .toUpperCase()
             const web3providerRpcURL =
-                process.env[
-                    `${providerName.toUpperCase()}_${networkEnvVariableName}_RPC_URL`
-                ]
+                process.env[`${networkEnvVariableName}_RPC_URL`]
 
             const jsonRpcProvider = await (
                 provider as BlockchainProvider
