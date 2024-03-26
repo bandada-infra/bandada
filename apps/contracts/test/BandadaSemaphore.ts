@@ -2,7 +2,7 @@ import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { FullProof, generateProof } from "@semaphore-protocol/proof"
 import { expect } from "chai"
-import { BigNumber, utils } from "ethers"
+import { ethers } from "ethers"
 import { run } from "hardhat"
 // @ts-ignore: typechain folder will be generated after contracts compilation.
 // eslint-disable-next-line import/extensions
@@ -12,9 +12,9 @@ describe("BandadaSemaphore", () => {
     let bandada: Bandada
     let bandadaSemaphore: BandadaSemaphore
 
-    const groupId = utils.formatBytes32String("Name")
+    const groupId = ethers.encodeBytes32String("Name")
     const identities = [0, 1].map((i) => new Identity(i.toString()))
-    const group = new Group(BigNumber.from(groupId).toBigInt())
+    const group = new Group(BigInt(groupId))
 
     group.addMembers(identities.map(({ commitment }) => commitment))
 
@@ -40,7 +40,7 @@ describe("BandadaSemaphore", () => {
         const wasmFilePath = `../../snark-artifacts/semaphore.wasm`
         const zkeyFilePath = `../../snark-artifacts/semaphore.zkey`
 
-        const signal = utils.formatBytes32String("Hello World")
+        const signal = ethers.encodeBytes32String("Hello World")
 
         let fullProof: FullProof
 

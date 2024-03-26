@@ -1,8 +1,11 @@
 /* istanbul ignore file */
 
-import { Signer } from "@ethersproject/abstract-signer"
-import { Contract, ContractReceipt } from "@ethersproject/contracts"
-import { formatBytes32String } from "@ethersproject/strings"
+import {
+    ethers,
+    type Contract,
+    type ContractTransactionReceipt,
+    type Signer
+} from "ethers"
 import getContract from "./getContract"
 import { Network } from "./types"
 
@@ -17,8 +20,8 @@ export class SemaphoreContract {
         groupName: string,
         merkleTreeDepth: number,
         admin: string
-    ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
+    ): Promise<ContractTransactionReceipt> {
+        const groupId = BigInt(ethers.encodeBytes32String(groupName))
 
         const transaction = await this.contract[
             "createGroup(uint256,uint256,address)"
@@ -30,8 +33,8 @@ export class SemaphoreContract {
     async updateGroupAdmin(
         groupName: string,
         newAdmin: string
-    ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
+    ): Promise<ContractTransactionReceipt> {
+        const groupId = BigInt(ethers.encodeBytes32String(groupName))
 
         const transaction = await this.contract.updateGroupAdmin(
             groupId,
@@ -44,8 +47,8 @@ export class SemaphoreContract {
     async addMember(
         groupName: string,
         member: string
-    ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
+    ): Promise<ContractTransactionReceipt> {
+        const groupId = BigInt(ethers.encodeBytes32String(groupName))
 
         const transaction = await this.contract.addMember(groupId, member)
 
@@ -55,8 +58,8 @@ export class SemaphoreContract {
     async addMembers(
         groupName: string,
         members: string[]
-    ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
+    ): Promise<ContractTransactionReceipt> {
+        const groupId = BigInt(ethers.encodeBytes32String(groupName))
 
         const transaction = await this.contract.addMembers(groupId, members)
 

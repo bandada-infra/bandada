@@ -1,7 +1,7 @@
 import { Group } from "@semaphore-protocol/group"
 import { Identity } from "@semaphore-protocol/identity"
 import { expect } from "chai"
-import { BigNumber, utils } from "ethers"
+import { ethers } from "ethers"
 import { run } from "hardhat"
 // @ts-ignore: typechain folder will be generated after contracts compilation.
 // eslint-disable-next-line import/extensions
@@ -10,9 +10,9 @@ import { Bandada } from "../typechain-types"
 describe("Bandada", () => {
     let bandada: Bandada
 
-    const groupId = utils.formatBytes32String("Name")
+    const groupId = ethers.encodeBytes32String("Name")
     const identities = [0, 1].map((i) => new Identity(i.toString()))
-    const group = new Group(BigNumber.from(groupId).toBigInt(), 20)
+    const group = new Group(BigInt(groupId), 20)
 
     group.addMembers(identities.map(({ commitment }) => commitment))
 

@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 
-import { Signer } from "@ethersproject/abstract-signer"
-import { Contract, ContractReceipt } from "@ethersproject/contracts"
+import type { Contract, Signer, ContractTransactionReceipt } from "ethers"
 import getContract from "./getContract"
 import { Network, OnchainBandadaGroup } from "./types"
 
@@ -14,7 +13,7 @@ export class BandadaContract {
 
     async updateGroups(
         groups: OnchainBandadaGroup[]
-    ): Promise<ContractReceipt> {
+    ): Promise<ContractTransactionReceipt> {
         const transaction = await this.contract.updateGroups(groups)
 
         return transaction.wait(1)
@@ -33,7 +32,7 @@ export class BandadaContract {
     async updateFingerprintDuration(
         groupId: BigInt,
         fingerprintDuration: BigInt
-    ): Promise<ContractReceipt> {
+    ): Promise<ContractTransactionReceipt> {
         const transaction = await this.contract.updateFingerprintDuration(
             groupId,
             fingerprintDuration

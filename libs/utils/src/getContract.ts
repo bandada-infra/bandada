@@ -1,8 +1,6 @@
 /* istanbul ignore file */
 
-import { Signer } from "@ethersproject/abstract-signer"
-import { Contract } from "@ethersproject/contracts"
-import { Provider } from "@ethersproject/providers"
+import { type Contract, type Signer, type Provider, ethers } from "ethers"
 import { getContractAddresses } from "./contractAddresses"
 import { abi as SemaphoreABI } from "./contractArtifacts/Semaphore.json"
 import { abi as BandadaABI } from "./contractArtifacts/Bandada.json"
@@ -32,9 +30,9 @@ export default function getContract(
 
     switch (contractName) {
         case "Bandada":
-            return new Contract(contractAddress, BandadaABI, providerOrWallet)
+            return new ethers.Contract(contractAddress, BandadaABI, providerOrWallet)
         case "Semaphore":
-            return new Contract(contractAddress, SemaphoreABI, providerOrWallet)
+            return new ethers.Contract(contractAddress, SemaphoreABI, providerOrWallet)
         default:
             throw new TypeError(`'${contractName}' contract does not exist`)
     }

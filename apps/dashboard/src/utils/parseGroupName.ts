@@ -1,4 +1,4 @@
-import { BigNumber, utils } from "ethers"
+import { ethers } from "ethers"
 
 /**
  * It converts a group name as a big number to a string.
@@ -7,9 +7,7 @@ import { BigNumber, utils } from "ethers"
  */
 export default function parseGroupName(groupNameBN: string) {
     try {
-        return utils.parseBytes32String(
-            BigNumber.from(groupNameBN).toHexString()
-        )
+        return ethers.decodeBytes32String(BigInt(groupNameBN).toString())
     } catch (error) {
         // If not parse-able as a string, it returns the original value.
         return groupNameBN
