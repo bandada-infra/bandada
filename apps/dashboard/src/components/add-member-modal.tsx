@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState } from "react"
 import { FiCopy } from "react-icons/fi"
-import { useSigner } from "wagmi"
+import { useWalletClient } from "wagmi"
 import * as bandadaAPI from "../api/bandadaAPI"
 import { Group } from "../types"
 import parseMemberIds from "../utils/parseMemberIds"
@@ -45,7 +45,7 @@ export default function AddMemberModal({
         setValue: setClientLink,
         onCopy
     } = useClipboard("")
-    const { data: signer } = useSigner()
+    const { data: walletClient } = useWalletClient()
 
     useEffect(() => {
         setMemberIds("")
@@ -122,7 +122,7 @@ ${memberIds.join("\n")}
             setIsLoading(false)
             onClose(memberIds)
         } else {
-            if (!signer) {
+            if (!walletClient) {
                 alert("No valid signer for your transaction!")
 
                 setIsLoading(false)
@@ -130,7 +130,10 @@ ${memberIds.join("\n")}
             }
 
             try {
-                const semaphore = getSemaphoreContract("sepolia", signer as any)
+                const semaphore = getSemaphoreContract(
+                    "sepolia",
+                    walletClient as any
+                )
 
                 await semaphore.addMembers(group.name, memberIds)
 
@@ -144,7 +147,7 @@ ${memberIds.join("\n")}
                 setIsLoading(false)
             }
         }
-    }, [onClose, _memberIds, group, signer])
+    }, [onClose, _memberIds, group, walletClient])
 
     const generateInviteLink = useCallback(async () => {
         const inviteLink = await bandadaAPI.generateMagicLink(group.id)
