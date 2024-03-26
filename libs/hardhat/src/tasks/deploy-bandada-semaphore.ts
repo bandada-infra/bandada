@@ -37,7 +37,7 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
                     )
                     const pairing = await PairingFactory.deploy()
 
-                    await pairing.deployed()
+                    await pairing.waitForDeployment()
 
                     if (logs) {
                         console.info(
@@ -58,7 +58,7 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
                 const semaphoreVerifier =
                     await SemaphoreVerifierFactory.deploy()
 
-                await semaphoreVerifier.deployed()
+                await semaphoreVerifier.waitForDeployment()
 
                 if (logs) {
                     console.info(
@@ -84,7 +84,7 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
                 bandadaAddress
             )
 
-            await bandadaSemaphore.deployed()
+            await bandadaSemaphore.waitForDeployment()
 
             if (logs) {
                 console.info(

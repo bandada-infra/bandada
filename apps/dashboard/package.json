@@ -17,8 +17,9 @@
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@fontsource-variable/unbounded": "^5.0.5",
-        "@rainbow-me/rainbowkit": "^0.12.8",
+        "@rainbow-me/rainbowkit": "^2.0.2",
         "@semaphore-protocol/data": "3.10.0",
+        "@tanstack/react-query": "^5.28.8",
         "ethers": "^6.11.1",
         "framer-motion": "^10.0.1",
         "react": "^18.2.0",
@@ -26,7 +27,8 @@
         "react-icons": "^4.10.1",
         "react-router-dom": "^6.8.1",
         "siwe": "^1.1.6",
-        "wagmi": "^0.12.12"
+        "viem": "2.x",
+        "wagmi": "^2.5.12"
     },
     "devDependencies": {
         "@types/react": "^18.0.27",

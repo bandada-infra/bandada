@@ -14,9 +14,9 @@ import {
 } from "@rainbow-me/rainbowkit/wallets"
 import React, { ReactNode, useEffect, useMemo, useState } from "react"
 import { SiweMessage } from "siwe"
-import { configureChains, createClient, WagmiConfig } from "wagmi"
+import { createConfig, http, WagmiProvider } from "wagmi"
 import { sepolia } from "wagmi/chains"
-import { publicProvider } from "wagmi/providers/public"
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 import { getNonce, logOut, signIn } from "../api/bandadaAPI"
 import useSessionData from "../hooks/use-session-data"
 import { Admin } from "../types"
@@ -82,50 +82,55 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         [saveAdmin, deleteAdmin]
     )
 
-    const { chains, provider, webSocketProvider } = configureChains(
-        [sepolia],
-        [publicProvider()]
+    const connectors = connectorsForWallets(
+        [
+            {
+                groupName: "Wallets",
+                wallets: [
+                    injectedWallet,
+                    metaMaskWallet,
+                    coinbaseWallet,
+                    walletConnectWallet
+                ]
+            }
+        ],
+        {
+            appName,
+            projectId: process.env.PROJECT_ID! // WALLET CONNECT PROJECT ID
+        }
     )
 
-    const connectors = connectorsForWallets([
-        {
-            groupName: "Wallets",
-            wallets: [
-                injectedWallet({ chains }),
-                metaMaskWallet({ chains }),
-                coinbaseWallet({ appName, chains }),
-                walletConnectWallet({ chains })
-            ]
-        }
-    ])
-
-    const wagmiClient = createClient({
-        autoConnect: true,
-        connectors,
-        provider,
-        webSocketProvider
+    const wagmiConfig = createConfig({
+        chains: [sepolia],
+        transports: {
+            [sepolia.id]: http()
+        },
+        connectors
     })
+
+    const queryClient = new QueryClient()
 
     return (
         <AuthContext.Provider value={contextValue}>
-            <WagmiConfig client={wagmiClient}>
-                <RainbowKitAuthenticationProvider
-                    adapter={authAdapter}
-                    status={authStatus}
-                >
-                    <RainbowKitProvider
-                        chains={chains}
-                        modalSize="compact"
-                        theme={lightTheme()}
-                        appInfo={{
-                            appName
-                        }}
-                        showRecentTransactions={false}
+            <WagmiProvider config={wagmiConfig}>
+                <QueryClientProvider client={queryClient}>
+                    <RainbowKitAuthenticationProvider
+                        adapter={authAdapter}
+                        status={authStatus}
                     >
-                        {children}
-                    </RainbowKitProvider>
-                </RainbowKitAuthenticationProvider>
-            </WagmiConfig>
+                        <RainbowKitProvider
+                            modalSize="compact"
+                            theme={lightTheme()}
+                            appInfo={{
+                                appName
+                            }}
+                            showRecentTransactions={false}
+                        >
+                            {children}
+                        </RainbowKitProvider>
+                    </RainbowKitAuthenticationProvider>
+                </QueryClientProvider>
+            </WagmiProvider>
         </AuthContext.Provider>
     )
 }

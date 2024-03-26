@@ -2,7 +2,7 @@ import { getSemaphoreContract } from "@bandada/utils"
 import { Box, Button, Heading, HStack, VStack } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useSigner } from "wagmi"
+import { useWalletClient } from "wagmi"
 import { encodeBytes32String } from "ethers"
 import * as bandadaAPI from "../../api/bandadaAPI"
 import image3 from "../../assets/image3.svg"
@@ -17,16 +17,19 @@ export default function FinalPreviewStep({
     group,
     onBack
 }: FinalPreviewStepProps): JSX.Element {
-    const { data: signer } = useSigner()
+    const { data: walletClient } = useWalletClient()
     const navigate = useNavigate()
     const [_loading, setLoading] = useState<boolean>()
 
     const createGroup = useCallback(async () => {
-        if (group.type === "on-chain" && signer) {
+        if (group.type === "on-chain" && walletClient) {
             setLoading(true)
             try {
-                const semaphore = getSemaphoreContract("sepolia", signer as any)
-                const admin = await signer.getAddress()
+                const semaphore = getSemaphoreContract(
+                    "sepolia",
+                    walletClient as any
+                )
+                const admin = await walletClient.account.address
 
                 await semaphore.createGroup(group.name, group.treeDepth, admin)
 
@@ -55,7 +58,7 @@ export default function FinalPreviewStep({
             }
             navigate(`/groups/off-chain/${response.id}`)
         }
-    }, [group, signer, navigate])
+    }, [group, walletClient, navigate])
 
     return (
         <VStack align="right" w="100%">

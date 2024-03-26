@@ -30,9 +30,17 @@ export default function getContract(
 
     switch (contractName) {
         case "Bandada":
-            return new ethers.Contract(contractAddress, BandadaABI, providerOrWallet)
+            return new ethers.Contract(
+                contractAddress,
+                BandadaABI,
+                providerOrWallet
+            )
         case "Semaphore":
-            return new ethers.Contract(contractAddress, SemaphoreABI, providerOrWallet)
+            return new ethers.Contract(
+                contractAddress,
+                SemaphoreABI,
+                providerOrWallet
+            )
         default:
             throw new TypeError(`'${contractName}' contract does not exist`)
     }

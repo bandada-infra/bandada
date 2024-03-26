@@ -62,7 +62,7 @@ const hardhatConfig: HardhatUserConfig = {
         coinmarketcap: process.env.COINMARKETCAP_API_KEY
     },
     typechain: {
-        target: "ethers-v5"
+        target: "ethers-v6"
     },
     etherscan: {
         apiKey: process.env.ETHERSCAN_API_KEY
