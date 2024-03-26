@@ -13,7 +13,7 @@ import {
 import { Identity } from "@semaphore-protocol/identity"
 import { useWeb3React } from "@web3-react/core"
 import { InjectedConnector } from "@web3-react/injected-connector"
-import { providers } from "ethers"
+import type { BrowserProvider } from "ethers"
 import { useCallback, useEffect, useState } from "react"
 import { FiGithub } from "react-icons/fi"
 import { useSearchParams } from "react-router-dom"
@@ -32,7 +32,7 @@ export default function HomePage(): JSX.Element {
     const [_credentialGroupId, setCredentialGroupId] = useState<string>("")
     const [_loading, setLoading] = useState<boolean>(false)
     const { activate, active, library, account } =
-        useWeb3React<providers.Web3Provider>()
+        useWeb3React<BrowserProvider>()
     const [_searchParams] = useSearchParams()
 
     useEffect(() => {
@@ -66,7 +66,7 @@ export default function HomePage(): JSX.Element {
                     return
                 }
 
-                const signer = library.getSigner(account)
+                const signer = await library.getSigner(account)
 
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
@@ -123,7 +123,7 @@ export default function HomePage(): JSX.Element {
                     .split("_")[0]
                     .toLowerCase()
 
-                const signer = library.getSigner(account)
+                const signer = await library.getSigner(account)
 
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
