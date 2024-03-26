@@ -1,9 +1,9 @@
-import { formatBytes32String } from "@ethersproject/strings"
 import { getSemaphoreContract } from "@bandada/utils"
 import { Box, Button, Heading, HStack, VStack } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSigner } from "wagmi"
+import { encodeBytes32String } from "ethers"
 import * as bandadaAPI from "../../api/bandadaAPI"
 import image3 from "../../assets/image3.svg"
 import GroupCard from "../group-card"
@@ -30,7 +30,7 @@ export default function FinalPreviewStep({
 
                 await semaphore.createGroup(group.name, group.treeDepth, admin)
 
-                const groupId = BigInt(formatBytes32String(group.name))
+                const groupId = BigInt(encodeBytes32String(group.name))
                 navigate(`/groups/on-chain/${groupId}`)
             } catch (error) {
                 setLoading(false)

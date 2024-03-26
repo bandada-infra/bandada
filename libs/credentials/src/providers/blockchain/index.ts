@@ -1,4 +1,5 @@
-import { utils, BigNumberish } from "ethers"
+import { ethers } from "ethers"
+import type { BigNumberish } from "ethers"
 import { BlockchainProvider } from "../.."
 import getJsonRpcProvider from "../../getJsonRpcProvider"
 
@@ -9,7 +10,7 @@ const provider: BlockchainProvider = {
         message: string,
         signature: string
     ): Promise<BigNumberish> {
-        const address = await utils.verifyMessage(message, signature)
+        const address = await ethers.verifyMessage(message, signature)
 
         return address
     },

@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { InfuraProvider, JsonRpcProvider } from "@ethersproject/providers"
+import { ethers, type JsonRpcProvider } from "ethers"
 import { Network } from "./types"
 
 export default function getProvider(
@@ -9,9 +9,9 @@ export default function getProvider(
 ): JsonRpcProvider {
     switch (network) {
         case "localhost":
-            return new JsonRpcProvider("http://127.0.0.1:8545")
+            return new ethers.JsonRpcProvider("http://127.0.0.1:8545")
         case "sepolia":
-            return new InfuraProvider(network, apiKey)
+            return new ethers.InfuraProvider(network, apiKey)
         default:
             throw new TypeError(`'${network}' network is not supported`)
     }

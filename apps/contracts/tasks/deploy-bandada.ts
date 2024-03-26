@@ -1,4 +1,4 @@
-import { Contract } from "ethers"
+import type { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
 task("deploy:bandada", "Deploy a Bandada contract")

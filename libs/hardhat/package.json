@@ -29,9 +29,9 @@
         "access": "public"
     },
     "devDependencies": {
-        "@nomiclabs/hardhat-ethers": "^2.0.0",
+        "@nomiclabs/hardhat-ethers": "^2.2.3",
         "@rollup/plugin-typescript": "^11.0.0",
-        "ethers": "^5.4.7",
+        "ethers": "^6.11.1",
         "hardhat": "^2.11.0",
         "rimraf": "^4.1.2",
         "rollup": "^3.17.2",
@@ -40,9 +40,9 @@
     },
     "peerDependencies": {
         "@bandada/contracts": "2.2.6",
-        "@nomiclabs/hardhat-ethers": "^2.0.0",
+        "@nomiclabs/hardhat-ethers": "^2.2.3",
         "@semaphore-protocol/contracts": "3.4.0",
-        "ethers": "^5.4.7",
+        "ethers": "^6.11.1",
         "hardhat": "^2.11.0"
     },
     "dependencies": {
