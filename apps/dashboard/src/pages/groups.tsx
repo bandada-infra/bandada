@@ -27,6 +27,7 @@ import GroupCard from "../components/group-card"
 import { AuthContext } from "../context/auth-context"
 import { Group } from "../types"
 import GoerliGroupCard from "../components/goerli-group"
+import ApiKeyComponent from "../components/api-key"
 
 export default function GroupsPage(): JSX.Element {
     const { admin } = useContext(AuthContext)
@@ -114,6 +115,8 @@ export default function GroupsPage(): JSX.Element {
                             Search
                         </Button>
                     </HStack>
+
+                    <ApiKeyComponent adminId={admin?.id!} />
 
                     <Button
                         variant="solid"

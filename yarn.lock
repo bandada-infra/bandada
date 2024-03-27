@@ -2685,6 +2685,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@chakra-ui/icon@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@chakra-ui/icon@npm:3.2.0"
+  dependencies:
+    "@chakra-ui/shared-utils": "npm:2.0.5"
+  peerDependencies:
+    "@chakra-ui/system": ">=2.0.0"
+    react: ">=18"
+  checksum: 10/b63eec1cb00b3f92ab64927fef96b60563ae32ae5df4a29edfe8cda4ba1c5aeb980c608b5a12e2376eaeb117a12362a45dd5e974b87ef72937dd897de7dc272f
+  languageName: node
+  linkType: hard
+
+"@chakra-ui/icons@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@chakra-ui/icons@npm:2.1.1"
+  dependencies:
+    "@chakra-ui/icon": "npm:3.2.0"
+  peerDependencies:
+    "@chakra-ui/system": ">=2.0.0"
+    react: ">=18"
+  checksum: 10/30c8644e1e80a1d24ce5fa081673da726a2b26e7dc62fa90f318f478efdd4537ef31db4bf4f6d5afc76ad6d815fdb6a1b6a394a353fc4ba99af28cf9116a6186
+  languageName: node
+  linkType: hard
+
 "@chakra-ui/image@npm:2.0.15":
   version: 2.0.15
   resolution: "@chakra-ui/image@npm:2.0.15"
@@ -13923,6 +13947,7 @@ __metadata:
   dependencies:
     "@bandada/credentials": "npm:2.1.1"
     "@bandada/utils": "npm:2.1.1"
+    "@chakra-ui/icons": "npm:^2.1.1"
     "@chakra-ui/react": "npm:^2.5.1"
     "@chakra-ui/styled-system": "npm:^2.0.0"
     "@chakra-ui/theme-tools": "npm:^2.0.16"
