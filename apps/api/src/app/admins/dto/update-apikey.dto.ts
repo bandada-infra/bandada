@@ -1,5 +1,5 @@
 import { IsEnum, IsString } from "class-validator"
-import { ApiKeyActions } from "../../../types"
+import { ApiKeyActions } from "@bandada/utils"
 
 export class UpdateApiKeyDTO {
     @IsString()

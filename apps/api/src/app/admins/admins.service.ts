@@ -4,10 +4,10 @@ import { BadRequestException, Injectable, Logger } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindOptionsWhere, Repository } from "typeorm"
 import { v4 } from "uuid"
+import { ApiKeyActions } from "@bandada/utils"
 import { CreateAdminDTO } from "./dto/create-admin.dto"
 import { Admin } from "./entities/admin.entity"
 import { UpdateApiKeyDTO } from "./dto/update-apikey.dto"
-import { ApiKeyActions } from "../../types"
 
 @Injectable()
 export class AdminsService {
