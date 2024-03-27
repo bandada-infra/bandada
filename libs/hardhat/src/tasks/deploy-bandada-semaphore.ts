@@ -41,11 +41,11 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
 
                     if (logs) {
                         console.info(
-                            `Pairing library has been deployed to: ${pairing.address}`
+                            `Pairing library has been deployed to: ${pairing.getAddress()}`
                         )
                     }
 
-                    pairingAddress = pairing.address
+                    pairingAddress = await pairing.getAddress()
                 }
 
                 const SemaphoreVerifierFactory =
@@ -62,11 +62,11 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
 
                 if (logs) {
                     console.info(
-                        `SemaphoreVerifier contract has been deployed to: ${semaphoreVerifier.address}`
+                        `SemaphoreVerifier contract has been deployed to: ${semaphoreVerifier.getAddress()}`
                     )
                 }
 
-                semaphoreVerifierAddress = semaphoreVerifier.address
+                semaphoreVerifierAddress = await semaphoreVerifier.getAddress()
             }
 
             if (!bandadaAddress) {
@@ -88,7 +88,7 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
 
             if (logs) {
                 console.info(
-                    `BandadaSemaphore contract has been deployed to: ${bandadaSemaphore.address}`
+                    `BandadaSemaphore contract has been deployed to: ${bandadaSemaphore.getAddress}`
                 )
             }
 

@@ -27,6 +27,15 @@ import {
 
 const injectedConnector = new InjectedConnector({})
 
+type Invite = {
+    groupId: string
+}
+type Group = {
+    credentials: {
+        id: string
+    }
+}
+
 export default function HomePage(): JSX.Element {
     const [_inviteCode, setInviteCode] = useState<string>("")
     const [_credentialGroupId, setCredentialGroupId] = useState<string>("")
@@ -59,7 +68,7 @@ export default function HomePage(): JSX.Element {
             if (account && library) {
                 setLoading(true)
 
-                const invite = await getInvite(inviteCode)
+                const invite: Invite | null = await getInvite(inviteCode)
 
                 if (invite === null) {
                     setLoading(false)
@@ -112,7 +121,7 @@ export default function HomePage(): JSX.Element {
             if (account && library) {
                 setLoading(true)
 
-                const group = await getGroup(groupId)
+                const group: Group | null = await getGroup(groupId)
 
                 if (group === null || group.credentials === null) {
                     setLoading(false)
