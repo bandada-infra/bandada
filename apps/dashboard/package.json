@@ -10,6 +10,7 @@
     "dependencies": {
         "@bandada/credentials": "2.1.1",
         "@bandada/utils": "2.1.1",
+        "@chakra-ui/icons": "^2.1.1",
         "@chakra-ui/react": "^2.5.1",
         "@chakra-ui/styled-system": "^2.0.0",
         "@chakra-ui/theme-tools": "^2.0.16",
