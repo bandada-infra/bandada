@@ -2,9 +2,9 @@ import { id as idToHash } from "@ethersproject/hash"
 import { ScheduleModule } from "@nestjs/schedule"
 import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
+import { ApiKeyActions } from "@bandada/utils"
 import { AdminsService } from "./admins.service"
 import { Admin } from "./entities/admin.entity"
-import { ApiKeyActions } from "../../types"
 
 describe("AdminsService", () => {
     const id = "1"
