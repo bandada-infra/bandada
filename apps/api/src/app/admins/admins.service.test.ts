@@ -81,10 +81,10 @@ describe("AdminsService", () => {
 
     describe("# updateApiKey", () => {
         it("Should create an apikey for the admin", async () => {
-            const apiKey = await adminsService.updateApiKey({
-                adminId: hashedId,
-                action: ApiKeyActions.Generate
-            })
+            const apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
 
             admin = await adminsService.findOne({ id: hashedId })
 
@@ -95,10 +95,10 @@ describe("AdminsService", () => {
         it("Should generate another apikey for the admin", async () => {
             const previousApiKey = admin.apiKey
 
-            const apiKey = await adminsService.updateApiKey({
-                adminId: hashedId,
-                action: ApiKeyActions.Generate
-            })
+            const apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
 
             admin = await adminsService.findOne({ id: hashedId })
 
@@ -110,10 +110,7 @@ describe("AdminsService", () => {
         it("Should disable the apikey for the admin", async () => {
             const { apiKey } = admin
 
-            await adminsService.updateApiKey({
-                adminId: hashedId,
-                action: ApiKeyActions.Disable
-            })
+            await adminsService.updateApiKey(hashedId, ApiKeyActions.Disable)
 
             admin = await adminsService.findOne({ id: hashedId })
 
@@ -124,10 +121,7 @@ describe("AdminsService", () => {
         it("Should enable the apikey for the admin", async () => {
             const { apiKey } = admin
 
-            await adminsService.updateApiKey({
-                adminId: hashedId,
-                action: ApiKeyActions.Enable
-            })
+            await adminsService.updateApiKey(hashedId, ApiKeyActions.Enable)
 
             admin = await adminsService.findOne({ id: hashedId })
 
@@ -138,10 +132,10 @@ describe("AdminsService", () => {
         it("Should not create the apikey when the given id does not belog to an admin", async () => {
             const wrongId = "wrongId"
 
-            const fun = adminsService.updateApiKey({
-                adminId: wrongId,
-                action: ApiKeyActions.Disable
-            })
+            const fun = adminsService.updateApiKey(
+                wrongId,
+                ApiKeyActions.Disable
+            )
 
             await expect(fun).rejects.toThrow(
                 `The '${wrongId}' does not belong to an admin`
@@ -154,10 +148,10 @@ describe("AdminsService", () => {
                 address: "address2"
             })
 
-            const fun = adminsService.updateApiKey({
-                adminId: tempAdmin.id,
-                action: ApiKeyActions.Enable
-            })
+            const fun = adminsService.updateApiKey(
+                tempAdmin.id,
+                ApiKeyActions.Enable
+            )
 
             await expect(fun).rejects.toThrow(
                 `The '${tempAdmin.id}' does not have an apikey`
@@ -167,11 +161,11 @@ describe("AdminsService", () => {
         it("Shoul throw if the action does not exist", async () => {
             const wrongAction = "wrong-action"
 
-            const fun = adminsService.updateApiKey({
-                adminId: hashedId,
+            const fun = adminsService.updateApiKey(
+                hashedId,
                 // @ts-ignore
-                action: wrongAction
-            })
+                wrongAction
+            )
 
             await expect(fun).rejects.toThrow(
                 `Unsupported ${wrongAction} apikey`

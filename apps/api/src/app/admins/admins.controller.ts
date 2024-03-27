@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common"
 import { ApiCreatedResponse } from "@nestjs/swagger"
-import { ApiKeyActions } from "@bandada/utils"
 import { CreateAdminDTO } from "./dto/create-admin.dto"
 import { AdminsService } from "./admins.service"
 import { Admin } from "./entities/admin.entity"
+import { UpdateApiKeyDTO } from "./dto/update-apikey.dto"
 
 @Controller("admins")
 export class AdminsController {
@@ -23,8 +23,8 @@ export class AdminsController {
     @Put(":admin/apikey")
     async updateApiKey(
         @Param("admin") adminId: string,
-        @Body() action: ApiKeyActions
+        @Body() dto: UpdateApiKeyDTO
     ): Promise<string> {
-        return this.adminsService.updateApiKey(adminId, action)
+        return this.adminsService.updateApiKey(adminId, dto.action)
     }
 }

@@ -11,16 +11,21 @@ import { OAuthAccount } from "./entities/credentials-account.entity"
 import { CredentialsService } from "./credentials.service"
 import { AdminsModule } from "../admins/admins.module"
 
-jest.mock("@bandada/utils", () => ({
-    __esModule: true,
-    getBandadaContract: () => ({
-        updateGroups: () => ({
-            status: true,
-            logs: ["1"]
-        }),
-        getGroups: () => []
-    })
-}))
+jest.mock("@bandada/utils", () => {
+    const originalModule = jest.requireActual("@bandada/utils")
+
+    return {
+        __esModule: true,
+        ...originalModule,
+        getBandadaContract: () => ({
+            updateGroups: () => ({
+                status: true,
+                logs: ["1"]
+            }),
+            getGroups: () => []
+        })
+    }
+})
 
 jest.mock("@bandada/credentials", () => ({
     __esModule: true,

@@ -9,7 +9,12 @@ import getBandadaContract, { BandadaContract } from "./getBandadaContract"
 import request from "./request"
 import shortenAddress from "./shortenAddress"
 
-export * from "./types/index"
+export {
+    ApiKeyActions,
+    Network,
+    ContractName,
+    OnchainBandadaGroup
+} from "./types/index"
 export {
     request,
     shortenAddress,
