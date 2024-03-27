@@ -11,7 +11,7 @@ task("deploy:bandada", "Deploy a Bandada contract")
 
         if (logs) {
             console.info(
-                `Bandada contract has been deployed to: ${bandada.address}`
+                `Bandada contract has been deployed to: ${bandada.getAddress()}`
             )
         }
 

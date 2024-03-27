@@ -1,10 +1,10 @@
-import type { Contract } from "ethers"
+import type { BaseContract } from "ethers"
 import { task, types } from "hardhat/config"
 
 task("deploy:bandada", "Deploy a Bandada contract")
     .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
 
-    .setAction(async ({ logs }, { ethers }): Promise<Contract> => {
+    .setAction(async ({ logs }, { ethers }): Promise<BaseContract> => {
         const ContractFactory = await ethers.getContractFactory("Bandada")
 
         const contract = await ContractFactory.deploy()

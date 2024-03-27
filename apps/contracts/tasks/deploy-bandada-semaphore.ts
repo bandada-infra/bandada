@@ -1,4 +1,4 @@
-import type { Contract } from "ethers"
+import type { BaseContract } from "ethers"
 import { task, types } from "hardhat/config"
 
 task("deploy:bandada-semaphore", "Deploy a BandadaSemaphore contract")
@@ -23,7 +23,7 @@ task("deploy:bandada-semaphore", "Deploy a BandadaSemaphore contract")
                 semaphoreVerifier: semaphoreVerifierAddress
             },
             { ethers, run }
-        ): Promise<Contract> => {
+        ): Promise<BaseContract> => {
             if (!semaphoreVerifierAddress) {
                 const PairingFactory = await ethers.getContractFactory(
                     "Pairing"

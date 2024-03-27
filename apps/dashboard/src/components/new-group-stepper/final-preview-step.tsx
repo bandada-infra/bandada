@@ -92,7 +92,7 @@ export default function FinalPreviewStep({
                 </Heading>
 
                 <Box zIndex="1">
-                    <GroupCard {...group} />
+                    <GroupCard {...(group as any)} />
                 </Box>
             </VStack>
 
