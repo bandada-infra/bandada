@@ -1,6 +1,6 @@
-import { request } from "@bandada/utils"
+import { ApiKeyActions, request } from "@bandada/utils"
 import { SiweMessage } from "siwe"
-import { Group } from "../types"
+import { Admin, Group } from "../types"
 import createAlert from "../utils/createAlert"
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -107,6 +107,69 @@ export async function createGroup(
 }
 
 /**
+ * It creates a new admin.
+ * @param id The admin id.
+ * @param address The admin address.
+ * @returns The Admin.
+ */
+export async function createAdmin(
+    id: string,
+    address: string
+): Promise<Admin | null> {
+    try {
+        return await request(`${API_URL}/admins`, {
+            method: "POST",
+            data: {
+                id,
+                address
+            }
+        })
+    } catch (error: any) {
+        console.error(error)
+        createAlert(error.response.data.message)
+        return null
+    }
+}
+
+/**
+ * It returns details of a specific admin.
+ * @param adminId The admin id.
+ * @returns The admin details.
+ */
+export async function getAdmin(adminId: string): Promise<Admin | null> {
+    try {
+        return await request(`${API_URL}/admins/${adminId}`)
+    } catch (error: any) {
+        console.error(error)
+        createAlert(error.response.data.message)
+        return null
+    }
+}
+
+/**
+ * It works with the Admin API key.
+ * @param adminId The admin id.
+ * @param action The action to carry on the API key.
+ */
+export async function updateApiKey(
+    adminId: string,
+    action: ApiKeyActions
+): Promise<string | null> {
+    try {
+        return await request(`${API_URL}/admins/${adminId}/apikey`, {
+            method: "PUT",
+            data: {
+                action
+            }
+        })
+    } catch (error: any) {
+        console.error(error)
+        createAlert(error.response.data.message)
+        return null
+    }
+}
+
+/**
  * It updates the detail of a group.
  * @param group The group id.
  * @param memberId The group member id.
@@ -123,23 +186,6 @@ export async function createGroup(
 //         })
 
 //         return { ...group, type: "off-chain" }
-//     } catch (error: any) {
-//         console.error(error)
-//         createAlert(error.response.data.message)
-//         return null
-//     }
-// }
-
-/**
- * It generates a new API key.
- * @param group The group id.
- */
-// @todo needs refactoring to support the new logic.
-// export async function generateApiKey(groupId: string): Promise<string | null> {
-//     try {
-//         return await request(`${API_URL}/groups/${groupId}/api-key`, {
-//             method: "PATCH"
-//         })
 //     } catch (error: any) {
 //         console.error(error)
 //         createAlert(error.response.data.message)
