@@ -9,16 +9,21 @@ import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 import { AdminsModule } from "../admins/admins.module"
 
-jest.mock("@bandada/utils", () => ({
-    __esModule: true,
-    getBandadaContract: () => ({
-        updateGroups: jest.fn(() => ({
-            status: true,
-            logs: ["1"]
-        })),
-        getGroups: jest.fn(() => [])
-    })
-}))
+jest.mock("@bandada/utils", () => {
+    const originalModule = jest.requireActual("@bandada/utils")
+
+    return {
+        __esModule: true,
+        ...originalModule,
+        getBandadaContract: () => ({
+            updateGroups: jest.fn(() => ({
+                status: true,
+                logs: ["1"]
+            })),
+            getGroups: jest.fn(() => [])
+        })
+    }
+})
 
 describe("InvitesService", () => {
     let invitesService: InvitesService

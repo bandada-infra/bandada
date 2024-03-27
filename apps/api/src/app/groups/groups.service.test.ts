@@ -14,17 +14,22 @@ import { Admin } from "../admins/entities/admin.entity"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 
-jest.mock("@bandada/utils", () => ({
-    __esModule: true,
-    getBandadaContract: () => ({
-        updateGroups: jest.fn(() => ({
-            status: true,
-            logs: ["1"]
-        })),
-        getGroups: jest.fn(() => []),
-        updateFingerprintDuration: jest.fn(() => null)
-    })
-}))
+jest.mock("@bandada/utils", () => {
+    const originalModule = jest.requireActual("@bandada/utils")
+
+    return {
+        __esModule: true,
+        ...originalModule,
+        getBandadaContract: () => ({
+            updateGroups: jest.fn(() => ({
+                status: true,
+                logs: ["1"]
+            })),
+            getGroups: jest.fn(() => []),
+            updateFingerprintDuration: jest.fn(() => null)
+        })
+    }
+})
 
 describe("GroupsService", () => {
     let groupsService: GroupsService
@@ -400,10 +405,10 @@ describe("GroupsService", () => {
                 address: "0x"
             })
 
-            apiKey = await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Generate
-            })
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
 
             admin = await adminsService.findOne({ id: admin.id })
         })
@@ -501,10 +506,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not create a group if the API key is disabled for the admin", async () => {
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Disable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
 
             const fun = groupsService.createGroupWithAPIKey(
                 groupDto,
@@ -518,10 +520,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not remove a group if the API key is disabled for the admin", async () => {
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Enable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
 
             const group = await groupsService.createGroupWithAPIKey(
                 groupDto,
@@ -529,10 +528,7 @@ describe("GroupsService", () => {
                 apiKey
             )
 
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Disable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
 
             const fun = groupsService.removeGroupWithAPIKey(
                 group.id,
@@ -546,10 +542,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not remove a group if the given id does not belong to the group admin", async () => {
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Enable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
 
             const group = await groupsService.createGroupWithAPIKey(
                 groupDto,
@@ -562,10 +555,10 @@ describe("GroupsService", () => {
                 address: "0x02"
             })
 
-            const anotherApiKey = await adminsService.updateApiKey({
-                adminId: anotherAdmin.id,
-                action: ApiKeyActions.Generate
-            })
+            const anotherApiKey = await adminsService.updateApiKey(
+                anotherAdmin.id,
+                ApiKeyActions.Generate
+            )
 
             anotherAdmin = await adminsService.findOne({ id: anotherAdmin.id })
 
@@ -615,10 +608,10 @@ describe("GroupsService", () => {
                 address: "0x"
             })
 
-            apiKey = await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Generate
-            })
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
 
             admin = await adminsService.findOne({ id: admin.id })
         })
@@ -726,10 +719,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not create the groups if the API key is disabled for the admin", async () => {
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Disable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
 
             const fun = groupsService.createGroupsWithAPIKey(
                 groupsDtos,
@@ -760,10 +750,10 @@ describe("GroupsService", () => {
                 address: "0x02"
             })
 
-            const anotherApiKey = await adminsService.updateApiKey({
-                adminId: anotherAdmin.id,
-                action: ApiKeyActions.Generate
-            })
+            const anotherApiKey = await adminsService.updateApiKey(
+                anotherAdmin.id,
+                ApiKeyActions.Generate
+            )
 
             anotherAdmin = await adminsService.findOne({ id: anotherAdmin.id })
 
@@ -803,11 +793,10 @@ describe("GroupsService", () => {
                 address: "0x"
             })
 
-            apiKey = await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Generate
-            })
-
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
             admin = await adminsService.findOne({ id: admin.id })
             group = await groupsService.createGroup(groupDto, admin.id)
         })
@@ -872,10 +861,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not update a group if the API key is disabled", async () => {
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Disable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
 
             const fun = groupsService.updateGroupWithApiKey(
                 groupId,
@@ -901,10 +887,10 @@ describe("GroupsService", () => {
                 address: "0x"
             })
 
-            apiKey = await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Generate
-            })
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
 
             group = await groupsService.createGroup(
                 {
@@ -1014,10 +1000,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not add a member to an existing group if API is disabled", async () => {
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Disable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
 
             const fun = groupsService.addMemberWithAPIKey(
                 group.id,
@@ -1054,10 +1037,10 @@ describe("GroupsService", () => {
                 address: "0x"
             })
 
-            apiKey = await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Generate
-            })
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
 
             group = await groupsService.createGroup(
                 {
@@ -1173,10 +1156,7 @@ describe("GroupsService", () => {
         })
 
         it("Should not add a member to an existing group if API is disabled", async () => {
-            await adminsService.updateApiKey({
-                adminId: admin.id,
-                action: ApiKeyActions.Disable
-            })
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
 
             const fun = groupsService.addMembersWithAPIKey(
                 group.id,
