@@ -17,7 +17,13 @@ import { SiweMessage } from "siwe"
 import { configureChains, createClient, WagmiConfig } from "wagmi"
 import { sepolia } from "wagmi/chains"
 import { publicProvider } from "wagmi/providers/public"
-import { getNonce, logOut, signIn } from "../api/bandadaAPI"
+import {
+    createAdmin,
+    getAdmin,
+    getNonce,
+    logOut,
+    signIn
+} from "../api/bandadaAPI"
 import useSessionData from "../hooks/use-session-data"
 import { Admin } from "../types"
 
@@ -59,13 +65,18 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
                 getMessageBody: ({ message }) => message.prepareMessage(),
 
                 verify: async ({ message, signature }) => {
-                    const admin = await signIn({
+                    const admin: Admin = await signIn({
                         message,
                         signature
                     })
 
                     if (admin) {
                         saveAdmin(admin)
+
+                        const alreadyCreated = await getAdmin(admin.id)
+
+                        if (!alreadyCreated)
+                            await createAdmin(admin.id, admin.address)
 
                         return true
                     }

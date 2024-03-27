@@ -7,7 +7,6 @@ import { v4 } from "uuid"
 import { ApiKeyActions } from "@bandada/utils"
 import { CreateAdminDTO } from "./dto/create-admin.dto"
 import { Admin } from "./entities/admin.entity"
-import { UpdateApiKeyDTO } from "./dto/update-apikey.dto"
 
 @Injectable()
 export class AdminsService {
@@ -36,11 +35,15 @@ export class AdminsService {
     /**
      * Updates the API key for a given admin based on the specified actions.
      *
-     * @param {UpdateApiKeyDTO} updateApiKeyDTO The DTO containing the admin ID and the action to be performed.
+     * @param adminId The identifier of the admin.
+     * @param action The action to be executed on the API key of the admin.
      * @returns {Promise<string>} The API key of the admin after the update operation. If the API key is disabled, the return value might not be meaningful.
      * @throws {BadRequestException} If the admin ID does not correspond to an existing admin, if the admin does not have an API key when trying to enable it, or if the action is unsupported.
      */
-    async updateApiKey({ adminId, action }: UpdateApiKeyDTO): Promise<string> {
+    async updateApiKey(
+        adminId: string,
+        action: ApiKeyActions
+    ): Promise<string> {
         const admin = await this.findOne({
             id: adminId
         })
