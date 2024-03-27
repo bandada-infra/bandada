@@ -245,9 +245,11 @@ export default function AccessModeStep({
                                                 }
                                             >
                                                 {blockchainCredentialSupportedNetworks.map(
-                                                    (network: string) => (
-                                                        <option value={network}>
-                                                            {network}
+                                                    (network: any) => (
+                                                        <option
+                                                            value={network.name}
+                                                        >
+                                                            {network.name}
                                                         </option>
                                                     )
                                                 )}

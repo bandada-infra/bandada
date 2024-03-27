@@ -108,18 +108,15 @@ export class CredentialsService {
         if (address) {
             const { network } = JSON.parse(group.credentials).criteria
 
-            if (
-                !blockchainCredentialSupportedNetworks.some(
-                    (n) => n.toLowerCase() === network.toLowerCase()
-                )
-            ) {
-                throw new BadRequestException(`The network is not supported`)
-            }
+            const supportedNetwork = blockchainCredentialSupportedNetworks.find(
+                (n) => n.name.toLowerCase() === network.toLowerCase()
+            )
 
-            const networkEnvVariableName = (network as string)
-                .split(" ")
-                .join("_")
-                .toUpperCase()
+            if (supportedNetwork === undefined)
+                throw new BadRequestException(`The network is not supported`)
+
+            const networkEnvVariableName = supportedNetwork.id.toUpperCase()
+
             const web3providerRpcURL =
                 process.env[`${networkEnvVariableName}_RPC_URL`]
 
