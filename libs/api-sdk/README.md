@@ -6,10 +6,10 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/privacy-scaling-explorations/bandada">
+    <a href="https://github.com/bandada-infra/bandada">
         <img src="https://img.shields.io/badge/project-Bandada-blue.svg?style=flat-square">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/LICENSE">
+    <a href="https://github.com/bandada-infra/bandada/blob/main/LICENSE">
         <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/bandada.svg?style=flat-square">
     </a>
     <a href="https://www.npmjs.com/package/@bandada/api-sdk">
@@ -28,15 +28,15 @@
 
 <div align="center">
     <h4>
-        <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/CONTRIBUTING.md">
+        <a href="https://github.com/bandada-infra/bandada/blob/main/CONTRIBUTING.md">
             👥 Contributing
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/CODE_OF_CONDUCT.md">
+        <a href="https://github.com/bandada-infra/bandada/blob/main/CODE_OF_CONDUCT.md">
             🤝 Code of conduct
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://github.com/privacy-scaling-explorations/bandada/contribute">
+        <a href="https://github.com/bandada-infra/bandada/contribute">
             🔎 Issues
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>

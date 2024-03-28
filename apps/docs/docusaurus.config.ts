@@ -91,7 +91,7 @@ const config: Config = {
                         },
                         {
                             label: "GitHub",
-                            href: "https://github.com/privacy-scaling-explorations/bandada"
+                            href: "https://github.com/bandada-infra/bandada"
                         },
                         {
                             label: "X (Twitter)",

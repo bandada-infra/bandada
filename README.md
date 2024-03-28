@@ -5,16 +5,16 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/privacy-scaling-explorations" target="_blank">
+    <a href="https://github.com/bandada-infra" target="_blank">
         <img src="https://img.shields.io/badge/project-Bandada-blue.svg?style=flat-square">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/bandada/blob/main/LICENSE">
+    <a href="https://github.com/bandada-infra/bandada/blob/main/LICENSE">
         <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/bandada.svg?style=flat-square">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/bandada/actions?query=workflow%3Atest">
+    <a href="https://github.com/bandada-infra/bandada/actions?query=workflow%3Atest">
         <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/bandada/test.yml?branch=main&label=test&style=flat-square&logo=github">
     </a>
-    <a href="https://github.com/privacy-scaling-explorations/bandada/actions?query=workflow%3Astyle">
+    <a href="https://github.com/bandada-infra/bandada/actions?query=workflow%3Astyle">
         <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/bandada/style.yml?branch=main&label=style&style=flat-square&logo=github">
     </a>
     <a href="https://coveralls.io/github/privacy-scaling-explorations/bandada">
@@ -39,7 +39,7 @@
             🤝 Code of conduct
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-        <a href="https://github.com/privacy-scaling-explorations/bandada/contribute">
+        <a href="https://github.com/bandada-infra/bandada/contribute">
             🔎 Issues
         </a>
         <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
@@ -195,7 +195,7 @@ The applications will be deployed at the following URLs without any changes to t
 Clone this repository:
 
 ```bash
-git clone https://github.com/privacy-scaling-explorations/bandada.git
+git clone https://github.com/bandada-infra/bandada.git
 ```
 
 and install the dependencies:

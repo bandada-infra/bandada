@@ -56,7 +56,7 @@ export default function HomePage(): JSX.Element {
 
                                 <HStack spacing="5">
                                     <Link
-                                        href="https://github.com/privacy-scaling-explorations/bandada"
+                                        href="https://github.com/bandada-infra/bandada"
                                         isExternal
                                     >
                                         <HStack spacing="1">

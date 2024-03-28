@@ -10,7 +10,7 @@ We're really glad you're reading this, because we need volunteer developers to h
 
 ## Issues
 
-The best way to contribute to our projects is by opening a [new issue](https://github.com/privacy-scaling-explorations/bandada/issues/new/choose) or tackling one of the issues listed [here](https://github.com/privacy-scaling-explorations/bandada/contribute).
+The best way to contribute to our projects is by opening a [new issue](https://github.com/bandada-infra/bandada/issues/new/choose) or tackling one of the issues listed [here](https://github.com/bandada-infra/bandada/contribute).
 
 ## Pull Requests
 

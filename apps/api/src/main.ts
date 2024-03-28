@@ -76,7 +76,7 @@ async function bootstrap() {
 
         // Create a hyperlink element
         const link = document.createElement('a');
-        link.href = 'https://github.com/privacy-scaling-explorations/bandada';
+        link.href = 'https://github.com/bandada-infra/bandada';
         link.rel = 'noreferrer noopener nofollow';
         link.target = '_blank'
         link.style.color = 'grey';
