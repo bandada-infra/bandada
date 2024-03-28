@@ -35,7 +35,7 @@ interface ProjectResultsProps {
     noResult?: boolean
 }
 
-const ProjectResults = ({ projects, noResult }: ProjectResultsProps) => {
+function ProjectResults({ projects, noResult }: ProjectResultsProps) {
     if (noResult) {
         return (
             <Card.Base>
@@ -53,13 +53,13 @@ const ProjectResults = ({ projects, noResult }: ProjectResultsProps) => {
 
     return (
         <Card.Base className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects?.map((project, index) => {
-                return <ProjectCard key={index} {...project} />
-            })}
+            {projects?.map((project, index) => (
+                <ProjectCard key={index} {...project} />
+            ))}
         </Card.Base>
     )
 }
-const ProjectList = () => {
+function ProjectList() {
     const { projects, handleSource, source, categories, handleCategory } =
         useProjects()
     const noResult =

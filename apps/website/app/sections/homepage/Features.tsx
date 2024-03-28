@@ -1,10 +1,10 @@
+import Image from "next/image"
 import { AppContainer } from "@/components/AppContainer"
 import { Label } from "@/components/elements/Label"
 import { FeatureItems } from "@/content/features"
 import { LABELS } from "@/content/pages/label"
-import Image from "next/image"
 
-const Features = () => {
+function Features() {
     return (
         <div className="bg-classic-rose-100">
             <AppContainer className="grid grid-cols-1 gap-20 py-28 md:grid-cols-[200px_1fr] lg:gap-40">

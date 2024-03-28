@@ -1,10 +1,10 @@
+import Image from "next/image"
 import { AppContainer } from "@/components/AppContainer"
 import { Label } from "@/components/elements/Label"
 import { EVENTS, Event } from "@/content/events"
 import { LABELS } from "@/content/pages/label"
-import Image from "next/image"
 
-const EventCard = ({ date, event, description }: Event) => {
+function EventCard({ date, event, description }: Event) {
     return (
         <div className="flex flex-col gap-2">
             <h4 className="text-baltic-sea-950 font-dm-sans text-[22px] font-bold">
@@ -19,7 +19,7 @@ const EventCard = ({ date, event, description }: Event) => {
     )
 }
 
-const Events = () => {
+function Events() {
     return (
         <div className="bg-classic-rose-100 py-28">
             <AppContainer className="flex flex-col gap-20">

@@ -6,7 +6,7 @@ interface BannerProps {
     children?: React.ReactNode
 }
 
-const Banner = ({ title, description, children }: BannerProps) => {
+function Banner({ title, description, children }: BannerProps) {
     return (
         <div className="bg-gradient-bandada">
             <AppContainer className="md:px-0 py-10 flex flex-col items-center gap-10 justify-center">

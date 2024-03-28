@@ -1,3 +1,4 @@
+import React from "react"
 import { AppContainer } from "@/components/AppContainer"
 import { ArticleCard } from "@/components/cards/ArticleCard"
 import { VideoCard } from "@/components/cards/VideoCard"
@@ -7,7 +8,6 @@ import { ShowMore } from "@/components/ShowMore"
 import { ARTICLES } from "@/content/articles"
 import { LABELS } from "@/content/pages/label"
 import { VIDEOS } from "@/content/videos"
-import React from "react"
 
 export default async function LearnPage() {
     return (

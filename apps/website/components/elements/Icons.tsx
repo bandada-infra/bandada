@@ -214,7 +214,7 @@ export const Icons: Record<string, any> = {
                     y2="20.0029"
                     gradientUnits="userSpaceOnUse"
                 >
-                    <stop stop-color="#FF5242" />
+                    <stop stopColor="#FF5242" />
                     <stop offset="1" stopColor="#EB179B" />
                 </linearGradient>
             </defs>

@@ -1,6 +1,6 @@
 import { AppContainer } from "@/components/AppContainer"
 
-const Intro = () => {
+function Intro() {
     return (
         <div className="bg-[url('/images/intro-background.png')] bg-cover bg-center relative flex flex-col h-[90vh]">
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-pink-transparent py-16 md:py-28">

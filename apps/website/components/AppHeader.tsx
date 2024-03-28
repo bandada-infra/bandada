@@ -1,14 +1,13 @@
 "use client"
 
 import Image from "next/image"
-import { Button } from "./elements/Button"
-import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Icons } from "./elements/Icons"
 import { classed } from "@tw-classed/react"
 import { useState } from "react"
-import NextLink from "next/link"
+import { Icons } from "./elements/Icons"
+import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
+import { Button } from "./elements/Button"
 import { Label } from "./elements/Label"
 import { LABELS } from "@/content/pages/label"
 import { Divider } from "./elements/Divider"
@@ -29,21 +28,7 @@ const LinkItem = classed.div(
     }
 )
 
-const AppHeader = () => {
-    return (
-        <div className="bg-baltic-sea-950 sticky top-0 z-50">
-            <AppContainer className="flex items-center justify-between py-6">
-                <Link className="h-[44px] w-[38px] md:w-[232px]" href="/">
-                    <Logo />
-                </Link>
-                <DesktopNav />
-                <MobileNav />
-            </AppContainer>
-        </div>
-    )
-}
-
-const MobileNav = () => {
+function MobileNav() {
     const [isMobileNavOpen, setMobileNavOpen] = useState(false)
     return (
         <div className="flex items-center lg:hidden">
@@ -52,9 +37,10 @@ const MobileNav = () => {
             </button>
             {isMobileNavOpen && (
                 <div
-                    className="z-5 fixed inset-0 flex justify-end bg-black opacity-50"
+                    aria-hidden="true"
                     onClick={() => setMobileNavOpen(false)}
-                ></div>
+                    className="z-5 fixed inset-0 flex justify-end bg-black opacity-50"
+                />
             )}
             {isMobileNavOpen && (
                 <div className="fixed gap-6 pt-6 px-4 overflow-hidden inset-y-0 right-0 z-10 flex w-full max-w-80 flex-col bg-baltic-sea-950 text-white">
@@ -83,7 +69,7 @@ const MobileNav = () => {
                                     if (footerOnly && !showInMobile) return null
 
                                     return (
-                                        <NextLink
+                                        <Link
                                             key={index}
                                             href={href}
                                             onClick={() =>
@@ -98,7 +84,7 @@ const MobileNav = () => {
                                                     size={20}
                                                 />
                                             )}
-                                        </NextLink>
+                                        </Link>
                                     )
                                 }
                             )}
@@ -145,7 +131,7 @@ const MobileNav = () => {
     )
 }
 
-const DesktopNav = () => {
+function DesktopNav() {
     const pathname = usePathname()
     return (
         <>
@@ -182,7 +168,7 @@ const DesktopNav = () => {
     )
 }
 
-const Logo = () => {
+function Logo() {
     return (
         <>
             <Image
@@ -200,6 +186,20 @@ const Logo = () => {
                 alt="bandada logo"
             />
         </>
+    )
+}
+
+function AppHeader() {
+    return (
+        <div className="bg-baltic-sea-950 sticky top-0 z-50">
+            <AppContainer className="flex items-center justify-between py-6">
+                <Link className="h-[44px] w-[38px] md:w-[232px]" href="/">
+                    <Logo />
+                </Link>
+                <DesktopNav />
+                <MobileNav />
+            </AppContainer>
+        </div>
     )
 }
 

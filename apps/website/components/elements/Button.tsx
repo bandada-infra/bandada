@@ -40,7 +40,7 @@ type ButtonProps = React.ComponentProps<typeof ButtonComponent> & {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     const { icon, children, iconPosition = "right", ...rest } = props
     return (
-        <ButtonComponent {...props} ref={ref}>
+        <ButtonComponent {...rest} ref={ref}>
             <div className={IconPositionMapping[iconPosition ?? "right"]}>
                 {icon}
                 <span>{children}</span>

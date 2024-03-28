@@ -1,4 +1,5 @@
 "use client"
+
 import { ReactNode, useState } from "react"
 import { Button } from "./elements/Button"
 import { LABELS } from "@/content/pages/label"
@@ -13,11 +14,7 @@ interface ShowMoreProps {
     className?: string
 }
 
-const ShowMore = ({
-    children,
-    className,
-    defaultItemsToShow
-}: ShowMoreProps) => {
+function ShowMore({ children, className, defaultItemsToShow }: ShowMoreProps) {
     const { isMobile, isTablet } = useSettings()
     const [isOpen, setIsOpen] = useState(false)
 
@@ -30,12 +27,12 @@ const ShowMore = ({
     return (
         <div className="flex flex-col gap-14">
             <div className={className ?? ""}>
-                {itemsToShow?.map((child, index) => {
-                    return <div key={index}>{child}</div>
-                })}
+                {itemsToShow?.map((child, index) => (
+                    <div key={index}>{child}</div>
+                ))}
             </div>
             <div className="relative flex">
-                <div className=" absolute h-[1px] w-full top-1/2 bg-baltic-sea-600"></div>
+                <div className=" absolute h-[1px] w-full top-1/2 bg-baltic-sea-600" />
                 <Button
                     onClick={() => setIsOpen(!isOpen)}
                     className="mx-auto border border-baltic-sea-800"

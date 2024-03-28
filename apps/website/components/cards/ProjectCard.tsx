@@ -1,8 +1,8 @@
+import Link from "next/link"
 import { Project } from "@/content/projects"
 import { Card } from "./Card"
 import { Tag } from "../elements/Tag"
 import { Icons } from "../elements/Icons"
-import Link from "next/link"
 
 const ProjectLinkIconMapping: Record<string, any> = {
     website: Icons.website,
@@ -10,7 +10,7 @@ const ProjectLinkIconMapping: Record<string, any> = {
     discord: Icons.discord
 }
 
-const ProjectCard = ({ name, tagline, categories, links }: Project) => {
+function ProjectCard({ name, tagline, categories, links }: Project) {
     return (
         <Card.Base
             className="relative group flex flex-col gap-12 border-[3px] cursor-pointer hover:border-sunset-orange-500 duration-200 ease-in-out"
@@ -19,8 +19,8 @@ const ProjectCard = ({ name, tagline, categories, links }: Project) => {
         >
             <div className="flex flex-col gap-[30px] ">
                 <div className="flex gap-2 flex-wrap">
-                    {categories?.map((category, index) => (
-                        <Tag key={index}>{category}</Tag>
+                    {categories?.map((category) => (
+                        <Tag key={category}>{category}</Tag>
                     ))}
                 </div>
                 <div className="flex flex-col gap-3">
@@ -32,10 +32,10 @@ const ProjectCard = ({ name, tagline, categories, links }: Project) => {
                     </p>
                 </div>
                 <div className="z-10  ml-auto flex items-center gap-2">
-                    {Object.entries(links ?? {}).map(([key, url], index) => {
+                    {Object.entries(links ?? {}).map(([key, url]) => {
                         const Icon = ProjectLinkIconMapping[key]
                         return (
-                            <Link key={index} href={url} target="_blank">
+                            <Link key={key} href={url} target="_blank">
                                 <Icon className="duration-300 text-baltic-sea-400 group-hover:text-sunset-orange-500" />
                             </Link>
                         )

@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Features } from "./sections/homepage/Features"
 import { Banner } from "@/components/elements/Banner"
 import { Button } from "@/components/elements/Button"
@@ -6,7 +7,6 @@ import { Projects } from "./sections/homepage/Projects"
 import { Events } from "./sections/homepage/Events"
 import { LABELS } from "@/content/pages/label"
 import { Icons } from "@/components/elements/Icons"
-import Link from "next/link"
 import { LINKS } from "@/common/settings"
 
 export default function Home() {

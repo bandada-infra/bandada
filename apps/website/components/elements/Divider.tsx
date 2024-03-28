@@ -1,7 +1,7 @@
 import { classed } from "@tw-classed/react"
 import { Icons } from "./Icons"
 
-const Bird = () => {
+function Bird() {
     return (
         <div className="flex justify-center py-10 w-full">
             <Icons.bird width={44} height={30} />

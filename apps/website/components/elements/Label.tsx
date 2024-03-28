@@ -18,10 +18,6 @@ const SectionTitle = classed.h2("font-unbounded font-normal", {
     }
 })
 
-const SectionHeader = classed.h3(
-    "text-baltic-sea-800 text-[18px] tracking-[0.18px] font-dm-sans font-normal font-medium leading-[27px]"
-)
-
 const SectionSubtitle = classed.h3(
     "text-baltic-sea-800 text-base leading-[24px] tracking-[0.18px] font-dm-sans font-normal font-medium md:text-[18px] md:leading-[27px]"
 )

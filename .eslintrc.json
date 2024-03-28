@@ -25,6 +25,10 @@
     "rules": {
         "import/prefer-default-export": "off",
         "import/no-cycle": "off",
+        "react/jsx-pascal-case": "off",
+        "react/no-array-index-key": "off",
+        "import/extensions": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
         "@typescript-eslint/lines-between-class-members": "off",
         "@typescript-eslint/dot-notation": "off",
         "@typescript-eslint/naming-convention": "off",

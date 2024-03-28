@@ -2,7 +2,7 @@ import { LABELS } from "@/content/pages/label"
 import { Card } from "./Card"
 import { Article } from "@/content/articles"
 
-const ArticleCard = ({ title, readTime = "0" }: Article) => {
+function ArticleCard({ title, readTime = "0" }: Article) {
     return (
         <Card.Base padding="xs" variant="content" borderSize="xs" border="dark">
             <div className="flex flex-col gap-5">

@@ -1,7 +1,7 @@
 import { Card } from "./Card"
 import { Video } from "@/content/videos"
 
-const VideoCard = ({ title }: Video) => {
+function VideoCard({ title }: Video) {
     return (
         <Card.Base
             padding="none"
@@ -18,7 +18,7 @@ const VideoCard = ({ title }: Video) => {
                     </div>
                 </div>
             </div>
-            <div className="bg-slate-200 h-[210px]"></div>
+            <div className="bg-slate-200 h-[210px]" />
         </Card.Base>
     )
 }

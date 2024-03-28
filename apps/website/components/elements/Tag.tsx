@@ -37,13 +37,13 @@ const TagByType: Record<TagType, any> = {
     square: TagComponentSquare
 }
 
-const Tag = ({
+function Tag({
     children,
     type = "rounded",
     icon,
     variant,
     ...props
-}: TagProps) => {
+}: TagProps) {
     const Component = TagByType[type]
     return (
         <Component variant={variant} {...props}>

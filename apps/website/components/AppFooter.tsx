@@ -1,11 +1,10 @@
-import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
 import Image from "next/image"
-import { Icons } from "./elements/Icons"
 import Link from "next/link"
-import { Label } from "./elements/Label"
 import { classed } from "@tw-classed/react"
+import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
+import { Icons } from "./elements/Icons"
+import { Label } from "./elements/Label"
 import { LABELS } from "@/content/pages/label"
-import { cn } from "@/common/utils"
 import { Divider } from "./elements/Divider"
 import { AppContainer } from "./AppContainer"
 
@@ -13,7 +12,7 @@ const MenuWrapper = classed.div(
     "flex flex-col items-center md:items-start gap-6 md:flex-row flex-wrap"
 )
 
-const AppFooter = () => {
+function AppFooter() {
     return (
         <div className="bg-baltic-sea-950">
             <AppContainer className="flex flex-col gap-12 pt-20 pb-12">
@@ -29,21 +28,17 @@ const AppFooter = () => {
                     <div className="flex flex-col gap-6 mg:gap-0 md:flex-row w-full md:justify-between">
                         <MenuWrapper>
                             {MENU_ITEMS.map(
-                                ({ label, href, external }, index) => {
-                                    return (
-                                        <Link href={href} key={index}>
-                                            <Label.MenuItem className="flex items-center">
-                                                {label}
+                                ({ label, href, external }, index) => (
+                                    <Link href={href} key={index}>
+                                        <Label.MenuItem className="flex items-center">
+                                            {label}
 
-                                                {external && (
-                                                    <Icons.externalLink
-                                                        size={20}
-                                                    />
-                                                )}
-                                            </Label.MenuItem>
-                                        </Link>
-                                    )
-                                }
+                                            {external && (
+                                                <Icons.externalLink size={20} />
+                                            )}
+                                        </Label.MenuItem>
+                                    </Link>
+                                )
                             )}
                         </MenuWrapper>
                         <MenuWrapper>
