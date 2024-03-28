@@ -1,3 +1,5 @@
+import { ApiKeyActions } from "@bandada/utils"
+
 export type GroupResponse = {
     id: string
     name: string
@@ -12,6 +14,48 @@ export type GroupResponse = {
         id: string
         criteria: Record<string, any>
     }
+}
+
+export type GroupRequest = {
+    name: string
+    description: string
+    treeDepth: number
+    fingerprintDuration: number
+    id?: string
+    credentials?: {
+        id: string
+        criteria: Record<string, any>
+    }
+}
+
+export type GroupUpdateRequest = {
+    description: string
+    treeDepth: number
+    fingerprintDuration: number
+    credentials?: {
+        id: string
+        criteria: Record<string, any>
+    }
+}
+
+export type AdminRequest = {
+    id: string
+    address: string
+    username?: string
+}
+
+export type AdminResponse = {
+    id: string
+    address: string
+    username: string
+    apiKey: string
+    apiEnabled: boolean
+    createdAt?: Date
+    updatedAt?: Date
+}
+
+export type AdminUpdateApiKeyRequest = {
+    action: ApiKeyActions
 }
 
 type Group = {

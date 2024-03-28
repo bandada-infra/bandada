@@ -87,18 +87,20 @@ export async function createGroup(
     credentials?: any
 ): Promise<Group | null> {
     try {
-        const group = await request(`${API_URL}/groups`, {
+        const groups = await request(`${API_URL}/groups`, {
             method: "POST",
-            data: {
-                name,
-                description,
-                treeDepth,
-                fingerprintDuration,
-                credentials: JSON.stringify(credentials)
-            }
+            data: [
+                {
+                    name,
+                    description,
+                    treeDepth,
+                    fingerprintDuration,
+                    credentials: JSON.stringify(credentials)
+                }
+            ]
         })
 
-        return { ...group, type: "off-chain" }
+        return { ...groups.at(0), type: "off-chain" }
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)
@@ -168,30 +170,6 @@ export async function updateApiKey(
         return null
     }
 }
-
-/**
- * It updates the detail of a group.
- * @param group The group id.
- * @param memberId The group member id.
- */
-// @todo needs refactoring to support the new logic.
-// export async function updateGroup(
-//     groupId: string,
-//     { apiEnabled }: { apiEnabled: boolean }
-// ): Promise<Group | null> {
-//     try {
-//         const group = await request(`${API_URL}/groups/${groupId}`, {
-//             method: "PATCH",
-//             data: { apiEnabled }
-//         })
-
-//         return { ...group, type: "off-chain" }
-//     } catch (error: any) {
-//         console.error(error)
-//         createAlert(error.response.data.message)
-//         return null
-//     }
-// }
 
 /**
  * It removes a group.

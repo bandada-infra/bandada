@@ -15,7 +15,6 @@ import {
 import {
     ApiBody,
     ApiCreatedResponse,
-    ApiExcludeEndpoint,
     ApiHeader,
     ApiOperation,
     ApiQuery,
@@ -64,37 +63,176 @@ export class GroupsController {
 
     @Post()
     @UseGuards(AuthGuard)
-    @ApiExcludeEndpoint()
-    async createGroup(@Req() req: Request, @Body() dto: CreateGroupDto) {
-        const group = await this.groupsService.createGroup(
-            dto,
-            req.session.adminId
-        )
-        const fingerprint = await this.groupsService.getFingerprint(group.id)
+    @ApiBody({ required: false, type: Array<CreateGroupDto> })
+    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiCreatedResponse({ type: Group })
+    @ApiOperation({
+        description: "Create one or more groups using an API Key or manually."
+    })
+    async createGroups(
+        @Body() dtos: Array<CreateGroupDto>,
+        @Headers() headers: Headers,
+        @Req() req: Request
+    ) {
+        let groups = []
+        const groupsToResponseDTO = []
 
-        return mapGroupToResponseDTO(group, fingerprint)
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            groups = await this.groupsService.createGroupsWithAPIKey(
+                dtos,
+                apiKey
+            )
+        }
+
+        if (req.session.adminId) {
+            groups = await this.groupsService.createGroupsManually(
+                dtos,
+                req.session.adminId
+            )
+        }
+
+        for await (const group of groups) {
+            const fingerprint = await this.groupsService.getFingerprint(
+                group.id
+            )
+
+            groupsToResponseDTO.push(mapGroupToResponseDTO(group, fingerprint))
+        }
+
+        return groupsToResponseDTO
+    }
+
+    @Delete()
+    @UseGuards(AuthGuard)
+    @ApiBody({ required: false, type: Array<string> })
+    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiOperation({
+        description: "Remove one or more groups using an API Key or manually."
+    })
+    async removeGroups(
+        @Body() groupsIds: Array<string>,
+        @Headers() headers: Headers,
+        @Req() req: Request
+    ) {
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            await this.groupsService.removeGroupsWithAPIKey(groupsIds, apiKey)
+        }
+
+        if (req.session.adminId) {
+            await this.groupsService.removeGroupsManually(
+                groupsIds,
+                req.session.adminId
+            )
+        }
     }
 
     @Delete(":group")
     @UseGuards(AuthGuard)
-    @ApiExcludeEndpoint()
-    async removeGroup(@Req() req: Request, @Param("group") groupId: string) {
-        await this.groupsService.removeGroup(groupId, req.session.adminId)
+    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiOperation({
+        description: "Remove a specific group using an API Key or manually"
+    })
+    async removeGroup(
+        @Param("group") groupId: string,
+        @Headers() headers: Headers,
+        @Req() req: Request
+    ) {
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            await this.groupsService.removeGroupWithAPIKey(groupId, apiKey)
+        }
+
+        if (req.session.adminId) {
+            await this.groupsService.removeGroupManually(
+                groupId,
+                req.session.adminId
+            )
+        }
+    }
+
+    @Patch()
+    @UseGuards(AuthGuard)
+    @ApiBody({ required: false, type: Array<UpdateGroupDto> })
+    @ApiCreatedResponse({ type: Array<Group> })
+    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiOperation({
+        description: "Update one or more groups using an API Key or manually."
+    })
+    async updateGroups(
+        @Headers() headers: Headers,
+        @Body() groupsIds: Array<string>,
+        @Body() dtos: Array<UpdateGroupDto>,
+        @Req() req: Request
+    ) {
+        let groups = []
+        const groupsToResponseDTO = []
+
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            groups = await this.groupsService.updateGroupsWithApiKey(
+                groupsIds,
+                dtos,
+                apiKey
+            )
+        }
+
+        if (req.session.adminId) {
+            groups = await this.groupsService.updateGroupsManually(
+                groupsIds,
+                dtos,
+                req.session.adminId
+            )
+        }
+
+        for await (const group of groups) {
+            const fingerprint = await this.groupsService.getFingerprint(
+                group.id
+            )
+
+            groupsToResponseDTO.push(mapGroupToResponseDTO(group, fingerprint))
+        }
+
+        return groupsToResponseDTO
     }
 
     @Patch(":group")
     @UseGuards(AuthGuard)
-    @ApiExcludeEndpoint()
+    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiBody({ required: false, type: UpdateGroupDto })
+    @ApiCreatedResponse({ type: Group })
+    @ApiOperation({
+        description: "Update a specific group using an API Key or manually."
+    })
     async updateGroup(
-        @Req() req: Request,
         @Param("group") groupId: string,
-        @Body() dto: UpdateGroupDto
+        @Headers() headers: Headers,
+        @Body() dto: UpdateGroupDto,
+        @Req() req: Request
     ) {
-        const group = await this.groupsService.updateGroup(
-            groupId,
-            dto,
-            req.session.adminId
-        )
+        let group: any
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            group = await this.groupsService.updateGroupWithApiKey(
+                groupId,
+                dto,
+                apiKey
+            )
+        }
+
+        if (req.session.adminId) {
+            group = await this.groupsService.updateGroupManually(
+                groupId,
+                dto,
+                req.session.adminId
+            )
+        }
 
         const fingerprint = await this.groupsService.getFingerprint(groupId)
 
