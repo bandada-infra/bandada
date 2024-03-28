@@ -15,10 +15,10 @@
         "LICENSE",
         "README.md"
     ],
-    "repository": "https://github.com/privacy-scaling-explorations/bandada",
-    "homepage": "https://github.com/privacy-scaling-explorations/bandada/tree/main/libs/api-sdk",
+    "repository": "https://github.com/bandada-infra/bandada",
+    "homepage": "https://github.com/bandada-infra/bandada/tree/main/libs/api-sdk",
     "bugs": {
-        "url": "https://github.com/privacy-scaling-explorations/bandada.git/issues"
+        "url": "https://github.com/bandada-infra/bandada.git/issues"
     },
     "scripts": {
         "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",

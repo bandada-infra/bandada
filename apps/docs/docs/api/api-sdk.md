@@ -7,7 +7,7 @@ import TabItem from "@theme/TabItem"
 
 # API SDK
 
-[The API SDK JavaScript package](https://github.com/privacy-scaling-explorations/bandada/tree/main/libs/api-sdk) provides a list of functions to make it easier to work with the Bandada API. 
+[The API SDK JavaScript package](https://github.com/bandada-infra/bandada/tree/main/libs/api-sdk) provides a list of functions to make it easier to work with the Bandada API. 
 
 Example of project using the API SDK library: [bandada-api-sdk-demo](https://github.com/bandada-infra/bandada-sdk-demo).
 
@@ -60,7 +60,7 @@ import { ApiSdk } from "@bandada/api-sdk"
 const apiSdk = new ApiSdk()
 ```
 
--   Creates a new instance using a [Supported URL](https://github.com/privacy-scaling-explorations/bandada/blob/main/libs/api-sdk/src/types/index.ts#L43). 
+-   Creates a new instance using a [Supported URL](https://github.com/bandada-infra/bandada/blob/main/libs/api-sdk/src/types/index.ts#L43). 
 
 This is useful when working with the development environment.
 
