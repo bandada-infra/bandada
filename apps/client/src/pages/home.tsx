@@ -151,6 +151,7 @@ export default function HomePage(): JSX.Element {
     )
 
     return (
+        // @ts-ignore --Expression produces a union type that is too complex to represent. This patch will be fixed.
         <Container maxW="container.md" pt="20" pb="20" px="8" centerContent>
             <VStack spacing="20" pb="30px" w="100%">
                 <HStack mb="60px" justify="space-between" w="100%">

@@ -96,7 +96,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
         ],
         {
             appName,
-            projectId: process.env.PROJECT_ID! // WALLET CONNECT PROJECT ID
+            projectId: import.meta.env.VITE_PROJECT_ID! // WALLET CONNECT PROJECT ID
         }
     )
 

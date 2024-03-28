@@ -76,6 +76,7 @@ export default function GroupsPage(): JSX.Element {
     )
 
     return (
+        // @ts-ignore -- Expression produces a union type that is too complex to represent. This patch will be fixed.
         <Container maxW="container.xl" px="8" pb="20">
             <VStack spacing="9" flex="1">
                 <HStack justifyContent="space-between" width="100%">

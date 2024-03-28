@@ -23,6 +23,7 @@ export default function GoerliGroupCard({
     const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } =
         useClipboard(id)
     return (
+        // @ts-ignore -- Expression produces a union type that is too complex to represent. This patch will be fixed.
         <Box>
             <Text fontSize="20px">{name}</Text>
 

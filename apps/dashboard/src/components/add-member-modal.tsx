@@ -167,6 +167,7 @@ ${memberIds.join("\n")}
             isCentered
         >
             <ModalOverlay />
+            {/* @ts-ignore -- Expression produces a union type that is too complex to represent. This patch will be fixed. */}
             <ModalContent bgColor="balticSea.50" maxW="450px">
                 <ModalBody p="25px 30px">
                     <Heading fontSize="25px" fontWeight="500" mb="25px" as="h1">
