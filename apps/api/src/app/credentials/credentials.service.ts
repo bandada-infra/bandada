@@ -7,6 +7,7 @@ import {
     Web2Context,
     BlockchainContext
 } from "@bandada/credentials"
+import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
@@ -78,15 +79,12 @@ export class CredentialsService {
      * @param OAuthState OAuth state to prevent forgery attacks.
      * @param oAuthCode OAuth code to exchange for an access token.
      * @param address Account address.
-     * @param network Network name.
-     * @param blockNumber Block number.
      * @returns Redirect URI
      */
     async addMember(
         oAuthState: string,
         oAuthCode?: string,
-        address?: string,
-        network?: string
+        address?: string
     ): Promise<string> {
         if (!this.oAuthState.has(oAuthState)) {
             throw new BadRequestException(`OAuth state does not exist`)
@@ -108,10 +106,19 @@ export class CredentialsService {
         let context: Web2Context | BlockchainContext
 
         if (address) {
+            const { network } = JSON.parse(group.credentials).criteria
+
+            const supportedNetwork = blockchainCredentialSupportedNetworks.find(
+                (n) => n.name.toLowerCase() === network.toLowerCase()
+            )
+
+            if (supportedNetwork === undefined)
+                throw new BadRequestException(`The network is not supported`)
+
+            const networkEnvVariableName = supportedNetwork.id.toUpperCase()
+
             const web3providerRpcURL =
-                process.env[
-                    `${providerName.toUpperCase()}_${network.toUpperCase()}_RPC_URL`
-                ]
+                process.env[`${networkEnvVariableName}_RPC_URL`]
 
             const jsonRpcProvider = await (
                 provider as BlockchainProvider

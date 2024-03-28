@@ -13,7 +13,8 @@ describe("BlockchainTransactions", () => {
             {
                 id: blockchainTransactions.id,
                 criteria: {
-                    minTransactions: 10
+                    minTransactions: 10,
+                    network: "sepolia"
                 }
             },
             {
@@ -33,6 +34,7 @@ describe("BlockchainTransactions", () => {
                 id: blockchainTransactions.id,
                 criteria: {
                     minTransactions: 10,
+                    network: "sepolia",
                     blockNumber: 4749638
                 }
             },
@@ -70,6 +72,7 @@ describe("BlockchainTransactions", () => {
                     id: blockchainTransactions.id,
                     criteria: {
                         minTransactions: 100,
+                        network: "sepolia",
                         minStars: 200
                     }
                 },
@@ -90,7 +93,8 @@ describe("BlockchainTransactions", () => {
                 {
                     id: blockchainTransactions.id,
                     criteria: {
-                        minTransactions: "100"
+                        minTransactions: "100",
+                        network: "sepolia"
                     }
                 },
                 {

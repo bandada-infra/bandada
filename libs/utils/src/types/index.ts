@@ -7,3 +7,8 @@ export type OnchainBandadaGroup = {
     id: BigInt
     fingerprint: BigInt
 }
+
+export type BlockchainNetwork = {
+    id: string
+    name: string
+}

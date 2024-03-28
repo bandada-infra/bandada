@@ -1,4 +1,5 @@
 import { validators } from "@bandada/credentials"
+import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
 import {
     Box,
     Button,
@@ -198,31 +199,62 @@ export default function AccessModeStep({
                                             </NumberInputStepper>
                                         </NumberInput>
                                     )}
-                                    {parameter[1].type === "string" && (
-                                        <Input
-                                            size="lg"
-                                            value={
-                                                _credentials.criteria[
-                                                    parameter[0]
-                                                ]
-                                            }
-                                            onChange={(event) =>
-                                                setCredentials({
-                                                    ..._credentials,
-                                                    criteria: {
-                                                        ..._credentials.criteria,
-                                                        [parameter[0]]:
-                                                            event.target.value
-                                                    }
-                                                })
-                                            }
-                                            placeholder={
-                                                parameter[0] === "repository"
-                                                    ? "<repo-owner>/<repo-name>"
-                                                    : undefined
-                                            }
-                                        />
-                                    )}
+                                    {parameter[0] !== "network" &&
+                                        parameter[1].type === "string" && (
+                                            <Input
+                                                size="lg"
+                                                value={
+                                                    _credentials.criteria[
+                                                        parameter[0]
+                                                    ]
+                                                }
+                                                onChange={(event) =>
+                                                    setCredentials({
+                                                        ..._credentials,
+                                                        criteria: {
+                                                            ..._credentials.criteria,
+                                                            [parameter[0]]:
+                                                                event.target
+                                                                    .value
+                                                        }
+                                                    })
+                                                }
+                                                placeholder={
+                                                    parameter[0] ===
+                                                    "repository"
+                                                        ? "<repo-owner>/<repo-name>"
+                                                        : undefined
+                                                }
+                                            />
+                                        )}
+                                    {parameter[0] === "network" &&
+                                        parameter[1].type === "string" && (
+                                            <Select
+                                                size="lg"
+                                                placeholder="Select network"
+                                                onChange={(event) =>
+                                                    setCredentials({
+                                                        ..._credentials,
+                                                        criteria: {
+                                                            ..._credentials.criteria,
+                                                            [parameter[0]]:
+                                                                event.target
+                                                                    .value
+                                                        }
+                                                    })
+                                                }
+                                            >
+                                                {blockchainCredentialSupportedNetworks.map(
+                                                    (network: any) => (
+                                                        <option
+                                                            value={network.name}
+                                                        >
+                                                            {network.name}
+                                                        </option>
+                                                    )
+                                                )}
+                                            </Select>
+                                        )}
                                     {parameter[1].type === "boolean" && (
                                         <Checkbox
                                             isChecked={
