@@ -32,12 +32,17 @@ function MobileNav() {
     const [isMobileNavOpen, setMobileNavOpen] = useState(false)
     return (
         <div className="flex items-center lg:hidden">
-            <button type="button" onClick={() => setMobileNavOpen(true)}>
+            <button
+                type="button"
+                aria-label="burgher menu"
+                onClick={() => setMobileNavOpen(true)}
+            >
                 <Icons.burgher className="text-white" />
             </button>
             {isMobileNavOpen && (
                 <div
                     aria-hidden="true"
+                    aria-label="mobile nav overlay"
                     onClick={() => setMobileNavOpen(false)}
                     className="z-5 fixed inset-0 flex justify-end bg-black opacity-50"
                 />
@@ -47,6 +52,7 @@ function MobileNav() {
                     <div className="flex justify-end h-10 items-center">
                         <button
                             type="button"
+                            aria-label="close mobile nav"
                             onClick={() => setMobileNavOpen(false)}
                         >
                             <Icons.close className="text-white" />

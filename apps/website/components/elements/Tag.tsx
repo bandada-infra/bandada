@@ -1,5 +1,5 @@
 import { classed } from "@tw-classed/react"
-import { ReactNode } from "react"
+import React, { ReactNode } from "react"
 
 const TagBase = classed.div("cursor-pointer font-dm-sans border duration-200", {
     variants: {
@@ -37,16 +37,10 @@ const TagByType: Record<TagType, any> = {
     square: TagComponentSquare
 }
 
-function Tag({
-    children,
-    type = "rounded",
-    icon,
-    variant,
-    ...props
-}: TagProps) {
-    const Component = TagByType[type]
+function Tag({ children, type, icon, variant, ...props }: TagProps) {
+    const Component = TagByType[type ?? "rounded"]
     return (
-        <Component variant={variant} {...props}>
+        <Component variant={variant ?? "primary"} {...props}>
             <div className="flex items-center gap-2">
                 {icon}
                 <div>{children}</div>
