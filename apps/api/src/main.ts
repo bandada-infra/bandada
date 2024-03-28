@@ -39,7 +39,7 @@ async function bootstrap() {
 
     const latestVersion = await (
         await fetch(
-            "https://api.github.com/repos/privacy-scaling-explorations/bandada/releases/latest"
+            "https://api.github.com/repos/bandada-infra/bandada/releases/latest"
         )
     ).json()
 
@@ -54,9 +54,9 @@ async function bootstrap() {
     const configUI = {
         swaggerOptions: { defaultModelsExpandDepth: -1 },
         customfavIcon:
-            "https://raw.githubusercontent.com/privacy-scaling-explorations/bandada/main/apps/dashboard/src/assets/favicon.ico",
+            "https://raw.githubusercontent.com/bandada-infra/bandada/main/apps/dashboard/src/assets/favicon.ico",
         customSiteTitle: "Bandada API Docs",
-        customCss: `.topbar-wrapper img {content:url('https://raw.githubusercontent.com/privacy-scaling-explorations/bandada/d5268274cbb93f73a1960e131bff0d2bf1eacea9/apps/dashboard/src/assets/icon1.svg'); width:60px; height:auto;}
+        customCss: `.topbar-wrapper img {content:url('https://raw.githubusercontent.com/bandada-infra/bandada/d5268274cbb93f73a1960e131bff0d2bf1eacea9/apps/dashboard/src/assets/icon1.svg'); width:60px; height:auto;}
         .swagger-ui .topbar { background-color: transparent; } small.version-stamp { display: none !important; }`,
         customJsStr: `
     // Add a custom title to the right side of the Swagger UI page

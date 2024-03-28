@@ -9,16 +9,16 @@
         <img src="https://img.shields.io/badge/project-Bandada-blue.svg?style=flat-square">
     </a>
     <a href="https://github.com/bandada-infra/bandada/blob/main/LICENSE">
-        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/bandada.svg?style=flat-square">
+        <img alt="Github license" src="https://img.shields.io/github/license/bandada-infra/bandada.svg?style=flat-square">
     </a>
     <a href="https://github.com/bandada-infra/bandada/actions?query=workflow%3Atest">
-        <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/bandada/test.yml?branch=main&label=test&style=flat-square&logo=github">
+        <img alt="GitHub Workflow test" src="https://img.shields.io/github/actions/workflow/status/bandada-infra/bandada/test.yml?branch=main&label=test&style=flat-square&logo=github">
     </a>
     <a href="https://github.com/bandada-infra/bandada/actions?query=workflow%3Astyle">
-        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/privacy-scaling-explorations/bandada/style.yml?branch=main&label=style&style=flat-square&logo=github">
+        <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/bandada-infra/bandada/style.yml?branch=main&label=style&style=flat-square&logo=github">
     </a>
-    <a href="https://coveralls.io/github/privacy-scaling-explorations/bandada">
-        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/privacy-scaling-explorations/bandada?label=coverage (ts)&style=flat-square&logo=coveralls">
+    <a href="https://coveralls.io/github/bandada-infra/bandada">
+        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/bandada-infra/bandada?label=coverage (ts)&style=flat-square&logo=coveralls">
     </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
@@ -288,7 +288,7 @@ Bandada offers APIs for retrieving group data and managing group members. As an 
 
 To enable API access for a group, go to the group page in the dashboard and toggle the **Enable API Access** button. Once enabled, a new API key will be generated for you. You can disable API access at any time using the same toggle button.
 
-[Enable API access toggle for off-chain group](https://github.com/privacy-scaling-explorations/bandada/assets/20580910/e7106f24-39c8-422d-97a5-11756200ae03)
+[Enable API access toggle for off-chain group](https://github.com/bandada-infra/bandada/assets/20580910/e7106f24-39c8-422d-97a5-11756200ae03)
 
 ## 🔌 APIs endpoints
 

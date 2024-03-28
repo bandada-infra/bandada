@@ -10,7 +10,7 @@
         <img src="https://img.shields.io/badge/project-Bandada-blue.svg?style=flat-square">
     </a>
     <a href="https://github.com/bandada-infra/bandada/blob/main/LICENSE">
-        <img alt="Github license" src="https://img.shields.io/github/license/privacy-scaling-explorations/bandada.svg?style=flat-square">
+        <img alt="Github license" src="https://img.shields.io/github/license/bandada-infra/bandada.svg?style=flat-square">
     </a>
     <a href="https://www.npmjs.com/package/@bandada/utils">
         <img alt="NPM version" src="https://img.shields.io/npm/v/@bandada/utils?style=flat-square" />
