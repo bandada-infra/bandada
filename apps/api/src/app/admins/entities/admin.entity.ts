@@ -2,11 +2,13 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    Index,
     PrimaryColumn,
     UpdateDateColumn
 } from "typeorm"
 
 @Entity("admins")
+@Index(["apiKey"], { unique: true })
 export class Admin {
     @PrimaryColumn({ unique: true })
     id: string

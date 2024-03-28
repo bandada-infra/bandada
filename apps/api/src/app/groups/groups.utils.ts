@@ -1,6 +1,7 @@
 import { BadRequestException } from "@nestjs/common"
 import { Group } from "./entities/group.entity"
 import { Admin } from "../admins/entities/admin.entity"
+import { AdminsService } from "../admins/admins.service"
 
 export function mapGroupToResponseDTO(group: Group, fingerprint: string = "") {
     const dto = {
@@ -19,16 +20,18 @@ export function mapGroupToResponseDTO(group: Group, fingerprint: string = "") {
     return dto
 }
 
-export async function adminApiKeyCheck(
-    admin: Admin,
+export async function getAndCheckAdmin(
+    adminService: AdminsService,
     apiKey: string,
     groupId?: string
-) {
-    if (!admin) {
+): Promise<Admin> {
+    const admin = await adminService.findOne({ apiKey })
+
+    if (!apiKey || !admin) {
         throw new BadRequestException(
             groupId
-                ? `Invalid admin for the group '${groupId}'`
-                : `Invalid admin for the groups`
+                ? `Invalid API key or invalid admin for the group '${groupId}'`
+                : `Invalid API key or invalid admin for the groups`
         )
     }
 
@@ -37,4 +40,6 @@ export async function adminApiKeyCheck(
             `Invalid API key or API access not enabled for admin '${admin.id}'`
         )
     }
+
+    return admin
 }
