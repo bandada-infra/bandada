@@ -17,8 +17,8 @@ export class AuthService {
         expectedNonce: string
     ) {
         const siweMessage = new SiweMessage(message)
-        const { address, statement, domain, nonce } =
-            await siweMessage.validate(signature)
+        const { data } = await siweMessage.verify({ signature })
+        const { address, domain, statement, nonce } = data
 
         if (nonce !== expectedNonce) {
             throw new UnprocessableEntityException("Invalid nonce")

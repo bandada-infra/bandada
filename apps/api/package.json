@@ -29,7 +29,7 @@
         "querystring": "^0.2.1",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^7.2.0",
-        "siwe": "^1.1.6",
+        "siwe": "^2.1.4",
         "sqlite3": "^5.1.4",
         "typeorm": "^0.3.12",
         "uuid": "^9.0.0"
