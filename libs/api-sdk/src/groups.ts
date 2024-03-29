@@ -1,5 +1,5 @@
 import { request } from "@bandada/utils"
-import { GroupResponse } from "./types"
+import { GroupRequest, GroupResponse, GroupUpdateRequest } from "./types"
 
 const url = "/groups"
 
@@ -16,6 +16,147 @@ export async function getGroups(config: object): Promise<GroupResponse[]> {
     }))
 
     return groups
+}
+
+/**
+ * Creates one or more groups with the provided details.
+ * @param dtos Array of objects containing the details for the groups to be created.
+ * @param apiKey API Key of the admin.
+ * @returns Array of  the created groups.
+ */
+export async function createGroups(
+    config: object,
+    dtos: Array<GroupRequest>,
+    apiKey: string
+): Promise<Array<GroupResponse>> {
+    const newConfig: any = {
+        method: "post",
+        data: {
+            dtos
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(url, newConfig)
+
+    return req
+}
+
+/**
+ * Removes the group.
+ * @param groupId The group id.
+ * @param apiKey API Key of the admin.
+ */
+export async function removeGroup(
+    config: object,
+    groupId: string,
+    apiKey: string
+): Promise<void> {
+    const requestUrl = `${url}/${groupId}`
+
+    const newConfig: any = {
+        method: "delete",
+        data: {
+            apiKey
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(requestUrl, newConfig)
+
+    return req
+}
+
+/**
+ * Removes one or more groups.
+ * @param groupsIds The groups ids.
+ * @param apiKey API Key of the admin.
+ */
+export async function removeGroups(
+    config: object,
+    groupsIds: Array<string>,
+    apiKey: string
+): Promise<void> {
+    const newConfig: any = {
+        method: "delete",
+        data: {
+            groupsIds,
+            apiKey
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(url, newConfig)
+
+    return req
+}
+
+/**
+ * Updates the group.
+ * @param groupId The group id.
+ * @param dto The data to update for the group.
+ * @param apiKey API Key of the admin.
+ * @return The updated group.
+ */
+export async function updateGroup(
+    config: object,
+    groupId: string,
+    dto: GroupUpdateRequest,
+    apiKey: string
+): Promise<GroupResponse> {
+    const requestUrl = `${url}/${groupId}`
+
+    const newConfig: any = {
+        method: "put",
+        data: {
+            groupId,
+            dto,
+            apiKey
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(requestUrl, newConfig)
+
+    return req
+}
+
+/**
+ * Updates the groups.
+ * @param groupsIds The groups ids.
+ * @param dtos The data to update for the groups.
+ * @param apiKey API Key of the admin.
+ * @return The updated groups.
+ */
+export async function updateGroups(
+    config: object,
+    groupsIds: Array<string>,
+    dtos: Array<GroupUpdateRequest>,
+    apiKey: string
+): Promise<Array<GroupResponse>> {
+    const newConfig: any = {
+        method: "put",
+        data: {
+            groupsIds,
+            dtos,
+            apiKey
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(url, newConfig)
+
+    return req
 }
 
 /**

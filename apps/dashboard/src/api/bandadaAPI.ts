@@ -1,6 +1,6 @@
-import { request } from "@bandada/utils"
+import { ApiKeyActions, request } from "@bandada/utils"
 import { SiweMessage } from "siwe"
-import { Group } from "../types"
+import { Admin, Group } from "../types"
 import createAlert from "../utils/createAlert"
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -87,18 +87,45 @@ export async function createGroup(
     credentials?: any
 ): Promise<Group | null> {
     try {
-        const group = await request(`${API_URL}/groups`, {
+        const groups = await request(`${API_URL}/groups`, {
+            method: "POST",
+            data: [
+                {
+                    name,
+                    description,
+                    treeDepth,
+                    fingerprintDuration,
+                    credentials: JSON.stringify(credentials)
+                }
+            ]
+        })
+
+        return { ...groups.at(0), type: "off-chain" }
+    } catch (error: any) {
+        console.error(error)
+        createAlert(error.response.data.message)
+        return null
+    }
+}
+
+/**
+ * It creates a new admin.
+ * @param id The admin id.
+ * @param address The admin address.
+ * @returns The Admin.
+ */
+export async function createAdmin(
+    id: string,
+    address: string
+): Promise<Admin | null> {
+    try {
+        return await request(`${API_URL}/admins`, {
             method: "POST",
             data: {
-                name,
-                description,
-                treeDepth,
-                fingerprintDuration,
-                credentials: JSON.stringify(credentials)
+                id,
+                address
             }
         })
-
-        return { ...group, type: "off-chain" }
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)
@@ -107,21 +134,13 @@ export async function createGroup(
 }
 
 /**
- * It updates the detail of a group.
- * @param group The group id.
- * @param memberId The group member id.
+ * It returns details of a specific admin.
+ * @param adminId The admin id.
+ * @returns The admin details.
  */
-export async function updateGroup(
-    groupId: string,
-    { apiEnabled }: { apiEnabled: boolean }
-): Promise<Group | null> {
+export async function getAdmin(adminId: string): Promise<Admin | null> {
     try {
-        const group = await request(`${API_URL}/groups/${groupId}`, {
-            method: "PATCH",
-            data: { apiEnabled }
-        })
-
-        return { ...group, type: "off-chain" }
+        return await request(`${API_URL}/admins/${adminId}`)
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)
@@ -130,13 +149,20 @@ export async function updateGroup(
 }
 
 /**
- * It generates a new API key.
- * @param group The group id.
+ * It works with the Admin API key.
+ * @param adminId The admin id.
+ * @param action The action to carry on the API key.
  */
-export async function generateApiKey(groupId: string): Promise<string | null> {
+export async function updateApiKey(
+    adminId: string,
+    action: ApiKeyActions
+): Promise<string | null> {
     try {
-        return await request(`${API_URL}/groups/${groupId}/api-key`, {
-            method: "PATCH"
+        return await request(`${API_URL}/admins/${adminId}/apikey`, {
+            method: "PUT",
+            data: {
+                action
+            }
         })
     } catch (error: any) {
         console.error(error)

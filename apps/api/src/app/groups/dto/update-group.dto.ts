@@ -1,5 +1,4 @@
 import {
-    IsBoolean,
     IsJSON,
     IsNumber,
     IsOptional,
@@ -20,10 +19,6 @@ export class UpdateGroupDto {
     @Min(16)
     @Max(32)
     readonly treeDepth?: number
-
-    @IsOptional()
-    @IsBoolean()
-    readonly apiEnabled?: boolean
 
     @IsOptional()
     @IsNumber()

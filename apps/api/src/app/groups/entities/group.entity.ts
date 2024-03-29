@@ -59,12 +59,6 @@ export class Group {
     })
     credentials: any // TODO: Add correct type for credentials JSON
 
-    @Column({ name: "api_enabled", default: false })
-    apiEnabled: boolean
-
-    @Column({ name: "api_key", nullable: true })
-    apiKey: string
-
     @CreateDateColumn({ name: "created_at" })
     createdAt: Date
 

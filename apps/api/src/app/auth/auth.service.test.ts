@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { ethers } from "ethers"
 import { generateNonce, SiweMessage } from "siwe"
 import { Admin } from "../admins/entities/admin.entity"
-import { AdminService } from "../admins/admins.service"
+import { AdminsService } from "../admins/admins.service"
 import { AuthService } from "./auth.service"
 
 jest.mock("@bandada/utils", () => ({
@@ -47,7 +47,7 @@ function createSiweMessage(address: string, statement?: string) {
 
 describe("AuthService", () => {
     let authService: AuthService
-    let adminService: AdminService
+    let adminsService: AdminsService
 
     let originalApiUrl: string
 
@@ -65,11 +65,11 @@ describe("AuthService", () => {
                 }),
                 TypeOrmModule.forFeature([Admin])
             ],
-            providers: [AuthService, AdminService]
+            providers: [AuthService, AdminsService]
         }).compile()
 
         authService = await module.resolve(AuthService)
-        adminService = await module.resolve(AdminService)
+        adminsService = await module.resolve(AdminsService)
 
         // Set API_URL so auth service can validate domain
         originalApiUrl = process.env.DASHBOARD_URL
@@ -169,7 +169,7 @@ describe("AuthService", () => {
 
     describe("# isLoggedIn", () => {
         it("Should return true if the admin exists", async () => {
-            const admin = await adminService.findOne({
+            const admin = await adminsService.findOne({
                 address: account1.address
             })
 

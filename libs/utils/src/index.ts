@@ -10,7 +10,12 @@ import request from "./request"
 import shortenAddress from "./shortenAddress"
 import { blockchainCredentialSupportedNetworks } from "./getSupportedNetworks"
 
-export * from "./types/index"
+export {
+    ApiKeyActions,
+    Network,
+    ContractName,
+    OnchainBandadaGroup
+} from "./types/index"
 export {
     request,
     shortenAddress,

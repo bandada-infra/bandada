@@ -12,13 +12,14 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
 import { Repository } from "typeorm"
-import { v4 } from "uuid"
 import { InvitesService } from "../invites/invites.service"
+import { AdminsService } from "../admins/admins.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { MerkleProof } from "./types"
+import { getAndCheckAdmin } from "./groups.utils"
 
 @Injectable()
 export class GroupsService {
@@ -31,7 +32,8 @@ export class GroupsService {
         @InjectRepository(Member)
         private readonly memberRepository: Repository<Member>,
         @Inject(forwardRef(() => InvitesService))
-        private readonly invitesService: InvitesService
+        private readonly invitesService: InvitesService,
+        private readonly adminsService: AdminsService
     ) {
         this.cachedGroups = new Map()
         // this.bandadaContract = getBandadaContract(
@@ -54,6 +56,86 @@ export class GroupsService {
         //         await this._syncContractGroups()
         //     }, 5000)
         // }
+    }
+
+    /**
+     * Create a group using API Key.
+     * @param dto External parameters used to create a new group.
+     * @param apiKey The API Key.
+     * @returns Created group.
+     */
+    async createGroupWithAPIKey(
+        dto: CreateGroupDto,
+        apiKey: string
+    ): Promise<Group> {
+        const groups = await this.createGroupsWithAPIKey([dto], apiKey)
+
+        return groups.at(0)
+    }
+
+    /**
+     * Create groups using API Key.
+     * @param dtos External parameters used to create new groups.
+     * @param apiKey The API Key.
+     * @returns Created groups.
+     */
+    async createGroupsWithAPIKey(
+        dtos: Array<CreateGroupDto>,
+        apiKey: string
+    ): Promise<Array<Group>> {
+        const newGroups: Array<Group> = []
+
+        const admin = await getAndCheckAdmin(this.adminsService, apiKey)
+
+        for await (const dto of dtos) {
+            const group = await this.createGroup(dto, admin.id)
+
+            newGroups.push(group)
+        }
+
+        return newGroups
+    }
+
+    /**
+     * Create group manually without using API Key.
+     * @param dto External parameters used to create a new group.
+     * @param adminId Admin id.
+     * @returns Created group.
+     */
+    async createGroupManually(
+        dto: CreateGroupDto,
+        adminId: string
+    ): Promise<Group> {
+        const admin = await this.adminsService.findOne({ id: adminId })
+
+        if (!admin) throw new BadRequestException(`You are not an admin`)
+
+        return this.createGroup(dto, adminId)
+    }
+
+    /**
+     * Create groups manually without using API Key.
+     * @param dtos External parameters used to create new groups.
+     * @param adminId Admin id.
+     * @returns Created groups.
+     */
+    async createGroupsManually(
+        dtos: Array<CreateGroupDto>,
+        adminId: string
+    ): Promise<Array<Group>> {
+        const admin = await this.adminsService.findOne({ id: adminId })
+
+        if (!admin) throw new BadRequestException(`You are not an admin`)
+
+        const newGroups: Array<Group> = []
+
+        for await (const dto of dtos) {
+            const group = await this.createGroup(dto, adminId)
+
+            newGroups.push(group)
+        }
+
+        return newGroups
     }
 
     /**
@@ -106,12 +188,70 @@ export class GroupsService {
     }
 
     /**
+     * Remove a group using API Key.
+     * @param groupId Group id.
+     * @param adminId Admin id.
+     * @param apiKey the api key.
+     * @returns Created group.
+     */
+    async removeGroupWithAPIKey(
+        groupId: string,
+        apiKey: string
+    ): Promise<void> {
+        return this.removeGroupsWithAPIKey([groupId], apiKey)
+    }
+
+    /**
+     * Remove groups using API Key.
+     * @param groupsIds Groups identifiers.
+     * @param apiKey the api key.
+     */
+    async removeGroupsWithAPIKey(
+        groupsIds: Array<string>,
+        apiKey: string
+    ): Promise<void> {
+        const admin = await getAndCheckAdmin(this.adminsService, apiKey)
+
+        for await (const groupId of groupsIds) {
+            await this.removeGroup(groupId, admin.id)
+        }
+    }
+
+    /**
+     * Remove a group manually without using API Key.
+     * @param groupId Group id.
+     * @param adminId Admin id.
+     */
+    async removeGroupManually(groupId: string, adminId: string): Promise<void> {
+        return this.removeGroup(groupId, adminId)
+    }
+
+    /**
+     * Remove groups manually without using API Key.
+     * @param groupsIds Groups identifiers.
+     * @param adminId Admin id.
+     */
+    async removeGroupsManually(
+        groupsIds: Array<string>,
+        adminId: string
+    ): Promise<void> {
+        for await (const groupId of groupsIds) {
+            await this.removeGroup(groupId, adminId)
+        }
+    }
+
+    /**
      * Removes a group.
      * @param groupId Group id.
      * @param adminId Admin id.
      */
     async removeGroup(groupId: string, adminId: string): Promise<void> {
         const group = await this.getGroup(groupId)
+
+        if (!group)
+            throw new BadRequestException(
+                `The group '${groupId}' does not exists`
+            )
 
         if (group.adminId !== adminId) {
             throw new UnauthorizedException(
@@ -127,6 +267,86 @@ export class GroupsService {
     }
 
     /**
+     * Update a group using API Key.
+     * @param groupId Group id.
+     * @param dto External parameters used to update a group.
+     * @param apiKey the API Key.
+     * @returns Updated group.
+     */
+    async updateGroupWithApiKey(
+        groupId: string,
+        dto: UpdateGroupDto,
+        apiKey: string
+    ): Promise<Group> {
+        const admin = await getAndCheckAdmin(this.adminsService, apiKey)
+
+        return this.updateGroup(groupId, dto, admin.id)
+    }
+
+    /**
+     * Update groups using API Key.
+     * @param groupsIds Groups ids.
+     * @param dtos External parameters used to update groups.
+     * @param apiKey the API Key.
+     * @returns Updated group.
+     */
+    async updateGroupsWithApiKey(
+        groupsIds: Array<string>,
+        dtos: Array<UpdateGroupDto>,
+        apiKey: string
+    ): Promise<Array<Group>> {
+        const updatedGroups: Array<Group> = []
+
+        const admin = await getAndCheckAdmin(this.adminsService, apiKey)
+
+        for await (const [index, groupId] of groupsIds.entries()) {
+            const dto = dtos[index]
+            const group = await this.updateGroup(groupId, dto, admin.id)
+            updatedGroups.push(group)
+        }
+
+        return updatedGroups
+    }
+
+    /**
+     * Update a group manually without using API Key.
+     * @param groupId Group id.
+     * @param dto External parameters used to update a group.
+     * @param adminId Group admin id.
+     * @returns Updated group.
+     */
+    async updateGroupManually(
+        groupId: string,
+        dto: UpdateGroupDto,
+        adminId: string
+    ): Promise<Group> {
+        return this.updateGroup(groupId, dto, adminId)
+    }
+
+    /**
+     * Update groups manually without using API Key.
+     * @param groupsIds Groups ids.
+     * @param dtos External parameters used to update groups.
+     * @param adminId Group admin id.
+     * @returns Updated groups.
+     */
+    async updateGroupsManually(
+        groupsIds: Array<string>,
+        dtos: Array<UpdateGroupDto>,
+        adminId: string
+    ): Promise<Array<Group>> {
+        const updatedGroups: Array<Group> = []
+
+        for await (const [index, groupId] of groupsIds.entries()) {
+            const dto = dtos[index]
+            const group = await this.updateGroup(groupId, dto, adminId)
+            updatedGroups.push(group)
+        }
+
+        return updatedGroups
+    }
+
+    /**
      * Updates some parameters of the group.
      * @param groupId Group id.
      * @param dto External parameters used to update a group.
@@ -138,13 +358,17 @@ export class GroupsService {
         {
             description,
             treeDepth,
-            apiEnabled,
             credentials,
             fingerprintDuration
         }: UpdateGroupDto,
         adminId: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
+
+        if (!group)
+            throw new BadRequestException(
+                `The group '${groupId}' does not exists`
+            )
 
         if (group.adminId !== adminId) {
             throw new UnauthorizedException(
@@ -176,51 +400,11 @@ export class GroupsService {
             group.credentials = credentials
         }
 
-        if (!group.credentials && apiEnabled !== undefined) {
-            group.apiEnabled = apiEnabled
-
-            // Generate a new API key if it doesn't exist
-            if (!group.apiKey) {
-                group.apiKey = v4()
-            }
-        }
-
         await this.groupRepository.save(group)
 
         Logger.log(`GroupsService: group '${group.name}' has been updated`)
 
         return group
-    }
-
-    /**
-     * Updates the group api key.
-     * @param groupId Group id.
-     * @param adminId Group admin id.
-     */
-    async updateApiKey(groupId: string, adminId: string): Promise<string> {
-        const group = await this.getGroup(groupId)
-
-        if (group.adminId !== adminId) {
-            throw new UnauthorizedException(
-                `You are not the admin of the group '${groupId}'`
-            )
-        }
-
-        if (!group.apiEnabled) {
-            throw new UnauthorizedException(
-                `Group '${groupId}' API key is not enabled`
-            )
-        }
-
-        group.apiKey = v4()
-
-        await this.groupRepository.save(group)
-
-        Logger.log(
-            `GroupsService: group '${group.name}' APIs have been updated`
-        )
-
-        return group.apiKey
     }
 
     /**
@@ -320,10 +504,17 @@ export class GroupsService {
         apiKey: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
+        const admin = await this.adminsService.findOne({ id: group.adminId })
 
-        if (!group.apiEnabled || group.apiKey !== apiKey) {
+        if (!admin) {
             throw new BadRequestException(
-                `Invalid API key or API access not enabled for group '${groupId}'`
+                `Invalid admin for group '${groupId}'`
+            )
+        }
+
+        if (!admin.apiEnabled || admin.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
             )
         }
 
@@ -540,10 +731,17 @@ export class GroupsService {
         apiKey: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
+        const admin = await this.adminsService.findOne({ id: group.adminId })
 
-        if (!group.apiEnabled || group.apiKey !== apiKey) {
+        if (!admin) {
             throw new BadRequestException(
-                `Invalid API key or API access not enabled for group '${groupId}'`
+                `Invalid admin for group '${groupId}'`
+            )
+        }
+
+        if (!admin.apiEnabled || admin.apiKey !== apiKey) {
+            throw new BadRequestException(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
             )
         }
 

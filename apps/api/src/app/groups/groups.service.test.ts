@@ -1,28 +1,40 @@
 import { ScheduleModule } from "@nestjs/schedule"
 import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
+import { ApiKeyActions } from "@bandada/utils"
 import { Invite } from "../invites/entities/invite.entity"
 import { InvitesService } from "../invites/invites.service"
 import { OAuthAccount } from "../credentials/entities/credentials-account.entity"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { GroupsService } from "./groups.service"
+import { AdminsService } from "../admins/admins.service"
+import { AdminsModule } from "../admins/admins.module"
+import { Admin } from "../admins/entities/admin.entity"
+import { CreateGroupDto } from "./dto/create-group.dto"
+import { UpdateGroupDto } from "./dto/update-group.dto"
 
-jest.mock("@bandada/utils", () => ({
-    __esModule: true,
-    getBandadaContract: () => ({
-        updateGroups: jest.fn(() => ({
-            status: true,
-            logs: ["1"]
-        })),
-        getGroups: jest.fn(() => []),
-        updateFingerprintDuration: jest.fn(() => null)
-    })
-}))
+jest.mock("@bandada/utils", () => {
+    const originalModule = jest.requireActual("@bandada/utils")
+
+    return {
+        __esModule: true,
+        ...originalModule,
+        getBandadaContract: () => ({
+            updateGroups: jest.fn(() => ({
+                status: true,
+                logs: ["1"]
+            })),
+            getGroups: jest.fn(() => []),
+            updateFingerprintDuration: jest.fn(() => null)
+        })
+    }
+})
 
 describe("GroupsService", () => {
     let groupsService: GroupsService
     let invitesService: InvitesService
+    let adminsService: AdminsService
     let groupId: string
 
     beforeAll(async () => {
@@ -33,18 +45,20 @@ describe("GroupsService", () => {
                         type: "sqlite",
                         database: ":memory:",
                         dropSchema: true,
-                        entities: [Group, Invite, Member, OAuthAccount],
+                        entities: [Group, Invite, Member, OAuthAccount, Admin],
                         synchronize: true
                     })
                 }),
-                TypeOrmModule.forFeature([Group, Invite, Member]),
-                ScheduleModule.forRoot()
+                TypeOrmModule.forFeature([Group, Invite, Member, Admin]),
+                ScheduleModule.forRoot(),
+                AdminsModule
             ],
-            providers: [GroupsService, InvitesService]
+            providers: [GroupsService, InvitesService, AdminsService]
         }).compile()
 
         groupsService = await module.resolve(GroupsService)
         invitesService = await module.resolve(InvitesService)
+        adminsService = await module.resolve(AdminsService)
 
         await groupsService.initialize()
 
@@ -225,54 +239,6 @@ describe("GroupsService", () => {
         })
     })
 
-    describe("# updateApiKey", () => {
-        let group: Group
-
-        it("Should enable the API with a new API key", async () => {
-            group = await groupsService.createGroup(
-                {
-                    name: "Group2",
-                    description: "This is a new group",
-                    treeDepth: 16,
-                    fingerprintDuration: 3600
-                },
-                "admin"
-            )
-
-            await groupsService.updateGroup(
-                group.id,
-                { apiEnabled: true },
-                "admin"
-            )
-
-            const { apiKey } = await groupsService.getGroup(group.id)
-
-            expect(apiKey).toHaveLength(36)
-        })
-
-        it("Should update the api key of the group", async () => {
-            const apiKey = await groupsService.updateApiKey(group.id, "admin")
-
-            expect(apiKey).toHaveLength(36)
-        })
-
-        it("Should not update the api key if the admin is the wrong one", async () => {
-            const fun = groupsService.updateApiKey(groupId, "wrong-admin")
-
-            await expect(fun).rejects.toThrow(
-                `You are not the admin of the group '${groupId}'`
-            )
-        })
-
-        it("Should not update the api key if the api is not enabled", async () => {
-            const fun = groupsService.updateApiKey(groupId, "admin")
-
-            await expect(fun).rejects.toThrow(
-                `Group '${groupId}' API key is not enabled`
-            )
-        })
-    })
-
     describe("# addMember", () => {
         let invite: Invite
 
@@ -423,11 +389,579 @@ describe("GroupsService", () => {
         })
     })
 
+    describe("# Create and remove group via API", () => {
+        const groupDto: CreateGroupDto = {
+            name: "Group",
+            description: "This is a new group",
+            treeDepth: 16,
+            fingerprintDuration: 3600
+        }
+        let admin: Admin
+        let apiKey: string
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+
+            admin = await adminsService.findOne({ id: admin.id })
+        })
+
+        it("Should create a group via API", async () => {
+            const group = await groupsService.createGroupWithAPIKey(
+                groupDto,
+                apiKey
+            )
+
+            expect(group.adminId).toBe(admin.id)
+            expect(group.description).toBe(groupDto.description)
+            expect(group.name).toBe(groupDto.name)
+            expect(group.treeDepth).toBe(groupDto.treeDepth)
+            expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
+            expect(group.members).toHaveLength(0)
+            expect(group.credentials).toBeNull()
+        })
+
+        it("Should remove a group via API", async () => {
+            const group = await groupsService.createGroupWithAPIKey(
+                groupDto,
+                apiKey
+            )
+
+            await groupsService.removeGroupWithAPIKey(group.id, apiKey)
+
+            const fun = groupsService.getGroup(group.id)
+
+            await expect(fun).rejects.toThrow(
+                `Group with id '${group.id}' does not exist`
+            )
+        })
+
+        it("Should not create a group if the admin does not exist", async () => {
+            const fun = groupsService.createGroupWithAPIKey(groupDto, "wrong")
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not remove a group if the admin does not exist", async () => {
+            const group = await groupsService.createGroupWithAPIKey(
+                groupDto,
+                apiKey
+            )
+
+            const fun = groupsService.removeGroupWithAPIKey(group.id, "wrong")
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not create a group if the API key is invalid", async () => {
+            const fun = groupsService.createGroupWithAPIKey(groupDto, "apiKey")
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not remove a group if the API key is invalid", async () => {
+            const group = await groupsService.createGroupWithAPIKey(
+                groupDto,
+                apiKey
+            )
+
+            const fun = groupsService.removeGroupWithAPIKey(group.id, "wrong")
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not create a group if the API key is disabled for the admin", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.createGroupWithAPIKey(groupDto, apiKey)
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+
+        it("Should not remove a group if the API key is disabled for the admin", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
+
+            const group = await groupsService.createGroupWithAPIKey(
+                groupDto,
+                apiKey
+            )
+
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.removeGroupWithAPIKey(group.id, apiKey)
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+
+        it("Should not remove a group if the given id does not belong to the group admin", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
+
+            const group = await groupsService.createGroupWithAPIKey(
+                groupDto,
+                apiKey
+            )
+
+            let anotherAdmin = await adminsService.create({
+                id: "admin2",
+                address: "0x02"
+            })
+
+            const anotherApiKey = await adminsService.updateApiKey(
+                anotherAdmin.id,
+                ApiKeyActions.Generate
+            )
+
+            anotherAdmin = await adminsService.findOne({ id: anotherAdmin.id })
+
+            const fun = groupsService.removeGroupWithAPIKey(
+                group.id,
+                anotherApiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${group.id}'`
+            )
+        })
+    })
+
+    describe("# Create and remove groups via API", () => {
+        const groupsDtos: Array<CreateGroupDto> = [
+            {
+                id: "1",
+                name: "Group1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600
+            },
+            {
+                id: "2",
+                name: "Group2",
+                description: "This is a new group2",
+                treeDepth: 16,
+                fingerprintDuration: 3600
+            },
+            {
+                id: "3",
+                name: "Group3",
+                description: "This is a new group3",
+                treeDepth: 16,
+                fingerprintDuration: 3600
+            }
+        ]
+        const ids = groupsDtos.map((dto) => dto.id)
+        let admin: Admin
+        let apiKey: string
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+
+            admin = await adminsService.findOne({ id: admin.id })
+        })
+
+        it("Should create the groups via API", async () => {
+            const groups = await groupsService.createGroupsWithAPIKey(
+                groupsDtos,
+                apiKey
+            )
+
+            groups.forEach((group: Group, i: number) => {
+                expect(group.id).toBe(groupsDtos[i].id)
+                expect(group.adminId).toBe(admin.id)
+                expect(group.description).toBe(groupsDtos[i].description)
+                expect(group.name).toBe(groupsDtos[i].name)
+                expect(group.treeDepth).toBe(groupsDtos[i].treeDepth)
+                expect(group.fingerprintDuration).toBe(
+                    groupsDtos[i].fingerprintDuration
+                )
+                expect(group.members).toHaveLength(0)
+                expect(group.credentials).toBeNull()
+            })
+        })
+
+        it("Should remove the groups via API", async () => {
+            let groups = await groupsService.getGroups({
+                adminId: admin.id
+            })
+
+            expect(groups).toHaveLength(4)
+
+            await groupsService.removeGroupsWithAPIKey([ids[0], ids[1]], apiKey)
+
+            groups = await groupsService.getGroups({
+                adminId: admin.id
+            })
+
+            expect(groups).toHaveLength(2)
+            const group = groups.at(1)
+            const groupDto = groupsDtos.at(2)
+
+            expect(group.id).toBe(groupDto.id)
+            expect(group.adminId).toBe(admin.id)
+            expect(group.description).toBe(groupDto.description)
+            expect(group.name).toBe(groupDto.name)
+            expect(group.treeDepth).toBe(groupDto.treeDepth)
+            expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
+            expect(group.members).toHaveLength(0)
+            expect(group.credentials).toBeNull()
+
+            const fun = groupsService.getGroup(ids[1])
+
+            await expect(fun).rejects.toThrow(
+                `Group with id '${ids[1]}' does not exist`
+            )
+        })
+
+        it("Should not create the groups if the admin does not exist", async () => {
+            const fun = groupsService.createGroupsWithAPIKey(
+                groupsDtos,
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not remove the groups if the admin does not exist", async () => {
+            const fun = groupsService.removeGroupsWithAPIKey(ids, "wrong")
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not create the groups if the API key is invalid", async () => {
+            const fun = groupsService.createGroupsWithAPIKey(
+                groupsDtos,
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not remove the groups if the API key is invalid", async () => {
+            const fun = groupsService.removeGroupsWithAPIKey(ids, "wrong")
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not create the groups if the API key is disabled for the admin", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.createGroupsWithAPIKey(groupsDtos, apiKey)
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+
+        it("Should not remove the groups if the API key is disabled for the admin", async () => {
+            const fun = groupsService.removeGroupsWithAPIKey(ids, apiKey)
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+
+        it("Should not remove the groups if the given id does not belong to the group admin", async () => {
+            let anotherAdmin = await adminsService.create({
+                id: "admin2",
+                address: "0x02"
+            })
+
+            const anotherApiKey = await adminsService.updateApiKey(
+                anotherAdmin.id,
+                ApiKeyActions.Generate
+            )
+
+            anotherAdmin = await adminsService.findOne({ id: anotherAdmin.id })
+
+            const fun = groupsService.removeGroupsWithAPIKey(
+                [ids[2]],
+                anotherApiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${ids[2]}'`
+            )
+        })
+    })
+
+    describe("# Update group via API", () => {
+        const groupDto: CreateGroupDto = {
+            id: "1",
+            name: "Group1",
+            description: "This is a new group1",
+            treeDepth: 16,
+            fingerprintDuration: 3600
+        }
+
+        const updateDto: UpdateGroupDto = {
+            description: "This is a new new group1",
+            treeDepth: 32,
+            fingerprintDuration: 7200
+        }
+        let admin: Admin
+        let apiKey: string
+        let group: Group
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+            admin = await adminsService.findOne({ id: admin.id })
+            group = await groupsService.createGroup(groupDto, admin.id)
+        })
+
+        it("Should update the group via API", async () => {
+            const updatedGroup = await groupsService.updateGroupWithApiKey(
+                group.id,
+                updateDto,
+                apiKey
+            )
+
+            expect(updatedGroup.id).toBe(groupDto.id)
+            expect(updatedGroup.adminId).toBe(admin.id)
+            expect(updatedGroup.description).toBe(updateDto.description)
+            expect(updatedGroup.name).toBe(groupDto.name)
+            expect(updatedGroup.treeDepth).toBe(updateDto.treeDepth)
+            expect(updatedGroup.fingerprintDuration).toBe(
+                updateDto.fingerprintDuration
+            )
+            expect(updatedGroup.members).toHaveLength(0)
+            expect(updatedGroup.credentials).toBeNull()
+        })
+
+        it("Should not update a group if the admin is the wrong one", async () => {
+            const fun = groupsService.updateGroupWithApiKey(
+                groupId,
+                groupDto,
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${groupId}'`
+            )
+        })
+
+        it("Should not update a group if the group does not exist", async () => {
+            const fun = groupsService.updateGroupWithApiKey(
+                "wrong",
+                groupDto,
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Group with id 'wrong' does not exist`
+            )
+        })
+
+        it("Should not update a group if the API key is invalid", async () => {
+            const fun = groupsService.updateGroupWithApiKey(
+                groupId,
+                groupDto,
+                "invalid-apikey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not update a group if the API key is disabled", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.updateGroupWithApiKey(
+                groupId,
+                groupDto,
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+    })
+
+    describe("# Update groups via API", () => {
+        const groupsDtos: Array<CreateGroupDto> = [
+            {
+                id: "1",
+                name: "Group1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600
+            },
+            {
+                id: "2",
+                name: "Group2",
+                description: "This is a new group2",
+                treeDepth: 32,
+                fingerprintDuration: 7200
+            }
+        ]
+
+        const updateDtos: Array<UpdateGroupDto> = [
+            {
+                description: "This is a new new group1",
+                treeDepth: 32,
+                fingerprintDuration: 7200
+            },
+            {
+                description: "This is a new new group2",
+                treeDepth: 32,
+                fingerprintDuration: 14400
+            }
+        ]
+        let admin: Admin
+        let apiKey: string
+        let groups: Array<Group>
+        let groupId1: string
+        let groupId2: string
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            admin = await adminsService.findOne({ id: admin.id })
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+            groups = await groupsService.createGroupsManually(
+                groupsDtos,
+                admin.id
+            )
+            groupId1 = groups[0].id
+            groupId2 = groups[1].id
+        })
+
+        it("Should update the groups via API", async () => {
+            const updatedGroups = await groupsService.updateGroupsWithApiKey(
+                [groupId1, groupId2],
+                updateDtos,
+                apiKey
+            )
+
+            updatedGroups.forEach((updatedGroup: Group, i: number) => {
+                expect(updatedGroup.id).toBe(groupsDtos[i].id)
+                expect(updatedGroup.adminId).toBe(admin.id)
+                expect(updatedGroup.description).toBe(updateDtos[i].description)
+                expect(updatedGroup.name).toBe(groupsDtos[i].name)
+                expect(updatedGroup.treeDepth).toBe(updateDtos[i].treeDepth)
+                expect(updatedGroup.fingerprintDuration).toBe(
+                    updateDtos[i].fingerprintDuration
+                )
+                expect(updatedGroup.members).toHaveLength(0)
+            })
+        })
+
+        it("Should not update the groups if the admin is the wrong one", async () => {
+            const fun = groupsService.updateGroupsWithApiKey(
+                [groupId1, groupId2],
+                groupsDtos,
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not update the groups if the group does not exist", async () => {
+            const fun = groupsService.updateGroupsWithApiKey(
+                ["wrong"],
+                groupsDtos,
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Group with id 'wrong' does not exist`
+            )
+        })
+
+        it("Should not update the groups if the API key is invalid", async () => {
+            const fun = groupsService.updateGroupsWithApiKey(
+                [groupId1, groupId2],
+                groupsDtos,
+                "invalid-apikey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not update the groups if the API key is disabled", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.updateGroupsWithApiKey(
+                [groupId1, groupId2],
+                groupsDtos,
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+    })
+
     describe("# Add and remove member via API", () => {
+        let admin: Admin
         let group: Group
         let apiKey: string
 
         beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+
             group = await groupsService.createGroup(
                 {
                     name: "Group2",
@@ -435,16 +969,10 @@ describe("GroupsService", () => {
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
-                "admin"
+                admin.id
             )
 
-            await groupsService.updateGroup(
-                group.id,
-                { apiEnabled: true },
-                "admin"
-            )
-
-            apiKey = (await groupsService.getGroup(group.id)).apiKey
+            admin = await adminsService.findOne({ id: admin.id })
         })
 
         it("Should add a member to an existing group via API", async () => {
@@ -493,13 +1021,7 @@ describe("GroupsService", () => {
             )
         })
 
-        it("Should not add a member to an existing group if API is disabled", async () => {
-            await groupsService.updateGroup(
-                group.id,
-                { apiEnabled: false },
-                "admin"
-            )
-
+        it("Should not add a member to an existing group if API belongs to another admin", async () => {
             const fun = groupsService.addMemberWithAPIKey(
                 groupId,
                 "100002",
@@ -507,11 +1029,11 @@ describe("GroupsService", () => {
             )
 
             await expect(fun).rejects.toThrow(
-                "Invalid API key or API access not enabled for group"
+                `Invalid admin for group '${groupId}'`
             )
         })
 
-        it("Should not remove a member to an existing group if API is disabled", async () => {
+        it("Should not remove a member to an existing group if API belongs to another admin", async () => {
             const fun = groupsService.removeMemberWithAPIKey(
                 groupId,
                 "100001",
@@ -519,16 +1041,77 @@ describe("GroupsService", () => {
             )
 
             await expect(fun).rejects.toThrow(
-                "Invalid API key or API access not enabled for group"
+                `Invalid admin for group '${groupId}'`
+            )
+        })
+
+        it("Should not add a member to an existing group if API is invalid", async () => {
+            const fun = groupsService.addMemberWithAPIKey(
+                group.id,
+                "100002",
+                "apiKey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
+            )
+        })
+
+        it("Should not remove a member to an existing group if API is invalid", async () => {
+            const fun = groupsService.removeMemberWithAPIKey(
+                group.id,
+                "100001",
+                "apiKey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
+            )
+        })
+
+        it("Should not add a member to an existing group if API is disabled", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.addMemberWithAPIKey(
+                group.id,
+                "100002",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
+            )
+        })
+
+        it("Should not remove a member to an existing group if API is disabled", async () => {
+            const fun = groupsService.removeMemberWithAPIKey(
+                group.id,
+                "100001",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
             )
         })
     })
 
     describe("# Add and remove members via API", () => {
+        let admin: Admin
         let group: Group
         let apiKey: string
 
         beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+
             group = await groupsService.createGroup(
                 {
                     name: "Group2",
@@ -536,16 +1119,10 @@ describe("GroupsService", () => {
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
-                "admin"
+                admin.id
             )
 
-            await groupsService.updateGroup(
-                group.id,
-                { apiEnabled: true },
-                "admin"
-            )
-
-            apiKey = (await groupsService.getGroup(group.id)).apiKey
+            admin = await adminsService.findOne({ id: admin.id })
         })
 
         it("Should add a member to an existing group via API", async () => {
@@ -600,13 +1177,7 @@ describe("GroupsService", () => {
             )
         })
 
-        it("Should not add a member to an existing group if API is disabled", async () => {
-            await groupsService.updateGroup(
-                group.id,
-                { apiEnabled: false },
-                "admin"
-            )
-
+        it("Should not add a member to an existing group if API belongs to another admin", async () => {
             const fun = groupsService.addMembersWithAPIKey(
                 groupId,
                 ["100002"],
@@ -614,11 +1185,11 @@ describe("GroupsService", () => {
             )
 
             await expect(fun).rejects.toThrow(
-                "Invalid API key or API access not enabled for group"
+                `Invalid admin for group '${groupId}'`
             )
         })
 
-        it("Should not remove a member to an existing group if API is disabled", async () => {
+        it("Should not remove a member to an existing group if API belongs to another admin", async () => {
             const fun = groupsService.removeMembersWithAPIKey(
                 groupId,
                 ["100001"],
@@ -626,7 +1197,57 @@ describe("GroupsService", () => {
             )
 
             await expect(fun).rejects.toThrow(
-                "Invalid API key or API access not enabled for group"
+                `Invalid admin for group '${groupId}'`
+            )
+        })
+
+        it("Should not add a member to an existing group if API is invalid", async () => {
+            const fun = groupsService.addMembersWithAPIKey(
+                group.id,
+                ["100002"],
+                "apiKey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
+            )
+        })
+
+        it("Should not remove a member to an existing group if API is invalid", async () => {
+            const fun = groupsService.removeMembersWithAPIKey(
+                group.id,
+                ["100001"],
+                "apiKey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
+            )
+        })
+
+        it("Should not add a member to an existing group if API is disabled", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.addMembersWithAPIKey(
+                group.id,
+                ["100002"],
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
+            )
+        })
+
+        it("Should not remove a member to an existing group if API is disabled", async () => {
+            const fun = groupsService.removeMembersWithAPIKey(
+                group.id,
+                ["100001"],
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${group.adminId}'`
             )
         })
     })
@@ -729,6 +1350,402 @@ describe("GroupsService", () => {
             )
 
             await expect(fun).rejects.toThrow("You are not the admin")
+        })
+    })
+
+    describe("# createGroupManually", () => {
+        const groupDto: CreateGroupDto = {
+            id: "1",
+            name: "Group1",
+            description: "This is a new group1",
+            treeDepth: 16,
+            fingerprintDuration: 3600
+        }
+        let admin: Admin
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            admin = await adminsService.findOne({ id: admin.id })
+        })
+
+        it("Should create a group manually", async () => {
+            const group = await groupsService.createGroupManually(
+                groupDto,
+                admin.id
+            )
+
+            expect(group.id).toBe(groupDto.id)
+            expect(group.adminId).toBe(admin.id)
+            expect(group.description).toBe(groupDto.description)
+            expect(group.name).toBe(groupDto.name)
+            expect(group.treeDepth).toBe(groupDto.treeDepth)
+            expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
+            expect(group.members).toHaveLength(0)
+        })
+
+        it("Should not create a group manually if the admin doesn't exist", async () => {
+            const fun = groupsService.createGroupManually(groupDto, "wrong")
+
+            await expect(fun).rejects.toThrow(`You are not an admin`)
+        })
+    })
+
+    describe("# createGroupsManually", () => {
+        const groupsDtos: Array<CreateGroupDto> = [
+            {
+                id: "1",
+                name: "Group1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600
+            },
+            {
+                id: "2",
+                name: "Group2",
+                description: "This is a new group2",
+                treeDepth: 32,
+                fingerprintDuration: 7200
+            }
+        ]
+        let admin: Admin
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            admin = await adminsService.findOne({ id: admin.id })
+        })
+
+        it("Should create a group manually", async () => {
+            const groups = await groupsService.createGroupsManually(
+                groupsDtos,
+                admin.id
+            )
+
+            groups.forEach((group: Group, i: number) => {
+                expect(group.id).toBe(groupsDtos[i].id)
+                expect(group.adminId).toBe(admin.id)
+                expect(group.description).toBe(groupsDtos[i].description)
+                expect(group.name).toBe(groupsDtos[i].name)
+                expect(group.treeDepth).toBe(groupsDtos[i].treeDepth)
+                expect(group.fingerprintDuration).toBe(
+                    groupsDtos[i].fingerprintDuration
+                )
+                expect(group.members).toHaveLength(0)
+            })
+        })
+
+        it("Should not create a group manually if the admin doesn't exist", async () => {
+            const fun = groupsService.createGroupsManually(groupsDtos, "wrong")
+
+            await expect(fun).rejects.toThrow(`You are not an admin`)
+        })
+    })
+
+    describe("# removeGroupManually", () => {
+        const groupDto: CreateGroupDto = {
+            id: "1",
+            name: "Group1",
+            description: "This is a new group1",
+            treeDepth: 16,
+            fingerprintDuration: 3600
+        }
+        let admin: Admin
+        let group: Group
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            admin = await adminsService.findOne({ id: admin.id })
+
+            group = await groupsService.createGroupManually(groupDto, admin.id)
+        })
+
+        it("Should remove a group manually", async () => {
+            await groupsService.removeGroupManually(group.id, admin.id)
+
+            const fun = groupsService.getGroup(group.id)
+
+            await expect(fun).rejects.toThrow(
+                `Group with id '${group.id}' does not exist`
+            )
+        })
+
+        it("Should not remove a group manually if the group doesn't exist", async () => {
+            const fun = groupsService.removeGroupManually(group.id, admin.id)
+
+            await expect(fun).rejects.toThrow(
+                `Group with id '${group.id}' does not exist`
+            )
+        })
+
+        it("Should not remove a group manually if the admin doesn't exist or is not the admin of the group", async () => {
+            group = await groupsService.createGroupManually(groupDto, admin.id)
+
+            const fun = groupsService.removeGroupManually(group.id, "wrong")
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${group.id}'`
+            )
+        })
+    })
+
+    describe("# removeGroupsManually", () => {
+        const groupsDtos: Array<CreateGroupDto> = [
+            {
+                id: "1",
+                name: "Group1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600
+            },
+            {
+                id: "2",
+                name: "Group2",
+                description: "This is a new group2",
+                treeDepth: 32,
+                fingerprintDuration: 7200
+            }
+        ]
+        let admin: Admin
+        let groups: Array<Group>
+        let groupId1: string
+        let groupId2: string
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            admin = await adminsService.findOne({ id: admin.id })
+
+            groups = await groupsService.createGroupsManually(
+                groupsDtos,
+                admin.id
+            )
+
+            groupId1 = groups[0].id
+            groupId2 = groups[1].id
+        })
+
+        it("Should remove the groups manually", async () => {
+            await groupsService.removeGroupsManually(
+                [groupId1, groupId2],
+                admin.id
+            )
+
+            const fun1 = groupsService.getGroup(groupId1)
+            const fun2 = groupsService.getGroup(groupId2)
+
+            await expect(fun1).rejects.toThrow(
+                `Group with id '${groupId1}' does not exist`
+            )
+            await expect(fun2).rejects.toThrow(
+                `Group with id '${groupId2}' does not exist`
+            )
+        })
+
+        it("Should not remove the groups manually if one or more group doesn't exist", async () => {
+            const fun = groupsService.removeGroupsManually(
+                [groupId1, groupId2],
+                admin.id
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Group with id '${groupId1}' does not exist`
+            )
+        })
+
+        it("Should not remove the groups manually if the admin doesn't exist or is not the admin of the group", async () => {
+            groups = await groupsService.createGroupsManually(
+                groupsDtos,
+                admin.id
+            )
+
+            const fun = groupsService.removeGroupsManually(
+                [groupId1, groupId2],
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${groupId1}'`
+            )
+        })
+    })
+
+    describe("# updateGroupManually", () => {
+        const groupDto: CreateGroupDto = {
+            id: "1",
+            name: "Group1",
+            description: "This is a new group1",
+            treeDepth: 16,
+            fingerprintDuration: 3600
+        }
+
+        const updateDto: UpdateGroupDto = {
+            description: "This is a new new group1",
+            treeDepth: 32,
+            fingerprintDuration: 7200
+        }
+        let admin: Admin
+        let group: Group
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            admin = await adminsService.findOne({ id: admin.id })
+            group = await groupsService.createGroupManually(groupDto, admin.id)
+        })
+
+        it("Should update a group manually", async () => {
+            const updatedGroup = await groupsService.updateGroupManually(
+                group.id,
+                updateDto,
+                admin.id
+            )
+
+            expect(updatedGroup.id).toBe(groupDto.id)
+            expect(updatedGroup.adminId).toBe(admin.id)
+            expect(updatedGroup.description).toBe(updateDto.description)
+            expect(updatedGroup.name).toBe(groupDto.name)
+            expect(updatedGroup.treeDepth).toBe(updateDto.treeDepth)
+            expect(updatedGroup.fingerprintDuration).toBe(
+                updateDto.fingerprintDuration
+            )
+            expect(updatedGroup.members).toHaveLength(0)
+            expect(updatedGroup.credentials).toBeNull()
+        })
+
+        it("Should not update a group manually if the group doesn't exist", async () => {
+            const fun = groupsService.updateGroupManually(
+                "wrong",
+                updateDto,
+                admin.id
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Group with id 'wrong' does not exist`
+            )
+        })
+
+        it("Should not update a group manually if the admin doesn't exist or is not the admin of the group", async () => {
+            const fun = groupsService.updateGroupManually(
+                group.id,
+                updateDto,
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${group.id}'`
+            )
+        })
+    })
+
+    describe("# updateGroupsManually", () => {
+        const groupsDtos: Array<CreateGroupDto> = [
+            {
+                id: "1",
+                name: "Group1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600
+            },
+            {
+                id: "2",
+                name: "Group2",
+                description: "This is a new group2",
+                treeDepth: 32,
+                fingerprintDuration: 7200
+            }
+        ]
+
+        const updateDtos: Array<UpdateGroupDto> = [
+            {
+                description: "This is a new new group1",
+                treeDepth: 32,
+                fingerprintDuration: 7200
+            },
+            {
+                description: "This is a new new group2",
+                treeDepth: 32,
+                fingerprintDuration: 14400
+            }
+        ]
+        let admin: Admin
+        let groups: Array<Group>
+        let groupId1: string
+        let groupId2: string
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            admin = await adminsService.findOne({ id: admin.id })
+            groups = await groupsService.createGroupsManually(
+                groupsDtos,
+                admin.id
+            )
+            groupId1 = groups[0].id
+            groupId2 = groups[1].id
+        })
+
+        it("Should update the groups manually", async () => {
+            const updatedGroups = await groupsService.updateGroupsManually(
+                [groupId1, groupId2],
+                updateDtos,
+                admin.id
+            )
+
+            updatedGroups.forEach((updatedGroup: Group, i: number) => {
+                expect(updatedGroup.id).toBe(groupsDtos[i].id)
+                expect(updatedGroup.adminId).toBe(admin.id)
+                expect(updatedGroup.description).toBe(updateDtos[i].description)
+                expect(updatedGroup.name).toBe(groupsDtos[i].name)
+                expect(updatedGroup.treeDepth).toBe(updateDtos[i].treeDepth)
+                expect(updatedGroup.fingerprintDuration).toBe(
+                    updateDtos[i].fingerprintDuration
+                )
+                expect(updatedGroup.members).toHaveLength(0)
+            })
+        })
+
+        it("Should not update the groups manually if one or more groups doesn't exist", async () => {
+            const fun = groupsService.updateGroupsManually(
+                ["wrong"],
+                updateDtos,
+                admin.id
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Group with id 'wrong' does not exist`
+            )
+        })
+
+        it("Should not update the groups manually if the admin doesn't exist or is not the admin of the groups", async () => {
+            const fun = groupsService.updateGroupsManually(
+                [groupId1, groupId2],
+                updateDtos,
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${groupId1}'`
+            )
         })
     })
 

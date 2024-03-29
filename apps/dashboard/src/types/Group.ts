@@ -8,8 +8,8 @@ export type Group = {
     fingerprintDuration?: number
     members: string[]
     admin: string
-    apiEnabled?: boolean
-    apiKey?: string
+    // apiEnabled?: boolean
+    // apiKey?: string
     createdAt?: string
 }
 

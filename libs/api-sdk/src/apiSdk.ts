@@ -1,8 +1,22 @@
-import { SupportedUrl, GroupResponse, InviteResponse } from "./types"
+import {
+    SupportedUrl,
+    GroupResponse,
+    InviteResponse,
+    GroupRequest,
+    GroupUpdateRequest,
+    AdminRequest,
+    AdminResponse,
+    AdminUpdateApiKeyRequest
+} from "./types"
 import checkParameter from "./checkParameter"
 import {
     getGroups,
     getGroup,
+    createGroups,
+    removeGroup,
+    removeGroups,
+    updateGroup,
+    updateGroups,
     isGroupMember,
     generateMerkleProof,
     addMemberByApiKey,
@@ -11,6 +25,7 @@ import {
     removeMemberByApiKey,
     removeMembersByApiKey
 } from "./groups"
+import { createAdmin, getAdmin, updateApiKey } from "./admins"
 import { getInvite } from "./invites"
 
 export default class ApiSdk {
@@ -65,11 +80,118 @@ export default class ApiSdk {
     }
 
     /**
+     * Create an admin.
+     * @param dto The data of the admin.
+     * @returns Specific admin.
+     */
+    async createAdmin(dto: AdminRequest): Promise<AdminResponse> {
+        const admin = await createAdmin(this._config, dto)
+
+        return admin
+    }
+
+    /**
+     * Get the admin with given id.
+     * @param adminId The admin id.
+     * @returns Specific admin.
+     */
+    async getAdmin(adminId: string): Promise<AdminResponse> {
+        const admin = await getAdmin(this._config, adminId)
+
+        return admin
+    }
+
+    /**
+     * Update an admin API key.
+     * @param adminId The admin id.
+     * @param dto The action to be executed on the API key.
+     * @returns The updated API key.
+     */
+    async updateApiKey(
+        adminId: string,
+        dto: AdminUpdateApiKeyRequest
+    ): Promise<string> {
+        const apiKey = await updateApiKey(this._config, adminId, dto)
+
+        return apiKey
+    }
+
+    /**
      * Returns the list of groups.
      * @returns List of groups.
      */
     async getGroups(): Promise<GroupResponse[]> {
         const groups = await getGroups(this._config)
+
+        return groups
+    }
+
+    /**
+     * Creates one or more groups using the API key.
+     * @param dtos The data of one or more groups.
+     * @param apiKey The API key of the admin of the group.
+     * @returns Specific group.
+     */
+    async createGroups(
+        dtos: Array<GroupRequest>,
+        apiKey: string
+    ): Promise<Array<GroupResponse>> {
+        const groups = await createGroups(this._config, dtos, apiKey)
+
+        return groups
+    }
+
+    /**
+     * Removes a group using the API key.
+     * @param groupId The group id.
+     * @param apiKey The API key of the admin of the group.
+     */
+    async removeGroup(groupId: string, apiKey: string): Promise<void> {
+        return removeGroup(this._config, groupId, apiKey)
+    }
+
+    /**
+     * Removes one or more group using the API key.
+     * @param groupsIds The groups ids.
+     * @param apiKey The API key of the admin of the group.
+     */
+    async removeGroups(
+        groupsIds: Array<string>,
+        apiKey: string
+    ): Promise<void> {
+        return removeGroups(this._config, groupsIds, apiKey)
+    }
+
+    /**
+     * Update a specific group using the API key.
+     * @param groupId The group id.
+     * @param dto The data to update for the group.
+     * @param apiKey The API key of the admin of the group.
+     * @returns Updated specific group.
+     */
+    async updateGroup(
+        groupId: string,
+        dto: GroupUpdateRequest,
+        apiKey: string
+    ): Promise<GroupResponse> {
+        const group = await updateGroup(this._config, groupId, dto, apiKey)
+
+        return group
+    }
+
+    /**
+     * Updats one or more groups using the API key.
+     * @param groupsIds The groups ids.
+     * @param dtos The data to update for the groups.
+     * @param apiKey The API key of the admin of the group.
+     * @returns Updated specific groups.
+     */
+    async updateGroups(
+        groupsIds: Array<string>,
+        dtos: Array<GroupUpdateRequest>,
+        apiKey: string
+    ): Promise<Array<GroupResponse>> {
+        const groups = await updateGroups(this._config, groupsIds, dtos, apiKey)
 
         return groups
     }
