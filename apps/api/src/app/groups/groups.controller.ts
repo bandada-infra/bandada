@@ -9,8 +9,7 @@ import {
     Patch,
     Post,
     Query,
-    Req,
-    UseGuards
+    Req
 } from "@nestjs/common"
 import {
     ApiBody,
@@ -21,7 +20,6 @@ import {
     ApiTags
 } from "@nestjs/swagger"
 import { Request } from "express"
-import { AuthGuard } from "../auth/auth.guard"
 import { stringifyJSON } from "../utils"
 import { Group, MerkleProof } from "./docSchemas"
 import { AddMemberDto } from "./dto/add-member.dto"
@@ -62,7 +60,6 @@ export class GroupsController {
     }
 
     @Post()
-    @UseGuards(AuthGuard)
     @ApiBody({ required: false, type: Array<CreateGroupDto> })
     @ApiHeader({ name: "x-api-key", required: false })
     @ApiCreatedResponse({ type: Group })
@@ -105,7 +102,6 @@ export class GroupsController {
     }
 
     @Delete()
-    @UseGuards(AuthGuard)
     @ApiBody({ required: false, type: Array<string> })
     @ApiHeader({ name: "x-api-key", required: false })
     @ApiOperation({
@@ -131,7 +127,6 @@ export class GroupsController {
     }
 
     @Delete(":group")
-    @UseGuards(AuthGuard)
     @ApiHeader({ name: "x-api-key", required: false })
     @ApiOperation({
         description: "Remove a specific group using an API Key or manually"
@@ -156,7 +151,6 @@ export class GroupsController {
     }
 
     @Patch()
-    @UseGuards(AuthGuard)
     @ApiBody({ required: false, type: Array<UpdateGroupDto> })
     @ApiCreatedResponse({ type: Array<Group> })
     @ApiHeader({ name: "x-api-key", required: false })
@@ -202,7 +196,6 @@ export class GroupsController {
     }
 
     @Patch(":group")
-    @UseGuards(AuthGuard)
     @ApiHeader({ name: "x-api-key", required: false })
     @ApiBody({ required: false, type: UpdateGroupDto })
     @ApiCreatedResponse({ type: Group })
