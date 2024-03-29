@@ -68,6 +68,12 @@ export default function ApiKeyComponent({
     }
 
     const handleRefresh = async () => {
+        const refresh = window.confirm(
+            "Are you sure you want to refresh your API Key?"
+        )
+
+        if (!refresh) return
+
         if (admin) {
             const newApiKey = await updateApiKey(
                 admin.id,
@@ -166,20 +172,24 @@ export default function ApiKeyComponent({
                                 aria-label="View API Key"
                             />
                         </Tooltip>
-                        <IconButton
-                            icon={isCopied ? <CheckIcon /> : <CopyIcon />}
-                            onClick={handleCopy}
-                            ml={2}
-                            aria-label="Copy API Key"
-                            isDisabled={!isEnabled}
-                        />
-                        <IconButton
-                            icon={<RepeatIcon />}
-                            onClick={handleRefresh}
-                            ml={2}
-                            aria-label="Refresh API Key"
-                            isDisabled={!isEnabled}
-                        />
+                        <Tooltip label="Copy API Key">
+                            <IconButton
+                                icon={isCopied ? <CheckIcon /> : <CopyIcon />}
+                                onClick={handleCopy}
+                                ml={2}
+                                aria-label="Copy API Key"
+                                isDisabled={!isEnabled}
+                            />
+                        </Tooltip>
+                        <Tooltip label="Refresh API Key">
+                            <IconButton
+                                icon={<RepeatIcon />}
+                                onClick={handleRefresh}
+                                ml={2}
+                                aria-label="Refresh API Key"
+                                isDisabled={!isEnabled}
+                            />
+                        </Tooltip>
                     </Flex>
                 )}
             </Flex>
