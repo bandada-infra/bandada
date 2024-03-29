@@ -3,10 +3,7 @@ import {
     GroupResponse,
     InviteResponse,
     GroupRequest,
-    GroupUpdateRequest,
-    AdminRequest,
-    AdminResponse,
-    AdminUpdateApiKeyRequest
+    GroupUpdateRequest
 } from "./types"
 import checkParameter from "./checkParameter"
 import {
@@ -25,7 +22,6 @@ import {
     removeMemberByApiKey,
     removeMembersByApiKey
 } from "./groups"
-import { createAdmin, getAdmin, updateApiKey } from "./admins"
 import { getInvite } from "./invites"
 
 export default class ApiSdk {
@@ -77,43 +73,6 @@ export default class ApiSdk {
      */
     get config(): object {
         return this._config
-    }
-
-    /**
-     * Create an admin.
-     * @param dto The data of the admin.
-     * @returns Specific admin.
-     */
-    async createAdmin(dto: AdminRequest): Promise<AdminResponse> {
-        const admin = await createAdmin(this._config, dto)
-
-        return admin
-    }
-
-    /**
-     * Get the admin with given id.
-     * @param adminId The admin id.
-     * @returns Specific admin.
-     */
-    async getAdmin(adminId: string): Promise<AdminResponse> {
-        const admin = await getAdmin(this._config, adminId)
-
-        return admin
-    }
-
-    /**
-     * Update an admin API key.
-     * @param adminId The admin id.
-     * @param dto The action to be executed on the API key.
-     * @returns The updated API key.
-     */
-    async updateApiKey(
-        adminId: string,
-        dto: AdminUpdateApiKeyRequest
-    ): Promise<string> {
-        const apiKey = await updateApiKey(this._config, adminId, dto)
-
-        return apiKey
     }
 
     /**
