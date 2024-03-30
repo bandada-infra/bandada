@@ -459,6 +459,13 @@ export class GroupsService {
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
 
+        // Check if the group is a credential group
+        if (group.credentials !== null) {
+            throw new Error(
+                `The group '${group.name}' is a credential group. You cannot manually add members to a credential group.`
+            )
+        }
+
         if (group.adminId !== adminId) {
             throw new UnauthorizedException(
                 `You are not the admin of the group '${groupId}'`
@@ -504,6 +511,14 @@ export class GroupsService {
         apiKey: string
     ): Promise<Group> {
         const group = await this.getGroup(groupId)
+
+        // Check if the group is a credential group
+        if (group.credentials !== null) {
+            throw new Error(
+                `The group '${group.name}' is a credential group. You cannot add members to a credential group using an API Key.`
+            )
+        }
+
         const admin = await this.adminsService.findOne({ id: group.adminId })
 
         if (!admin) {
