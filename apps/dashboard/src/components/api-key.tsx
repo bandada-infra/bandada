@@ -144,16 +144,14 @@ export default function ApiKeyComponent({
             justify="space-between"
             p={4}
             borderRadius="md"
+            border="1px"
+            color={isEnabled ? "balticSea.900" : "balticSea.400"}
             minWidth="300px"
             height="48px"
         >
             <Flex align="center" flexGrow={1} justify="center">
                 <Box>
-                    <Text
-                        fontWeight="bold"
-                        colorScheme="primary"
-                        color={isEnabled ? "balticSea.900" : "balticSea.400"}
-                    >
+                    <Text fontWeight="bold" colorScheme="primary">
                         API Key
                     </Text>
                 </Box>
@@ -167,6 +165,7 @@ export default function ApiKeyComponent({
                     <Flex align="center">
                         <Tooltip label="Show API Key">
                             <IconButton
+                                height="40px"
                                 icon={<ViewIcon />}
                                 onClick={showApiKey}
                                 aria-label="View API Key"
@@ -174,6 +173,7 @@ export default function ApiKeyComponent({
                         </Tooltip>
                         <Tooltip label="Copy API Key">
                             <IconButton
+                                height="40px"
                                 icon={isCopied ? <CheckIcon /> : <CopyIcon />}
                                 onClick={handleCopy}
                                 ml={2}
@@ -183,6 +183,7 @@ export default function ApiKeyComponent({
                         </Tooltip>
                         <Tooltip label="Refresh API Key">
                             <IconButton
+                                height="40px"
                                 icon={<RepeatIcon />}
                                 onClick={handleRefresh}
                                 ml={2}
