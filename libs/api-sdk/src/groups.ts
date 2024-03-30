@@ -19,30 +19,6 @@ export async function getGroups(config: object): Promise<GroupResponse[]> {
 }
 
 /**
- * Creates a group with the provided details.
- * @param groupData Data to create the group.
- * @param apiKey API Key of the admin.
- * @returns The created group.
- */
-export async function createGroup(
-    config: object,
-    groupData: GroupRequest,
-    apiKey: string
-): Promise<GroupResponse> {
-    const newConfig: any = {
-        method: "post",
-        data: [groupData],
-        ...config
-    }
-
-    newConfig.headers["x-api-key"] = apiKey
-
-    const groups = await request(url, newConfig)
-
-    return groups[0]
-}
-
-/**
  * Creates one or more groups with the provided details.
  * @param groupsData Data to create the groups.
  * @param apiKey API Key of the admin.

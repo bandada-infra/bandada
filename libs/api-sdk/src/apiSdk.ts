@@ -9,7 +9,6 @@ import checkParameter from "./checkParameter"
 import {
     getGroups,
     getGroup,
-    createGroup,
     createGroups,
     removeGroup,
     removeGroups,
@@ -96,9 +95,9 @@ export default class ApiSdk {
         groupData: GroupRequest,
         apiKey: string
     ): Promise<GroupResponse> {
-        const group = await createGroup(this._config, groupData, apiKey)
+        const groups = await createGroups(this._config, [groupData], apiKey)
 
-        return group
+        return groups[0]
     }
 
     /**
