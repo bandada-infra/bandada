@@ -156,7 +156,7 @@ export class GroupsController {
     }
 
     @Patch()
-    @ApiBody({ isArray: true, type: UpdateGroupDto })
+    @ApiBody({ type: UpdateGroupsDto })
     @ApiCreatedResponse({ isArray: true, type: Group })
     @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({
@@ -381,7 +381,7 @@ export class GroupsController {
     }
 
     @Delete(":group/members")
-    @ApiBody({ isArray: true, type: RemoveMembersDto })
+    @ApiBody({ type: RemoveMembersDto })
     @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({
         description: "Removes members from a group using an API Key."

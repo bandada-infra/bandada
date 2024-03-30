@@ -58,9 +58,6 @@ export async function removeGroup(
 
     const newConfig: any = {
         method: "delete",
-        data: {
-            apiKey
-        },
         ...config
     }
 
@@ -84,8 +81,7 @@ export async function removeGroups(
     const newConfig: any = {
         method: "delete",
         data: {
-            groupIds,
-            apiKey
+            groupIds
         },
         ...config
     }
@@ -115,9 +111,7 @@ export async function updateGroup(
     const newConfig: any = {
         method: "put",
         data: {
-            groupId,
-            groupData,
-            apiKey
+            groupData
         },
         ...config
     }
@@ -146,8 +140,7 @@ export async function updateGroups(
         method: "put",
         data: {
             groupIds,
-            groupsData,
-            apiKey
+            groupsData
         },
         ...config
     }
