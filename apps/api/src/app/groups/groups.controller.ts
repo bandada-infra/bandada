@@ -84,13 +84,13 @@ export class GroupsController {
                 dtos,
                 apiKey
             )
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             groups = await this.groupsService.createGroupsManually(
                 dtos,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
 
         for await (const group of groups) {
@@ -120,13 +120,13 @@ export class GroupsController {
 
         if (apiKey) {
             await this.groupsService.removeGroupsWithAPIKey(groupIds, apiKey)
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             await this.groupsService.removeGroupsManually(
                 groupIds,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
     }
 
@@ -145,13 +145,13 @@ export class GroupsController {
 
         if (apiKey) {
             await this.groupsService.removeGroupWithAPIKey(groupId, apiKey)
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             await this.groupsService.removeGroupManually(
                 groupId,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
     }
 
@@ -179,14 +179,14 @@ export class GroupsController {
                 groupsInfo,
                 apiKey
             )
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             groups = await this.groupsService.updateGroupsManually(
                 groupIds,
                 groupsInfo,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
 
         for await (const group of groups) {
@@ -223,14 +223,14 @@ export class GroupsController {
                 dto,
                 apiKey
             )
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             group = await this.groupsService.updateGroupManually(
                 groupId,
                 dto,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
 
         const fingerprint = await this.groupsService.getFingerprint(groupId)
@@ -373,11 +373,16 @@ export class GroupsController {
         }
 
         // Remove as an admin.
-        await this.groupsService.removeMemberManually(
-            groupId,
-            memberId,
-            req.session.adminId
-        )
+        if (req.session.adminId) {
+            await this.groupsService.removeMemberManually(
+                groupId,
+                memberId,
+                req.session.adminId
+            )
+            return
+        }
+
+        throw new NotImplementedException()
     }
 
     @Delete(":group/members")
@@ -404,10 +409,16 @@ export class GroupsController {
         }
 
         // Remove as an admin.
-        await this.groupsService.removeMembersManually(
-            groupId,
-            dto.memberIds,
-            req.session.adminId
-        )
+        if (req.session.adminId) {
+            await this.groupsService.removeMembersManually(
+                groupId,
+                dto.memberIds,
+                req.session.adminId
+            )
+
+            return
+        }
+
+        throw new NotImplementedException()
     }
 }

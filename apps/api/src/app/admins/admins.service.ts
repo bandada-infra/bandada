@@ -18,12 +18,16 @@ export class AdminsService {
     public async create(payload: CreateAdminDTO): Promise<Admin> {
         const username = payload.username || payload.address.slice(-5)
 
-        return this.adminRepository.save({
+        const admin = {
             id: id(payload.id),
             address: payload.address,
             username,
             createdAt: new Date()
-        })
+        }
+
+        Logger.log(`AdminsService: admin '${admin.id}' has been created`)
+
+        return this.adminRepository.save(admin)
     }
 
     public async findOne(
