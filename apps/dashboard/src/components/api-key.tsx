@@ -34,7 +34,7 @@ export default function ApiKeyComponent({
                 setIsEnabled(admin.apiEnabled)
             }
         })
-    })
+    }, [adminId])
 
     useEffect(() => {
         if (isCopied) {
