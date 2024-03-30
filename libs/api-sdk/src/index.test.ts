@@ -108,11 +108,10 @@ describe("Bandada API SDK", () => {
                 )
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const groups: Array<GroupResponse> = await apiSdk.createGroups(
-                    [expectedGroup],
+                const group: GroupResponse = await apiSdk.createGroup(
+                    expectedGroup,
                     apiKey
                 )
-                const group = groups.at(0)!
 
                 expect(group.id).toBe(expectedGroup.id)
                 expect(group.description).toBe(expectedGroup.description)

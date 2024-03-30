@@ -9,6 +9,7 @@ import checkParameter from "./checkParameter"
 import {
     getGroups,
     getGroup,
+    createGroup,
     createGroups,
     removeGroup,
     removeGroups,
@@ -86,10 +87,25 @@ export default class ApiSdk {
     }
 
     /**
+     * Creates a group using the API key.
+     * @param dto The data of the group.
+     * @param apiKey The API key of the admin of the group.
+     * @returns The created group.
+     */
+    async createGroup(
+        dto: GroupRequest,
+        apiKey: string
+    ): Promise<GroupResponse> {
+        const group = await createGroup(this._config, dto, apiKey)
+
+        return group
+    }
+
+    /**
      * Creates one or more groups using the API key.
      * @param dtos The data of one or more groups.
      * @param apiKey The API key of the admin of the group.
-     * @returns Specific group.
+     * @returns The created groups.
      */
     async createGroups(
         dtos: Array<GroupRequest>,
@@ -124,9 +140,9 @@ export default class ApiSdk {
     /**
      * Update a specific group using the API key.
      * @param groupId The group id.
-     * @param dto The data to update for the group.
+     * @param dto The data to update the group.
      * @param apiKey The API key of the admin of the group.
-     * @returns Updated specific group.
+     * @returns The updated group.
      */
     async updateGroup(
         groupId: string,
@@ -141,9 +157,9 @@ export default class ApiSdk {
     /**
      * Updats one or more groups using the API key.
      * @param groupsIds The groups ids.
-     * @param dtos The data to update for the groups.
+     * @param dtos The data to update the groups.
      * @param apiKey The API key of the admin of the group.
-     * @returns Updated specific groups.
+     * @returns The updated groups.
      */
     async updateGroups(
         groupsIds: Array<string>,
