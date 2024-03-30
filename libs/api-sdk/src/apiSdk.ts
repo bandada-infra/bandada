@@ -88,30 +88,30 @@ export default class ApiSdk {
 
     /**
      * Creates a group using the API key.
-     * @param dto The data of the group.
+     * @param groupData Data to create the group.
      * @param apiKey The API key of the admin of the group.
      * @returns The created group.
      */
     async createGroup(
-        dto: GroupRequest,
+        groupData: GroupRequest,
         apiKey: string
     ): Promise<GroupResponse> {
-        const group = await createGroup(this._config, dto, apiKey)
+        const group = await createGroup(this._config, groupData, apiKey)
 
         return group
     }
 
     /**
      * Creates one or more groups using the API key.
-     * @param dtos The data of one or more groups.
-     * @param apiKey The API key of the admin of the group.
+     * @param groupsData Data to create the groups.
+     * @param apiKey The API key of the admin of the groups.
      * @returns The created groups.
      */
     async createGroups(
-        dtos: Array<GroupRequest>,
+        groupsData: Array<GroupRequest>,
         apiKey: string
     ): Promise<Array<GroupResponse>> {
-        const groups = await createGroups(this._config, dtos, apiKey)
+        const groups = await createGroups(this._config, groupsData, apiKey)
 
         return groups
     }
@@ -120,6 +120,7 @@ export default class ApiSdk {
      * Removes a group using the API key.
      * @param groupId The group id.
      * @param apiKey The API key of the admin of the group.
+     * @returns undefined.
      */
     async removeGroup(groupId: string, apiKey: string): Promise<void> {
         return removeGroup(this._config, groupId, apiKey)
@@ -127,46 +128,54 @@ export default class ApiSdk {
 
     /**
      * Removes one or more group using the API key.
-     * @param groupsIds The groups ids.
-     * @param apiKey The API key of the admin of the group.
+     * @param groupIds The group ids.
+     * @param apiKey The API key of the admin of the groups.
+     * @returns undefined.
      */
-    async removeGroups(
-        groupsIds: Array<string>,
-        apiKey: string
-    ): Promise<void> {
-        return removeGroups(this._config, groupsIds, apiKey)
+    async removeGroups(groupIds: Array<string>, apiKey: string): Promise<void> {
+        return removeGroups(this._config, groupIds, apiKey)
     }
 
     /**
      * Update a specific group using the API key.
      * @param groupId The group id.
-     * @param dto The data to update the group.
+     * @param groupData Data to update the group.
      * @param apiKey The API key of the admin of the group.
      * @returns The updated group.
      */
     async updateGroup(
         groupId: string,
-        dto: GroupUpdateRequest,
+        groupData: GroupUpdateRequest,
         apiKey: string
     ): Promise<GroupResponse> {
-        const group = await updateGroup(this._config, groupId, dto, apiKey)
+        const group = await updateGroup(
+            this._config,
+            groupId,
+            groupData,
+            apiKey
+        )
 
         return group
     }
 
     /**
      * Updats one or more groups using the API key.
-     * @param groupsIds The groups ids.
-     * @param dtos The data to update the groups.
-     * @param apiKey The API key of the admin of the group.
+     * @param groupIds The group ids.
+     * @param groupsData Data to update the groups.
+     * @param apiKey The API key of the admin of the groups.
      * @returns The updated groups.
      */
     async updateGroups(
-        groupsIds: Array<string>,
-        dtos: Array<GroupUpdateRequest>,
+        groupIds: Array<string>,
+        groupsData: Array<GroupUpdateRequest>,
         apiKey: string
     ): Promise<Array<GroupResponse>> {
-        const groups = await updateGroups(this._config, groupsIds, dtos, apiKey)
+        const groups = await updateGroups(
+            this._config,
+            groupIds,
+            groupsData,
+            apiKey
+        )
 
         return groups
     }
@@ -217,7 +226,7 @@ export default class ApiSdk {
      * Adds a member to a group using an API Key.
      * @param groupId Group id.
      * @param memberId Member id.
-     * @param apiKey API Key.
+     * @param apiKey API Key of the admin of the group.
      * @returns undefined.
      */
     async addMemberByApiKey(
@@ -232,7 +241,7 @@ export default class ApiSdk {
      * Adds several members to a group using an API Key.
      * @param groupId Group id.
      * @param memberIds Member ids.
-     * @param apiKey API Key.
+     * @param apiKey API Key of the admin of the group.
      * @returns undefined.
      */
     async addMembersByApiKey(
@@ -262,7 +271,7 @@ export default class ApiSdk {
      * Removes a member from a group using an API Key.
      * @param groupId Group id.
      * @param memberId Member id.
-     * @param apiKey API Key.
+     * @param apiKey API Key of the admin of the group.
      * @returns undefined.
      */
     async removeMemberByApiKey(
@@ -277,7 +286,7 @@ export default class ApiSdk {
      * Removes multiple members from a group using an API Key.
      * @param groupId Group id.
      * @param memberIds Member ids.
-     * @param apiKey API Key.
+     * @param apiKey API Key of the admin of the group.
      * @returns undefined.
      */
     async removeMembersByApiKey(

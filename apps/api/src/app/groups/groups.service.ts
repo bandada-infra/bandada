@@ -203,16 +203,16 @@ export class GroupsService {
 
     /**
      * Remove groups using API Key.
-     * @param groupsIds Groups identifiers.
+     * @param groupIds Groups identifiers.
      * @param apiKey the api key.
      */
     async removeGroupsWithAPIKey(
-        groupsIds: Array<string>,
+        groupIds: Array<string>,
         apiKey: string
     ): Promise<void> {
         const admin = await getAndCheckAdmin(this.adminsService, apiKey)
 
-        for await (const groupId of groupsIds) {
+        for await (const groupId of groupIds) {
             await this.removeGroup(groupId, admin.id)
         }
     }
@@ -228,14 +228,14 @@ export class GroupsService {
 
     /**
      * Remove groups manually without using API Key.
-     * @param groupsIds Groups identifiers.
+     * @param groupIds Groups identifiers.
      * @param adminId Admin id.
      */
     async removeGroupsManually(
-        groupsIds: Array<string>,
+        groupIds: Array<string>,
         adminId: string
     ): Promise<void> {
-        for await (const groupId of groupsIds) {
+        for await (const groupId of groupIds) {
             await this.removeGroup(groupId, adminId)
         }
     }
@@ -285,13 +285,13 @@ export class GroupsService {
 
     /**
      * Update groups using API Key.
-     * @param groupsIds Groups ids.
+     * @param groupIds Group ids.
      * @param dtos External parameters used to update groups.
      * @param apiKey the API Key.
      * @returns Updated group.
      */
     async updateGroupsWithApiKey(
-        groupsIds: Array<string>,
+        groupIds: Array<string>,
         dtos: Array<UpdateGroupDto>,
         apiKey: string
     ): Promise<Array<Group>> {
@@ -299,7 +299,7 @@ export class GroupsService {
 
         const admin = await getAndCheckAdmin(this.adminsService, apiKey)
 
-        for await (const [index, groupId] of groupsIds.entries()) {
+        for await (const [index, groupId] of groupIds.entries()) {
             const dto = dtos[index]
             const group = await this.updateGroup(groupId, dto, admin.id)
             updatedGroups.push(group)
@@ -325,19 +325,19 @@ export class GroupsService {
 
     /**
      * Update groups manually without using API Key.
-     * @param groupsIds Groups ids.
+     * @param groupIds Group ids.
      * @param dtos External parameters used to update groups.
      * @param adminId Group admin id.
      * @returns Updated groups.
      */
     async updateGroupsManually(
-        groupsIds: Array<string>,
+        groupIds: Array<string>,
         dtos: Array<UpdateGroupDto>,
         adminId: string
     ): Promise<Array<Group>> {
         const updatedGroups: Array<Group> = []
 
-        for await (const [index, groupId] of groupsIds.entries()) {
+        for await (const [index, groupId] of groupIds.entries()) {
             const dto = dtos[index]
             const group = await this.updateGroup(groupId, dto, adminId)
             updatedGroups.push(group)

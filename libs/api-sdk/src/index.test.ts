@@ -206,7 +206,7 @@ describe("Bandada API SDK", () => {
         })
         describe("#removeGroups", () => {
             it("Should create a group", async () => {
-                const groupsIds = [
+                const groupIds = [
                     "10402173435763029700781503965100",
                     "20402173435763029700781503965200"
                 ]
@@ -215,7 +215,7 @@ describe("Bandada API SDK", () => {
                 requestMocked.mockImplementationOnce(() => Promise.resolve())
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const res = await apiSdk.removeGroups(groupsIds, apiKey)
+                const res = await apiSdk.removeGroups(groupIds, apiKey)
                 expect(res).toBeUndefined()
             })
         })
@@ -259,7 +259,7 @@ describe("Bandada API SDK", () => {
         })
         describe("#updateGroups", () => {
             it("Should update some groups", async () => {
-                const groupsIds = [
+                const groupIds = [
                     "10402173435763029700781503965100",
                     "20402173435763029700781503965200"
                 ]
@@ -306,7 +306,7 @@ describe("Bandada API SDK", () => {
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Array<GroupResponse> = await apiSdk.updateGroups(
-                    groupsIds,
+                    groupIds,
                     updatedGroups,
                     apiKey
                 )
