@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
     Box,
     Flex,
@@ -26,7 +26,7 @@ export default function ApiKeyComponent({
     const { onCopy } = useClipboard(apiKey)
     const toast = useToast()
 
-    useEffect(() => {
+    const getAdminInfo = useCallback(async () => {
         getAdmin(adminId).then((admin) => {
             if (admin) {
                 setAdmin(admin)
@@ -35,6 +35,10 @@ export default function ApiKeyComponent({
             }
         })
     }, [adminId])
+
+    useEffect(() => {
+        getAdminInfo()
+    }, [getAdminInfo])
 
     useEffect(() => {
         if (isCopied) {
@@ -91,7 +95,7 @@ export default function ApiKeyComponent({
                     "Successfully refreshed",
                     "success"
                 )
-                setApiKey(newApiKey)
+                getAdminInfo()
             }
         }
     }
@@ -132,9 +136,8 @@ export default function ApiKeyComponent({
                         ? "API key has been enabled."
                         : "API key has been disabled."
             }
-
+            getAdminInfo()
             showToast(toastTitle, toastDescription, "success")
-            setIsEnabled((prevState) => !prevState)
         }
     }
 
