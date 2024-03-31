@@ -38,26 +38,6 @@ export type GroupUpdateRequest = {
     }
 }
 
-export type AdminRequest = {
-    id: string
-    address: string
-    username?: string
-}
-
-export type AdminResponse = {
-    id: string
-    address: string
-    username: string
-    apiKey: string
-    apiEnabled: boolean
-    createdAt?: Date
-    updatedAt?: Date
-}
-
-export type AdminUpdateApiKeyRequest = {
-    action: ApiKeyActions
-}
-
 type Group = {
     id: string
     name: string

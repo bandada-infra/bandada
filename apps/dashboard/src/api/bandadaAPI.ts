@@ -109,31 +109,6 @@ export async function createGroup(
 }
 
 /**
- * It creates a new admin.
- * @param id The admin id.
- * @param address The admin address.
- * @returns The Admin.
- */
-export async function createAdmin(
-    id: string,
-    address: string
-): Promise<Admin | null> {
-    try {
-        return await request(`${API_URL}/admins`, {
-            method: "POST",
-            data: {
-                id,
-                address
-            }
-        })
-    } catch (error: any) {
-        console.error(error)
-        createAlert(error.response.data.message)
-        return null
-    }
-}
-
-/**
  * It returns details of a specific admin.
  * @param adminId The admin id.
  * @returns The admin details.

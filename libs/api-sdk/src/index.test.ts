@@ -1,9 +1,6 @@
-import { request, ApiKeyActions } from "@bandada/utils"
+import { request } from "@bandada/utils"
 import ApiSdk from "./apiSdk"
 import {
-    AdminRequest,
-    AdminResponse,
-    AdminUpdateApiKeyRequest,
     GroupRequest,
     GroupResponse,
     GroupUpdateRequest,
@@ -82,106 +79,6 @@ describe("Bandada API SDK", () => {
             expect(apiSdk.url).toBe(SupportedUrl.DEV)
         })
     })
-    describe("Admins", () => {
-        describe("#createAdmin", () => {
-            it("Should create an admin", async () => {
-                const expectedAdmin: AdminRequest = {
-                    id: "1",
-                    address:
-                        "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847"
-                }
-
-                requestMocked.mockImplementationOnce(() =>
-                    Promise.resolve({
-                        id: "0xc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc6",
-                        address:
-                            "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                        username:
-                            "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                        createdAt: "2024-03-28T20:45:53.142Z",
-                        apiKey: null,
-                        apiEnabled: false,
-                        updatedAt: "2024-03-28T20:45:53.000Z"
-                    })
-                )
-
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const admin: AdminResponse = await apiSdk.createAdmin(
-                    expectedAdmin
-                )
-
-                expect(admin.id).toBeDefined()
-                expect(admin.username).toBe(expectedAdmin.address)
-                expect(admin.address).toBe(expectedAdmin.address)
-                expect(admin.apiKey).toBeNull()
-                expect(admin.apiEnabled).toBeFalsy()
-                expect(admin.createdAt).toBeDefined()
-                expect(admin.updatedAt).toBeDefined()
-            })
-        })
-        describe("#getAdmin", () => {
-            it("Should return an admin", async () => {
-                const adminId =
-                    "0xc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc6"
-                const expectedAdmin: AdminResponse = {
-                    id: "0xc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc6",
-                    address:
-                        "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                    username:
-                        "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                    apiKey: "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc",
-                    apiEnabled: true
-                }
-
-                requestMocked.mockImplementationOnce(() =>
-                    Promise.resolve({
-                        id: "0xc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc6",
-                        address:
-                            "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                        username:
-                            "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                        apiKey: "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc",
-                        apiEnabled: true,
-                        createdAt: "2024-03-28T20:45:53.000Z",
-                        updatedAt: "2024-03-28T20:45:53.000Z"
-                    })
-                )
-
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const admin: AdminResponse = await apiSdk.getAdmin(adminId)
-
-                expect(admin.id).toBeDefined()
-                expect(admin.username).toBe(expectedAdmin.address)
-                expect(admin.address).toBe(expectedAdmin.address)
-                expect(admin.apiKey).toBe(expectedAdmin.apiKey)
-                expect(admin.apiEnabled).toBe(expectedAdmin.apiEnabled)
-                expect(admin.createdAt).toBeDefined()
-                expect(admin.updatedAt).toBeDefined()
-            })
-        })
-        describe("#updateApiKey", () => {
-            it("Should update the api key", async () => {
-                const adminId =
-                    "0xc89efdaa54c0f20c7adf612882df0950f5a951637e0307cdcb4c672f298b8bc6"
-                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
-                const action: AdminUpdateApiKeyRequest = {
-                    action: ApiKeyActions.Generate
-                }
-
-                requestMocked.mockImplementationOnce(() =>
-                    Promise.resolve(apiKey)
-                )
-
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const updatedApiKey: string = await apiSdk.updateApiKey(
-                    adminId,
-                    action
-                )
-
-                expect(updatedApiKey).toBe(apiKey)
-            })
-        })
-    })
     describe("Groups", () => {
         describe("#createGroup", () => {
             it("Should create a group", async () => {
@@ -211,11 +108,10 @@ describe("Bandada API SDK", () => {
                 )
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const groups: Array<GroupResponse> = await apiSdk.createGroups(
-                    [expectedGroup],
+                const group: GroupResponse = await apiSdk.createGroup(
+                    expectedGroup,
                     apiKey
                 )
-                const group = groups.at(0)!
 
                 expect(group.id).toBe(expectedGroup.id)
                 expect(group.description).toBe(expectedGroup.description)
@@ -310,7 +206,7 @@ describe("Bandada API SDK", () => {
         })
         describe("#removeGroups", () => {
             it("Should create a group", async () => {
-                const groupsIds = [
+                const groupIds = [
                     "10402173435763029700781503965100",
                     "20402173435763029700781503965200"
                 ]
@@ -319,7 +215,7 @@ describe("Bandada API SDK", () => {
                 requestMocked.mockImplementationOnce(() => Promise.resolve())
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const res = await apiSdk.removeGroups(groupsIds, apiKey)
+                const res = await apiSdk.removeGroups(groupIds, apiKey)
                 expect(res).toBeUndefined()
             })
         })
@@ -363,7 +259,7 @@ describe("Bandada API SDK", () => {
         })
         describe("#updateGroups", () => {
             it("Should update some groups", async () => {
-                const groupsIds = [
+                const groupIds = [
                     "10402173435763029700781503965100",
                     "20402173435763029700781503965200"
                 ]
@@ -410,7 +306,7 @@ describe("Bandada API SDK", () => {
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Array<GroupResponse> = await apiSdk.updateGroups(
-                    groupsIds,
+                    groupIds,
                     updatedGroups,
                     apiKey
                 )

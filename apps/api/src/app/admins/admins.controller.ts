@@ -1,26 +1,22 @@
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common"
-import { ApiCreatedResponse } from "@nestjs/swagger"
-import { CreateAdminDTO } from "./dto/create-admin.dto"
+import { Body, Controller, Get, Param, Put, UseGuards } from "@nestjs/common"
+import { ApiExcludeController } from "@nestjs/swagger"
+import { AuthGuard } from "../auth/auth.guard"
 import { AdminsService } from "./admins.service"
-import { Admin } from "./entities/admin.entity"
 import { UpdateApiKeyDTO } from "./dto/update-apikey.dto"
 
+@ApiExcludeController()
 @Controller("admins")
 export class AdminsController {
     constructor(private readonly adminsService: AdminsService) {}
 
-    @Post()
-    async createAdmin(@Body() dto: CreateAdminDTO): Promise<Admin> {
-        return this.adminsService.create(dto)
-    }
-
     @Get(":admin")
-    @ApiCreatedResponse({ type: Admin })
+    @UseGuards(AuthGuard)
     async getAdmin(@Param("admin") adminId: string) {
         return this.adminsService.findOne({ id: adminId })
     }
 
     @Put(":admin/apikey")
+    @UseGuards(AuthGuard)
     async updateApiKey(
         @Param("admin") adminId: string,
         @Body() dto: UpdateApiKeyDTO

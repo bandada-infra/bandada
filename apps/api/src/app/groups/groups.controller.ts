@@ -9,8 +9,7 @@ import {
     Patch,
     Post,
     Query,
-    Req,
-    UseGuards
+    Req
 } from "@nestjs/common"
 import {
     ApiBody,
@@ -21,7 +20,6 @@ import {
     ApiTags
 } from "@nestjs/swagger"
 import { Request } from "express"
-import { AuthGuard } from "../auth/auth.guard"
 import { stringifyJSON } from "../utils"
 import { Group, MerkleProof } from "./docSchemas"
 import { AddMemberDto } from "./dto/add-member.dto"
@@ -29,8 +27,10 @@ import { AddMembersDto } from "./dto/add-members.dto"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { RemoveMembersDto } from "./dto/remove-members.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
+import { UpdateGroupsDto } from "./dto/update-groups.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
+import { RemoveGroupsDto } from "./dto/remove-groups.dto"
 
 @ApiTags("groups")
 @Controller("groups")
@@ -62,12 +62,12 @@ export class GroupsController {
     }
 
     @Post()
-    @UseGuards(AuthGuard)
-    @ApiBody({ required: false, type: Array<CreateGroupDto> })
-    @ApiHeader({ name: "x-api-key", required: false })
-    @ApiCreatedResponse({ type: Group })
+    @ApiBody({ isArray: true, type: CreateGroupDto })
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiCreatedResponse({ isArray: true, type: Group })
     @ApiOperation({
-        description: "Create one or more groups using an API Key or manually."
+        description:
+            "Create one or multiple groups using an API Key or a valid session."
     })
     async createGroups(
         @Body() dtos: Array<CreateGroupDto>,
@@ -84,13 +84,13 @@ export class GroupsController {
                 dtos,
                 apiKey
             )
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             groups = await this.groupsService.createGroupsManually(
                 dtos,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
 
         for await (const group of groups) {
@@ -105,36 +105,36 @@ export class GroupsController {
     }
 
     @Delete()
-    @UseGuards(AuthGuard)
-    @ApiBody({ required: false, type: Array<string> })
-    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiBody({ type: RemoveGroupsDto })
+    @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({
-        description: "Remove one or more groups using an API Key or manually."
+        description:
+            "Remove one or multiple groups using an API Key or a valid session."
     })
     async removeGroups(
-        @Body() groupsIds: Array<string>,
+        @Body() { groupIds }: RemoveGroupsDto,
         @Headers() headers: Headers,
         @Req() req: Request
     ) {
         const apiKey = headers["x-api-key"] as string
 
         if (apiKey) {
-            await this.groupsService.removeGroupsWithAPIKey(groupsIds, apiKey)
-        }
-
-        if (req.session.adminId) {
+            await this.groupsService.removeGroupsWithAPIKey(groupIds, apiKey)
+        } else if (req.session.adminId) {
             await this.groupsService.removeGroupsManually(
-                groupsIds,
+                groupIds,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
     }
 
     @Delete(":group")
-    @UseGuards(AuthGuard)
-    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({
-        description: "Remove a specific group using an API Key or manually"
+        description:
+            "Remove a specific group using an API Key or a valid session"
     })
     async removeGroup(
         @Param("group") groupId: string,
@@ -145,28 +145,27 @@ export class GroupsController {
 
         if (apiKey) {
             await this.groupsService.removeGroupWithAPIKey(groupId, apiKey)
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             await this.groupsService.removeGroupManually(
                 groupId,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
     }
 
     @Patch()
-    @UseGuards(AuthGuard)
-    @ApiBody({ required: false, type: Array<UpdateGroupDto> })
-    @ApiCreatedResponse({ type: Array<Group> })
-    @ApiHeader({ name: "x-api-key", required: false })
+    @ApiBody({ type: UpdateGroupsDto })
+    @ApiCreatedResponse({ isArray: true, type: Group })
+    @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({
-        description: "Update one or more groups using an API Key or manually."
+        description:
+            "Update one or multiple groups using an API Key or a valid session."
     })
     async updateGroups(
         @Headers() headers: Headers,
-        @Body() groupsIds: Array<string>,
-        @Body() dtos: Array<UpdateGroupDto>,
+        @Body() { groupIds, groupsInfo }: UpdateGroupsDto,
         @Req() req: Request
     ) {
         let groups = []
@@ -176,18 +175,18 @@ export class GroupsController {
 
         if (apiKey) {
             groups = await this.groupsService.updateGroupsWithApiKey(
-                groupsIds,
-                dtos,
+                groupIds,
+                groupsInfo,
                 apiKey
             )
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             groups = await this.groupsService.updateGroupsManually(
-                groupsIds,
-                dtos,
+                groupIds,
+                groupsInfo,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
 
         for await (const group of groups) {
@@ -202,12 +201,12 @@ export class GroupsController {
     }
 
     @Patch(":group")
-    @UseGuards(AuthGuard)
-    @ApiHeader({ name: "x-api-key", required: false })
-    @ApiBody({ required: false, type: UpdateGroupDto })
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiBody({ type: UpdateGroupDto })
     @ApiCreatedResponse({ type: Group })
     @ApiOperation({
-        description: "Update a specific group using an API Key or manually."
+        description:
+            "Update a specific group using an API Key or a valid session."
     })
     async updateGroup(
         @Param("group") groupId: string,
@@ -224,14 +223,14 @@ export class GroupsController {
                 dto,
                 apiKey
             )
-        }
-
-        if (req.session.adminId) {
+        } else if (req.session.adminId) {
             group = await this.groupsService.updateGroupManually(
                 groupId,
                 dto,
                 req.session.adminId
             )
+        } else {
+            throw new NotImplementedException()
         }
 
         const fingerprint = await this.groupsService.getFingerprint(groupId)
@@ -320,7 +319,7 @@ export class GroupsController {
     @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({
         description:
-            "Adds multiple members to a group. Requires either API Key in the headers or a valid session."
+            "Adds one or multiple members to a group. Requires either API Key in the headers or a valid session."
     })
     async addMembers(
         @Param("group") groupId: string,
@@ -374,11 +373,16 @@ export class GroupsController {
         }
 
         // Remove as an admin.
-        await this.groupsService.removeMemberManually(
-            groupId,
-            memberId,
-            req.session.adminId
-        )
+        if (req.session.adminId) {
+            await this.groupsService.removeMemberManually(
+                groupId,
+                memberId,
+                req.session.adminId
+            )
+            return
+        }
+
+        throw new NotImplementedException()
     }
 
     @Delete(":group/members")
@@ -405,10 +409,16 @@ export class GroupsController {
         }
 
         // Remove as an admin.
-        await this.groupsService.removeMembersManually(
-            groupId,
-            dto.memberIds,
-            req.session.adminId
-        )
+        if (req.session.adminId) {
+            await this.groupsService.removeMembersManually(
+                groupId,
+                dto.memberIds,
+                req.session.adminId
+            )
+
+            return
+        }
+
+        throw new NotImplementedException()
     }
 }
