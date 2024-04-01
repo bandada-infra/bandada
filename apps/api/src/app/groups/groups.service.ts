@@ -161,6 +161,8 @@ export class GroupsService {
                 .toString()
                 .slice(0, 32)
 
+        if (credentials === undefined) credentials = null
+
         const group = this.groupRepository.create({
             id: _groupId,
             name,

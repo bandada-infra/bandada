@@ -83,7 +83,6 @@ describe("Bandada API SDK", () => {
         describe("#createGroup", () => {
             it("Should create a group", async () => {
                 const expectedGroup: GroupRequest = {
-                    id: "10402173435763029700781503965100",
                     name: "Group1",
                     description: "This is a new group",
                     treeDepth: 16,
@@ -113,7 +112,6 @@ describe("Bandada API SDK", () => {
                     apiKey
                 )
 
-                expect(group.id).toBe(expectedGroup.id)
                 expect(group.description).toBe(expectedGroup.description)
                 expect(group.name).toBe(expectedGroup.name)
                 expect(group.treeDepth).toBe(expectedGroup.treeDepth)
@@ -128,14 +126,12 @@ describe("Bandada API SDK", () => {
             it("Should create the groups", async () => {
                 const expectedGroups: Array<GroupRequest> = [
                     {
-                        id: "10402173435763029700781503965100",
                         name: "Group1",
                         description: "This is a new group",
                         treeDepth: 16,
                         fingerprintDuration: 3600
                     },
                     {
-                        id: "20402173435763029700781503965200",
                         name: "Group2",
                         description: "This is a new group",
                         treeDepth: 32,
@@ -178,7 +174,6 @@ describe("Bandada API SDK", () => {
                 )
 
                 groups.forEach((group: GroupResponse, i: number) => {
-                    expect(group.id).toBe(expectedGroups[i].id)
                     expect(group.description).toBe(
                         expectedGroups[i].description
                     )

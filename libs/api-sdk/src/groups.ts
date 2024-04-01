@@ -31,9 +31,7 @@ export async function createGroups(
 ): Promise<Array<GroupResponse>> {
     const newConfig: any = {
         method: "post",
-        data: {
-            groupsData
-        },
+        data: groupsData,
         ...config
     }
 

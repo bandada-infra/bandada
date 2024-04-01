@@ -1,4 +1,7 @@
-import { ApiKeyActions } from "@bandada/utils"
+export type Credential = {
+    id: string
+    criteria: Record<string, any>
+}
 
 export type GroupResponse = {
     id: string
@@ -10,10 +13,7 @@ export type GroupResponse = {
     fingerprintDuration: number
     createdAt: Date
     members: string[]
-    credentials: {
-        id: string
-        criteria: Record<string, any>
-    }
+    credentials: Credential
 }
 
 export type GroupRequest = {
@@ -21,21 +21,14 @@ export type GroupRequest = {
     description: string
     treeDepth: number
     fingerprintDuration: number
-    id?: string
-    credentials?: {
-        id: string
-        criteria: Record<string, any>
-    }
+    credentials?: Credential
 }
 
 export type GroupUpdateRequest = {
     description: string
     treeDepth: number
     fingerprintDuration: number
-    credentials?: {
-        id: string
-        criteria: Record<string, any>
-    }
+    credentials?: Credential
 }
 
 type Group = {
@@ -45,10 +38,7 @@ type Group = {
     adminId: string
     treeDepth: number
     fingerprintDuration: number
-    credentials: {
-        id: string
-        criteria: Record<string, any>
-    }
+    credentials: Credential
     apiEnabled: boolean
     apiKey: string
     createdAt: Date
