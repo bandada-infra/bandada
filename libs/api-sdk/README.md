@@ -71,21 +71,39 @@ yarn add @bandada/api-sdk
 
 Creates a new instance of ApiSdk using the API URL and the [config](https://axios-http.com/docs/req_config).
 
--   Creates a new instance using the Bandada API URL and the default config.
+-   Create a new instance using the Bandada API URL and the default config.
+
+This is what you need if you are using the production Bandada API.
 
 ```ts
+import { ApiSdk } from "@bandada/api-sdk"
+
 const apiSdk = new ApiSdk()
 ```
 
--   Creates a new instance using a custom API URL.
+-   Create a new instance using a [Supported URL](https://github.com/bandada-infra/bandada/blob/main/libs/api-sdk/src/types/index.ts#L43).
+
+This is useful when working with the development environment.
 
 ```ts
+import { ApiSdk, SupportedUrl } from "@bandada/api-sdk"
+
+const apiSdk = new ApiSdk(SupportedUrl.DEV)
+```
+
+-   Create a new instance using a custom API URL.
+
+```ts
+import { ApiSdk } from "@bandada/api-sdk"
+
 const apiSdk = new ApiSdk("https://example.com/api")
 ```
 
--   Creates a new instance using a custom API URL and config.
+-   Create a new instance using a custom API URL and config.
 
 ```ts
+import { ApiSdk } from "@bandada/api-sdk"
+
 const url = "https://example.com/api"
 const config = {
     headers: {
@@ -95,7 +113,7 @@ const config = {
 const apiSdk = new ApiSdk(url, config)
 ```
 
-\# **getGroups**(): _Promise\<GroupResponse[]>_
+\# **getGroups**(): _Promise\<Group[]>_
 
 Returns the list of groups.
 
@@ -103,7 +121,7 @@ Returns the list of groups.
 const groups = await apiSdk.getGroups()
 ```
 
-\# **getGroup**(): _Promise\<GroupResponse>_
+\# **getGroup**(): _Promise\<Group>_
 
 Returns a specific group.
 
