@@ -1,10 +1,10 @@
 import { request } from "@bandada/utils"
 import ApiSdk from "./apiSdk"
 import {
-    GroupRequest,
-    GroupResponse,
-    GroupUpdateRequest,
-    InviteResponse,
+    GroupCreationDetails,
+    Group,
+    GroupUpdateDetails,
+    Invite,
     SupportedUrl
 } from "./types"
 
@@ -82,8 +82,7 @@ describe("Bandada API SDK", () => {
     describe("Groups", () => {
         describe("#createGroup", () => {
             it("Should create a group", async () => {
-                const expectedGroup: GroupRequest = {
-                    id: "10402173435763029700781503965100",
+                const expectedGroup: GroupCreationDetails = {
                     name: "Group1",
                     description: "This is a new group",
                     treeDepth: 16,
@@ -108,12 +107,11 @@ describe("Bandada API SDK", () => {
                 )
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const group: GroupResponse = await apiSdk.createGroup(
+                const group: Group = await apiSdk.createGroup(
                     expectedGroup,
                     apiKey
                 )
 
-                expect(group.id).toBe(expectedGroup.id)
                 expect(group.description).toBe(expectedGroup.description)
                 expect(group.name).toBe(expectedGroup.name)
                 expect(group.treeDepth).toBe(expectedGroup.treeDepth)
@@ -126,16 +124,14 @@ describe("Bandada API SDK", () => {
         })
         describe("#createGroups", () => {
             it("Should create the groups", async () => {
-                const expectedGroups: Array<GroupRequest> = [
+                const expectedGroups: Array<GroupCreationDetails> = [
                     {
-                        id: "10402173435763029700781503965100",
                         name: "Group1",
                         description: "This is a new group",
                         treeDepth: 16,
                         fingerprintDuration: 3600
                     },
                     {
-                        id: "20402173435763029700781503965200",
                         name: "Group2",
                         description: "This is a new group",
                         treeDepth: 32,
@@ -172,13 +168,12 @@ describe("Bandada API SDK", () => {
                 )
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const groups: Array<GroupResponse> = await apiSdk.createGroups(
+                const groups: Array<Group> = await apiSdk.createGroups(
                     [expectedGroups[0], expectedGroups[1]],
                     apiKey
                 )
 
-                groups.forEach((group: GroupResponse, i: number) => {
-                    expect(group.id).toBe(expectedGroups[i].id)
+                groups.forEach((group: Group, i: number) => {
                     expect(group.description).toBe(
                         expectedGroups[i].description
                     )
@@ -222,7 +217,7 @@ describe("Bandada API SDK", () => {
         describe("#updateGroup", () => {
             it("Should update a group", async () => {
                 const groupId = "10402173435763029700781503965100"
-                const updatedGroup: GroupUpdateRequest = {
+                const updatedGroup: GroupUpdateDetails = {
                     description: "This is a new group",
                     treeDepth: 16,
                     fingerprintDuration: 3600
@@ -244,7 +239,7 @@ describe("Bandada API SDK", () => {
                 )
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const group: GroupResponse = await apiSdk.updateGroup(
+                const group: Group = await apiSdk.updateGroup(
                     groupId,
                     updatedGroup,
                     apiKey
@@ -263,7 +258,7 @@ describe("Bandada API SDK", () => {
                     "10402173435763029700781503965100",
                     "20402173435763029700781503965200"
                 ]
-                const updatedGroups: Array<GroupUpdateRequest> = [
+                const updatedGroups: Array<GroupUpdateDetails> = [
                     {
                         description: "This is a new group1",
                         treeDepth: 32,
@@ -305,13 +300,13 @@ describe("Bandada API SDK", () => {
                 )
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const groups: Array<GroupResponse> = await apiSdk.updateGroups(
+                const groups: Array<Group> = await apiSdk.updateGroups(
                     groupIds,
                     updatedGroups,
                     apiKey
                 )
 
-                groups.forEach((group: GroupResponse, i: number) => {
+                groups.forEach((group: Group, i: number) => {
                     expect(group.description).toBe(updatedGroups[i].description)
                     expect(group.treeDepth).toBe(updatedGroups[i].treeDepth)
                     expect(group.fingerprintDuration).toBe(
@@ -338,7 +333,7 @@ describe("Bandada API SDK", () => {
                     ])
                 )
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const groups: GroupResponse[] = await apiSdk.getGroups()
+                const groups: Group[] = await apiSdk.getGroups()
                 expect(groups).toHaveLength(1)
             })
         })
@@ -360,7 +355,7 @@ describe("Bandada API SDK", () => {
                 const groupId = "10402173435763029700781503965100"
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const group: GroupResponse = await apiSdk.getGroup(groupId)
+                const group: Group = await apiSdk.getGroup(groupId)
                 expect(group.id).toBe(groupId)
             })
         })
@@ -555,9 +550,7 @@ describe("Bandada API SDK", () => {
                 const inviteCode = "C5VAG4HD"
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const invite: InviteResponse = await apiSdk.getInvite(
-                    inviteCode
-                )
+                const invite: Invite = await apiSdk.getInvite(inviteCode)
                 expect(invite.code).toBe(inviteCode)
             })
         })

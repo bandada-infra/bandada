@@ -1,5 +1,5 @@
 import { request } from "@bandada/utils"
-import { GroupRequest, GroupResponse, GroupUpdateRequest } from "./types"
+import type { GroupCreationDetails, Group, GroupUpdateDetails } from "./types"
 
 const url = "/groups"
 
@@ -7,7 +7,7 @@ const url = "/groups"
  * Returns the list of groups.
  * @returns List of groups.
  */
-export async function getGroups(config: object): Promise<GroupResponse[]> {
+export async function getGroups(config: object): Promise<Group[]> {
     const groups = await request(url, config)
 
     groups.map((group: any) => ({
@@ -20,20 +20,18 @@ export async function getGroups(config: object): Promise<GroupResponse[]> {
 
 /**
  * Creates one or more groups with the provided details.
- * @param groupsData Data to create the groups.
+ * @param groupsCreationDetails Data to create the groups.
  * @param apiKey API Key of the admin.
  * @returns Array of the created groups.
  */
 export async function createGroups(
     config: object,
-    groupsData: Array<GroupRequest>,
+    groupsCreationDetails: Array<GroupCreationDetails>,
     apiKey: string
-): Promise<Array<GroupResponse>> {
+): Promise<Array<Group>> {
     const newConfig: any = {
         method: "post",
-        data: {
-            groupsData
-        },
+        data: groupsCreationDetails,
         ...config
     }
 
@@ -96,22 +94,22 @@ export async function removeGroups(
 /**
  * Updates the group.
  * @param groupId The group id.
- * @param groupData Data to update the group.
+ * @param groupUpdateDetails Data to update the group.
  * @param apiKey API Key of the admin.
  * @return The updated group.
  */
 export async function updateGroup(
     config: object,
     groupId: string,
-    groupData: GroupUpdateRequest,
+    groupUpdateDetails: GroupUpdateDetails,
     apiKey: string
-): Promise<GroupResponse> {
+): Promise<Group> {
     const requestUrl = `${url}/${groupId}`
 
     const newConfig: any = {
         method: "put",
         data: {
-            groupData
+            groupUpdateDetails
         },
         ...config
     }
@@ -126,21 +124,21 @@ export async function updateGroup(
 /**
  * Updates the groups.
  * @param groupIds The group ids.
- * @param groupsData Data to update the groups.
+ * @param groupsUpdateDetails Data to update the groups.
  * @param apiKey API Key of the admin.
  * @return The updated groups.
  */
 export async function updateGroups(
     config: object,
     groupIds: Array<string>,
-    groupsData: Array<GroupUpdateRequest>,
+    groupsUpdateDetails: Array<GroupUpdateDetails>,
     apiKey: string
-): Promise<Array<GroupResponse>> {
+): Promise<Array<Group>> {
     const newConfig: any = {
         method: "put",
         data: {
             groupIds,
-            groupsData
+            groupsUpdateDetails
         },
         ...config
     }
@@ -160,7 +158,7 @@ export async function updateGroups(
 export async function getGroup(
     config: object,
     groupId: string
-): Promise<GroupResponse> {
+): Promise<Group> {
     const requestUrl = `${url}/${groupId}`
 
     const group = await request(requestUrl, config)

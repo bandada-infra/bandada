@@ -1,10 +1,8 @@
-import { ApiSdk, GroupResponse, InviteResponse } from "@bandada/api-sdk"
+import { ApiSdk, Group, Invite } from "@bandada/api-sdk"
 
 const api = new ApiSdk(import.meta.env.VITE_API_URL)
 
-export async function getInvite(
-    inviteCode: string
-): Promise<InviteResponse | null> {
+export async function getInvite(inviteCode: string): Promise<Invite | null> {
     try {
         return await api.getInvite(inviteCode)
     } catch (error: any) {
@@ -20,7 +18,7 @@ export async function getInvite(
     }
 }
 
-export async function getGroup(groupId: string): Promise<GroupResponse | null> {
+export async function getGroup(groupId: string): Promise<Group | null> {
     try {
         return await api.getGroup(groupId)
     } catch (error: any) {

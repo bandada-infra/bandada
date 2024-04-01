@@ -114,7 +114,7 @@ export default function HomePage(): JSX.Element {
 
                 const group = await getGroup(groupId)
 
-                if (group === null) {
+                if (group === null || group.credentials === null) {
                     setLoading(false)
                     return
                 }

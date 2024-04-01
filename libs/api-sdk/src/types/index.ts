@@ -1,6 +1,9 @@
-import { ApiKeyActions } from "@bandada/utils"
+export type Credential = {
+    id: string
+    criteria: Record<string, any>
+}
 
-export type GroupResponse = {
+export type Group = {
     id: string
     name: string
     description: string
@@ -10,56 +13,41 @@ export type GroupResponse = {
     fingerprintDuration: number
     createdAt: Date
     members: string[]
-    credentials: {
-        id: string
-        criteria: Record<string, any>
-    }
+    credentials: Credential | null
 }
 
-export type GroupRequest = {
+export type GroupCreationDetails = {
     name: string
     description: string
     treeDepth: number
     fingerprintDuration: number
-    id?: string
-    credentials?: {
-        id: string
-        criteria: Record<string, any>
-    }
+    credentials?: Credential
 }
 
-export type GroupUpdateRequest = {
+export type GroupUpdateDetails = {
     description: string
     treeDepth: number
     fingerprintDuration: number
-    credentials?: {
-        id: string
-        criteria: Record<string, any>
-    }
+    credentials?: Credential
 }
 
-type Group = {
+type GroupSummary = {
     id: string
     name: string
     description: string
     adminId: string
     treeDepth: number
     fingerprintDuration: number
-    credentials: {
-        id: string
-        criteria: Record<string, any>
-    }
-    apiEnabled: boolean
-    apiKey: string
+    credentials: Credential | null
     createdAt: Date
     updatedAt: Date
 }
 
-export type InviteResponse = {
+export type Invite = {
     code: string
     isRedeemed: boolean
     createdAt: Date
-    group: Group
+    group: GroupSummary
     groupName: string
     groupId: string
 }
