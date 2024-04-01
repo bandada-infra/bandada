@@ -108,9 +108,7 @@ export async function updateGroup(
 
     const newConfig: any = {
         method: "put",
-        data: {
-            groupUpdateDetails
-        },
+        data: groupUpdateDetails,
         ...config
     }
 
@@ -138,7 +136,7 @@ export async function updateGroups(
         method: "put",
         data: {
             groupIds,
-            groupsUpdateDetails
+            groupsInfo: groupsUpdateDetails
         },
         ...config
     }
