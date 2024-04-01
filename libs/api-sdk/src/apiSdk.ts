@@ -87,30 +87,30 @@ export default class ApiSdk {
 
     /**
      * Creates a group using the API key.
-     * @param groupData Data to create the group.
+     * @param groupCreationDetails Data to create the group.
      * @param apiKey The API key of the admin of the group.
      * @returns The created group.
      */
     async createGroup(
-        groupData: GroupCreationDetails,
+        groupCreationDetails: GroupCreationDetails,
         apiKey: string
     ): Promise<Group> {
-        const groups = await createGroups(this._config, [groupData], apiKey)
+        const groups = await createGroups(this._config, [groupCreationDetails], apiKey)
 
         return groups[0]
     }
 
     /**
      * Creates one or more groups using the API key.
-     * @param groupsData Data to create the groups.
+     * @param groupsCreationDetails Data to create the groups.
      * @param apiKey The API key of the admin of the groups.
      * @returns The created groups.
      */
     async createGroups(
-        groupsData: Array<GroupCreationDetails>,
+        groupsCreationDetails: Array<GroupCreationDetails>,
         apiKey: string
     ): Promise<Array<Group>> {
-        const groups = await createGroups(this._config, groupsData, apiKey)
+        const groups = await createGroups(this._config, groupsCreationDetails, apiKey)
 
         return groups
     }
@@ -138,19 +138,19 @@ export default class ApiSdk {
     /**
      * Update a specific group using the API key.
      * @param groupId The group id.
-     * @param groupData Data to update the group.
+     * @param groupUpdateDetails Data to update the group.
      * @param apiKey The API key of the admin of the group.
      * @returns The updated group.
      */
     async updateGroup(
         groupId: string,
-        groupData: GroupUpdateDetails,
+        groupUpdateDetails: GroupUpdateDetails,
         apiKey: string
     ): Promise<Group> {
         const group = await updateGroup(
             this._config,
             groupId,
-            groupData,
+            groupUpdateDetails,
             apiKey
         )
 
@@ -160,19 +160,19 @@ export default class ApiSdk {
     /**
      * Updats one or more groups using the API key.
      * @param groupIds The group ids.
-     * @param groupsData Data to update the groups.
+     * @param groupsUpdateDetails Data to update the groups.
      * @param apiKey The API key of the admin of the groups.
      * @returns The updated groups.
      */
     async updateGroups(
         groupIds: Array<string>,
-        groupsData: Array<GroupUpdateDetails>,
+        groupsUpdateDetails: Array<GroupUpdateDetails>,
         apiKey: string
     ): Promise<Array<Group>> {
         const groups = await updateGroups(
             this._config,
             groupIds,
-            groupsData,
+            groupsUpdateDetails,
             apiKey
         )
 
