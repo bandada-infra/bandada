@@ -1,5 +1,5 @@
 import { request } from "@bandada/utils"
-import { InviteResponse } from "./types"
+import { Invite } from "./types"
 
 const url = "/invites"
 
@@ -11,7 +11,7 @@ const url = "/invites"
 export async function getInvite(
     config: object,
     inviteCode: string
-): Promise<InviteResponse> {
+): Promise<Invite> {
     const requestUrl = `${url}/${inviteCode}`
 
     const invite = await request(requestUrl, config)

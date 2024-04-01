@@ -1,7 +1,7 @@
 import {
     SupportedUrl,
     Group,
-    InviteResponse,
+    Invite,
     GroupCreationDetails,
     GroupUpdateDetails
 } from "./types"
@@ -95,7 +95,11 @@ export default class ApiSdk {
         groupCreationDetails: GroupCreationDetails,
         apiKey: string
     ): Promise<Group> {
-        const groups = await createGroups(this._config, [groupCreationDetails], apiKey)
+        const groups = await createGroups(
+            this._config,
+            [groupCreationDetails],
+            apiKey
+        )
 
         return groups[0]
     }
@@ -110,7 +114,11 @@ export default class ApiSdk {
         groupsCreationDetails: Array<GroupCreationDetails>,
         apiKey: string
     ): Promise<Array<Group>> {
-        const groups = await createGroups(this._config, groupsCreationDetails, apiKey)
+        const groups = await createGroups(
+            this._config,
+            groupsCreationDetails,
+            apiKey
+        )
 
         return groups
     }
@@ -301,7 +309,7 @@ export default class ApiSdk {
      * @param inviteCode Invite code.
      * @returns Specific invite.
      */
-    async getInvite(inviteCode: string): Promise<InviteResponse> {
+    async getInvite(inviteCode: string): Promise<Invite> {
         const invite = getInvite(this._config, inviteCode)
 
         return invite

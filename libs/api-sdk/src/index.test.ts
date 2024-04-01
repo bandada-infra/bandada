@@ -4,7 +4,7 @@ import {
     GroupCreationDetails,
     Group,
     GroupUpdateDetails,
-    InviteResponse,
+    Invite,
     SupportedUrl
 } from "./types"
 
@@ -550,9 +550,7 @@ describe("Bandada API SDK", () => {
                 const inviteCode = "C5VAG4HD"
 
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
-                const invite: InviteResponse = await apiSdk.getInvite(
-                    inviteCode
-                )
+                const invite: Invite = await apiSdk.getInvite(inviteCode)
                 expect(invite.code).toBe(inviteCode)
             })
         })

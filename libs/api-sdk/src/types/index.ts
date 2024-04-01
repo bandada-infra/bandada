@@ -43,7 +43,7 @@ type GroupSummary = {
     updatedAt: Date
 }
 
-export type InviteResponse = {
+export type Invite = {
     code: string
     isRedeemed: boolean
     createdAt: Date
