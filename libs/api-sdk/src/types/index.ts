@@ -38,9 +38,7 @@ type Group = {
     adminId: string
     treeDepth: number
     fingerprintDuration: number
-    credentials: Credential
-    apiEnabled: boolean
-    apiKey: string
+    credentials: Credential | null
     createdAt: Date
     updatedAt: Date
 }
