@@ -1,5 +1,5 @@
 import { request } from "@bandada/utils"
-import { GroupRequest, GroupResponse, GroupUpdateRequest } from "./types"
+import type { GroupCreationDetails, Group, GroupUpdateDetails } from "./types"
 
 const url = "/groups"
 
@@ -7,7 +7,7 @@ const url = "/groups"
  * Returns the list of groups.
  * @returns List of groups.
  */
-export async function getGroups(config: object): Promise<GroupResponse[]> {
+export async function getGroups(config: object): Promise<Group[]> {
     const groups = await request(url, config)
 
     groups.map((group: any) => ({
@@ -26,9 +26,9 @@ export async function getGroups(config: object): Promise<GroupResponse[]> {
  */
 export async function createGroups(
     config: object,
-    groupsData: Array<GroupRequest>,
+    groupsData: Array<GroupCreationDetails>,
     apiKey: string
-): Promise<Array<GroupResponse>> {
+): Promise<Array<Group>> {
     const newConfig: any = {
         method: "post",
         data: groupsData,
@@ -101,9 +101,9 @@ export async function removeGroups(
 export async function updateGroup(
     config: object,
     groupId: string,
-    groupData: GroupUpdateRequest,
+    groupData: GroupUpdateDetails,
     apiKey: string
-): Promise<GroupResponse> {
+): Promise<Group> {
     const requestUrl = `${url}/${groupId}`
 
     const newConfig: any = {
@@ -131,9 +131,9 @@ export async function updateGroup(
 export async function updateGroups(
     config: object,
     groupIds: Array<string>,
-    groupsData: Array<GroupUpdateRequest>,
+    groupsData: Array<GroupUpdateDetails>,
     apiKey: string
-): Promise<Array<GroupResponse>> {
+): Promise<Array<Group>> {
     const newConfig: any = {
         method: "put",
         data: {
@@ -158,7 +158,7 @@ export async function updateGroups(
 export async function getGroup(
     config: object,
     groupId: string
-): Promise<GroupResponse> {
+): Promise<Group> {
     const requestUrl = `${url}/${groupId}`
 
     const group = await request(requestUrl, config)

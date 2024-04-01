@@ -1,9 +1,9 @@
 import {
     SupportedUrl,
-    GroupResponse,
+    Group,
     InviteResponse,
-    GroupRequest,
-    GroupUpdateRequest
+    GroupCreationDetails,
+    GroupUpdateDetails
 } from "./types"
 import checkParameter from "./checkParameter"
 import {
@@ -79,7 +79,7 @@ export default class ApiSdk {
      * Returns the list of groups.
      * @returns List of groups.
      */
-    async getGroups(): Promise<GroupResponse[]> {
+    async getGroups(): Promise<Group[]> {
         const groups = await getGroups(this._config)
 
         return groups
@@ -92,9 +92,9 @@ export default class ApiSdk {
      * @returns The created group.
      */
     async createGroup(
-        groupData: GroupRequest,
+        groupData: GroupCreationDetails,
         apiKey: string
-    ): Promise<GroupResponse> {
+    ): Promise<Group> {
         const groups = await createGroups(this._config, [groupData], apiKey)
 
         return groups[0]
@@ -107,9 +107,9 @@ export default class ApiSdk {
      * @returns The created groups.
      */
     async createGroups(
-        groupsData: Array<GroupRequest>,
+        groupsData: Array<GroupCreationDetails>,
         apiKey: string
-    ): Promise<Array<GroupResponse>> {
+    ): Promise<Array<Group>> {
         const groups = await createGroups(this._config, groupsData, apiKey)
 
         return groups
@@ -144,9 +144,9 @@ export default class ApiSdk {
      */
     async updateGroup(
         groupId: string,
-        groupData: GroupUpdateRequest,
+        groupData: GroupUpdateDetails,
         apiKey: string
-    ): Promise<GroupResponse> {
+    ): Promise<Group> {
         const group = await updateGroup(
             this._config,
             groupId,
@@ -166,9 +166,9 @@ export default class ApiSdk {
      */
     async updateGroups(
         groupIds: Array<string>,
-        groupsData: Array<GroupUpdateRequest>,
+        groupsData: Array<GroupUpdateDetails>,
         apiKey: string
-    ): Promise<Array<GroupResponse>> {
+    ): Promise<Array<Group>> {
         const groups = await updateGroups(
             this._config,
             groupIds,
@@ -184,7 +184,7 @@ export default class ApiSdk {
      * @param groupId Group id.
      * @returns Specific group.
      */
-    async getGroup(groupId: string): Promise<GroupResponse> {
+    async getGroup(groupId: string): Promise<Group> {
         const group = await getGroup(this._config, groupId)
 
         return group

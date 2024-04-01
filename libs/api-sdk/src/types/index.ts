@@ -3,7 +3,7 @@ export type Credential = {
     criteria: Record<string, any>
 }
 
-export type GroupResponse = {
+export type Group = {
     id: string
     name: string
     description: string
@@ -13,10 +13,10 @@ export type GroupResponse = {
     fingerprintDuration: number
     createdAt: Date
     members: string[]
-    credentials: Credential
+    credentials: Credential | null
 }
 
-export type GroupRequest = {
+export type GroupCreationDetails = {
     name: string
     description: string
     treeDepth: number
@@ -24,14 +24,14 @@ export type GroupRequest = {
     credentials?: Credential
 }
 
-export type GroupUpdateRequest = {
+export type GroupUpdateDetails = {
     description: string
     treeDepth: number
     fingerprintDuration: number
     credentials?: Credential
 }
 
-type Group = {
+type GroupSummary = {
     id: string
     name: string
     description: string
@@ -47,7 +47,7 @@ export type InviteResponse = {
     code: string
     isRedeemed: boolean
     createdAt: Date
-    group: Group
+    group: GroupSummary
     groupName: string
     groupId: string
 }
