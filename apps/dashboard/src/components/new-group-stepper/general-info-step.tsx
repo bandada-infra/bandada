@@ -168,7 +168,10 @@ export default function GeneralInfoStep({
                             size="lg"
                             value={_fingerprintDuration}
                             onChange={(value) =>
-                                setFingerprintDuration(Number(value))
+                                !Number.isNaN(Number(value)) &&
+                                Number(value) >= 0
+                                    ? setFingerprintDuration(Number(value))
+                                    : null
                             }
                             onBlur={() =>
                                 onSubmit(
@@ -205,7 +208,6 @@ export default function GeneralInfoStep({
                         !_groupName ||
                         (group.type === "off-chain" &&
                             (_fingerprintDuration === undefined ||
-                                Number.isNaN(_fingerprintDuration) ||
                                 !_groupDescription ||
                                 _groupDescription.length < 10)) ||
                         _fingerprintDuration < 0
