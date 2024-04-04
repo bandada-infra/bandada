@@ -22,7 +22,7 @@ import {
     removeMemberByApiKey,
     removeMembersByApiKey
 } from "./groups"
-import { getInvite } from "./invites"
+import { createInvite, getInvite } from "./invites"
 
 export default class ApiSdk {
     private _url: string
@@ -305,12 +305,24 @@ export default class ApiSdk {
     }
 
     /**
+     * Creates a new group invite.
+     * @param groupId The group identifier.
+     * @param apiKey The api key.
+     * @returns Specific invite.
+     */
+    async createInvite(groupId: string, apiKey: string): Promise<Invite> {
+        const invite = await createInvite(this._config, groupId, apiKey)
+
+        return invite
+    }
+
+    /**
      * Returns a specific invite.
      * @param inviteCode Invite code.
      * @returns Specific invite.
      */
     async getInvite(inviteCode: string): Promise<Invite> {
-        const invite = getInvite(this._config, inviteCode)
+        const invite = await getInvite(this._config, inviteCode)
 
         return invite
     }

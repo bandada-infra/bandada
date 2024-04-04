@@ -2,14 +2,17 @@ import {
     Body,
     Controller,
     Get,
+    Headers,
+    NotImplementedException,
     Param,
     Post,
     Req,
     UseGuards
 } from "@nestjs/common"
 import {
+    ApiBody,
     ApiCreatedResponse,
-    ApiExcludeEndpoint,
+    ApiHeader,
     ApiOperation,
     ApiTags
 } from "@nestjs/swagger"
@@ -30,17 +33,36 @@ export class InvitesController {
     @Post()
     @UseGuards(AuthGuard)
     @UseGuards(ThrottlerGuard)
-    @ApiExcludeEndpoint()
+    @ApiBody({ type: CreateInviteDto })
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiCreatedResponse({ type: Invite })
+    @ApiOperation({
+        description: "Creates a new group invite with a unique code."
+    })
     async createInvite(
+        @Headers() headers: Headers,
         @Req() req: Request,
         @Body() dto: CreateInviteDto
-    ): Promise<string> {
-        const { code } = await this.invitesService.createInvite(
-            dto,
-            req.session.adminId
-        )
+    ): Promise<Invite> {
+        let invite: Invite
 
-        return code
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            invite = await this.invitesService.createInviteWithApiKey(
+                dto,
+                apiKey
+            )
+        } else if (req.session.adminId) {
+            invite = await this.invitesService.createInviteManually(
+                dto,
+                req.session.adminId
+            )
+        } else {
+            throw new NotImplementedException()
+        }
+
+        return invite
     }
 
     @Get(":code")

@@ -44,12 +44,11 @@ type GroupSummary = {
 }
 
 export type Invite = {
+    id: number
     code: string
     isRedeemed: boolean
-    createdAt: Date
     group: GroupSummary
-    groupName: string
-    groupId: string
+    createdAt: Date
 }
 
 export enum SupportedUrl {

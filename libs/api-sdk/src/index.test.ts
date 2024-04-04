@@ -521,10 +521,53 @@ describe("Bandada API SDK", () => {
         })
     })
     describe("Invites", () => {
+        it("# createInvite", async () => {
+            const groupId = "95633257675970239314311768035433"
+            const groupName = "Group 1"
+            const group = {
+                id: groupId,
+                name: groupName,
+                description: "This is Group 1",
+                adminId:
+                    "0x63229164c457584616006e31d1e171e6cdd4163695bc9c4bf0227095998ffa4c",
+                treeDepth: 16,
+                fingerprintDuration: 3600,
+                credentials: null,
+                apiEnabled: false,
+                apiKey: null,
+                createdAt: "2023-08-09T18:09:53.000Z",
+                updatedAt: "2023-08-09T18:09:53.000Z"
+            }
+            const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+            const inviteId = 1
+            const inviteCode = "C5VAG4HD"
+            const inviteCreatedAt = "2023-08-09T18:10:02.000Z"
+
+            requestMocked.mockImplementationOnce(() =>
+                Promise.resolve({
+                    id: inviteId,
+                    code: inviteCode,
+                    isRedeemed: false,
+                    createdAt: inviteCreatedAt,
+                    group
+                })
+            )
+
+            apiSdk = new ApiSdk(SupportedUrl.DEV)
+            const invite: Invite = await apiSdk.createInvite(groupId, apiKey)
+
+            expect(invite.id).toBe(inviteId)
+            expect(invite.code).toBe(inviteCode)
+            expect(invite.createdAt).toBe(inviteCreatedAt)
+            expect(invite.code).toBe(inviteCode)
+            expect(invite.group).toStrictEqual(group)
+        })
+
         describe("# getInvite", () => {
             it("Should return an invite", async () => {
                 requestMocked.mockImplementationOnce(() =>
                     Promise.resolve({
+                        id: 1,
                         code: "C5VAG4HD",
                         isRedeemed: false,
                         createdAt: "2023-08-09T18:10:02.000Z",

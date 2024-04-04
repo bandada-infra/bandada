@@ -11,6 +11,8 @@ import { Repository } from "typeorm"
 import { GroupsService } from "../groups/groups.service"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
+import { getAndCheckAdmin } from "../utils"
+import { AdminsService } from "../admins/admins.service"
 
 @Injectable()
 export class InvitesService {
@@ -18,8 +20,45 @@ export class InvitesService {
         @InjectRepository(Invite)
         private readonly inviteRepository: Repository<Invite>,
         @Inject(forwardRef(() => GroupsService))
-        private readonly groupsService: GroupsService
+        private readonly groupsService: GroupsService,
+        private readonly adminsService: AdminsService
     ) {}
+
+    /**
+     * Create a new group invite using API Key.
+     * @param dto External parameters used to create a new group invite.
+     * @param apiKey the API Key.
+     * @returns The group invite.
+     */
+    async createInviteWithApiKey(
+        dto: CreateInviteDto,
+        apiKey: string
+    ): Promise<Invite> {
+        const admin = await getAndCheckAdmin(
+            this.adminsService,
+            apiKey,
+            dto.groupId
+        )
+
+        return this.createInvite(dto, admin.id)
+    }
+
+    /**
+     * Create a new group invite manually without using API Key.
+     * @param dto External parameters used to create a new group invite.
+     * @param adminId Group admin id.
+     * @returns The group invite.
+     */
+    async createInviteManually(
+        dto: CreateInviteDto,
+        adminId: string
+    ): Promise<Invite> {
+        const admin = await this.adminsService.findOne({ id: adminId })
+
+        if (!admin) throw new BadRequestException(`You are not an admin`)
+
+        return this.createInvite(dto, adminId)
+    }
 
     /**
      * Creates a new group invite with a unique code. Group invites can only be

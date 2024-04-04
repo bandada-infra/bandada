@@ -20,3 +20,27 @@ export async function getInvite(
 
     return invite
 }
+
+/**
+ * Creates one new group invite.
+ * @param groupId The group identifier.
+ * @param apiKey API Key of the admin.
+ * @returns Invite.
+ */
+export async function createInvite(
+    config: object,
+    groupId: string,
+    apiKey: string
+): Promise<Invite> {
+    const newConfig: any = {
+        method: "post",
+        data: groupId,
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(url, newConfig)
+
+    return req
+}
