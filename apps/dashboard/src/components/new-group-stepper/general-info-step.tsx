@@ -1,3 +1,4 @@
+import { useState } from "react"
 import {
     Button,
     HStack,
@@ -11,11 +12,22 @@ import {
     Tag,
     TagLabel,
     Text,
-    VStack
+    VStack,
+    Box,
+    ChakraProvider,
+    extendTheme,
+    Tooltip
 } from "@chakra-ui/react"
-import { useState } from "react"
 import { FiHardDrive, FiZap } from "react-icons/fi"
+import { FaInfoCircle } from "react-icons/fa"
 import capitalize from "../../utils/capitalize"
+import { tooltipTheme } from "../../styles/components/tooltip"
+
+const theme = extendTheme({
+    components: {
+        Tooltip: tooltipTheme
+    }
+})
 
 const groupTypes = ["off-chain", "on-chain"]
 
@@ -161,7 +173,34 @@ export default function GeneralInfoStep({
                     </VStack>
 
                     <VStack align="left" pt="20px">
-                        <Text>Fingerprint duration</Text>
+                        <span style={{ display: "flex", alignItems: "center" }}>
+                            <Text marginRight="2">Fingerprint duration</Text>
+                            <ChakraProvider theme={theme}>
+                                <Tooltip
+                                    label={
+                                        <Box>
+                                            <Text>
+                                                A <b>fingerprint </b>is a unique
+                                                identifier for a group, changing
+                                                with any group modification.
+                                            </Text>
+                                            <Text>
+                                                The <b>fingerprint duration</b>{" "}
+                                                specifies how long old
+                                                fingerprints remain valid for
+                                                successful proof verification.
+                                            </Text>
+                                        </Box>
+                                    }
+                                    fontSize="md"
+                                    style={tooltipTheme.baseStyle}
+                                >
+                                    <span>
+                                        <FaInfoCircle />
+                                    </span>
+                                </Tooltip>
+                            </ChakraProvider>
+                        </span>
 
                         <NumberInput
                             min={0}
