@@ -25,7 +25,7 @@ describe("BandadaSemaphore", () => {
 
         bandadaSemaphore = await run("deploy:bandada-semaphore", {
             logs: false,
-            bandada: bandada.address
+            bandada: bandada.target
         })
 
         await bandada.updateGroups([
