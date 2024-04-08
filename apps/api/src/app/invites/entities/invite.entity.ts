@@ -20,7 +20,7 @@ export class Invite {
     code: string
 
     @Column({ default: false, name: "is_redeemed" })
-    isRedeemed?: boolean
+    isRedeemed: boolean
 
     @ManyToOne(() => Group, {
         onDelete: "CASCADE"

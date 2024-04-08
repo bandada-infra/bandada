@@ -44,7 +44,6 @@ type GroupSummary = {
 }
 
 export type Invite = {
-    id: number
     code: string
     isRedeemed: boolean
     group: GroupSummary

@@ -16,10 +16,6 @@ export class GroupResponse {
     @ApiProperty()
     credentials: object
     @ApiProperty()
-    apiEnabled: boolean
-    @ApiProperty()
-    apiKey: string
-    @ApiProperty()
     createdAt: Date
     @ApiProperty()
     updatedAt: Date

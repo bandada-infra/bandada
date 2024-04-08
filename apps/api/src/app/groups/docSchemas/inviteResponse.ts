@@ -10,8 +10,4 @@ export class InviteResponse {
     createdAt: Date
     @ApiProperty()
     group: GroupResponse
-    @ApiProperty()
-    groupName: string
-    @ApiProperty()
-    groupId: string
 }

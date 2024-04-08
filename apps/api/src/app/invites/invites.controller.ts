@@ -6,8 +6,7 @@ import {
     NotImplementedException,
     Param,
     Post,
-    Req,
-    UseGuards
+    Req
 } from "@nestjs/common"
 import {
     ApiBody,
@@ -16,10 +15,8 @@ import {
     ApiOperation,
     ApiTags
 } from "@nestjs/swagger"
-import { ThrottlerGuard } from "@nestjs/throttler"
+// import { ThrottlerGuard } from "@nestjs/throttler"
 import { Request } from "express"
-import { AuthGuard } from "../auth/auth.guard"
-import { mapEntity } from "../utils"
 import { InviteResponse } from "../groups/docSchemas"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
@@ -31,11 +28,10 @@ export class InvitesController {
     constructor(private readonly invitesService: InvitesService) {}
 
     @Post()
-    @UseGuards(AuthGuard)
-    @UseGuards(ThrottlerGuard)
+    // @UseGuards(ThrottlerGuard)
     @ApiBody({ type: CreateInviteDto })
     @ApiHeader({ name: "x-api-key", required: true })
-    @ApiCreatedResponse({ type: Invite })
+    @ApiCreatedResponse({ type: InviteResponse })
     @ApiOperation({
         description: "Creates a new group invite with a unique code."
     })
@@ -43,7 +39,7 @@ export class InvitesController {
         @Headers() headers: Headers,
         @Req() req: Request,
         @Body() dto: CreateInviteDto
-    ): Promise<Invite> {
+    ): Promise<InviteResponse> {
         let invite: Invite
 
         const apiKey = headers["x-api-key"] as string
@@ -70,12 +66,9 @@ export class InvitesController {
     @ApiCreatedResponse({ type: InviteResponse })
     async getInvite(
         @Param("code") inviteCode: string
-    ): Promise<Omit<Invite, "id">> {
-        const invite = (await this.invitesService.getInvite(inviteCode)) as any
+    ): Promise<InviteResponse> {
+        const invite = await this.invitesService.getInvite(inviteCode)
 
-        invite.groupName = invite.group.name
-        invite.groupId = invite.group.id
-
-        return mapEntity(invite)
+        return invite
     }
 }
