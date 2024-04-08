@@ -20,14 +20,14 @@ export async function generateMagicLink(
     clientUrl?: string
 ): Promise<string | null> {
     try {
-        const code = await request(`${API_URL}/invites`, {
+        const invite = await request(`${API_URL}/invites`, {
             method: "POST",
             data: {
                 groupId
             }
         })
 
-        return (clientUrl || CLIENT_INVITES_URL).replace("\\", code)
+        return (clientUrl || CLIENT_INVITES_URL).replace("\\", invite.code)
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)

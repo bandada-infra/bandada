@@ -19,7 +19,7 @@ import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { MerkleProof } from "./types"
-import { getAndCheckAdmin } from "./groups.utils"
+import { getAndCheckAdmin } from "../utils"
 
 @Injectable()
 export class GroupsService {

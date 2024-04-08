@@ -73,7 +73,7 @@ export default function HomePage(): JSX.Element {
                 const identityCommitment = identity.getCommitment().toString()
 
                 const hasJoined = await isGroupMember(
-                    invite.groupId,
+                    invite.group.id,
                     identityCommitment
                 )
 
@@ -89,7 +89,7 @@ export default function HomePage(): JSX.Element {
                 }
 
                 const response = await addMemberByInviteCode(
-                    invite.groupId,
+                    invite.group.id,
                     identityCommitment,
                     inviteCode
                 )

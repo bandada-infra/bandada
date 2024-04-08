@@ -2,25 +2,26 @@ import {
     Body,
     Controller,
     Get,
+    Headers,
+    NotImplementedException,
     Param,
     Post,
-    Req,
-    UseGuards
+    Req
 } from "@nestjs/common"
 import {
+    ApiBody,
     ApiCreatedResponse,
-    ApiExcludeEndpoint,
+    ApiHeader,
     ApiOperation,
     ApiTags
 } from "@nestjs/swagger"
-import { ThrottlerGuard } from "@nestjs/throttler"
+// import { ThrottlerGuard } from "@nestjs/throttler"
 import { Request } from "express"
-import { AuthGuard } from "../auth/auth.guard"
-import { mapEntity } from "../utils"
 import { InviteResponse } from "../groups/docSchemas"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
+import { mapEntity } from "../utils"
 
 @ApiTags("invites")
 @Controller("invites")
@@ -28,19 +29,37 @@ export class InvitesController {
     constructor(private readonly invitesService: InvitesService) {}
 
     @Post()
-    @UseGuards(AuthGuard)
-    @UseGuards(ThrottlerGuard)
-    @ApiExcludeEndpoint()
+    // @UseGuards(ThrottlerGuard)
+    @ApiBody({ type: CreateInviteDto })
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiCreatedResponse({ type: InviteResponse })
+    @ApiOperation({
+        description: "Creates a new group invite with a unique code."
+    })
     async createInvite(
+        @Headers() headers: Headers,
         @Req() req: Request,
         @Body() dto: CreateInviteDto
-    ): Promise<string> {
-        const { code } = await this.invitesService.createInvite(
-            dto,
-            req.session.adminId
-        )
+    ): Promise<InviteResponse> {
+        let invite: Invite
 
-        return code
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            invite = await this.invitesService.createInviteWithApiKey(
+                dto,
+                apiKey
+            )
+        } else if (req.session.adminId) {
+            invite = await this.invitesService.createInviteManually(
+                dto,
+                req.session.adminId
+            )
+        } else {
+            throw new NotImplementedException()
+        }
+
+        return mapEntity(invite)
     }
 
     @Get(":code")
@@ -48,11 +67,8 @@ export class InvitesController {
     @ApiCreatedResponse({ type: InviteResponse })
     async getInvite(
         @Param("code") inviteCode: string
-    ): Promise<Omit<Invite, "id">> {
-        const invite = (await this.invitesService.getInvite(inviteCode)) as any
-
-        invite.groupName = invite.group.name
-        invite.groupId = invite.group.id
+    ): Promise<InviteResponse> {
+        const invite = await this.invitesService.getInvite(inviteCode)
 
         return mapEntity(invite)
     }
