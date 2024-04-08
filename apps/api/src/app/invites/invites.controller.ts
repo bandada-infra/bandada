@@ -21,6 +21,7 @@ import { InviteResponse } from "../groups/docSchemas"
 import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
+import { mapEntity } from "../utils"
 
 @ApiTags("invites")
 @Controller("invites")
@@ -58,7 +59,7 @@ export class InvitesController {
             throw new NotImplementedException()
         }
 
-        return invite
+        return mapEntity(invite)
     }
 
     @Get(":code")
@@ -69,6 +70,6 @@ export class InvitesController {
     ): Promise<InviteResponse> {
         const invite = await this.invitesService.getInvite(inviteCode)
 
-        return invite
+        return mapEntity(invite)
     }
 }

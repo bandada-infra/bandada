@@ -85,6 +85,10 @@ export class InvitesService {
             )
         }
 
+        // Remove unnecessary parameters.
+        delete group.members
+        delete group.oAuthAccounts
+
         const invite = this.inviteRepository.create({
             code: this.generateCode(),
             group
