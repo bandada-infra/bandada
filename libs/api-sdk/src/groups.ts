@@ -133,7 +133,7 @@ export async function updateGroups(
     apiKey: string
 ): Promise<Array<Group>> {
     const newConfig: any = {
-        method: "put",
+        method: "patch",
         data: {
             groupIds,
             groupsInfo: groupsUpdateDetails
