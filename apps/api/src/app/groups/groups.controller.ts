@@ -120,14 +120,20 @@ export class GroupsController {
 
         if (apiKey) {
             await this.groupsService.removeGroupsWithAPIKey(groupIds, apiKey)
-        } else if (req.session.adminId) {
+
+            return
+        }
+
+        if (req.session.adminId) {
             await this.groupsService.removeGroupsManually(
                 groupIds,
                 req.session.adminId
             )
-        } else {
-            throw new NotImplementedException()
+
+            return
         }
+
+        throw new NotImplementedException()
     }
 
     @Delete(":group")
@@ -145,14 +151,19 @@ export class GroupsController {
 
         if (apiKey) {
             await this.groupsService.removeGroupWithAPIKey(groupId, apiKey)
-        } else if (req.session.adminId) {
+
+            return
+        }
+        if (req.session.adminId) {
             await this.groupsService.removeGroupManually(
                 groupId,
                 req.session.adminId
             )
-        } else {
-            throw new NotImplementedException()
+
+            return
         }
+
+        throw new NotImplementedException()
     }
 
     @Patch()
