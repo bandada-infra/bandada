@@ -61,9 +61,7 @@ export async function removeGroup(
 
     newConfig.headers["x-api-key"] = apiKey
 
-    const req = await request(requestUrl, newConfig)
-
-    return req
+    await request(requestUrl, newConfig)
 }
 
 /**
@@ -86,9 +84,7 @@ export async function removeGroups(
 
     newConfig.headers["x-api-key"] = apiKey
 
-    const req = await request(url, newConfig)
-
-    return req
+    await request(url, newConfig)
 }
 
 /**
