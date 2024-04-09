@@ -34,7 +34,9 @@ export async function createInvite(
 ): Promise<Invite> {
     const newConfig: any = {
         method: "post",
-        data: groupId,
+        data: {
+            groupId
+        },
         ...config
     }
 
