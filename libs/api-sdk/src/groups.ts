@@ -107,7 +107,7 @@ export async function updateGroup(
     const requestUrl = `${url}/${groupId}`
 
     const newConfig: any = {
-        method: "put",
+        method: "patch",
         data: groupUpdateDetails,
         ...config
     }

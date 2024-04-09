@@ -25,9 +25,9 @@ export type GroupCreationDetails = {
 }
 
 export type GroupUpdateDetails = {
-    description: string
-    treeDepth: number
-    fingerprintDuration: number
+    description?: string
+    treeDepth?: number
+    fingerprintDuration?: number
     credentials?: Credential
 }
 
