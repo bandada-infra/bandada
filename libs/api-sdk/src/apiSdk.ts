@@ -130,7 +130,7 @@ export default class ApiSdk {
      * @returns undefined.
      */
     async removeGroup(groupId: string, apiKey: string): Promise<void> {
-        return removeGroup(this._config, groupId, apiKey)
+        await removeGroup(this._config, groupId, apiKey)
     }
 
     /**
@@ -140,7 +140,7 @@ export default class ApiSdk {
      * @returns undefined.
      */
     async removeGroups(groupIds: Array<string>, apiKey: string): Promise<void> {
-        return removeGroups(this._config, groupIds, apiKey)
+        await removeGroups(this._config, groupIds, apiKey)
     }
 
     /**
