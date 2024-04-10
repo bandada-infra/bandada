@@ -11,6 +11,7 @@ import {
 } from "typeorm"
 import { OAuthAccount } from "../../credentials/entities/credentials-account.entity"
 import { Member } from "./member.entity"
+import { Invite } from "../../invites/entities/invite.entity"
 
 @Entity("groups")
 export class Group {
@@ -46,6 +47,11 @@ export class Group {
         }
     })
     members: Member[]
+
+    @OneToMany(() => Invite, (invite) => invite.group, {
+        cascade: ["remove"]
+    })
+    invites: Invite[]
 
     @OneToMany(() => OAuthAccount, (account) => account.group, {
         cascade: ["insert"]
