@@ -67,6 +67,8 @@ yarn add @bandada/api-sdk
 
 ## 📜 Usage
 
+## Create a new instance
+
 \# **new ApiSdk**(url: SupportedUrl | string, config?: object): _ApiSdk_
 
 Creates a new instance of ApiSdk using the API URL and the [config](https://axios-http.com/docs/req_config).
@@ -113,6 +115,8 @@ const config = {
 const apiSdk = new ApiSdk(url, config)
 ```
 
+## Create group
+
 \# **createGroup**(): _Promise\<Group>_
 
 Creates a Bandada group.
@@ -128,6 +132,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
 ```
+
+## Create groups
 
 \# **createGroups**(): _Promise\<Group[]>_
 
@@ -153,6 +159,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const groups = await apiSdk.createGroups(groupsCreateDetails, apiKey)
 ```
 
+## Remove group
+
 \# **removeGroup**(): _Promise\<void>_
 
 Removes a specific Bandada group.
@@ -163,6 +171,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 await apiSdk.removeGroup(groupId, apiKey)
 ```
+
+## Remove groups
 
 \# **removeGroups**(): _Promise\<void>_
 
@@ -177,6 +187,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 await apiSdk.removeGroups(groupIds, apiKey)
 ```
+
+## Update group
 
 \# **updateGroup**(): _Promise\<Group>_
 
@@ -193,6 +205,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 await apiSdk.updateGroup(groupId, groupUpdateDetails, apiKey)
 ```
+
+## Update groups
 
 \# **updateGroups**(): _Promise\<Group[]>_
 
@@ -220,13 +234,7 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 await apiSdk.updateGroups(groupId, groupUpdateDetails, apiKey)
 ```
 
-\# **getGroups**(): _Promise\<Group[]>_
-
-Returns the list of groups.
-
-```ts
-const groups = await apiSdk.getGroups()
-```
+## Get group
 
 \# **getGroup**(): _Promise\<Group>_
 
@@ -237,6 +245,18 @@ const groupId = "10402173435763029700781503965100"
 
 const group = await apiSdk.getGroup(groupId)
 ```
+
+## Get groups
+
+\# **getGroups**(): _Promise\<Group[]>_
+
+Returns the list of groups.
+
+```ts
+const groups = await apiSdk.getGroups()
+```
+
+## Is group member
 
 \# **isGroupMember**(): _Promise\<boolean>_
 
@@ -249,6 +269,8 @@ const memberId = "1"
 const isMember = await apiSdk.isGroupMember(groupId, memberId)
 ```
 
+## Generate merkle proof
+
 \# **generateMerkleProof**(): _Promise\<string>_
 
 Returns the Merkle Proof for a member in a group.
@@ -259,6 +281,8 @@ const memberId = "1"
 
 const proof = await apiSdk.generateMerkleProof(groupId, memberId)
 ```
+
+## Add member using an API Key
 
 \# **addMemberByApiKey**(): _Promise\<void>_
 
@@ -272,6 +296,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 await apiSdk.addMemberByApiKey(groupId, memberId, apiKey)
 ```
 
+## Add members using an API Key
+
 \# **addMembersByApiKey**(): _Promise\<void>_
 
 Adds multiple members to a group using an API Key.
@@ -283,6 +309,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 await apiSdk.addMembersByApiKey(groupId, memberIds, apiKey)
 ```
+
+## Add member using an invite code
 
 \# **addMemberByInviteCode**(): _Promise\<void>_
 
@@ -296,6 +324,8 @@ const inviteCode = "MQYS4UR5"
 await apiSdk.addMemberByInviteCode(groupId, memberId, inviteCode)
 ```
 
+## Remove member using an API Key
+
 \# **removeMemberByApiKey**(): _Promise\<void>_
 
 Removes a member from a group using an API Key.
@@ -308,6 +338,8 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 await apiSdk.removeMemberByApiKey(groupId, memberId, apiKey)
 ```
 
+## Remove members using an API Key
+
 \# **removeMembersByApiKey**(): _Promise\<void>_
 
 Removes multiple members from a group using an API Key.
@@ -319,6 +351,21 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 await apiSdk.removeMembersByApiKey(groupId, memberIds, apiKey)
 ```
+
+## Create invite
+
+\# **createInvite**(): _Promise\<Invite>_
+
+Creates a new group invite.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const invite = await apiSdk.createInvite(groupId, apiKey)
+```
+
+## Get invite
 
 \# **getInvite**(): _Promise\<Invite>_
 
