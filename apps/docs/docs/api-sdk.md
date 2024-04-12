@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 import Tabs from "@theme/Tabs"
@@ -50,7 +50,7 @@ pnpm add @bandada/api-sdk
 
 Creates a new instance of ApiSdk using the API URL and the [config](https://axios-http.com/docs/req_config).
 
--   Creates a new instance using the production Bandada API URL and the default config.
+-   Create a new instance using the Bandada API URL and the default config.
 
 This is what you need if you are using the production Bandada API.
 
@@ -60,7 +60,7 @@ import { ApiSdk } from "@bandada/api-sdk"
 const apiSdk = new ApiSdk()
 ```
 
--   Creates a new instance using a [Supported URL](https://github.com/bandada-infra/bandada/blob/main/libs/api-sdk/src/types/index.ts#L43). 
+-   Create a new instance using a [Supported URL](https://github.com/bandada-infra/bandada/blob/main/libs/api-sdk/src/types/index.ts#L43).
 
 This is useful when working with the development environment.
 
@@ -70,7 +70,7 @@ import { ApiSdk, SupportedUrl } from "@bandada/api-sdk"
 const apiSdk = new ApiSdk(SupportedUrl.DEV)
 ```
 
--   Creates a new instance using a custom API URL.
+-   Create a new instance using a custom API URL.
 
 ```ts
 import { ApiSdk } from "@bandada/api-sdk"
@@ -78,7 +78,7 @@ import { ApiSdk } from "@bandada/api-sdk"
 const apiSdk = new ApiSdk("https://example.com/api")
 ```
 
--   Creates a new instance using a custom API URL and config.
+-   Create a new instance using a custom API URL and config.
 
 ```ts
 import { ApiSdk } from "@bandada/api-sdk"
@@ -92,19 +92,128 @@ const config = {
 const apiSdk = new ApiSdk(url, config)
 ```
 
-## Get groups
+## Create group
 
-\# **getGroups**(): _Promise\<GroupResponse[]>_
+\# **createGroup**(): _Promise\<Group>_
 
-Returns the list of groups.
+Creates a Bandada group.
 
 ```ts
-const groups = await apiSdk.getGroups()
+const groupCreateDetails = {
+    name: "Group 1",
+    description: "This is Group 1.",
+    treeDepth: 16,
+    fingerprintDuration: 3600
+}
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
+```
+
+## Create groups
+
+\# **createGroups**(): _Promise\<Group[]>_
+
+Creates one or many Bandada groups.
+
+```ts
+const groupsCreateDetails = [
+    {
+        name: "Group 1",
+        description: "This is Group 1.",
+        treeDepth: 16,
+        fingerprintDuration: 3600
+    },
+    {
+        name: "Group 2",
+        description: "This is Group 2.",
+        treeDepth: 16,
+        fingerprintDuration: 3600
+    }
+]
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const groups = await apiSdk.createGroups(groupsCreateDetails, apiKey)
+```
+
+## Remove group
+
+\# **removeGroup**(): _Promise\<void>_
+
+Removes a specific Bandada group.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.removeGroup(groupId, apiKey)
+```
+
+## Remove groups
+
+\# **removeGroups**(): _Promise\<void>_
+
+Removes one or many Bandada groups.
+
+```ts
+const groupIds = [
+    "10402173435763029700781503965100",
+    "20402173435763029700781503965200"
+]
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.removeGroups(groupIds, apiKey)
+```
+
+## Update group
+
+\# **updateGroup**(): _Promise\<Group>_
+
+Updates a specific Bandada group.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const groupUpdateDetails = {
+    description: "This is a new group.",
+    treeDepth: 20,
+    fingerprintDuration: 4000
+}
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.updateGroup(groupId, groupUpdateDetails, apiKey)
+```
+
+## Update groups
+
+\# **updateGroups**(): _Promise\<Group[]>_
+
+Updates one or many Bandada groups.
+
+```ts
+const groupIds = [
+    "10402173435763029700781503965100",
+    "20402173435763029700781503965200"
+]
+const updatedGroups: Array<GroupUpdateDetails> = [
+    {
+        description: "This is a new group1.",
+        treeDepth: 32,
+        fingerprintDuration: 7200
+    },
+    {
+        description: "This is a new group2.",
+        treeDepth: 32,
+        fingerprintDuration: 7200
+    }
+]
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.updateGroups(groupId, groupUpdateDetails, apiKey)
 ```
 
 ## Get group
 
-\# **getGroup**(): _Promise\<GroupResponse>_
+\# **getGroup**(): _Promise\<Group>_
 
 Returns a specific group.
 
@@ -112,6 +221,16 @@ Returns a specific group.
 const groupId = "10402173435763029700781503965100"
 
 const group = await apiSdk.getGroup(groupId)
+```
+
+## Get groups
+
+\# **getGroups**(): _Promise\<Group[]>_
+
+Returns the list of groups.
+
+```ts
+const groups = await apiSdk.getGroups()
 ```
 
 ## Is group member
@@ -208,4 +327,30 @@ const memberIds = ["1", "2", "3"]
 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 await apiSdk.removeMembersByApiKey(groupId, memberIds, apiKey)
+```
+
+## Create invite  
+
+\# **createInvite**(): _Promise\<Invite>_
+
+Creates a new group invite.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const invite = await apiSdk.createInvite(groupId, apiKey)
+```
+
+## Get invite
+
+\# **getInvite**(): _Promise\<Invite>_
+
+Returns a specific invite.
+
+```ts
+const inviteCode = "C5VAG4HD"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const invite = await apiSdk.getInvite(inviteCode)
 ```
