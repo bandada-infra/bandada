@@ -325,3 +325,15 @@ yarn commit
 ```
 
 The command will automatically verify that the modified files adhere to the rules of ESLint and Prettier.
+
+### Releases
+
+Bump a new version with:
+
+```bash
+yarn version:bump <version>
+# e.g. yarn version:bump 2.0.0
+```
+
+It will create a commit and a git tag that will be pushed to the main branch. A workflow will be triggered and will
+publish the Bandada packages on [npm](https://www.npmjs.com/) and release a new version on Github with its changelogs automatically.
