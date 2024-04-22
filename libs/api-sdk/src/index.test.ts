@@ -7,6 +7,7 @@ import {
     Invite,
     SupportedUrl
 } from "./types"
+import checkParameter from "./checkParameter"
 
 jest.mock("@bandada/utils", () => {
     const originalModule = jest.requireActual("@bandada/utils")
@@ -68,6 +69,13 @@ describe("Bandada API SDK", () => {
                 apiSdk = new ApiSdk(SupportedUrl.DEV, config)
             }
             expect(fun).toThrow("The url and baseURL should be the same")
+        })
+        it("Should throw an error when the url has the wrong type", () => {
+            const url = 123
+            const fun = () => {
+                apiSdk = new ApiSdk(url as any)
+            }
+            expect(fun).toThrow("Parameter 'url' is not a string")
         })
         it("Should add the baseURL to config", () => {
             const config = {
@@ -597,6 +605,34 @@ describe("Bandada API SDK", () => {
                 expect(invite.createdAt).toBe(inviteCreatedAt)
                 expect(invite.code).toBe(inviteCode)
                 expect(invite.group).toStrictEqual(group)
+            })
+        })
+    })
+    describe("Check Parameter", () => {
+        describe("Should not throw an error if the parameter has the expected type", () => {
+            it("Should not throw an error if the parameter is a string and the function expects a string", () => {
+                const url = "http://localhost:3000"
+                const fun = () => {
+                    checkParameter(url, "url", "string")
+                }
+                expect(fun).not.toThrow()
+            })
+        })
+
+        describe("Should throw an error if the parameter does not have the expected type", () => {
+            it("Should throw an error if the parameter is a number and the function expects a string", () => {
+                const url = 123
+                const fun = () => {
+                    checkParameter(url, "url", "string")
+                }
+                expect(fun).toThrow("Parameter 'url' is not a string")
+            })
+            it("Should throw an error if the parameter is a string and the function expects an object", () => {
+                const url = "http://localhost:3000"
+                const fun = () => {
+                    checkParameter(url, "url", "object")
+                }
+                expect(fun).toThrow("Parameter 'url' is not an object")
             })
         })
     })
