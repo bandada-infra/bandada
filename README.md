@@ -352,5 +352,4 @@ git push origin <version>
 # e.g. git push origin 2.0.0
 ```
 
-After pushing the new git tag, a workflow will be triggered and will
-publish the Bandada packages on [npm](https://www.npmjs.com/) and release a new version on Github with its changelogs automatically.
+After pushing the new git tag, a workflow will be triggered and will publish the Bandada packages on [npm](https://www.npmjs.com/) and release a new version on Github with its changelogs automatically.
