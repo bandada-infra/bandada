@@ -18,7 +18,7 @@
         "@emotion/styled": "^11.10.6",
         "@fontsource-variable/unbounded": "^5.0.5",
         "@rainbow-me/rainbowkit": "^0.12.8",
-        "@semaphore-protocol/data": "3.10.0",
+        "@semaphore-protocol/data": "patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch",
         "ethers": "5.5.1",
         "framer-motion": "^10.0.1",
         "react": "^18.2.0",

@@ -1,0 +1,26 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 614a9093f82e9ae8e9219b65af0a8e93ea992560..f35cadc1c3623e2209c261ddde6c678442079522 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -1137,7 +1137,7 @@ var SemaphoreSubgraph = /** @class */ (function () {
+                                 filterFragments.push("timestamp_lte: \"".concat(jsDateToGraphqlDate(timestampLte), "\""));
+                             }
+                             if (filterFragments.length > 0) {
+-                                filtersQuery = "(where: {".concat(filterFragments.join(", "), "})");
++																filtersQuery = "(orderBy:timestamp, orderDirection:desc, where: {".concat(filterFragments.join(", "), "})");
+                             }
+                         }
+                         config = {
+diff --git a/dist/index.node.js b/dist/index.node.js
+index 29640ebef31511af5ee5ff7e970c74e1fa0bc98e..14617cb0dab0fc92de298b6e572a70215d36bf43 100644
+--- a/dist/index.node.js
++++ b/dist/index.node.js
+@@ -1145,7 +1145,7 @@ var SemaphoreSubgraph = /** @class */ (function () {
+                                 filterFragments.push("timestamp_lte: \"".concat(jsDateToGraphqlDate(timestampLte), "\""));
+                             }
+                             if (filterFragments.length > 0) {
+-                                filtersQuery = "(where: {".concat(filterFragments.join(", "), "})");
++																filtersQuery = "(orderBy:timestamp, orderDirection:desc, where: {".concat(filterFragments.join(", "), "})");
+                             }
+                         }
+                         config = {

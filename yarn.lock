@@ -7440,6 +7440,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@semaphore-protocol/data@patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch":
+  version: 3.10.0
+  resolution: "@semaphore-protocol/data@patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch::version=3.10.0&hash=a89166"
+  dependencies:
+    "@ethersproject/contracts": "npm:^5.7.0"
+    "@ethersproject/providers": "npm:^5.7.0"
+    axios: "npm:^0.27.2"
+  checksum: 10/9da8fde3d53db4a4b6abf712e35cf1ec1438860eb92170c56a13b4a58ccef0d4eb7df3ab7d470d6ecbf255e5704f0556b71e593580e625142fa01abbbfc1c9b3
+  languageName: node
+  linkType: hard
+
 "@semaphore-protocol/group@npm:3.10.0":
   version: 3.10.0
   resolution: "@semaphore-protocol/group@npm:3.10.0"
@@ -13955,7 +13966,7 @@ __metadata:
     "@emotion/styled": "npm:^11.10.6"
     "@fontsource-variable/unbounded": "npm:^5.0.5"
     "@rainbow-me/rainbowkit": "npm:^0.12.8"
-    "@semaphore-protocol/data": "npm:3.10.0"
+    "@semaphore-protocol/data": "patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch"
     "@types/react": "npm:^18.0.27"
     "@types/react-dom": "npm:^18.0.10"
     "@vitejs/plugin-react": "npm:^3.1.0"
