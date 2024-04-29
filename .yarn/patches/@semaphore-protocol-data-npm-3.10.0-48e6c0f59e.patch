@@ -7,7 +7,7 @@ index 614a9093f82e9ae8e9219b65af0a8e93ea992560..f35cadc1c3623e2209c261ddde6c6784
                              }
                              if (filterFragments.length > 0) {
 -                                filtersQuery = "(where: {".concat(filterFragments.join(", "), "})");
-+																filtersQuery = "(orderBy:timestamp, orderDirection:desc, where: {".concat(filterFragments.join(", "), "})");
++								 filtersQuery = "(orderBy:timestamp, orderDirection:desc, where: {".concat(filterFragments.join(", "), "})");
                              }
                          }
                          config = {
@@ -20,7 +20,7 @@ index 29640ebef31511af5ee5ff7e970c74e1fa0bc98e..14617cb0dab0fc92de298b6e572a7021
                              }
                              if (filterFragments.length > 0) {
 -                                filtersQuery = "(where: {".concat(filterFragments.join(", "), "})");
-+																filtersQuery = "(orderBy:timestamp, orderDirection:desc, where: {".concat(filterFragments.join(", "), "})");
++								 filtersQuery = "(orderBy:timestamp, orderDirection:desc, where: {".concat(filterFragments.join(", "), "})");
                              }
                          }
                          config = {
