@@ -7442,12 +7442,12 @@ __metadata:
 
 "@semaphore-protocol/data@patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch":
   version: 3.10.0
-  resolution: "@semaphore-protocol/data@patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch::version=3.10.0&hash=a89166"
+  resolution: "@semaphore-protocol/data@patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch::version=3.10.0&hash=ea766a"
   dependencies:
     "@ethersproject/contracts": "npm:^5.7.0"
     "@ethersproject/providers": "npm:^5.7.0"
     axios: "npm:^0.27.2"
-  checksum: 10/9da8fde3d53db4a4b6abf712e35cf1ec1438860eb92170c56a13b4a58ccef0d4eb7df3ab7d470d6ecbf255e5704f0556b71e593580e625142fa01abbbfc1c9b3
+  checksum: 10/c760b945d59219776cb5201dedcae5390d4cb360487c6ff5b752d0058b43753318f941b4f3a1e799d9f6871ad2535a72a5574242c034d0fdfdcaea8685bef658
   languageName: node
   linkType: hard
 
