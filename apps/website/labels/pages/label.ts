@@ -32,7 +32,8 @@ export const LABELS = {
         CATEGORY: "Category",
         NO_RESULT: "No result found.",
         NO_RESULT_DESCRIPTION:
-            "No projects matching these filters. Try changing your search."
+            "No projects matching these filters. Try changing your search.",
+        GET_INSPIRED: "Get inspired"
     },
     PROJECTS: {
         TITLE: "Build with Bandada",
@@ -56,15 +57,15 @@ export const LABELS = {
             LINKS: [
                 {
                     label: "Good first issues",
-                    href: ""
+                    href: "#"
                 },
                 {
                     label: "Enhance the protocol",
-                    href: ""
+                    href: "#"
                 },
                 {
                     label: "Give feedback about the website",
-                    href: ""
+                    href: "#"
                 }
             ]
         }

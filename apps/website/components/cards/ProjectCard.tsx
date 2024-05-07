@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Project } from "@/content/projects"
+import { Project } from "@/labels/projects"
 import { Card } from "./Card"
 import { Tag } from "../elements/Tag"
 import { Icons } from "../elements/Icons"

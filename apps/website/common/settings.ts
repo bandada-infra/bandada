@@ -55,5 +55,6 @@ export const LINKS: Record<string, string> = {
     WEBSITE_FEEDBACK:
         "https://github.com/orgs/bandada-infra/discussions/new?category=website",
     SUBMIT_PROJECT: "https://github.com/bandada-infra/bandada/issues/new ",
-    DISCORD: ""
+    DISCORD: "#",
+    GET_INSPIRED: "#"
 }

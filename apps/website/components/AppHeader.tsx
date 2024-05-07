@@ -9,7 +9,7 @@ import { Icons } from "./elements/Icons"
 import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
 import { Button } from "./elements/Button"
 import { Label } from "./elements/Label"
-import { LABELS } from "@/content/pages/label"
+import { LABELS } from "@/labels/pages/label"
 import { Divider } from "./elements/Divider"
 import { AppContainer } from "./AppContainer"
 
@@ -87,7 +87,7 @@ function MobileNav() {
                                         >
                                             {label}
                                             {external && (
-                                                <Icons.externalLink
+                                                <Icons.ExternalLink
                                                     className="text-white"
                                                     size={20}
                                                 />
@@ -124,7 +124,7 @@ function MobileNav() {
                                 >
                                     <Label.MenuItem className="flex items-center">
                                         {LABELS.FOOTER.FEEDBACK}
-                                        <Icons.externalLink />
+                                        <Icons.ExternalLink />
                                     </Label.MenuItem>
                                 </Link>
                                 <span className="text-baltic-sea-600 text-[13px] font-normal tracking-[0.26px] font-sans">
@@ -165,7 +165,7 @@ function DesktopNav() {
                                     </div>
                                     <Link href={href}>{label}</Link>
                                 </div>
-                                {external && <Icons.externalLink />}
+                                {external && <Icons.ExternalLink />}
                             </LinkItem>
                         )
                     }

@@ -1,8 +1,8 @@
 import Image from "next/image"
 import { AppContainer } from "@/components/AppContainer"
 import { Label } from "@/components/elements/Label"
-import { FeatureItems } from "@/content/features"
-import { LABELS } from "@/content/pages/label"
+import { FeatureItems } from "@/labels/features"
+import { LABELS } from "@/labels/pages/label"
 
 function Features() {
     return (

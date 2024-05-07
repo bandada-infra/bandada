@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { LABELS } from "@/content/pages/label"
+import { LABELS } from "@/labels/pages/label"
 import { Card } from "./Card"
 
 interface ArticleProps {

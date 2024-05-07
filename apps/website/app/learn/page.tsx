@@ -7,16 +7,19 @@ import { VideoCard } from "@/components/cards/VideoCard"
 import { Divider } from "@/components/elements/Divider"
 import { Label } from "@/components/elements/Label"
 import { ShowMore } from "@/components/ShowMore"
-import { LABELS } from "@/content/pages/label"
+import { LABELS } from "@/labels/pages/label"
 import useContent from "@/hooks/useContent"
+// import * as learnPage from "@/content/learnPage.md"
 
 export default function LearnPage() {
     const { articles, videos } = useContent()
 
+    //  console.log(learnPage)
+
     return (
         <div className="flex flex-col">
             <div className="bg-classic-rose-100 py-28">
-                <AppContainer>
+                <AppContainer className="max-w-screen-xl">
                     <div className=" flex flex-col gap-6">
                         <Label.Section size="md" className="text-center">
                             {LABELS.LEARN.TITLE}

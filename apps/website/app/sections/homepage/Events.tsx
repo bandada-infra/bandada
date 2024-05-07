@@ -1,8 +1,8 @@
 import Image from "next/image"
 import { AppContainer } from "@/components/AppContainer"
 import { Label } from "@/components/elements/Label"
-import { EVENTS, Event } from "@/content/events"
-import { LABELS } from "@/content/pages/label"
+import { EVENTS, Event } from "@/labels/events"
+import { LABELS } from "@/labels/pages/label"
 
 function EventCard({ date, event, description }: Event) {
     return (

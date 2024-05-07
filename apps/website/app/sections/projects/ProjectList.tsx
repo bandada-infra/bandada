@@ -4,13 +4,13 @@ import { Card } from "@/components/cards/Card"
 import { ProjectCard } from "@/components/cards/ProjectCard"
 import { Icons } from "@/components/elements/Icons"
 import { Tag } from "@/components/elements/Tag"
-import { LABELS } from "@/content/pages/label"
+import { LABELS } from "@/labels/pages/label"
 import {
     Project,
     ProjectCategories,
     ProjectSource,
     ProjectsSources
-} from "@/content/projects"
+} from "@/labels/projects"
 import useProjects from "@/hooks/useProjects"
 
 const ProjectSourceMapping: Record<

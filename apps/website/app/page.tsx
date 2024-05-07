@@ -5,7 +5,7 @@ import { Button } from "@/components/elements/Button"
 import { Intro } from "./sections/homepage/Intro"
 import { Projects } from "./sections/homepage/Projects"
 import { Events } from "./sections/homepage/Events"
-import { LABELS } from "@/content/pages/label"
+import { LABELS } from "@/labels/pages/label"
 import { Icons } from "@/components/elements/Icons"
 import { LINKS } from "@/common/settings"
 

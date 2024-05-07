@@ -8,6 +8,9 @@ const config: Config = {
     ],
     theme: {
         extend: {
+            padding: {
+                30: "120px"
+            },
             backgroundImage: {
                 "gradient-bandada":
                     "linear-gradient(95deg, #FF5242 14.6%, #EB179B 92.7%)",

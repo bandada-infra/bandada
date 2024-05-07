@@ -1,9 +1,13 @@
+interface IconsProps {
+    size?: number
+}
+
 export const Icons: Record<string, any> = {
-    externalLink: (props: any) => (
+    ExternalLink: ({ size = 18, ...props }: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width={props?.size || 18}
-            height={props?.size || 18}
+            width={size}
+            height={size}
             viewBox="0 0 18 18"
             fill="none"
             {...props}
@@ -16,7 +20,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    arrowDown: (props: any) => (
+    arrowDown: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 24}
@@ -33,7 +37,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    burgher: (props: any) => (
+    burgher: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 24}
@@ -50,7 +54,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    close: (props: any) => (
+    close: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 24}
@@ -67,7 +71,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    line: (props: any) => (
+    line: (props: IconsProps) => (
         <svg
             width="1289"
             height="1"
@@ -85,7 +89,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    discord: (props: any) => (
+    discord: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 24}
@@ -100,7 +104,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    twitter: (props: any) => (
+    twitter: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 18}
@@ -117,7 +121,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    community: (props: any) => (
+    community: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 21}
@@ -134,7 +138,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    pse: (props: any) => (
+    pse: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 20}
@@ -149,7 +153,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    website: (props: any) => (
+    website: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 24}
@@ -164,7 +168,7 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    github: (props: any) => (
+    github: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || 24}
@@ -192,7 +196,7 @@ export const Icons: Record<string, any> = {
             </defs>
         </svg>
     ),
-    bird: (props: any) => (
+    bird: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width={props?.size || props?.width || 15}

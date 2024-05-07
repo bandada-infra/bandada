@@ -4,7 +4,7 @@ import { classed } from "@tw-classed/react"
 import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
 import { Icons } from "./elements/Icons"
 import { Label } from "./elements/Label"
-import { LABELS } from "@/content/pages/label"
+import { LABELS } from "@/labels/pages/label"
 import { Divider } from "./elements/Divider"
 import { AppContainer } from "./AppContainer"
 
@@ -34,7 +34,7 @@ function AppFooter() {
                                             {label}
 
                                             {external && (
-                                                <Icons.externalLink size={20} />
+                                                <Icons.ExternalLink size={20} />
                                             )}
                                         </Label.MenuItem>
                                     </Link>
@@ -73,7 +73,7 @@ function AppFooter() {
                     >
                         <Label.MenuItem className="flex gap-2">
                             {LABELS.FOOTER.FEEDBACK}
-                            <Icons.externalLink size={20} />
+                            <Icons.ExternalLink size={20} />
                         </Label.MenuItem>
                     </Link>
                 </div>

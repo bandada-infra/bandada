@@ -2,7 +2,7 @@
 
 import { ReactNode, useState } from "react"
 import { Button } from "./elements/Button"
-import { LABELS } from "@/content/pages/label"
+import { LABELS } from "@/labels/pages/label"
 import { Icons } from "./elements/Icons"
 import { cn } from "@/common/utils"
 import useSettings from "@/hooks/useSettings"

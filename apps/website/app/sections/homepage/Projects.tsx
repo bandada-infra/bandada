@@ -2,8 +2,8 @@ import { AppContainer } from "@/components/AppContainer"
 import { ProjectCard } from "@/components/cards/ProjectCard"
 import { Button } from "@/components/elements/Button"
 import { Label } from "@/components/elements/Label"
-import { LABELS } from "@/content/pages/label"
-import { PROJECT_ITEMS } from "@/content/projects"
+import { LABELS } from "@/labels/pages/label"
+import { PROJECT_ITEMS } from "@/labels/projects"
 
 function Projects() {
     return (
