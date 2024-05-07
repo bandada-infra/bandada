@@ -135,11 +135,7 @@ export default validator
 Testing your validator is also important. If you use Jest you can use some test utilities to mock the API function easily.
 
 ```typescript
-import {
-    addValidator,
-    testUtils,
-    validateCredentials
-} from "@bandada/credentials"
+import { addValidator, testUtils, validateCredentials } from "@bandada/credentials"
 import githubFollowers from "./index"
 
 describe("GithubFollowers", () => {

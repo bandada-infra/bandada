@@ -76,14 +76,14 @@ function ProjectList() {
                         const { label, icon } =
                             ProjectSourceMapping[projectSource]
 
-                        const isActive = source === projectSource
+                        // const isActive = source === projectSource
 
                         return (
                             <Tag
                                 key={index}
                                 type="square"
                                 icon={icon}
-                                variant={isActive ? "primary" : "secondary"}
+                                // variant={isActive ? "primary" : "secondary"}
                                 onClick={() => handleSource(projectSource)}
                             >
                                 <span className=" capitalize">{label}</span>
@@ -97,19 +97,16 @@ function ProjectList() {
                     {LABELS.COMMON.CATEGORY}
                 </Card.Title>
                 <div className="flex flex-wrap gap-3">
-                    {ProjectCategories.map((category, index) => {
-                        const isActive = categories.includes(category)
-
-                        return (
-                            <Tag
-                                key={index}
-                                variant={isActive ? "primary" : "secondary"}
-                                onClick={() => handleCategory(category)}
-                            >
-                                {category}
-                            </Tag>
-                        )
-                    })}
+                    {ProjectCategories.map((category, index) => (
+                        // const isActive = categories.includes(category)
+                        <Tag
+                            key={index}
+                            // variant={isActive ? "primary" : "secondary"}
+                            onClick={() => handleCategory(category)}
+                        >
+                            {category}
+                        </Tag>
+                    ))}
                 </div>
             </Card.Base>
 

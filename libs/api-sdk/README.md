@@ -179,10 +179,7 @@ await apiSdk.removeGroup(groupId, apiKey)
 Removes one or many Bandada groups.
 
 ```ts
-const groupIds = [
-    "10402173435763029700781503965100",
-    "20402173435763029700781503965200"
-]
+const groupIds = ["10402173435763029700781503965100", "20402173435763029700781503965200"]
 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 await apiSdk.removeGroups(groupIds, apiKey)
@@ -213,10 +210,7 @@ await apiSdk.updateGroup(groupId, groupUpdateDetails, apiKey)
 Updates one or many Bandada groups.
 
 ```ts
-const groupIds = [
-    "10402173435763029700781503965100",
-    "20402173435763029700781503965200"
-]
+const groupIds = ["10402173435763029700781503965100", "20402173435763029700781503965200"]
 const updatedGroups: Array<GroupUpdateDetails> = [
     {
         description: "This is a new group1.",

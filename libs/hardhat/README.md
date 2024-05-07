@@ -99,9 +99,7 @@ task("deploy", "Deploy a Greeter contract")
         await greeter.waitForDeployment()
 
         if (logs) {
-            console.log(
-                `Greeter contract has been deployed to: ${greeter.address}`
-            )
+            console.log(`Greeter contract has been deployed to: ${greeter.address}`)
         }
 
         return greeter

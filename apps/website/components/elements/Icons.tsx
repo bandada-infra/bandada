@@ -199,8 +199,8 @@ export const Icons: Record<string, any> = {
     bird: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width={props?.size || props?.width || 15}
-            height={props?.size || props?.height || 20}
+            width={props?.size || 15}
+            height={props?.size || 20}
             viewBox="0 0 15 20"
             fill="none"
             {...props}

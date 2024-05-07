@@ -36,8 +36,8 @@ const REACT_MARKDOWN_CONFIG: Components = {
             className: "font-bold",
             ...props
         })
-    //span: ({ ...props }: any) => <Label.Paragraph {...props} />,
-    //p: ({ ...props }: any) => <Label.Paragraph {...props} />
+    // span: ({ ...props }: any) => <Label.Paragraph {...props} />,
+    // p: ({ ...props }: any) => <Label.Paragraph {...props} />
 }
 
 interface MarkdownProps {

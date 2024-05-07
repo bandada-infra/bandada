@@ -1,7 +1,13 @@
 {
-    "extends": ["../../.eslintrc.json"],
+    "extends": ["../../.eslintrc.json", "plugin:@next/next/recommended"],
     "rules": {
+        "@next/next/no-html-link-for-pages": ["error", "./"],
         "react/prop-types": "off"
+    },
+    "settings": {
+        "next": {
+            "rootDir": "./app"
+        }
     },
     "parserOptions": {
         "project": "./tsconfig.json"
