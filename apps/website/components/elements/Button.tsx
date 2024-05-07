@@ -1,5 +1,5 @@
 import { classed } from "@tw-classed/react"
-import { forwardRef } from "react"
+import React, { forwardRef } from "react"
 
 type Position = "top" | "right" | "bottom" | "left"
 const ButtonBase = classed.button(
@@ -37,18 +37,18 @@ type ButtonProps = React.ComponentProps<typeof ButtonComponent> & {
     iconPosition?: Position
 }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-    const { icon, children, iconPosition = "right", ...rest } = props
-    return (
-        <ButtonComponent {...rest} ref={ref}>
-            <div className={IconPositionMapping[iconPosition ?? "right"]}>
-                {icon}
-                <span>{children}</span>
-            </div>
-        </ButtonComponent>
-    )
-})
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+    (props, ref) => {
+        const { icon, children, iconPosition = "right", ...rest } = props
+        return (
+            <ButtonComponent {...rest} ref={ref}>
+                <div className={IconPositionMapping[iconPosition ?? "right"]}>
+                    {icon}
+                    <span>{children}</span>
+                </div>
+            </ButtonComponent>
+        )
+    }
+)
 
 Button.displayName = "Button"
-
-export { Button }

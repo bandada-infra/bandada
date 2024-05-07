@@ -1,9 +1,9 @@
 import { classed } from "@tw-classed/react"
-import React, { ReactNode } from "react"
+import React, { forwardRef, ReactNode } from "react"
 
 const TagBase = classed.div("cursor-pointer font-dm-sans border duration-200", {
     variants: {
-        variant: {
+        color: {
             primary:
                 "bg-classic-rose-50 border-classic-rose-900 text-classic-rose-900",
             secondary:
@@ -11,7 +11,7 @@ const TagBase = classed.div("cursor-pointer font-dm-sans border duration-200", {
         }
     },
     defaultVariants: {
-        variant: "primary"
+        color: "primary"
     }
 })
 
@@ -37,18 +37,17 @@ const TagByType: Record<TagType, any> = {
     square: TagComponentSquare
 }
 
-function Tag({ children, type, icon, variant, ...props }: TagProps) {
-    const Component = TagByType[type ?? "rounded"]
+export const Tag = forwardRef<HTMLDivElement, TagProps>((props, ref) => {
+    const Component = TagByType[props?.type ?? "rounded"]
+    const { icon, children } = props
     return (
-        <Component variant={variant ?? "primary"} {...props}>
+        <Component {...props} ref={ref}>
             <div className="flex items-center gap-2">
                 {icon}
                 <div>{children}</div>
             </div>
         </Component>
     )
-}
+})
 
 Tag.displayName = "Tag"
-
-export { Tag }
