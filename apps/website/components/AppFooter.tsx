@@ -25,7 +25,7 @@ function AppFooter() {
                     />
                 </div>
                 <div className="flex">
-                    <div className="flex flex-col gap-6 mg:gap-0 md:flex-row w-full md:justify-between">
+                    <div className="flex flex-col gap-12 mg:gap-0 md:flex-row w-full md:justify-between">
                         <MenuWrapper>
                             {MENU_ITEMS.map(
                                 ({ label, href, external }, index) => (
@@ -62,11 +62,15 @@ function AppFooter() {
                     </div>
                 </div>
                 <Divider.Line />
-                <div className="w-full flex flex-col items-center md:justify-between md:flex-row">
-                    <span className="text-baltic-sea-600 text-[13px] font-normal tracking-[0.26px] font-sans">
+                <div className="w-full flex gap-4 flex-col items-center md:justify-between md:flex-row">
+                    <span className="text-baltic-sea-600 text-[13px] font-normal tracking-[0.26px] font-sans order-2">
                         {LABELS.FOOTER.COPYRIGHT}
                     </span>
-                    <Link href={LINKS.WEBSITE_FEEDBACK} target="_blank">
+                    <Link
+                        href={LINKS.WEBSITE_FEEDBACK}
+                        target="_blank"
+                        className="order-1 py-2"
+                    >
                         <Label.MenuItem className="flex gap-2">
                             {LABELS.FOOTER.FEEDBACK}
                             <Icons.externalLink size={20} />

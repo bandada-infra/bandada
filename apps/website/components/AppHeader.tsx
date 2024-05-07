@@ -35,7 +35,9 @@ function MobileNav() {
             <button
                 type="button"
                 aria-label="burgher menu"
-                onClick={() => setMobileNavOpen(true)}
+                onClick={() => {
+                    setMobileNavOpen(true)
+                }}
             >
                 <Icons.burgher className="text-white" />
             </button>
