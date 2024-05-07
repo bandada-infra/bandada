@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react"
 import { AppContainer } from "@/components/AppContainer"
 import { ArticleCard } from "@/components/cards/ArticleCard"
@@ -5,11 +7,12 @@ import { VideoCard } from "@/components/cards/VideoCard"
 import { Divider } from "@/components/elements/Divider"
 import { Label } from "@/components/elements/Label"
 import { ShowMore } from "@/components/ShowMore"
-import { ARTICLES } from "@/content/articles"
 import { LABELS } from "@/content/pages/label"
-import { VIDEOS } from "@/content/videos"
+import useContent from "@/hooks/useContent"
 
-export default async function LearnPage() {
+export default function LearnPage() {
+    const { articles, videos } = useContent()
+
     return (
         <div className="flex flex-col">
             <div className="bg-classic-rose-100 py-28">
@@ -47,7 +50,7 @@ export default async function LearnPage() {
                             {LABELS.LEARN.VIDEOS}
                         </h3>
                         <ShowMore className="grid grid-cols-1 gap-x-[30px] gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-                            {VIDEOS.map((video, index) => (
+                            {videos.map((video, index) => (
                                 <VideoCard key={index} {...video} />
                             ))}
                         </ShowMore>
@@ -57,7 +60,7 @@ export default async function LearnPage() {
                             {LABELS.LEARN.ARTICLES}
                         </h3>
                         <ShowMore className="grid grid-cols-1 gap-x-[30px] gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-                            {ARTICLES.map((article, index) => (
+                            {articles.map((article, index) => (
                                 <ArticleCard key={index} {...article} />
                             ))}
                         </ShowMore>
