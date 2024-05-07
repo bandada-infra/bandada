@@ -17,7 +17,7 @@ function VideoCard({ title, thumbnail, url = "#" }: VideoProps) {
             >
                 <div className="p-6">
                     <div className="flex flex-col gap-5">
-                        <div className="min-h-[116px]">
+                        <div className="min-h-[84px] max-h-[84px] truncate ">
                             <span className=" line-clamp-4 text-baltic-sea-50 font-dm-sans font-bold text-xl">
                                 {title}
                             </span>
