@@ -4,7 +4,7 @@ import {
     PROJECT_ITEMS,
     ProjectCategory,
     ProjectSource
-} from "@/labels/projects"
+} from "@/shared/data/projects"
 
 export default function useProjects() {
     const [source, setSource] = useState<ProjectSource | undefined>()

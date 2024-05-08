@@ -9,7 +9,8 @@ const config: Config = {
     theme: {
         extend: {
             padding: {
-                30: "120px"
+                30: "120px",
+                15: "60px"
             },
             backgroundImage: {
                 "gradient-bandada":
@@ -26,6 +27,7 @@ const config: Config = {
                 "dm-sans": ["DM Sans", "sans-serif"]
             },
             colors: {
+                black: "#131313",
                 "baltic-sea": {
                     50: "#F8F7F8",
                     100: "#F6EDF4",

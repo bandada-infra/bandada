@@ -27,8 +27,8 @@ const ButtonComponent = classed(ButtonBase, {
 
 const IconPositionMapping: Record<Position, string> = {
     top: "flex flex-col items-center",
-    right: "flex flex-row-reverse gap-1 items-center",
-    bottom: "flex flex-col-reverse gap-1 items-center",
+    right: "flex flex-row-reverse gap-[10px] items-center",
+    bottom: "flex flex-col-reverse gap-[10px] items-center",
     left: "flex items-center gap-1"
 }
 
@@ -37,12 +37,24 @@ type ButtonProps = React.ComponentProps<typeof ButtonComponent> & {
     iconPosition?: Position
 }
 
+const DEFAULT_ICON_POSITION: Position = "left"
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     (props, ref) => {
-        const { icon, children, iconPosition = "right", ...rest } = props
+        const {
+            icon,
+            children,
+            iconPosition = DEFAULT_ICON_POSITION,
+            ...rest
+        } = props
         return (
             <ButtonComponent {...rest} ref={ref}>
-                <div className={IconPositionMapping[iconPosition ?? "right"]}>
+                <div
+                    className={
+                        IconPositionMapping[
+                            iconPosition ?? DEFAULT_ICON_POSITION
+                        ]
+                    }
+                >
                     {icon}
                     <span>{children}</span>
                 </div>

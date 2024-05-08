@@ -46,8 +46,7 @@ export const PROJECT_ITEMS: Project[] = [
     },
     {
         name: "Project y",
-        tagline:
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime asperiores illo, quas cum non saepe at inventore quod laborum nemo.",
+        tagline: "Lorem ipsum dolor sit, ",
         description: "Project description",
         pse: false,
         categories: ["infra", "nft"],

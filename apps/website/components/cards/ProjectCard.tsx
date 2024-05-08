@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Project } from "@/labels/projects"
+import { Project } from "@/shared/data/projects"
 import { Card } from "./Card"
 import { Tag } from "../elements/Tag"
 import { Icons } from "../elements/Icons"
@@ -10,10 +10,10 @@ const ProjectLinkIconMapping: Record<string, any> = {
     discord: Icons.discord
 }
 
-function ProjectCard({ name, tagline, categories, links }: Project) {
+export function ProjectCard({ name, tagline, categories, links }: Project) {
     return (
         <Card.Base
-            className="relative group flex flex-col gap-12 border-[3px] cursor-pointer hover:border-sunset-orange-500 duration-200 ease-in-out"
+            className="relative group flex flex-col gap-12 border-[3px] hover:border-sunset-orange-500 ease-in-out"
             variant="classic"
             padding="xs"
         >
@@ -24,12 +24,14 @@ function ProjectCard({ name, tagline, categories, links }: Project) {
                     ))}
                 </div>
                 <div className="flex flex-col gap-3">
-                    <h3 className="text-[20px] text-baltic-sea-950 font-unbounded font-normal">
+                    <h3 className="text-xl leading-6 text-baltic-sea-950 font-unbounded font-normal line-clamp-1">
                         {name}
                     </h3>
-                    <p className="text-baltic-sea-600 text-sm tracking-[0.14px] font-dm-sans">
-                        {tagline}
-                    </p>
+                    <div className="min-h-16">
+                        <p className="text-baltic-sea-600 text-sm tracking-[0.14px] font-dm-sans leading-5 line-clamp-3">
+                            {tagline}
+                        </p>
+                    </div>
                 </div>
                 <div className="z-10  ml-auto flex items-center gap-2">
                     {Object.entries(links ?? {}).map(([key, url]) => {
@@ -45,6 +47,3 @@ function ProjectCard({ name, tagline, categories, links }: Project) {
         </Card.Base>
     )
 }
-
-ProjectCard.displayName = "ProjectCard"
-export { ProjectCard }

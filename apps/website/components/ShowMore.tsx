@@ -39,7 +39,7 @@ function ShowMore({ children, className, defaultItemsToShow }: ShowMoreProps) {
                     color="black"
                     size="xs"
                     icon={
-                        <Icons.arrowDown
+                        <Icons.ArrowDown
                             className={cn("duration-200", {
                                 "transform rotate-180": isOpen
                             })}

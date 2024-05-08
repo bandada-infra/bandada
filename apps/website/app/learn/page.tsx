@@ -7,14 +7,12 @@ import { VideoCard } from "@/components/cards/VideoCard"
 import { Divider } from "@/components/elements/Divider"
 import { Label } from "@/components/elements/Label"
 import { ShowMore } from "@/components/ShowMore"
-import { LABELS } from "@/labels/pages/label"
 import useContent from "@/hooks/useContent"
-// import * as learnPage from "@/content/learnPage.md"
+import { Accordion } from "@/components/elements/Accordion"
+import { LABELS } from "@/shared/labels"
 
 export default function LearnPage() {
     const { articles, videos } = useContent()
-
-    //  console.log(learnPage)
 
     return (
         <div className="flex flex-col">
@@ -38,10 +36,19 @@ export default function LearnPage() {
                         </Label.Paragraph>
                     </div>
                     <Divider.Bird />
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-6">
                         <Label.ParagraphTitle>
                             {LABELS.LEARN.KEY_CONCEPTS.TITLE}
                         </Label.ParagraphTitle>
+                        <div className="flex flex-col divide-baltic-sea-300 divide-y">
+                            {LABELS.LEARN.ITEMS.map(
+                                ({ TITLE, DESCRIPTION }, index) => (
+                                    <Accordion key={index} label={TITLE}>
+                                        {DESCRIPTION}
+                                    </Accordion>
+                                )
+                            )}
+                        </div>
                     </div>
                 </AppContainer>
             </div>

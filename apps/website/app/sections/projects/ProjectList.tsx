@@ -10,7 +10,7 @@ import {
     ProjectCategories,
     ProjectSource,
     ProjectsSources
-} from "@/labels/projects"
+} from "@/shared/data/projects"
 import useProjects from "@/hooks/useProjects"
 
 const ProjectSourceMapping: Record<
