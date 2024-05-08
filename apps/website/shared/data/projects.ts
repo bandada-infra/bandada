@@ -33,75 +33,55 @@ export type ProjectSource = (typeof ProjectsSources)[number]
 
 export const PROJECT_ITEMS: Project[] = [
     {
-        name: "Project x",
-        tagline:
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime asperiores illo, quas cum non saepe at inventore quod laborum nemo.",
-        description: "Project description",
+        name: "p0tion",
+        tagline: "Toolkit for Groth16 Phase 2 Trusted Setup ceremonies",
         pse: true,
-        categories: ["climate", "nft", "iot"],
+        categories: ["anti-sybil", "trusted setup"],
         links: {
-            website: "https://example.com",
-            discord: "https://discord.com"
+            website: "https://pse.dev/en/projects/p0tion",
+            github: "https://github.com/privacy-scaling-explorations/p0tion"
         }
     },
     {
-        name: "Project y",
-        tagline: "Lorem ipsum dolor sit, ",
-        description: "Project description",
+        name: "Discreetly",
+        tagline: "An anonymous, federated, chat application using ZK",
+        pse: true,
+        categories: ["chat", "private", "anonymous"],
+        links: {
+            website: "https://app.discreetly.chat/",
+            github: "https://github.com/Discreetly"
+        }
+    },
+    {
+        name: "0x2FA",
+        tagline: "Privacy Preserving 2FA W/ A Novel Multisig",
         pse: false,
-        categories: ["infra", "nft"],
+        categories: ["multisig", "privacy", "security"],
         links: {
-            website: "https://example.com",
-            discord: "https://discord.com"
+            website:
+                "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/cluz0xnnj013uz301nfa9uj4g/idea",
+            github: "https://github.com/0x2fa-org/0x2fa"
         }
     },
     {
-        name: "Project z",
-        tagline:
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime asperiores illo, quas cum non saepe at inventore quod laborum nemo.",
-        description: "Project description",
-        pse: true,
-        categories: ["data", "indentity"],
-        links: {
-            website: "https://example.com",
-            discord: "https://discord.com"
-        }
-    },
-    {
-        name: "Project x",
-        tagline:
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime asperiores illo, quas cum non saepe at inventore quod laborum nemo.",
-        description: "Project description",
-        pse: true,
-        categories: ["climate", "nft", "iot"],
-        links: {
-            website: "https://example.com",
-            discord: "https://discord.com"
-        }
-    },
-    {
-        name: "Project y",
-        tagline:
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime asperiores illo, quas cum non saepe at inventore quod laborum nemo.",
-        description: "Project description",
+        name: "BrickWall",
+        tagline: "Web3 company reviews platform with privacy-preserving groups",
         pse: false,
-        categories: ["infra", "nft"],
+        categories: ["review", "feedback", "privacy"],
         links: {
-            website: "https://example.com",
-            discord: "https://discord.com"
+            website:
+                "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/clux971fz00nuvq01mh9g5phl/idea"
         }
     },
     {
-        name: "Project z",
+        name: "B-Hook",
         tagline:
-            "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime asperiores illo, quas cum non saepe at inventore quod laborum nemo.",
-        description: "Project description",
-        pse: true,
-        categories: ["data", "indentity"],
+            "Create content, get community feedback and build innovative NFT-backed privacy",
+        pse: false,
+        categories: ["feedback", "community", "nft", "privacy"],
         links: {
-            website: "https://example.com",
-            discord: "https://discord.com",
-            github: "https://github.com"
+            website:
+                "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/cluz8gb2701a9z301ptjuvhlo/idea"
         }
     }
 ]

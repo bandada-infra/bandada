@@ -9,7 +9,11 @@
     },
     "dependencies": {
         "@headlessui/react": "^1.7.18",
+        "@mdx-js/loader": "^3.0.1",
+        "@mdx-js/react": "^3.0.1",
+        "@next/mdx": "^14.2.3",
         "@tw-classed/react": "^1.7.0",
+        "@types/mdx": "^2.0.13",
         "clsx": "^2.1.0",
         "framer-motion": "^11.0.12",
         "gray-matter": "^4.0.3",

@@ -3,7 +3,7 @@ import React, { forwardRef, ReactNode } from "react"
 
 const TagBase = classed.div("cursor-pointer font-dm-sans border duration-200", {
     variants: {
-        color: {
+        variant: {
             primary:
                 "bg-classic-rose-50 border-classic-rose-900 text-classic-rose-900",
             secondary:
@@ -11,7 +11,7 @@ const TagBase = classed.div("cursor-pointer font-dm-sans border duration-200", {
         }
     },
     defaultVariants: {
-        color: "primary"
+        variant: "primary"
     }
 })
 

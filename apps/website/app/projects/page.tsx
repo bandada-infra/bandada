@@ -13,7 +13,7 @@ function Illustration() {
     return (
         <AppContainer className="relative h-[270px]">
             <Image
-                src="/birds/birds-projects.svg"
+                src="/illustrations/birds-projects.svg"
                 alt="birds illustrations"
                 className="absolute translate-x-16 z-[2] translate-y-2/3 -top-12 md:translate-y-4 md:top-0 md:translate-x-full"
                 height={211}
@@ -21,7 +21,7 @@ function Illustration() {
             />
             <Image
                 className="absolute inset-0 md:relative flex mx-auto top-1/2 -translate-y-1/2 -translate-x-32 md:-translate-x-60 "
-                src="/illustrations/project-page.svg"
+                src="/illustrations/clouds-projects.svg"
                 height={96}
                 width={520}
                 alt="projects banner"

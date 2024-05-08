@@ -1,13 +1,11 @@
 import { BUILD_PAGE_LABELS } from "./buildPage.labels"
 import { HOMEPAGE_LABELS } from "./homepage"
-import { LEARN_PAGE_LABELS } from "./learnPage.labels"
 import { PROJECTS_PAGE_LABELS } from "./projectsPage.labels"
 
 export const LABELS = {
     HOMEPAGE: HOMEPAGE_LABELS,
     BUILD: BUILD_PAGE_LABELS,
     PROJECTS: PROJECTS_PAGE_LABELS,
-    LEARN: LEARN_PAGE_LABELS,
     COMMON: {
         VIEW_MORE: "View more",
         SUBMIT_PROJECT: "Submit your project",
