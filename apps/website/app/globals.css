@@ -30,3 +30,7 @@ body {
         text-wrap: balance;
     }
 }
+
+.markdown-image {
+    max-width: unset !important;
+}
