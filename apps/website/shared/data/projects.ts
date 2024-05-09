@@ -9,26 +9,6 @@ export type Project = {
 }
 
 export const ProjectsSources = ["pse", "community"] as const
-export const ProjectCategories = [
-    "education",
-    "social",
-    "identity",
-    "coordination",
-    "autenticity",
-    "nft",
-    "trust",
-    "iot",
-    "ticketing",
-    "interoperability",
-    "data",
-    "whistleblowing",
-    "voting",
-    "climate",
-    "health",
-    "infra"
-] as const
-
-export type ProjectCategory = (typeof ProjectCategories)[number]
 export type ProjectSource = (typeof ProjectsSources)[number]
 
 export const PROJECT_ITEMS: Project[] = [
@@ -36,7 +16,7 @@ export const PROJECT_ITEMS: Project[] = [
         name: "p0tion",
         tagline: "Toolkit for Groth16 Phase 2 Trusted Setup ceremonies",
         pse: true,
-        categories: ["anti-sybil", "trusted setup"],
+        categories: ["anti-sybil", "trusted setup", "demo"],
         links: {
             website: "https://pse.dev/en/projects/p0tion",
             github: "https://github.com/privacy-scaling-explorations/p0tion"

@@ -1,17 +1,20 @@
 import { useState } from "react"
 import { arrayToggle } from "@/common/utils"
-import {
-    PROJECT_ITEMS,
-    ProjectCategory,
-    ProjectSource
-} from "@/shared/data/projects"
+import { PROJECT_ITEMS, ProjectSource } from "@/shared/data/projects"
 
 export default function useProjects() {
     const [source, setSource] = useState<ProjectSource | undefined>()
 
-    const [categories, setCategories] = useState<ProjectCategory[]>([])
+    const categoriesFromProjects = PROJECT_ITEMS.reduce<string[]>(
+        (acc, project) => [...acc, ...(project.categories ?? [])],
+        []
+    )
+    // unique categories
+    const projectCategories = Array.from(new Set(categoriesFromProjects))
 
-    const handleCategory = (category: ProjectCategory) => {
+    const [categories, setCategories] = useState<string[]>([])
+
+    const handleCategory = (category: string) => {
         setCategories(arrayToggle(categories, category))
     }
 
@@ -38,6 +41,7 @@ export default function useProjects() {
         categories,
         projects,
         handleCategory,
-        handleSource
+        handleSource,
+        projectCategories
     }
 }

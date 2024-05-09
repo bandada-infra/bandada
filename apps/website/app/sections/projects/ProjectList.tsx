@@ -4,12 +4,7 @@ import { Card } from "@/components/cards/Card"
 import { ProjectCard } from "@/components/cards/ProjectCard"
 import { Icons } from "@/components/elements/Icons"
 import { Tag } from "@/components/elements/Tag"
-import {
-    Project,
-    ProjectCategories,
-    ProjectSource,
-    ProjectsSources
-} from "@/shared/data/projects"
+import { Project, ProjectSource, ProjectsSources } from "@/shared/data/projects"
 import useProjects from "@/hooks/useProjects"
 import { LABELS } from "@/shared/labels"
 
@@ -60,8 +55,14 @@ function ProjectResults({ projects, noResult }: ProjectResultsProps) {
     )
 }
 function ProjectList() {
-    const { projects, handleSource, source, categories, handleCategory } =
-        useProjects()
+    const {
+        projects,
+        handleSource,
+        source,
+        categories,
+        handleCategory,
+        projectCategories
+    } = useProjects()
     const noResult =
         projects.length === 0 && (source !== undefined || categories.length > 0)
 
@@ -97,7 +98,7 @@ function ProjectList() {
                     {LABELS.COMMON.CATEGORY}
                 </Card.Title>
                 <div className="flex flex-wrap gap-3">
-                    {ProjectCategories.map((category, index) => {
+                    {projectCategories.map((category, index) => {
                         const isActive = categories.includes(category)
                         return (
                             <Tag
