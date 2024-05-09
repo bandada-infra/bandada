@@ -11,7 +11,7 @@ import { Section } from "@/components/typography/Section"
 
 function Illustration() {
     return (
-        <AppContainer className="relative h-[270px]">
+        <AppContainer className="relative h-[270px] overflow-x-hidden">
             <Image
                 src="/illustrations/birds-projects.svg"
                 alt="birds illustrations"
@@ -44,6 +44,8 @@ export default function ProjectsPage() {
                             </Section.Description>
                         </div>
                     </div>
+                </AppContainer>
+                <AppContainer margins="sm">
                     <ProjectList />
                 </AppContainer>
             </div>

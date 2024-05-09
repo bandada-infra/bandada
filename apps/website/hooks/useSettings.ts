@@ -8,6 +8,7 @@ export default function useSettings() {
     const [isMobile, setIsMobile] = useState(false)
     const [isTablet, setIsTablet] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false)
+    const [clientHeight, setClientHeight] = useState(0)
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -15,12 +16,14 @@ export default function useSettings() {
             setIsMobile(md.current?.mobile() !== null)
             setIsTablet(md.current?.tablet() !== null)
             setIsLoaded(true)
+            setClientHeight(window?.document?.documentElement?.clientHeight)
         }
     }, [])
 
     return {
         isMobile,
         isTablet,
-        isLoaded
+        isLoaded,
+        clientHeight
     }
 }

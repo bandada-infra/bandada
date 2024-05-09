@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { classed } from "@tw-classed/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Icons } from "./elements/Icons"
 import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
 import { Button } from "./elements/Button"
@@ -12,6 +12,7 @@ import { Label } from "./elements/Label"
 import { Divider } from "./elements/Divider"
 import { AppContainer } from "./AppContainer"
 import { LABELS } from "@/shared/labels"
+import useSettings from "@/hooks/useSettings"
 
 const LinkItem = classed.div(
     "relative flex items-center text-base font-dm-sans duration-300 tracking-[0.16px]",
@@ -30,6 +31,19 @@ const LinkItem = classed.div(
 
 function MobileNav() {
     const [isMobileNavOpen, setMobileNavOpen] = useState(false)
+    const { clientHeight } = useSettings()
+
+    // prevent scrolling of body element when mobile nav is open
+    useEffect(() => {
+        if (!isMobileNavOpen) {
+            document.body.style.overflow = "auto"
+            document.body.style.height = "auto"
+        } else {
+            document.body.style.overflow = "hidden"
+            document.body.style.height = `${clientHeight}px`
+        }
+    }, [clientHeight, isMobileNavOpen])
+
     return (
         <div className="flex items-center lg:hidden">
             <button

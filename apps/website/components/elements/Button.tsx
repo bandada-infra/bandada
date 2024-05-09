@@ -3,15 +3,16 @@ import React, { forwardRef } from "react"
 
 type Position = "top" | "right" | "bottom" | "left"
 const ButtonBase = classed.button(
-    "relative font-dm-sans font-medium self-start rounded-lg duration-200 ease-in-out"
+    "relative font-dm-sans font-medium self-start rounded-lg duration-200 ease-in-out disabled:cursor-not-allowed"
 )
 
 const ButtonComponent = classed(ButtonBase, {
     variants: {
         color: {
-            primary: "bg-gradient-bandada text-baltic-sea-50 hover:opacity-80",
-            black: "bg-baltic-sea-950 text-baltic-sea-100",
-            white: "bg-baltic-sea-100 text-baltic-sea-800",
+            primary:
+                "bg-gradient-bandada text-baltic-sea-50 hover:opacity-80 disabled:text-baltic-sea-50/50",
+            black: "bg-baltic-sea-950 text-baltic-sea-100 disabled:text-baltic-sea-100/50",
+            white: "bg-baltic-sea-100 text-baltic-sea-800 disabled:text-baltic-sea-800/50",
             link: "bg-transparent text-baltic-sea-300 hover:text-classic-rose-300 after:content-[''] after:absolute after:hover:bg-classic-rose-300 after:bottom-0 after:left-0 after:h-[1px] after:w-full after:bg-baltic-sea-300 !p-0"
         },
         size: {
