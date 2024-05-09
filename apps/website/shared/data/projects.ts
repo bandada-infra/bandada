@@ -78,7 +78,7 @@ export const PROJECT_ITEMS: Project[] = [
         tagline:
             "Create content, get community feedback and build innovative NFT-backed privacy",
         pse: false,
-        categories: ["feedback", "community", "nft", "privacy"],
+        categories: ["feedback", "nft", "privacy"],
         links: {
             website:
                 "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/cluz8gb2701a9z301ptjuvhlo/idea"

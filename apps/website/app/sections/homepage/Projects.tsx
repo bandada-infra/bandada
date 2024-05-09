@@ -1,10 +1,15 @@
+"use client"
+
 import Link from "next/link"
+import Glider from "react-glider"
 import { AppContainer } from "@/components/AppContainer"
 import { ProjectCard } from "@/components/cards/ProjectCard"
 import { Button } from "@/components/elements/Button"
 import { Label } from "@/components/elements/Label"
 import { PROJECT_ITEMS } from "@/shared/data/projects"
 import { LABELS } from "@/shared/labels"
+
+import "glider-js/glider.min.css"
 
 export function Projects() {
     return (
@@ -13,11 +18,29 @@ export function Projects() {
                 <Label.Section color="white" size="xs" className="text-center">
                     {LABELS.HOMEPAGE.PROJECTS.TITLE}
                 </Label.Section>
-                <div className="grid gap-8 lg:grid-cols-3">
-                    {PROJECT_ITEMS.slice(0, 3).map((project, index) => (
-                        <ProjectCard key={index} {...project} />
-                    ))}
+
+                <div>
+                    <Glider
+                        draggable
+                        slidesToShow={1.1}
+                        slidesToScroll={1}
+                        responsive={[
+                            {
+                                breakpoint: 768,
+                                settings: {
+                                    slidesToShow: 3.3
+                                }
+                            }
+                        ]}
+                    >
+                        {PROJECT_ITEMS.map((project, index) => (
+                            <div className="pr-8" key={index}>
+                                <ProjectCard key={index} {...project} />
+                            </div>
+                        ))}
+                    </Glider>
                 </div>
+
                 <Link href="/projects" className="mx-auto">
                     <Button color="link">{LABELS.COMMON.VIEW_MORE}</Button>
                 </Link>

@@ -28,7 +28,7 @@ export function ProjectCard({ name, tagline, categories, links }: Project) {
                         {name}
                     </h3>
                     <div className="min-h-16">
-                        <p className="text-baltic-sea-600 text-sm tracking-[0.14px] font-dm-sans leading-5 line-clamp-3">
+                        <p className="text-baltic-sea-600 text-sm tracking-[0.14px] font-dm-sans leading-5 line-clamp-2">
                             {tagline}
                         </p>
                     </div>
