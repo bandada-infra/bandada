@@ -14503,7 +14503,7 @@ __metadata:
     "@types/react": "npm:^18.0.27"
     "@types/react-dom": "npm:^18.0.10"
     "@vitejs/plugin-react": "npm:^4.2.1"
-    ethers: "npm:^6.11.1"
+    ethers: "npm:6.11.1"
     framer-motion: "npm:^10.0.1"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
