@@ -9,6 +9,7 @@ export default function useSettings() {
     const [isTablet, setIsTablet] = useState(false)
     const [isLoaded, setIsLoaded] = useState(false)
     const [clientHeight, setClientHeight] = useState(0)
+    const [clientWidth, setClientWidth] = useState(0)
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -17,6 +18,7 @@ export default function useSettings() {
             setIsTablet(md.current?.tablet() !== null)
             setIsLoaded(true)
             setClientHeight(window?.document?.documentElement?.clientHeight)
+            setClientWidth(window?.document?.documentElement?.clientWidth)
         }
     }, [])
 
@@ -24,6 +26,7 @@ export default function useSettings() {
         isMobile,
         isTablet,
         isLoaded,
-        clientHeight
+        clientHeight,
+        clientWidth
     }
 }
