@@ -10,15 +10,22 @@ const ProjectLinkIconMapping: Record<string, any> = {
     discord: Icons.discord
 }
 
-export function ProjectCard({ name, tagline, categories, links }: Project) {
+interface ProjectCardProps extends Project {}
+
+export function ProjectCard({
+    name,
+    tagline,
+    categories,
+    links
+}: ProjectCardProps) {
     return (
         <Card.Base
-            className="relative group flex flex-col gap-12 border-[3px] hover:border-sunset-orange-500 ease-in-out"
+            className="relative group flex flex-col gap-12 border-[3px] md:hover:border-sunset-orange-500 ease-in-out"
             variant="classic"
             padding="xs"
         >
             <div className="flex flex-col gap-[30px] ">
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex gap-2 flex-wrap min-h-[50px] md:min-h-[25px]">
                     {categories?.map((category) => (
                         <Tag key={category}>{category}</Tag>
                     ))}

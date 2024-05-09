@@ -12,7 +12,10 @@ export function Intro() {
                             {LABELS.HOMEPAGE.INTRO.TITLE}
                         </Section.Title>
                     </div>
-                    <Section.Description subtitle>
+                    <Section.Description
+                        className="inline-flex break-words"
+                        subtitle
+                    >
                         {LABELS.HOMEPAGE.INTRO.DESCRIPTION}
                     </Section.Description>
                 </AppContainer>

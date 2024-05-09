@@ -17,7 +17,7 @@ const TagBase = classed.div("cursor-pointer font-dm-sans border duration-200", {
 
 const TagComponentRounded = classed.div(
     TagBase,
-    "py-[2px] px-2 tracking-[0.26px] text-[13px] rounded-full"
+    "py-[2px] px-2 tracking-[0.26px] text-[13px] rounded-full max-h-[25px]"
 )
 
 const TagComponentSquare = classed.div(
