@@ -73,11 +73,11 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
-    Bird: ({ size, width, height, ...props }: IconsProps) => (
+    Bird: ({ size, width = 15, height = 20, ...props }: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width={size || width || 15}
-            height={size || height || 20}
+            width={size || width}
+            height={size || height}
             viewBox="0 0 15 20"
             fill="none"
             {...props}

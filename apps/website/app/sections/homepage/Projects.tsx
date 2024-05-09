@@ -21,9 +21,9 @@ export function Projects() {
     useEffect(() => {
         if (clientWidth === 0) return
         // spacer distance to match starting position as AppContainer
-        const containerWidth = ref.current?.clientWidth ?? 0
+        const containerWidth = ref.current?.clientWidth ?? 64
 
-        const sliderSpacer = (clientWidth - containerWidth) / 2
+        const sliderSpacer = (clientWidth - containerWidth) / 2 || 32
 
         const element = refSlider.current.ele.querySelector(".glider-track")
         if (!element) return

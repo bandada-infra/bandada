@@ -26,13 +26,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {children}
             </a>
         ),
-        img: ({ alt, src, ...props }) => (
-            <img
-                alt={alt}
-                src={src}
-                className="w-full md:!w-2/3 h-auto"
-                {...props}
-            />
+        img: ({ alt, src, height, ...props }) => (
+            <img {...props} alt={alt} src={src} />
         ),
         p: ({ children }) => (
             <span className="!block !pb-3 text-base leading-6 font-normal text-baltic-sea-800 md:leading-[27px] md:tracking-[0.18px] md:text-lg">
