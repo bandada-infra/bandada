@@ -29,7 +29,11 @@ function AppFooter() {
                         <MenuWrapper>
                             {MENU_ITEMS.map(
                                 ({ label, href, external }, index) => (
-                                    <Link href={href} key={index}>
+                                    <Link
+                                        href={href}
+                                        key={index}
+                                        target={external ? "_blank" : undefined}
+                                    >
                                         <Label.MenuItem className="flex items-center">
                                             {label}
 
@@ -46,7 +50,11 @@ function AppFooter() {
                                 ({ label, href, icon }, index) => {
                                     const Icon: any = icon
                                     return (
-                                        <Link key={index} href={href}>
+                                        <Link
+                                            key={index}
+                                            href={href}
+                                            target="_blank"
+                                        >
                                             <Label.MenuItem
                                                 key={index}
                                                 className="flex items-center"
