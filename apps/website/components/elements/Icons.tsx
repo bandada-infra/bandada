@@ -1,5 +1,7 @@
 interface IconsProps {
     size?: number
+    width?: number
+    height?: number
 }
 
 export const Icons: Record<string, any> = {
@@ -69,6 +71,34 @@ export const Icons: Record<string, any> = {
                 d="M20.584 11.9166C21.1823 11.9166 21.6673 12.4017 21.6673 13C21.6673 13.5555 21.2491 14.0134 20.7103 14.076L20.584 14.0833H5.41732C4.81901 14.0833 4.33398 13.5983 4.33398 13C4.33398 12.4444 4.75219 11.9865 5.29098 11.9239L5.41732 11.9166H20.584Z"
                 fill="currentColor"
             />
+        </svg>
+    ),
+    Bird: ({ size, width, height, ...props }: IconsProps) => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size || width || 15}
+            height={size || height || 20}
+            viewBox="0 0 15 20"
+            fill="none"
+            {...props}
+        >
+            <path
+                d="M0.500001 7.29974L4.59025 8.89783L6.21993 7.48265L4.46163 -4.38791e-07L10.0768 2.19255C10.0768 2.19255 11.348 7.63694 11.7341 8.69516L12.9271 8.93951L14.5 10.0744L12.9591 11.1576L11.773 11.3853C11.094 13.6166 10.2926 17.12 10.2926 17.12L4.75072 20L6.30075 13.0742L4.62743 11.4704L0.5 13.0742L0.500001 7.29974Z"
+                fill="url(#paint0_linear_285_3329)"
+            />
+            <defs>
+                <linearGradient
+                    id="paint0_linear_285_3329"
+                    x1="14.5"
+                    y1="3.2"
+                    x2="12.1975"
+                    y2="20.0029"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop stopColor="#FF5242" />
+                    <stop offset="1" stopColor="#EB179B" />
+                </linearGradient>
+            </defs>
         </svg>
     ),
     burgher: (props: IconsProps) => (
@@ -222,34 +252,6 @@ export const Icons: Record<string, any> = {
                     y1="2"
                     x2="22.8214"
                     y2="3.66747"
-                    gradientUnits="userSpaceOnUse"
-                >
-                    <stop stopColor="#FF5242" />
-                    <stop offset="1" stopColor="#EB179B" />
-                </linearGradient>
-            </defs>
-        </svg>
-    ),
-    bird: (props: IconsProps) => (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={props?.size || 15}
-            height={props?.size || 20}
-            viewBox="0 0 15 20"
-            fill="none"
-            {...props}
-        >
-            <path
-                d="M0.500001 7.29974L4.59025 8.89783L6.21993 7.48265L4.46163 -4.38791e-07L10.0768 2.19255C10.0768 2.19255 11.348 7.63694 11.7341 8.69516L12.9271 8.93951L14.5 10.0744L12.9591 11.1576L11.773 11.3853C11.094 13.6166 10.2926 17.12 10.2926 17.12L4.75072 20L6.30075 13.0742L4.62743 11.4704L0.5 13.0742L0.500001 7.29974Z"
-                fill="url(#paint0_linear_285_3329)"
-            />
-            <defs>
-                <linearGradient
-                    id="paint0_linear_285_3329"
-                    x1="14.5"
-                    y1="3.2"
-                    x2="12.1975"
-                    y2="20.0029"
                     gradientUnits="userSpaceOnUse"
                 >
                     <stop stopColor="#FF5242" />

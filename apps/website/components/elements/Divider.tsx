@@ -4,7 +4,7 @@ import { Icons } from "./Icons"
 function Bird() {
     return (
         <div className="flex justify-center py-10 w-full">
-            <Icons.bird width={30} height={44} />
+            <Icons.Bird width={30} height={44} />
         </div>
     )
 }

@@ -4,9 +4,9 @@ import { classed } from "@tw-classed/react"
 import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
 import { Icons } from "./elements/Icons"
 import { Label } from "./elements/Label"
-import { LABELS } from "@/labels/pages/label"
 import { Divider } from "./elements/Divider"
 import { AppContainer } from "./AppContainer"
+import { LABELS } from "@/shared/labels"
 
 const MenuWrapper = classed.div(
     "flex flex-col items-center md:items-start gap-6 md:flex-row flex-wrap"
@@ -63,13 +63,13 @@ function AppFooter() {
                 </div>
                 <Divider.Line />
                 <div className="w-full flex gap-4 flex-col items-center md:justify-between md:flex-row">
-                    <span className="text-baltic-sea-600 text-[13px] font-normal tracking-[0.26px] font-sans order-2">
+                    <span className="text-baltic-sea-600 text-[13px] font-normal tracking-[0.26px] font-sans order-2 md:order-2">
                         {LABELS.FOOTER.COPYRIGHT}
                     </span>
                     <Link
                         href={LINKS.WEBSITE_FEEDBACK}
                         target="_blank"
-                        className="order-1 py-2"
+                        className="order-1 md:order-2 py-2"
                     >
                         <Label.MenuItem className="flex gap-2">
                             {LABELS.FOOTER.FEEDBACK}

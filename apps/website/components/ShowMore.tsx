@@ -2,10 +2,10 @@
 
 import { ReactNode, useState } from "react"
 import { Button } from "./elements/Button"
-import { LABELS } from "@/labels/pages/label"
 import { Icons } from "./elements/Icons"
 import { cn } from "@/common/utils"
 import useSettings from "@/hooks/useSettings"
+import { LABELS } from "@/shared/labels"
 
 const DEFAULT_ITEMS_TO_SHOW = 6
 interface ShowMoreProps {
@@ -24,6 +24,8 @@ function ShowMore({ children, className, defaultItemsToShow }: ShowMoreProps) {
         ? children
         : children.slice(0, defaultItemsToShow)
 
+    const canShowMore = children.length > defaultItemsToShow
+
     return (
         <div className="flex flex-col gap-14">
             <div className={className ?? ""}>
@@ -34,6 +36,7 @@ function ShowMore({ children, className, defaultItemsToShow }: ShowMoreProps) {
             <div className="relative flex">
                 <div className=" absolute h-[1px] w-full top-1/2 bg-baltic-sea-600" />
                 <Button
+                    disabled={!canShowMore}
                     onClick={() => setIsOpen(!isOpen)}
                     className="mx-auto border border-baltic-sea-800"
                     color="black"

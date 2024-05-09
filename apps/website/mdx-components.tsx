@@ -8,9 +8,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             <Section.Header className="text-center">{children}</Section.Header>
         ),
         h3: ({ children }) => (
-            <h4 className="text-2xl font-unbounded font-normal text-baltic-sea-950r">
+            <h3 className="text-xl leading-6 md:leading-[30px] md:text-[25px] font-unbounded font-normal text-baltic-sea-950">
                 {children}
-            </h4>
+            </h3>
         ),
         h6: ({ children }) => (
             <h6 className="text-lg leading-5 md:text-xl md:leading-6 font-unbounded font-normal text-baltic-sea-950 text-center">
@@ -35,7 +35,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             />
         ),
         p: ({ children }) => (
-            <span className="!block !pb-3 font-normal tracking-[0.16px] md:leading-[27px] md:tracking-[0.18px] md:text-lg">
+            <span className="!block !pb-3 text-base leading-6 font-normal text-baltic-sea-800 md:leading-[27px] md:tracking-[0.18px] md:text-lg">
                 {children}
             </span>
         )

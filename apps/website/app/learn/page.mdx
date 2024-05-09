@@ -4,16 +4,22 @@ import { Divider } from "@/components/elements/Divider"
 import { ArticlesAndVideos } from "./../sections/learn/ArticlesAndVideos"
 
 <div className="bg-classic-rose-100 py-30">
-    <AppContainer>
-        <div className="flex flex-col gap-6">
-            # Bandada: public goods infra
 
-            Bandada is a user-friendly platform allowing anyone to create and manage private groups of anonymous individuals without needing technical expertise. It supports various types of groups, both on and off-chain, and offers manual or automated management based on eligibility criteria. It serves a wide array of purposes, such as organizing organizational members, GitHub contributors, or NFT holders.
-
-            Bandada caters to **developers** with tools and APIs and **non-developers** with intuitive interfaces, enabling easy creation and management of anonymous groups for entities like DAOs, governments, and non-profits.
+    <div className="flex flex-col gap-10">
+        <div className="relative w-full py-4 overflow-x-hidden">
+            <img className="absolute min-w-[950px] left-[-390px] mx-auto w-auto md:left-[0px] md:relative" src="/illustrations/birds-learn.svg" alt="birds with cloud" fill/>
         </div>
+         <AppContainer >
+            <div className="flex flex-col gap-6">
+                # Bandada: public goods infra
 
-    </AppContainer>
+                Bandada is a user-friendly platform allowing anyone to create and manage private groups of anonymous individuals without needing technical expertise. It supports various types of groups, both on and off-chain, and offers manual or automated management based on eligibility criteria. It serves a wide array of purposes, such as organizing organizational members, GitHub contributors, or NFT holders.
+
+                Bandada caters to **developers** with tools and APIs and **non-developers** with intuitive interfaces, enabling easy creation and management of anonymous groups for entities like DAOs, governments, and non-profits.
+            </div>
+        </AppContainer>
+    </div>
+
     <Divider.Bird />
 
     <AppContainer>
@@ -39,13 +45,13 @@ import { ArticlesAndVideos } from "./../sections/learn/ArticlesAndVideos"
         ### Key concepts
         <div className="flex flex-col divide-baltic-sea-300 divide-y">
             <Accordion label="Group">
-                In the realm of privacy and zero-knowledge technologies, the concept of a group takes on a significant role. A group, in this context, is more than just a collection of individuals; it represents an anonymity set. This means that within the group, individual members' actions, characteristics, or identities become indistinguishable from one another, providing a way for individuals to engage in collective actions or share attributes without revealing specific information about themselves.
+                In the realm of privacy and zero-knowledge technologies, the concept of a group takes on a significant role. A group, in this context, is more than just a collection of individuals; it represents an **anonymity set**. This means that within the group, individual members' actions, characteristics, or identities become indistinguishable from one another, providing a way for individuals to engage in collective actions or share attributes without revealing specific information about themselves.
             </Accordion>
             <Accordion label="Anonimity VS. Pseudonymity">
-                In the realm of privacy and zero-knowledge technologies, the concept of a group takes on a significant role. A group, in this context, is more than just a collection of individuals; it represents an anonymity set. This means that within the group, individual members' actions, characteristics, or identities become indistinguishable from one another, providing a way for individuals to engage in collective actions or share attributes without revealing specific information about themselves.
+                Anonymity refers to the complete concealment of a user's identity, while pseudonymity allows users to interact under a consistent but “disguised” identity.
             </Accordion>
             <Accordion label="Credential">
-                In the realm of privacy and zero-knowledge technologies, the concept of a group takes on a significant role. A group, in this context, is more than just a collection of individuals; it represents an anonymity set. This means that within the group, individual members' actions, characteristics, or identities become indistinguishable from one another, providing a way for individuals to engage in collective actions or share attributes without revealing specific information about themselves.
+                A way to establish necessary trust between a set of participants by verifying certain attributes or qualifications of individuals, without necessarily revealing their _full_ identity and letting users keep control over how the data associated with their identities is stored, managed and used.
             </Accordion>
         </div>
     </AppContainer>

@@ -4,7 +4,6 @@ import { Card } from "@/components/cards/Card"
 import { ProjectCard } from "@/components/cards/ProjectCard"
 import { Icons } from "@/components/elements/Icons"
 import { Tag } from "@/components/elements/Tag"
-import { LABELS } from "@/labels/pages/label"
 import {
     Project,
     ProjectCategories,
@@ -12,6 +11,7 @@ import {
     ProjectsSources
 } from "@/shared/data/projects"
 import useProjects from "@/hooks/useProjects"
+import { LABELS } from "@/shared/labels"
 
 const ProjectSourceMapping: Record<
     ProjectSource,

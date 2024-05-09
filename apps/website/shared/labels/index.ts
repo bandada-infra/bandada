@@ -6,6 +6,10 @@ export const LABELS = {
     HOMEPAGE: HOMEPAGE_LABELS,
     BUILD: BUILD_PAGE_LABELS,
     PROJECTS: PROJECTS_PAGE_LABELS,
+    FOOTER: {
+        COPYRIGHT: "Copyright © 2023 Ethereum Foundation",
+        FEEDBACK: "Give feedback about the website"
+    },
     COMMON: {
         VIEW_MORE: "View more",
         SUBMIT_PROJECT: "Submit your project",
@@ -15,6 +19,7 @@ export const LABELS = {
         NO_RESULT: "No result found.",
         NO_RESULT_DESCRIPTION:
             "No projects matching these filters. Try changing your search.",
-        GET_INSPIRED: "Get inspired"
+        GET_INSPIRED: "Get inspired",
+        READ_TIME: "min read"
     }
 }

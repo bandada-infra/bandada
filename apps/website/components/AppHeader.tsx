@@ -9,17 +9,17 @@ import { Icons } from "./elements/Icons"
 import { LINKS, MENU_ITEMS, SOCIAL_LINKS } from "@/common/settings"
 import { Button } from "./elements/Button"
 import { Label } from "./elements/Label"
-import { LABELS } from "@/labels/pages/label"
 import { Divider } from "./elements/Divider"
 import { AppContainer } from "./AppContainer"
+import { LABELS } from "@/shared/labels"
 
 const LinkItem = classed.div(
-    "relative flex items-center gap-2 text-base font-dm-sans duration-300 p-2",
+    "relative flex items-center text-base font-dm-sans duration-300 tracking-[0.16px]",
     {
         variants: {
             active: {
-                true: "text-classic-rose-500 font-semibold",
-                false: "text-baltic-sea-50 font-medium"
+                true: "text-classic-rose-500 font-semibold py-2 pr-2",
+                false: "text-baltic-sea-50 hover:text-classic-rose-500 font-medium p-2"
             }
         },
         defaultVariants: {
@@ -143,7 +143,7 @@ function DesktopNav() {
     const pathname = usePathname()
     return (
         <>
-            <ul className="hidden lg:flex gap-1">
+            <ul className="hidden lg:flex gap-6">
                 {MENU_ITEMS.map(
                     ({ label, href, footerOnly, external }, index) => {
                         if (footerOnly) return null // this is a footer only item
@@ -158,15 +158,19 @@ function DesktopNav() {
                                 pathParts[0] === pathname.split("/")[1])
 
                         return (
-                            <LinkItem key={index} active={isActive}>
-                                <div className="flex items-center gap-1">
-                                    <div className="w-4 block">
-                                        {isActive && <Icons.bird />}
+                            <div className="flex items-center group">
+                                <LinkItem key={index} active={isActive}>
+                                    <div className="flex items-center gap-[6px]">
+                                        {isActive && (
+                                            <Icons.Bird className="w-4 block" />
+                                        )}
+                                        <Link href={href}>{label}</Link>
                                     </div>
-                                    <Link href={href}>{label}</Link>
-                                </div>
-                                {external && <Icons.ExternalLink />}
-                            </LinkItem>
+                                </LinkItem>
+                                {external && (
+                                    <Icons.ExternalLink className="duration-300 text-white group-hover:text-classic-rose-500" />
+                                )}
+                            </div>
                         )
                     }
                 )}

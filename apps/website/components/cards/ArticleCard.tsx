@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { LABELS } from "@/labels/pages/label"
 import { Card } from "./Card"
+import { LABELS } from "@/shared/labels"
 
 interface ArticleProps {
     title?: string
@@ -26,7 +26,7 @@ function ArticleCard({ title, url = "#", minRead = "0" }: ArticleProps) {
                     <p className="text-baltic-sea-500 h-5 font-dm-sans font-normal text-sm tracking-[0.14px]">
                         {minRead !== undefined && (
                             <>
-                                {minRead} {LABELS.ARTICLE.READ_TIME}
+                                {minRead} {LABELS.COMMON.READ_TIME}
                             </>
                         )}
                     </p>
