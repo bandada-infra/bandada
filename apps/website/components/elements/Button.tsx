@@ -17,7 +17,8 @@ const ButtonComponent = classed(ButtonBase, {
         },
         size: {
             xs: "text-xs tracking-[0.14px] py-[10px] px-4",
-            sm: "text-base tracking-[0.16px] px-4 py-2"
+            sm: "text-base tracking-[0.16px] px-4 py-2",
+            md: "text-lg tracking-[0.16px] px-5 py-3"
         }
     },
     defaultVariants: {

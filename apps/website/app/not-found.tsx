@@ -27,7 +27,7 @@ export default function NotFound() {
                     its name changed, or is temporarily unavailable.
                 </span>
                 <Link href="/">
-                    <Button>{LABELS.COMMON.GO_TO_HOME}</Button>
+                    <Button size="md">{LABELS.COMMON.GO_TO_HOME}</Button>
                 </Link>
             </AppContainer>
         </div>
