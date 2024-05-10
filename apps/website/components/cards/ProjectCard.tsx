@@ -1,3 +1,4 @@
+import { HTMLAttributes } from "react"
 import Link from "next/link"
 import { Project } from "@/shared/data/projects"
 import { Card } from "./Card"
@@ -10,17 +11,18 @@ const ProjectLinkIconMapping: Record<string, any> = {
     discord: Icons.discord
 }
 
-interface ProjectCardProps extends Project {}
+interface ProjectCardProps extends Project, HTMLAttributes<HTMLDivElement> {}
 
 export function ProjectCard({
     name,
     tagline,
     categories,
-    links
+    links,
+    className = ""
 }: ProjectCardProps) {
     return (
         <Card.Base
-            className="relative group flex flex-col gap-12 border-[3px] md:hover:border-sunset-orange-500 ease-in-out"
+            className={`relative group flex flex-col gap-12 border-[3px] md:hover:border-sunset-orange-500 ease-in-out ${className}`}
             variant="classic"
             padding="xs"
         >

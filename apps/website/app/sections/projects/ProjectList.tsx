@@ -34,7 +34,7 @@ function ProjectResults({ projects, noResult }: ProjectResultsProps) {
     if (noResult) {
         return (
             <Card.Base>
-                <div className="flex flex-col gap-[10px] p-8 md:p-0">
+                <div className="flex flex-col gap-[10px] md:p-0">
                     <Card.Title className="font-bold font-dm-sans text-center">
                         {LABELS.COMMON.NO_RESULT}
                     </Card.Title>

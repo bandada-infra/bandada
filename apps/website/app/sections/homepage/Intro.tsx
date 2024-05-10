@@ -65,7 +65,7 @@ export function Intro() {
     const { clientWidth, clientHeight, HEADER_SIZE } = useSettings()
     return (
         <div
-            className="relative overflow-x-hidden bg-gradient-purple-pink bg-blend-multiply mix-blend-color-burn bg-cover bg-center flex flex-col"
+            className="relative overflow-x-hidden bg-gradient-purple-pink bg-cover bg-center flex flex-col"
             style={{
                 minHeight: `${clientHeight - HEADER_SIZE}px`
             }}

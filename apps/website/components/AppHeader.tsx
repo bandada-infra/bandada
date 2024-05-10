@@ -64,7 +64,7 @@ function MobileNav() {
                 />
             )}
             {isMobileNavOpen && (
-                <div className="fixed gap-6 pt-6 px-4 overflow-hidden inset-y-0 right-0 z-10 flex w-full max-w-[420px] flex-col bg-baltic-sea-950 text-white">
+                <div className="fixed gap-4 pt-4 px-4 sm:gap-6 sm:pt-6 overflow-hidden inset-y-0 right-0 z-10 flex w-full max-w-[440px] flex-col bg-baltic-sea-950 text-white">
                     <div className="flex justify-end h-10 items-center">
                         <button
                             type="button"
@@ -75,7 +75,7 @@ function MobileNav() {
                         </button>
                     </div>
                     <div className="flex flex-col h-full">
-                        <div className="flex w-full flex-col items-center gap-5 text-base font-medium">
+                        <div className="flex w-full flex-col items-center gap-4 sm:gap-5 text-base font-medium">
                             <Link href={LINKS.LAUNCH_APP} target="_blank">
                                 <Button className="mx-auto">Launch App</Button>
                             </Link>
@@ -133,7 +133,7 @@ function MobileNav() {
                         </div>
                         <div className="flex flex-col gap-12 mt-auto overflow-hidden">
                             <Divider.Line className="mx-auto" />
-                            <div className="flex flex-col gap-4 mx-auto text-center mb-8">
+                            <div className="flex flex-col gap-2 sm:gap-4 mx-auto text-center mb-8">
                                 <Link
                                     href={LINKS.WEBSITE_FEEDBACK}
                                     target="_blank"

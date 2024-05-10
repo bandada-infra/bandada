@@ -23,8 +23,8 @@ const config: Config = {
                     "linear-gradient(102deg, rgba(207, 184, 249, 0.80) 8.33%, rgba(255, 204, 242, 0.80) 48.44%)"
             },
             fontFamily: {
-                unbounded: ["Unbounded", "sans-serif"],
-                "dm-sans": ["DM Sans", "sans-serif"]
+                "dm-sans": ["var(--font-sans)", "sans-serif"],
+                unbounded: ["var(--font-unbounded)", "sans-serif"]
             },
             colors: {
                 black: "#131313",

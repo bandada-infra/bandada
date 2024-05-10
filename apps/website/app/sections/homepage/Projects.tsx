@@ -47,7 +47,7 @@ export function Projects() {
                 <Glider
                     ref={refSlider}
                     draggable
-                    slidesToShow={1.1}
+                    slidesToShow={1.2}
                     slidesToScroll={1}
                     responsive={[
                         {
@@ -65,8 +65,12 @@ export function Projects() {
                     ]}
                 >
                     {PROJECT_ITEMS.map((project, index) => (
-                        <div className="pr-8" key={index}>
-                            <ProjectCard key={index} {...project} />
+                        <div className="pr-8 h-full" key={index}>
+                            <ProjectCard
+                                className="h-full"
+                                key={index}
+                                {...project}
+                            />
                         </div>
                     ))}
                 </Glider>

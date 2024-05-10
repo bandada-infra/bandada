@@ -1,11 +1,20 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { DM_Sans } from "next/font/google"
+import { DM_Sans, Unbounded } from "next/font/google"
 import { AppHeader } from "@/components/AppHeader"
 import { AppFooter } from "@/components/AppFooter"
 import { APP_SETTINGS } from "@/common/settings"
 
-const dmSans = DM_Sans({ subsets: ["latin"] })
+const dm_sans = DM_Sans({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-sans"
+})
+const undbounded = Unbounded({
+    subsets: ["latin"],
+    display: "swap",
+    variable: "--font-unbounded"
+})
 
 export const metadata: Metadata = {
     title: APP_SETTINGS.APP_TITLE,
@@ -33,7 +42,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${dmSans.className}`}>
+            <body
+                className={`${dm_sans.className} ${dm_sans.variable} ${undbounded.variable}`}
+            >
                 <AppHeader />
                 {children}
                 <AppFooter />
