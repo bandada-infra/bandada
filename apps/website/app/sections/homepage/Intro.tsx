@@ -62,9 +62,14 @@ function Clouds() {
 }
 
 export function Intro() {
-    const { clientWidth } = useSettings()
+    const { clientWidth, clientHeight, HEADER_SIZE } = useSettings()
     return (
-        <div className="relative overflow-x-hidden bg-gradient-purple-pink bg-blend-multiply mix-blend-color-burn bg-cover bg-center flex flex-col h-[90vh]">
+        <div
+            className="relative overflow-x-hidden bg-gradient-purple-pink bg-blend-multiply mix-blend-color-burn bg-cover bg-center flex flex-col"
+            style={{
+                minHeight: `${clientHeight - HEADER_SIZE}px`
+            }}
+        >
             {/* BIRDS FLOCK */}
             <Image
                 className="z-[1] min-w-[1200px] h-[596px] md:h-auto md:w-full md:my-auto"

@@ -4,6 +4,7 @@ import MobileDetect from "mobile-detect"
 import { useRef, useState, useEffect } from "react"
 
 export default function useSettings() {
+    const HEADER_SIZE = 92
     const md = useRef<any>()
     const [isMobile, setIsMobile] = useState(false)
     const [isTablet, setIsTablet] = useState(false)
@@ -27,6 +28,7 @@ export default function useSettings() {
         isTablet,
         isLoaded,
         clientHeight,
-        clientWidth
+        clientWidth,
+        HEADER_SIZE
     }
 }
