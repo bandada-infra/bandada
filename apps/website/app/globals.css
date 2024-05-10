@@ -34,3 +34,7 @@ body {
 .markdown-image {
     max-width: unset !important;
 }
+
+.rotate-y-180 {
+    transform: rotateY(180deg);
+}
