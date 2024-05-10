@@ -12,7 +12,7 @@ export default function NotFound() {
     return (
         <div className="bg-gradient-purple-pink">
             <AppContainer className="flex flex-col items-center text-center  justify-center gap-14 h-[calc(100vh-82px)]">
-                <Section.Header className="uppercase text-anon">
+                <Section.Header className="uppercase font-unbounded">
                     404: Page not found
                 </Section.Header>
                 <div className="relative size-[146px] md:size-[240px]">
@@ -22,7 +22,7 @@ export default function NotFound() {
                         alt="404 illustration"
                     />
                 </div>
-                <span className=" text-baltic-sea-800 text-base md:text-lg">
+                <span className=" text-baltic-sea-800 text-base md:text-lg font-sans">
                     The page you are looking for might have been removed, had
                     its name changed, or is temporarily unavailable.
                 </span>
