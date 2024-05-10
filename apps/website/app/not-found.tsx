@@ -22,7 +22,7 @@ export default function NotFound() {
                         alt="404 illustration"
                     />
                 </div>
-                <span className=" text-baltic-sea-800 text-base md:text-lg font-sans">
+                <span className=" text-baltic-sea-800 text-base font-normal md:font-medium md:text-lg font-sans">
                     The page you are looking for might have been removed, had
                     its name changed, or is temporarily unavailable.
                 </span>
