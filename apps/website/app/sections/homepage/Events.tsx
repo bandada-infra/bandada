@@ -1,19 +1,26 @@
 import Image from "next/image"
+import Link from "next/link"
 import { AppContainer } from "@/components/AppContainer"
 import { EVENTS, Event } from "@/shared/data/events"
 import { Section } from "@/components/typography/Section"
 import { LABELS } from "@/shared/labels"
 
-function EventCard({ date, event, description }: Event) {
+function EventCard({ date, event, description, link }: Event) {
     return (
-        <div className="flex flex-col gap-2 py-8 first-of-type:pt-0 last-of-type:pb-0">
-            <h4 className="text-baltic-sea-950 font-dm-sans text-[22px] leading-[27px] font-bold">
+        <Link
+            target="_blank"
+            href={link}
+            className="group flex flex-col gap-2 py-8 first-of-type:pt-0 last-of-type:pb-0"
+        >
+            <h4 className="text-baltic-sea-950 font-dm-sans text-[22px] leading-[27px] font-bold duration-200 group-hover:text-orange-600">
                 {`${date} | ${event}`}
             </h4>
             {description && (
-                <Section.Description>{description}</Section.Description>
+                <Section.Description className="duration-200 group-hover:text-orange-600">
+                    {description}
+                </Section.Description>
             )}
-        </div>
+        </Link>
     )
 }
 

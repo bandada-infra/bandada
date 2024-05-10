@@ -64,7 +64,7 @@ function MobileNav() {
                 />
             )}
             {isMobileNavOpen && (
-                <div className="fixed gap-6 pt-6 px-4 overflow-hidden inset-y-0 right-0 z-10 flex w-full max-w-80 flex-col bg-baltic-sea-950 text-white">
+                <div className="fixed gap-6 pt-6 px-4 overflow-hidden inset-y-0 right-0 z-10 flex w-full max-w-[420px] flex-col bg-baltic-sea-950 text-white">
                     <div className="flex justify-end h-10 items-center">
                         <button
                             type="button"

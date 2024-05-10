@@ -2,25 +2,22 @@ export type Event = {
     date: string
     event: string
     description: string
+    link: string
 }
 
 export const EVENTS: Event[] = [
     {
-        date: "Oct 06-07, 2024",
-        event: "ETH Dam",
+        event: "ETHRome",
+        date: "Oct 4-6, 2024",
         description:
-            "Bandada team will attend Progcrypto and deliver workshops on how to build applications with Semaphore."
+            "Semaphore team will deliver an in-person talk and sponsor prizes for the hackathon.",
+        link: "https://www.ethrome.org/"
     },
     {
-        date: "Nov 16-17, 2024",
         event: "Devcon",
+        date: "Nov 12-15, 2024",
         description:
-            "Bandada team will attend Progcrypto and deliver workshops on how to build applications with Semaphore."
-    },
-    {
-        date: "Nov 16-17, 2024",
-        event: "ETH Rome",
-        description:
-            "Bandada team will attend Progcrypto and deliver workshops on how to build applications with Semaphore."
+            "Semaphore team will deliver an in-person talk and run workshops.",
+        link: "https://devcon.org/en/"
     }
 ]

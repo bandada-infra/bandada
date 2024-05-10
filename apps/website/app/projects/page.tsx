@@ -44,8 +44,6 @@ export default function ProjectsPage() {
                             </Section.Description>
                         </div>
                     </div>
-                </AppContainer>
-                <AppContainer margins="sm">
                     <ProjectList />
                 </AppContainer>
             </div>
