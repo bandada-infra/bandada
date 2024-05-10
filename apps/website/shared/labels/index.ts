@@ -20,6 +20,11 @@ export const LABELS = {
         NO_RESULT_DESCRIPTION:
             "No projects matching these filters. Try changing your search.",
         GET_INSPIRED: "Get inspired",
-        READ_TIME: "min read"
+        READ_TIME: "min read",
+        LAUNCH_APP: "Launch app",
+        DISCORD: "Discord",
+        VIDEOS: "Videos",
+        ARTICLES: "Articles",
+        GO_TO_HOME: "Go to home"
     }
 }

@@ -42,7 +42,7 @@ export function Accordion({ label, children }: AccordionProps) {
 
     return (
         <div
-            className="flex flex-col py-4 bg-transparent"
+            className="flex flex-col py-[18px] bg-transparent"
             aria-expanded={isOpen}
             aria-label="accordion"
         >

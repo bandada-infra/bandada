@@ -24,7 +24,7 @@ export default function Home() {
                         icon={<Icons.discord size={18} />}
                         iconPosition="left"
                     >
-                        Discord
+                        {LABELS.COMMON.DISCORD}
                     </Button>
                 </Link>
             </Banner>

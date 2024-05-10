@@ -4,6 +4,7 @@ import { AppContainer } from "@/components/AppContainer"
 import { EVENTS, Event } from "@/shared/data/events"
 import { Section } from "@/components/typography/Section"
 import { LABELS } from "@/shared/labels"
+import { Divider } from "@/components/elements/Divider"
 
 function EventCard({ date, event, description, link }: Event) {
     return (
@@ -34,9 +35,12 @@ export function Events() {
                             {LABELS.HOMEPAGE.EVENTS.TITLE}
                         </Section.Title>
                     </div>
-                    <div className="grid grid-cols-1 divide-y divide-baltic-sea-300">
+                    <div className="grid grid-cols-1">
                         {EVENTS.map((event, index) => (
-                            <EventCard key={index} {...event} />
+                            <div key={index} className="group flex flex-col">
+                                <EventCard {...event} />
+                                <Divider.Line className="py-7 group-last-of-type:hidden" />
+                            </div>
                         ))}
                     </div>
                 </div>

@@ -43,15 +43,20 @@ import { ArticlesAndVideos } from "./../sections/learn/ArticlesAndVideos"
     </AppContainer>
     <Divider.Bird />
 
-    <AppContainer className="flex flex-col gap-6">
-        ### Key concepts
-        <div className="flex flex-col divide-baltic-sea-300 divide-y">
+    <AppContainer className="flex flex-col">
+        <div className="pb-6">
+            ### Key concepts
+        </div>
+         <Divider.Line className="mt-auto" />
+        <div className="flex flex-col">
             <Accordion label="Group">
                 In the realm of privacy and zero-knowledge technologies, the concept of a group takes on a significant role. A group, in this context, is more than just a collection of individuals; it represents an **anonymity set**. This means that within the group, individual members' actions, characteristics, or identities become indistinguishable from one another, providing a way for individuals to engage in collective actions or share attributes without revealing specific information about themselves.
             </Accordion>
+              <Divider.Line />
             <Accordion label="Anonimity VS. Pseudonymity">
                 Anonymity refers to the complete concealment of a user's identity, while pseudonymity allows users to interact under a consistent but “disguised” identity.
             </Accordion>
+              <Divider.Line />
             <Accordion label="Credential">
                 A way to establish necessary trust between a set of participants by verifying certain attributes or qualifications of individuals, without necessarily revealing their _full_ identity and letting users keep control over how the data associated with their identities is stored, managed and used.
             </Accordion>

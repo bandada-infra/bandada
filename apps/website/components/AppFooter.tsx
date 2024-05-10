@@ -69,7 +69,7 @@ function AppFooter() {
                         </MenuWrapper>
                     </div>
                 </div>
-                <Divider.Line />
+                <Divider.Line color="dark" />
                 <div className="w-full flex gap-4 flex-col items-center md:justify-between md:flex-row">
                     <span className="text-baltic-sea-600 text-[13px] font-normal tracking-[0.26px] font-sans order-2 md:order-2">
                         {LABELS.FOOTER.COPYRIGHT}

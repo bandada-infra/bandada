@@ -34,3 +34,28 @@ body {
 .rotate-y-180 {
     transform: rotateY(180deg);
 }
+
+.dashed-line {
+    --c: #C0B8C1; /* color */
+    --t: 6px;  /* thickness of the lines */
+    --g: 6px; /* gap between lines */
+    --s: 2px; /* size of the dashes*/
+
+    background:
+      conic-gradient(at var(--t) 50%,#0000 75%,var(--c) 0)
+      var(--g)/calc(var(--g) + var(--t)) var(--s);
+    background-repeat: repeat no-repeat;
+}
+
+
+.dashed-line-dark {
+    --c: #6B5D6C; /* color */
+    --t: 6px;  /* thickness of the lines */
+    --g: 6px; /* gap between lines */
+    --s: 2px; /* size of the dashes*/
+
+    background:
+      conic-gradient(at var(--t) 50%,#0000 75%,var(--c) 0)
+      var(--g)/calc(var(--g) + var(--t)) var(--s);
+    background-repeat: repeat no-repeat;
+}

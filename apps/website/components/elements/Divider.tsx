@@ -8,7 +8,17 @@ function Bird() {
         </div>
     )
 }
-const Line = classed.div("w-full h-[1px] bg-baltic-sea-600")
+const Line = classed.div("w-full h-[1px] ", {
+    variants: {
+        color: {
+            light: "dashed-line",
+            dark: "dashed-line-dark"
+        }
+    },
+    defaultVariants: {
+        color: "light"
+    }
+})
 
 const Divider = {
     displayName: "Divider",

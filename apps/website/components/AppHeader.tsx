@@ -77,7 +77,9 @@ function MobileNav() {
                     <div className="flex flex-col h-full">
                         <div className="flex w-full flex-col items-center gap-4 sm:gap-5 text-base font-medium">
                             <Link href={LINKS.LAUNCH_APP} target="_blank">
-                                <Button className="mx-auto">Launch App</Button>
+                                <Button className="mx-auto">
+                                    {LABELS.COMMON.LAUNCH_APP}
+                                </Button>
                             </Link>
                             {MENU_ITEMS.map(
                                 (
@@ -197,7 +199,7 @@ function DesktopNav() {
                 className="hidden lg:flex"
                 target="_blank"
             >
-                <Button>Launch App</Button>
+                <Button>{LABELS.COMMON.LAUNCH_APP}</Button>
             </Link>
         </>
     )

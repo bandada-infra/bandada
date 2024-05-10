@@ -6,6 +6,7 @@ import { Icons } from "./elements/Icons"
 import { cn } from "@/common/utils"
 import useSettings from "@/hooks/useSettings"
 import { LABELS } from "@/shared/labels"
+import { Divider } from "./elements/Divider"
 
 const DEFAULT_ITEMS_TO_SHOW = 6
 interface ShowMoreProps {
@@ -34,7 +35,10 @@ function ShowMore({ children, className, defaultItemsToShow }: ShowMoreProps) {
                 ))}
             </div>
             <div className="relative flex">
-                <div className=" absolute h-[1px] w-full top-1/2 bg-baltic-sea-600" />
+                <Divider.Line
+                    color="dark"
+                    className="absolute h-[1px] w-full top-1/2"
+                />
                 <Button
                     disabled={!canShowMore}
                     onClick={() => setIsOpen(!isOpen)}
