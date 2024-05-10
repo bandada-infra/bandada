@@ -42,7 +42,7 @@ export function Events() {
                 </div>
                 <div className="relative overflow-hidden rounded-3xl h-[450px]">
                     <Image
-                        src="/images/bg-events.png"
+                        src="/images/bg-events.webp"
                         alt="Events"
                         fill
                         className="object-cover bg-center rounded-3xl"
