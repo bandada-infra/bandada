@@ -133,7 +133,7 @@ function MobileNav() {
                                 )}
                             </div>
                         </div>
-                        <div className="flex flex-col gap-12 mt-auto overflow-hidden">
+                        <div className="flex flex-col gap-4 md:gap-12 mt-auto overflow-hidden">
                             <Divider.Line className="mx-auto" />
                             <div className="flex flex-col gap-2 sm:gap-4 mx-auto text-center mb-8">
                                 <Link
@@ -176,7 +176,10 @@ function DesktopNav() {
                                 pathParts[0] === pathname.split("/")[1])
 
                         return (
-                            <div className="flex items-center group">
+                            <div
+                                key={index}
+                                className="flex items-center group"
+                            >
                                 <LinkItem key={index} active={isActive}>
                                     <div className="flex items-center gap-[6px]">
                                         {isActive && (

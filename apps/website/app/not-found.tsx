@@ -11,11 +11,11 @@ import { Button } from "@/components/elements/Button"
 export default function NotFound() {
     return (
         <div className="bg-gradient-purple-pink">
-            <AppContainer className="flex flex-col items-center text-center  justify-center gap-14 h-[calc(100vh-82px)]">
+            <AppContainer className="flex flex-col items-center text-center  justify-center gap-14 h-[calc(100vh-160px)] py-10">
                 <Section.Header className="uppercase font-unbounded">
                     404: Page not found
                 </Section.Header>
-                <div className="relative size-[146px] md:size-[240px]">
+                <div className="relative size-[120px] md:size-[240px]">
                     <Image
                         src="/icons/feature-icon-1.svg"
                         fill
