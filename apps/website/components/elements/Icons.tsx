@@ -22,6 +22,23 @@ export const Icons: Record<string, any> = {
             />
         </svg>
     ),
+    Eagle: ({ size, width = 55, height = 35, ...props }: IconsProps) => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={width || size}
+            height={height || size}
+            viewBox="0 0 55 35"
+            fill="none"
+            version="1.1"
+            transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,0,0)"
+            {...props}
+        >
+            <path
+                d="M20.3791 34.8757L24.1717 24.6268L20.1316 20.8378L0.116226 26.2188L5.31913 12.149C5.31913 12.149 19.8834 8.2537 22.6962 7.15617L23.2024 4.19874L26.0685 0.182799L29.1992 3.80188L29.9692 6.67485C36.0937 8.01792 45.6758 9.4782 45.6758 9.4782L54.1867 22.6405L35.2485 19.8374L31.1268 24.1666L36.1241 33.0684L20.3791 34.8757Z"
+                fill="#231F23"
+            />
+        </svg>
+    ),
     ArrowDown: (props: IconsProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
