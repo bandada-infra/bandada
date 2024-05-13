@@ -36,26 +36,23 @@ body {
 }
 
 .dashed-line {
-    --c: #C0B8C1; /* color */
-    --t: 6px;  /* thickness of the lines */
+    --c: #c0b8c1; /* color */
+    --t: 6px; /* thickness of the lines */
     --g: 6px; /* gap between lines */
     --s: 2px; /* size of the dashes*/
 
-    background:
-      conic-gradient(at var(--t) 50%,#0000 75%,var(--c) 0)
-      var(--g)/calc(var(--g) + var(--t)) var(--s);
+    background: conic-gradient(at var(--t) 50%, #0000 75%, var(--c) 0) var(--g) /
+        calc(var(--g) + var(--t)) var(--s);
     background-repeat: repeat no-repeat;
 }
 
-
 .dashed-line-dark {
-    --c: #6B5D6C; /* color */
-    --t: 6px;  /* thickness of the lines */
+    --c: #6b5d6c; /* color */
+    --t: 6px; /* thickness of the lines */
     --g: 6px; /* gap between lines */
     --s: 2px; /* size of the dashes*/
 
-    background:
-      conic-gradient(at var(--t) 50%,#0000 75%,var(--c) 0)
-      var(--g)/calc(var(--g) + var(--t)) var(--s);
+    background: conic-gradient(at var(--t) 50%, #0000 75%, var(--c) 0) var(--g) /
+        calc(var(--g) + var(--t)) var(--s);
     background-repeat: repeat no-repeat;
 }
