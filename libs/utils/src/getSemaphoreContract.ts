@@ -22,7 +22,7 @@ export class SemaphoreContract {
         merkleTreeDepth: number,
         admin: string
     ): Promise<ContractTransactionReceipt> {
-        const groupId = BigInt(ethers.encodeBytes32String(groupName))
+        const groupId = toBigInt(encodeBytes32String(groupName))
 
         const transaction = await this.contract[
             "createGroup(uint256,uint256,address)"
