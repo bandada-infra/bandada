@@ -1,7 +1,8 @@
 /* istanbul ignore file */
 
 import {
-    ethers,
+    encodeBytes32String,
+    toBigInt,
     type Contract,
     type ContractTransactionReceipt,
     type Signer
