@@ -5645,33 +5645,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/theme-search-algolia@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "@docusaurus/theme-search-algolia@npm:3.3.2"
-  dependencies:
-    "@docsearch/react": "npm:^3.5.2"
-    "@docusaurus/core": "npm:3.3.2"
-    "@docusaurus/logger": "npm:3.3.2"
-    "@docusaurus/plugin-content-docs": "npm:3.3.2"
-    "@docusaurus/theme-common": "npm:3.3.2"
-    "@docusaurus/theme-translations": "npm:3.3.2"
-    "@docusaurus/utils": "npm:3.3.2"
-    "@docusaurus/utils-validation": "npm:3.3.2"
-    algoliasearch: "npm:^4.18.0"
-    algoliasearch-helper: "npm:^3.13.3"
-    clsx: "npm:^2.0.0"
-    eta: "npm:^2.2.0"
-    fs-extra: "npm:^11.1.1"
-    lodash: "npm:^4.17.21"
-    tslib: "npm:^2.6.0"
-    utility-types: "npm:^3.10.0"
-  peerDependencies:
-    react: ^18.0.0
-    react-dom: ^18.0.0
-  checksum: 10/d69650b2dacb189ce9c7ce9ca73b2923505c7e05d3da71d13a8b1a4a8d759d9fc5384ae4129b47b7f279f26fcc4ce6fe53835c5a8e883d7a3148fbb3a4c665a3
-  languageName: node
-  linkType: hard
-
 "@docusaurus/theme-translations@npm:3.1.1":
   version: 3.1.1
   resolution: "@docusaurus/theme-translations@npm:3.1.1"
