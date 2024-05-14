@@ -35,7 +35,7 @@ export class SemaphoreContract {
         groupName: string,
         newAdmin: string
     ): Promise<ContractTransactionReceipt> {
-        const groupId = BigInt(ethers.encodeBytes32String(groupName))
+        const groupId = toBigInt(encodeBytes32String(groupName))
 
         const transaction = await this.contract.updateGroupAdmin(
             groupId,
@@ -49,7 +49,7 @@ export class SemaphoreContract {
         groupName: string,
         member: string
     ): Promise<ContractTransactionReceipt> {
-        const groupId = BigInt(ethers.encodeBytes32String(groupName))
+        const groupId = toBigInt(encodeBytes32String(groupName))
 
         const transaction = await this.contract.addMember(groupId, member)
 
@@ -60,7 +60,7 @@ export class SemaphoreContract {
         groupName: string,
         members: string[]
     ): Promise<ContractTransactionReceipt> {
-        const groupId = BigInt(ethers.encodeBytes32String(groupName))
+        const groupId = toBigInt(encodeBytes32String(groupName))
 
         const transaction = await this.contract.addMembers(groupId, members)
 
