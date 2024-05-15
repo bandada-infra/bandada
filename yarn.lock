@@ -6088,6 +6088,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mdx-js/loader@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@mdx-js/loader@npm:3.0.1"
+  dependencies:
+    "@mdx-js/mdx": "npm:^3.0.0"
+    source-map: "npm:^0.7.0"
+  peerDependencies:
+    webpack: ">=5"
+  checksum: 10/e2eff3ae99958590730a7b23bf5def7720745066065ef2bb7face4f60d913d1083da617c7b4004a2906267ead5609c1d00cd452cb303cd77dea1048d80e1ca35
+  languageName: node
+  linkType: hard
+
 "@mdx-js/mdx@npm:^3.0.0":
   version: 3.0.1
   resolution: "@mdx-js/mdx@npm:3.0.1"
@@ -6119,7 +6131,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdx-js/react@npm:^3.0.0":
+"@mdx-js/react@npm:^3.0.0, @mdx-js/react@npm:^3.0.1":
   version: 3.0.1
   resolution: "@mdx-js/react@npm:3.0.1"
   dependencies:
@@ -6745,6 +6757,23 @@ __metadata:
   dependencies:
     glob: "npm:10.3.10"
   checksum: 10/f462941b651cc570635d0098e9a66db7b8c8e18a585c399f4457dccba458b481618388881abc10f2f12d806f060e55e19159a82f3a19e15b5d094ee5cd2ff226
+  languageName: node
+  linkType: hard
+
+"@next/mdx@npm:^14.2.3":
+  version: 14.2.3
+  resolution: "@next/mdx@npm:14.2.3"
+  dependencies:
+    source-map: "npm:^0.7.0"
+  peerDependencies:
+    "@mdx-js/loader": ">=0.15.0"
+    "@mdx-js/react": ">=0.15.0"
+  peerDependenciesMeta:
+    "@mdx-js/loader":
+      optional: true
+    "@mdx-js/react":
+      optional: true
+  checksum: 10/37e8b7a5189ce035cd5cacc153ad808ed99157aa5cc48bdaa2e566be671fd383ba486241240e84b02fe232749c0ab9747beba2b0708bafe2ca0c1957641b4b16
   languageName: node
   linkType: hard
 
@@ -9444,6 +9473,13 @@ __metadata:
   version: 2.0.11
   resolution: "@types/mdx@npm:2.0.11"
   checksum: 10/54d1ac0dc6c1c8d68f7537ecfab415767f34b4eee9d74f1d302b217307fb72bc976bf2616fdca654bdb01c1e4d152fb094b52f6502d8f6d6a063d3b9a8f9b81a
+  languageName: node
+  linkType: hard
+
+"@types/mdx@npm:^2.0.13":
+  version: 2.0.13
+  resolution: "@types/mdx@npm:2.0.13"
+  checksum: 10/b73ed5f08114879b9590dc6a9ee8b648643c57c708583cd24b2bc3cc8961361fc63139ac7e9291e7b3b6e6b45707749d01d6f9727ddec5533df75dc3b90871a4
   languageName: node
   linkType: hard
 
@@ -12336,8 +12372,12 @@ __metadata:
   resolution: "bandada-website@workspace:apps/website"
   dependencies:
     "@headlessui/react": "npm:^1.7.18"
+    "@mdx-js/loader": "npm:^3.0.1"
+    "@mdx-js/react": "npm:^3.0.1"
     "@next/eslint-plugin-next": "npm:^14.2.3"
+    "@next/mdx": "npm:^14.2.3"
     "@tw-classed/react": "npm:^1.7.0"
+    "@types/mdx": "npm:^2.0.13"
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
@@ -12352,6 +12392,7 @@ __metadata:
     postcss: "npm:^8"
     react: "npm:^18"
     react-dom: "npm:^18"
+    react-glider: "npm:^4.0.2"
     react-markdown: "npm:^9.0.1"
     tailwind-merge: "npm:^2.2.1"
     tailwindcss: "npm:^3.3.0"
@@ -18700,6 +18741,13 @@ __metadata:
     mkdirp: "npm:^0.5.1"
     tar: "npm:^4.4.1"
   checksum: 10/093c90652d02d0da8d1662c9b21cd1db019d28bebbb570752faa67b35029ab3097a19d7fa1787b0d041dec01d0764565aa2b051810c010006925964a6716d5e9
+  languageName: node
+  linkType: hard
+
+"glider-js@npm:^1.7.7":
+  version: 1.7.9
+  resolution: "glider-js@npm:1.7.9"
+  checksum: 10/5c4b1930cfe880d47adbac67d9ebd790c0d29021efa423a5cd2eb37bc88637ff9e0effcf8c0e29beb56aa0d870f17c8864a85d5acb1e147459d517f9a5cd0071
   languageName: node
   linkType: hard
 
@@ -27456,6 +27504,18 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10/01d1135fdb46012b921859e2159af461d1015f5b636f83b671e3c6d227e848396397944f08f541521798c735c807e826e251ecd1ac44966a469f88849bd515b6
+  languageName: node
+  linkType: hard
+
+"react-glider@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "react-glider@npm:4.0.2"
+  dependencies:
+    glider-js: "npm:^1.7.7"
+  peerDependencies:
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 10/8f419d52ef14921b88b8cef8272bb199c124a238170fde8b5df0b956cbf64040e46d39ea93bdea0160633610e5b47c5047c659a4ac49fdf00357db6909c19622
   languageName: node
   linkType: hard
 
