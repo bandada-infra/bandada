@@ -74,6 +74,19 @@ export default function HomePage(): JSX.Element {
                                         </HStack>
                                     </Link>
                                     <Link
+                                        href="https://docs.bandada.pse.dev/"
+                                        isExternal
+                                    >
+                                        <HStack spacing="1">
+                                            <Text
+                                                color="balticSea.300"
+                                                textDecoration="underline"
+                                            >
+                                                Documentation
+                                            </Text>
+                                        </HStack>
+                                    </Link>
+                                    <Link
                                         href={`https://sepolia.etherscan.io/address/${CONTRACT_ADDRESSES.sepolia.Bandada}`}
                                         isExternal
                                     >

@@ -1,6 +1,6 @@
 {
     "name": "@bandada/hardhat",
-    "version": "2.2.6",
+    "version": "2.2.7",
     "description": "A Hardhat plugin which provides tasks to deploy Bandada contracts.",
     "license": "MIT",
     "main": "dist/index.node.js",
@@ -39,7 +39,7 @@
         "typescript": "^5.4.3"
     },
     "peerDependencies": {
-        "@bandada/contracts": "2.2.6",
+        "@bandada/contracts": "2.2.7",
         "@nomiclabs/hardhat-ethers": "^2.2.3",
         "@semaphore-protocol/contracts": "3.4.0",
         "ethers": "^6.11.1",
