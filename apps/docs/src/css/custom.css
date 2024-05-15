@@ -41,7 +41,7 @@ html {
     color: unset;
 }
 
-[data-theme='light'] .DocSearch {
+[data-theme="light"] .DocSearch {
     /* --docsearch-primary-color: var(--ifm-color-primary); */
     /* --docsearch-text-color: var(--ifm-font-color-base); */
     --docsearch-muted-color: var(--ifm-color-secondary-darkest);
@@ -59,7 +59,7 @@ html {
     --docsearch-footer-background: var(--ifm-color-white);
 }
 
-[data-theme='dark'] .DocSearch {
+[data-theme="dark"] .DocSearch {
     --docsearch-text-color: var(--ifm-font-color-base);
     --docsearch-muted-color: var(--ifm-color-secondary-darkest);
     --docsearch-container-background: rgba(47, 55, 69, 0.7);
@@ -74,8 +74,9 @@ html {
     --docsearch-hit-background: var(--ifm-color-emphasis-100);
     /* Footer */
     --docsearch-footer-background: var(--ifm-background-surface-color);
-    --docsearch-key-gradient: linear-gradient(-26.5deg,
-            var(--ifm-color-emphasis-200) 0%,
-            var(--ifm-color-emphasis-100) 100%);
+    --docsearch-key-gradient: linear-gradient(
+        -26.5deg,
+        var(--ifm-color-emphasis-200) 0%,
+        var(--ifm-color-emphasis-100) 100%
+    );
 }
-
