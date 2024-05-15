@@ -8,7 +8,6 @@ import {
     BlockchainContext
 } from "@bandada/credentials"
 import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
-import { id } from "@ethersproject/hash"
 import {
     BadRequestException,
     forwardRef,
@@ -19,6 +18,7 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { v4 } from "uuid"
+import { id } from "ethers"
 import { GroupsService } from "../groups/groups.service"
 import { OAuthAccount } from "./entities/credentials-account.entity"
 import { OAuthState } from "./types"

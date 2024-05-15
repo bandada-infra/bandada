@@ -96,7 +96,7 @@ task("deploy", "Deploy a Greeter contract")
 
         const greeter = await Greeter.deploy(bandada.address)
 
-        await greeter.deployed()
+        await greeter.waitForDeployment()
 
         if (logs) {
             console.log(

@@ -1,4 +1,3 @@
-import { BigNumber } from "ethers"
 import { BlockchainContext, Validator } from "../.."
 
 export type Criteria = {
@@ -44,7 +43,7 @@ const validator: Validator = {
                 (context as BlockchainContext).address,
                 blockNumber
             )
-            return balance >= BigNumber.from(criteria.minBalance)
+            return balance >= BigInt(criteria.minBalance)
         }
         throw new Error("No address value found")
     }

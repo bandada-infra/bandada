@@ -1,4 +1,4 @@
-// Supported networks: https://docs.ethers.org/v5/api/providers/api-providers/#InfuraProvider
+// Supported networks: https://docs.ethers.org/v6/api/providers/thirdparty/#InfuraProvider
 export type Network = "localhost" | "sepolia"
 
 export type ContractName = "Bandada" | "Semaphore" | "BandadaSemaphore"

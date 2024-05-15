@@ -37,15 +37,15 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
                     )
                     const pairing = await PairingFactory.deploy()
 
-                    await pairing.deployed()
+                    await pairing.waitForDeployment()
 
                     if (logs) {
                         console.info(
-                            `Pairing library has been deployed to: ${pairing.address}`
+                            `Pairing library has been deployed to: ${pairing.getAddress()}`
                         )
                     }
 
-                    pairingAddress = pairing.address
+                    pairingAddress = await pairing.getAddress()
                 }
 
                 const SemaphoreVerifierFactory =
@@ -58,15 +58,15 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
                 const semaphoreVerifier =
                     await SemaphoreVerifierFactory.deploy()
 
-                await semaphoreVerifier.deployed()
+                await semaphoreVerifier.waitForDeployment()
 
                 if (logs) {
                     console.info(
-                        `SemaphoreVerifier contract has been deployed to: ${semaphoreVerifier.address}`
+                        `SemaphoreVerifier contract has been deployed to: ${semaphoreVerifier.getAddress()}`
                     )
                 }
 
-                semaphoreVerifierAddress = semaphoreVerifier.address
+                semaphoreVerifierAddress = await semaphoreVerifier.getAddress()
             }
 
             if (!bandadaAddress) {
@@ -84,11 +84,11 @@ task("deploy:bandada-semaphore", "Deploy BandadaSemaphore contract")
                 bandadaAddress
             )
 
-            await bandadaSemaphore.deployed()
+            await bandadaSemaphore.waitForDeployment()
 
             if (logs) {
                 console.info(
-                    `BandadaSemaphore contract has been deployed to: ${bandadaSemaphore.address}`
+                    `BandadaSemaphore contract has been deployed to: ${bandadaSemaphore.getAddress}`
                 )
             }
 

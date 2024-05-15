@@ -28,6 +28,7 @@ export default function GroupCard({
     treeDepth
 }: GroupCardProps): JSX.Element {
     return (
+        // @ts-ignore -- Expression produces a union type that is too complex to represent. This patch will be fixed.
         <VStack
             borderRadius="8px"
             borderColor="balticSea.200"

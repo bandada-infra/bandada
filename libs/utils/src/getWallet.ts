@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { Wallet } from "@ethersproject/wallet"
+import { ethers, type Wallet } from "ethers"
 import getProvider from "./getProvider"
 import { Network } from "./types"
 
@@ -12,8 +12,8 @@ export default function getWallet(
     if (network) {
         const provider = getProvider(network, apiKey)
 
-        return new Wallet(privateKey, provider)
+        return new ethers.Wallet(privateKey, provider)
     }
 
-    return new Wallet(privateKey)
+    return new ethers.Wallet(privateKey)
 }

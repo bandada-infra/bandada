@@ -1,5 +1,6 @@
 import "@nomicfoundation/hardhat-chai-matchers"
 import "@nomicfoundation/hardhat-toolbox"
+import "@nomicfoundation/hardhat-verify"
 import { config as dotenvConfig } from "dotenv"
 import "hardhat-dependency-compiler"
 import { HardhatUserConfig } from "hardhat/config"
@@ -62,7 +63,7 @@ const hardhatConfig: HardhatUserConfig = {
         coinmarketcap: process.env.COINMARKETCAP_API_KEY
     },
     typechain: {
-        target: "ethers-v5"
+        target: "ethers-v6"
     },
     etherscan: {
         apiKey: process.env.ETHERSCAN_API_KEY

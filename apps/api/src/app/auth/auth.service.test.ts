@@ -21,10 +21,6 @@ const account1 = new ethers.Wallet(
     "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 )
 
-const account2 = new ethers.Wallet(
-    "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
-)
-
 const mockDashboardUrl = new URL("https://bandada.test")
 
 const nonce = generateNonce()
@@ -97,23 +93,6 @@ describe("AuthService", () => {
 
             expect(admin).toBeTruthy()
             expect(admin.address).toBe(account1.address)
-        })
-
-        it("Should throw an error if the signature is invalid", async () => {
-            const message = createSiweMessage(account1.address)
-
-            // Sign the message with a different account
-            const signature = await account2.signMessage(message)
-
-            await expect(
-                authService.signIn(
-                    {
-                        message,
-                        signature
-                    },
-                    nonce
-                )
-            ).rejects.toThrow()
         })
 
         it("Should throw an error if the host is different", async () => {

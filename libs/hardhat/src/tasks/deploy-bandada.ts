@@ -7,11 +7,11 @@ task("deploy:bandada", "Deploy a Bandada contract")
 
         const bandada = await BandadaFactory.deploy()
 
-        await bandada.deployed()
+        await bandada.waitForDeployment()
 
         if (logs) {
             console.info(
-                `Bandada contract has been deployed to: ${bandada.address}`
+                `Bandada contract has been deployed to: ${bandada.getAddress()}`
             )
         }
 

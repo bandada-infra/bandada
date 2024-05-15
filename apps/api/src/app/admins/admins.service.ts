@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { id } from "@ethersproject/hash"
+import { id } from "ethers"
 import { BadRequestException, Injectable, Logger } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindOptionsWhere, Repository } from "typeorm"

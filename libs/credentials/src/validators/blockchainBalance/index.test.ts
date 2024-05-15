@@ -1,4 +1,3 @@
-import { BigNumber } from "ethers"
 import { validateCredentials } from "../.."
 import blockchainBalance from "./index"
 
@@ -8,7 +7,7 @@ describe("BlockchainBalance", () => {
     }
 
     it("Should return true if an account has a balance greater than or equal to 10", async () => {
-        jsonRpcProviderMocked.getBalance.mockReturnValue(BigNumber.from(12))
+        jsonRpcProviderMocked.getBalance.mockReturnValue(BigInt(12))
 
         const result = await validateCredentials(
             {
@@ -28,7 +27,7 @@ describe("BlockchainBalance", () => {
     })
 
     it("Should return true if an account has a balance greater than or equal to 10 using the block number", async () => {
-        jsonRpcProviderMocked.getBalance.mockReturnValue(BigNumber.from(12))
+        jsonRpcProviderMocked.getBalance.mockReturnValue(BigInt(12))
 
         const result = await validateCredentials(
             {
