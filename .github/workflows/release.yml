@@ -27,8 +27,8 @@ jobs:
             - name: Authentication
               run: |
                   echo npmAuthToken: "$NODE_AUTH_TOKEN" >> ./.yarnrc.yml
-                  env:
-                      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             - name: Install dependencies
               run: yarn
