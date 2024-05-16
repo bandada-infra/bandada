@@ -23,7 +23,7 @@ apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 usermod -aG docker ubuntu
 
-su -P ubuntu -c "git clone -b $Branch --single-branch https://github.com/ntampakas/$Repo.git /home/ubuntu/$Repo"
+su -P ubuntu -c "git clone -b $Branch --single-branch https://github.com/bandada-infra/$Repo.git /home/ubuntu/$Repo"
 su -P ubuntu -c "cp /home/ubuntu/$Repo/apps/api/.env.example /home/ubuntu/$Repo/apps/api/.env"
 su -P ubuntu -c "sed -i 's/\(DB_TYPE=\).*/\1postgres/' /home/ubuntu/$Repo/apps/api/.env"
 su -P ubuntu -c "sed -i 's/\(DB_URL=\).*/\1postgres:\/\/root:helloworld\@postgres:5432\/bandada/' /home/ubuntu/$Repo/apps/api/.env"
