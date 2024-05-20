@@ -128,9 +128,9 @@ const config: Config = {
             darkTheme: prismThemes.dracula
         },
         algolia: {
-            appId: "6P229KVKCB",
-            apiKey: "879bb5b002b6370f181f0f79f5c2afe2",
-            indexName: "semaphoreliedzkp",
+            appId: "QL6JTMT15C",
+            apiKey: "6a3cd9c9b77cd3eed4c4bf2014f5e390",
+            indexName: "bandada",
             contextualSearch: true
         }
     } satisfies Preset.ThemeConfig
