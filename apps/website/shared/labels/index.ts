@@ -7,7 +7,7 @@ export const LABELS = {
     BUILD: BUILD_PAGE_LABELS,
     PROJECTS: PROJECTS_PAGE_LABELS,
     FOOTER: {
-        COPYRIGHT: "Copyright © 2023 Ethereum Foundation",
+        COPYRIGHT: `Copyright © ${new Date().getFullYear()} Ethereum Foundation`,
         FEEDBACK: "Give feedback about the website"
     },
     COMMON: {
