@@ -12,7 +12,15 @@
         "eventName": "ETHGlobal - Circuit Breaker",
         "date": "2024-02-02",
         "speakers": ["Giacomo Corrias | 0xjei"],
-        "url": "https://youtu.be/M7CJ3hYx2pg",
-        "thumbnail": "https://img.youtube.com/vi/M7CJ3hYx2pg/0.jpg"
+        "url": "https://youtu.be/kfMa5EHn9Bw",
+        "thumbnail": "https://img.youtube.com/vi/kfMa5EHn9Bw/0.jpg"
+    },
+    {
+        "title": "Bandada: Managing Privacy-Preserving Groups",
+        "eventName": "ETHDam 2024",
+        "date": "2024-04-12",
+        "speakers": ["Vivian Plasencia"],
+        "url": "https://youtu.be/m-_OEfmfYXM",
+        "thumbnail": "https://img.youtube.com/vi/m-_OEfmfYXM/0.jpg"
     }
 ]
