@@ -10,7 +10,7 @@ export const EVENTS: Event[] = [
         event: "ETHRome",
         date: "Oct 4-6, 2024",
         description:
-            "Semaphore team will deliver an in-person talk and sponsor prizes for the hackathon.",
+            "Bandada team will deliver an in-person talk and sponsor prizes for the hackathon.",
         link: "https://www.ethrome.org/"
     },
     {
