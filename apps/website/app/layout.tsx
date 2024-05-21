@@ -41,9 +41,10 @@ export default function RootLayout({
     children: React.ReactNode
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body
                 className={`${dm_sans.className} ${dm_sans.variable} ${undbounded.variable}`}
+                suppressHydrationWarning
             >
                 <AppHeader />
                 {children}
