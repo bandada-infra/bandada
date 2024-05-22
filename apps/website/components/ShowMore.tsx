@@ -34,32 +34,33 @@ function ShowMore({ children, className, defaultItemsToShow }: ShowMoreProps) {
                     <div key={index}>{child}</div>
                 ))}
             </div>
-            <div className="relative flex">
-                <Divider.Line
-                    color="dark"
-                    className="absolute h-[1px] w-full top-1/2"
-                />
-                <Button
-                    disabled={!canShowMore}
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="mx-auto border border-baltic-sea-800"
-                    color="black"
-                    size="xs"
-                    icon={
-                        <Icons.ArrowDown
-                            className={cn("duration-200", {
-                                "transform rotate-180": isOpen
-                            })}
-                        />
-                    }
-                >
-                    <span className="text-base font-medium">
-                        {isOpen
-                            ? LABELS.COMMON.SHOW_LESS
-                            : LABELS.COMMON.SHOW_MORE}
-                    </span>
-                </Button>
-            </div>
+            {canShowMore && (
+                <div className="relative flex">
+                    <Divider.Line
+                        color="dark"
+                        className="absolute h-[1px] w-full top-1/2"
+                    />
+                    <Button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="mx-auto border border-baltic-sea-800"
+                        color="black"
+                        size="xs"
+                        icon={
+                            <Icons.ArrowDown
+                                className={cn("duration-200", {
+                                    "transform rotate-180": isOpen
+                                })}
+                            />
+                        }
+                    >
+                        <span className="text-base font-medium">
+                            {isOpen
+                                ? LABELS.COMMON.SHOW_LESS
+                                : LABELS.COMMON.SHOW_MORE}
+                        </span>
+                    </Button>
+                </div>
+            )}
         </div>
     )
 }

@@ -1,5 +1,4 @@
 import React from "react"
-import Link from "next/link"
 import Image from "next/image"
 import { Banner } from "@/components/elements/Banner"
 import { Button } from "@/components/elements/Button"
@@ -8,10 +7,11 @@ import { AppContainer } from "@/components/AppContainer"
 import { ProjectList } from "../sections/projects/ProjectList"
 import { LABELS } from "@/shared/labels"
 import { Section } from "@/components/typography/Section"
+import { AppLink } from "@/components/AppLink"
 
 function Illustration() {
     return (
-        <AppContainer className="relative">
+        <AppContainer className="relative overflow-x-hidden">
             <Image
                 src="/illustrations/birds-projects.svg"
                 alt="birds illustrations"
@@ -54,11 +54,11 @@ export default function ProjectsPage() {
                 title={LABELS.PROJECTS.BANNER.TITLE}
                 description={LABELS.PROJECTS.BANNER.DESCRIPTION}
             >
-                <Link href={LINKS.SUBMIT_PROJECT} target="_blank">
+                <AppLink href={LINKS.SUBMIT_PROJECT} external>
                     <Button color="black">
                         {LABELS.COMMON.SUBMIT_PROJECT}
                     </Button>
-                </Link>
+                </AppLink>
             </Banner>
         </div>
     )

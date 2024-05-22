@@ -1,9 +1,9 @@
 import { HTMLAttributes } from "react"
-import Link from "next/link"
 import { Project } from "@/shared/data/projects"
 import { Card } from "./Card"
 import { Tag } from "../elements/Tag"
 import { Icons } from "../elements/Icons"
+import { AppLink } from "../AppLink"
 
 const ProjectLinkIconMapping: Record<string, any> = {
     website: Icons.website,
@@ -46,9 +46,9 @@ export function ProjectCard({
                     {Object.entries(links ?? {}).map(([key, url]) => {
                         const Icon = ProjectLinkIconMapping[key]
                         return (
-                            <Link key={key} href={url} target="_blank">
+                            <AppLink key={key} href={url} external>
                                 <Icon className="duration-300 text-baltic-sea-400 group-hover:text-sunset-orange-500" />
-                            </Link>
+                            </AppLink>
                         )
                     })}
                 </div>

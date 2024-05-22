@@ -1,7 +1,6 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { classed } from "@tw-classed/react"
 import { useEffect, useState } from "react"
@@ -13,6 +12,7 @@ import { Divider } from "./elements/Divider"
 import { AppContainer } from "./AppContainer"
 import { LABELS } from "@/shared/labels"
 import useSettings from "@/hooks/useSettings"
+import { AppLink } from "./AppLink"
 
 const LinkItem = classed.div(
     "relative flex items-center text-base font-dm-sans duration-300 tracking-[0.16px]",
@@ -76,11 +76,11 @@ function MobileNav() {
                     </div>
                     <div className="flex flex-col h-full">
                         <div className="flex w-full flex-col items-center gap-4 sm:gap-5 text-base font-medium">
-                            <Link href={LINKS.LAUNCH_APP} target="_blank">
+                            <AppLink href={LINKS.LAUNCH_APP} external>
                                 <Button className="mx-auto">
                                     {LABELS.COMMON.LAUNCH_APP}
                                 </Button>
-                            </Link>
+                            </AppLink>
                             {MENU_ITEMS.map(
                                 (
                                     {
@@ -95,12 +95,13 @@ function MobileNav() {
                                     if (footerOnly && !showInMobile) return null
 
                                     return (
-                                        <Link
+                                        <AppLink
                                             key={index}
                                             href={href}
                                             onClick={() =>
                                                 setMobileNavOpen(false)
                                             }
+                                            external={external}
                                             className="flex items-center gap-0.5 p-2"
                                         >
                                             {label}
@@ -110,7 +111,7 @@ function MobileNav() {
                                                     size={20}
                                                 />
                                             )}
-                                        </Link>
+                                        </AppLink>
                                     )
                                 }
                             )}
@@ -119,7 +120,7 @@ function MobileNav() {
                                     ({ label, href, icon }, index) => {
                                         const Icon: any = icon
                                         return (
-                                            <Link key={index} href={href}>
+                                            <AppLink key={index} href={href}>
                                                 <Label.MenuItem
                                                     key={index}
                                                     className="flex items-center"
@@ -127,7 +128,7 @@ function MobileNav() {
                                                     <Icon />
                                                     <span>{label}</span>
                                                 </Label.MenuItem>
-                                            </Link>
+                                            </AppLink>
                                         )
                                     }
                                 )}
@@ -136,15 +137,12 @@ function MobileNav() {
                         <div className="flex flex-col gap-4 md:gap-12 mt-auto overflow-hidden">
                             <Divider.Line className="mx-auto" />
                             <div className="flex flex-col gap-2 sm:gap-4 mx-auto text-center mb-8">
-                                <Link
-                                    href={LINKS.WEBSITE_FEEDBACK}
-                                    target="_blank"
-                                >
+                                <AppLink href={LINKS.WEBSITE_FEEDBACK} external>
                                     <Label.MenuItem className="flex items-center">
                                         {LABELS.FOOTER.FEEDBACK}
                                         <Icons.ExternalLink />
                                     </Label.MenuItem>
-                                </Link>
+                                </AppLink>
                                 <span className="text-baltic-sea-600 text-[13px] font-normal tracking-[0.26px] font-sans">
                                     {LABELS.FOOTER.COPYRIGHT}
                                 </span>
@@ -185,7 +183,7 @@ function DesktopNav() {
                                         {isActive && (
                                             <Icons.Bird className="w-4 block" />
                                         )}
-                                        <Link href={href}>{label}</Link>
+                                        <AppLink href={href}>{label}</AppLink>
                                     </div>
                                 </LinkItem>
                                 {external && (
@@ -197,13 +195,13 @@ function DesktopNav() {
                 )}
             </ul>
 
-            <Link
+            <AppLink
                 href={LINKS.LAUNCH_APP}
                 className="hidden lg:flex"
-                target="_blank"
+                external
             >
                 <Button>{LABELS.COMMON.LAUNCH_APP}</Button>
-            </Link>
+            </AppLink>
         </>
     )
 }
@@ -233,9 +231,9 @@ function AppHeader() {
     return (
         <div className="bg-baltic-sea-950 sticky top-0 z-50">
             <AppContainer className="flex items-center justify-between py-6">
-                <Link className="h-[44px] w-[38px] md:w-[232px]" href="/">
+                <AppLink className="h-[44px] w-[38px] md:w-[232px]" href="/">
                     <Logo />
-                </Link>
+                </AppLink>
                 <DesktopNav />
                 <MobileNav />
             </AppContainer>

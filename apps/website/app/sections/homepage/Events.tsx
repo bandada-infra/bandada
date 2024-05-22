@@ -1,15 +1,15 @@
 import Image from "next/image"
-import Link from "next/link"
 import { AppContainer } from "@/components/AppContainer"
 import { EVENTS, Event } from "@/shared/data/events"
 import { Section } from "@/components/typography/Section"
 import { LABELS } from "@/shared/labels"
 import { Divider } from "@/components/elements/Divider"
+import { AppLink } from "@/components/AppLink"
 
 function EventCard({ date, event, description, link }: Event) {
     return (
-        <Link
-            target="_blank"
+        <AppLink
+            external
             href={link}
             className="group flex flex-col gap-2 py-8 first-of-type:pt-0 last-of-type:pb-0"
         >
@@ -21,7 +21,7 @@ function EventCard({ date, event, description, link }: Event) {
                     {description}
                 </Section.Description>
             )}
-        </Link>
+        </AppLink>
     )
 }
 

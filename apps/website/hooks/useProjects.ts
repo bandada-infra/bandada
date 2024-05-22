@@ -19,6 +19,10 @@ export default function useProjects() {
     }
 
     const handleSource = (id: ProjectSource) => {
+        if (source === id) {
+            setSource(undefined)
+            return
+        }
         setSource(id)
     }
 

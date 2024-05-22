@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { Features } from "./sections/homepage/Features"
 import { Banner } from "@/components/elements/Banner"
 import { Button } from "@/components/elements/Button"
@@ -8,6 +7,7 @@ import { Events } from "./sections/homepage/Events"
 import { Icons } from "@/components/elements/Icons"
 import { LINKS } from "@/common/settings"
 import { LABELS } from "@/shared/labels"
+import { AppLink } from "@/components/AppLink"
 
 export default function Home() {
     return (
@@ -17,7 +17,7 @@ export default function Home() {
             <Projects />
             <Events />
             <Banner title={LABELS.HOMEPAGE.BANNER.TITLE}>
-                <Link href={LINKS.DISCORD} target="_blank">
+                <AppLink href={LINKS.DISCORD} external>
                     <Button
                         className="flex items-center gap-2"
                         color="black"
@@ -26,7 +26,7 @@ export default function Home() {
                     >
                         {LABELS.COMMON.DISCORD}
                     </Button>
-                </Link>
+                </AppLink>
             </Banner>
         </div>
     )

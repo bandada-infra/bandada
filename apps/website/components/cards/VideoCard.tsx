@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { Card } from "./Card"
+import { AppLink } from "../AppLink"
 
 interface VideoProps {
     title?: string
@@ -8,7 +8,7 @@ interface VideoProps {
 }
 function VideoCard({ title, thumbnail, url = "#" }: VideoProps) {
     return (
-        <Link href={url} target="_blank">
+        <AppLink href={url} external>
             <Card.Base
                 padding="none"
                 variant="content"
@@ -33,7 +33,7 @@ function VideoCard({ title, thumbnail, url = "#" }: VideoProps) {
                     }}
                 />
             </Card.Base>
-        </Link>
+        </AppLink>
     )
 }
 

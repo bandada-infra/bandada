@@ -1,6 +1,6 @@
-import Link from "next/link"
 import { Card } from "./Card"
 import { LABELS } from "@/shared/labels"
+import { AppLink } from "../AppLink"
 
 interface ArticleProps {
     title?: string
@@ -10,7 +10,7 @@ interface ArticleProps {
 
 function ArticleCard({ title, url = "#", minRead = "0" }: ArticleProps) {
     return (
-        <Link href={url} target="_blank">
+        <AppLink href={url} external>
             <Card.Base
                 padding="xs"
                 variant="content"
@@ -32,7 +32,7 @@ function ArticleCard({ title, url = "#", minRead = "0" }: ArticleProps) {
                     </p>
                 </div>
             </Card.Base>
-        </Link>
+        </AppLink>
     )
 }
 

@@ -19,6 +19,10 @@ const undbounded = Unbounded({
 export const metadata: Metadata = {
     title: APP_SETTINGS.APP_TITLE,
     description: APP_SETTINGS.APP_DESCRIPTION,
+    icons: {
+        icon: "/favicon.ico",
+        shortcut: "/favicon.ico"
+    },
     openGraph: {
         type: "website",
         locale: "en_US",
