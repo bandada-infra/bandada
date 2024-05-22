@@ -19,7 +19,18 @@ export default function RenderArticles(): JSX.Element {
                         >
                             {article.title}
                         </a>{" "}
-                        - {article.authors.join(", ")} (<i>{article.date}</i>)
+                        - {article.authors.join(", ")} (
+                        <i>
+                            {new Date(article.date).toLocaleDateString(
+                                "en-US",
+                                {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric"
+                                }
+                            )}
+                        </i>
+                        )
                     </div>
                 ))}
         </div>
