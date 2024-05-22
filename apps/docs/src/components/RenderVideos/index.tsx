@@ -19,7 +19,8 @@ export default function RenderVideos(): JSX.Element {
                         >
                             {video.title}
                         </a>{" "}
-                        - {video.speakers.join(", ")} (
+                        - {video.speakers.join(", ")} at{" "}
+                        <u>{video.eventName}</u> (
                         <i>
                             {new Date(video.date).toLocaleDateString("en-US", {
                                 year: "numeric",
