@@ -183,7 +183,12 @@ function DesktopNav() {
                                         {isActive && (
                                             <Icons.Bird className="w-4 block" />
                                         )}
-                                        <AppLink href={href}>{label}</AppLink>
+                                        <AppLink
+                                            href={href}
+                                            external={external}
+                                        >
+                                            {label}
+                                        </AppLink>
                                     </div>
                                 </LinkItem>
                                 {external && (

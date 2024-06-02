@@ -2,7 +2,7 @@ export const HOMEPAGE_LABELS = {
     INTRO: {
         TITLE: "Easily manage privacy-preserving groups of anonymous individuals",
         DESCRIPTION:
-            "Add a layer of privacy to your dapp, build custom gating mechanisms, build a strong anti-sybil system."
+            "Add a layer of privacy to your app, build custom gating mechanisms, build a strong anti-sybil system."
     },
     BANNER: {
         TITLE: "Join the Bandada community"

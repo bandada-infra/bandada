@@ -22,7 +22,7 @@ export const MENU_ITEMS: MenuItem[] = [
     },
     {
         label: "Documentation",
-        href: "https://pse-team.notion.site/Bandada-s-Hackathon-Guide-82d0d9d3c6b64b7bb2a09d4c7647c083",
+        href: "https://docs.bandada.pse.dev/",
         external: true
     },
     {
