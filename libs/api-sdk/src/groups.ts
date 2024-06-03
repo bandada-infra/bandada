@@ -19,6 +19,27 @@ export async function getGroups(config: object): Promise<Group[]> {
 }
 
 /**
+ * Returns the list of groups by admin id.
+ * @param adminId Admin id.
+ * @returns List of groups by admin id.
+ */
+export async function getGroupsByAdminId(
+    config: object,
+    adminId: string
+): Promise<Group[]> {
+    const requestUrl = `${url}?adminId=${adminId}`
+
+    const groups = await request(requestUrl, config)
+
+    groups.map((group: any) => ({
+        ...group,
+        credentials: JSON.parse(group.credentials)
+    }))
+
+    return groups
+}
+
+/**
  * Creates one or more groups with the provided details.
  * @param groupsCreationDetails Data to create the groups.
  * @param apiKey API Key of the admin.
