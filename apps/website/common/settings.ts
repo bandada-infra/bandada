@@ -14,7 +14,7 @@ export const MENU_ITEMS: MenuItem[] = [
     },
     {
         label: "Build",
-        href: "/build"
+        href: "/build-with-bandada"
     },
     {
         label: "Learn",
