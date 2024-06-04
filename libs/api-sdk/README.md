@@ -268,6 +268,17 @@ const adminId =
 const groups = await apiSdk.getGroupsByAdminId(adminId)
 ```
 
+## Get groups by member id
+
+\# **getGroupsByMemberId**(): _Promise\<Group[]>_
+
+Returns the list of groups by member id.
+
+```ts
+const memberId = "1"
+const groups = await apiSdk.getGroupsByMemberId(memberId)
+```
+
 ## Is group member
 
 \# **isGroupMember**(): _Promise\<boolean>_
