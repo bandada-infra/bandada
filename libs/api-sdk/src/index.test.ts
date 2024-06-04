@@ -362,14 +362,43 @@ describe("Bandada API SDK", () => {
                         }
                     ])
                 )
+
                 const adminId =
                     "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847"
+
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Group[] = await apiSdk.getGroupsByAdminId(adminId)
                 expect(groups).toHaveLength(1)
                 groups.forEach((group: Group) => {
                     expect(group.admin).toBe(adminId)
                 })
+            })
+        })
+        describe("#getGroupsByMemberId", () => {
+            it("Should return all groups by member id", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const memberId = "1"
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByMemberId(
+                    memberId
+                )
+                expect(groups).toHaveLength(1)
             })
         })
         describe("#getGroup", () => {

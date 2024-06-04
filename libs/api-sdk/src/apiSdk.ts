@@ -21,7 +21,8 @@ import {
     addMemberByInviteCode,
     removeMemberByApiKey,
     removeMembersByApiKey,
-    getGroupsByAdminId
+    getGroupsByAdminId,
+    getGroupsByMemberId
 } from "./groups"
 import { createInvite, getInvite } from "./invites"
 
@@ -93,6 +94,17 @@ export default class ApiSdk {
      */
     async getGroupsByAdminId(adminId: string): Promise<Group[]> {
         const groups = await getGroupsByAdminId(this._config, adminId)
+
+        return groups
+    }
+
+    /**
+     * Returns the list of groups by member id.
+     * @param memberId Member id.
+     * @returns List of groups by member id.
+     */
+    async getGroupsByMemberId(memberId: string): Promise<Group[]> {
+        const groups = await getGroupsByMemberId(this._config, memberId)
 
         return groups
     }
