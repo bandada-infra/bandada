@@ -222,6 +222,33 @@ describe("GroupsService", () => {
 
             expect(result).toHaveLength(1)
         })
+
+        it("Should return a list of groups by member", async () => {
+            const { id: _groupId } = await groupsService.createGroup(
+                {
+                    name: "MemberGroup",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            const invite = await invitesService.createInvite(
+                { groupId: _groupId },
+                "admin"
+            )
+
+            await groupsService.joinGroup(_groupId, "123456", {
+                inviteCode: invite.code
+            })
+
+            const result = await groupsService.getGroups({
+                memberId: "123456"
+            })
+
+            expect(result).toHaveLength(1)
+        })
     })
 
     describe("# getGroup", () => {

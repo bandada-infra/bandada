@@ -811,11 +811,26 @@ export class GroupsService {
      * Returns a list of groups.
      * @returns List of existing groups.
      */
-    async getGroups(filters?: { adminId: string }): Promise<Group[]> {
-        const where = []
+    async getGroups(filters?: {
+        adminId?: string
+        memberId?: string
+    }): Promise<Group[]> {
+        let where = {}
 
         if (filters?.adminId) {
-            where.push({ adminId: filters.adminId })
+            where = {
+                adminId: filters.adminId,
+                ...where
+            }
+        }
+
+        if (filters?.memberId) {
+            where = {
+                members: {
+                    id: filters.memberId
+                },
+                ...where
+            }
         }
 
         return this.groupRepository.find({
