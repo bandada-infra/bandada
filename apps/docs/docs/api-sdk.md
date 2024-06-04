@@ -233,6 +233,12 @@ Returns the list of groups.
 const groups = await apiSdk.getGroups()
 ```
 
+## Get groups by admin id
+
+\# **getGroupsByAdminId**(): _Promise\<Group[]>_
+
+Returns the list of groups by admin id.
+
 ## Is group member
 
 \# **isGroupMember**(): _Promise\<boolean>_
