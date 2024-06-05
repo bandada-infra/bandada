@@ -1,3 +1,5 @@
+import { LINKS } from "@/common/settings"
+
 export const BUILD_PAGE_LABELS = {
     TITLE: "Let's build something new",
     SUBTITLE:
@@ -9,15 +11,15 @@ export const BUILD_PAGE_LABELS = {
         LINKS: [
             {
                 label: "Good first issues",
-                href: "#"
+                href: LINKS.GOOD_FIRST_ISSUES
             },
             {
                 label: "Enhance the protocol",
-                href: "#"
+                href: LINKS.GITHUB
             },
             {
                 label: "Give feedback about the website",
-                href: "#"
+                href: LINKS.WEBSITE_FEEDBACK
             }
         ]
     }

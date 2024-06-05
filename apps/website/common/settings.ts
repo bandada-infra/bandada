@@ -40,13 +40,16 @@ export const MENU_ITEMS: MenuItem[] = [
 ]
 
 export const LINKS: Record<string, string> = {
+    GITHUB: "https://github.com/bandada-infra/bandada",
     WEBSITE_FEEDBACK:
         "https://github.com/orgs/bandada-infra/discussions/new?category=website",
     SUBMIT_PROJECT: "https://github.com/bandada-infra/bandada/issues/new",
     DISCORD: "https://discord.com/invite/sF5CT5rzrR",
     TWITTER: "https://twitter.com/BandadaDevs",
     GET_INSPIRED: "https://github.com/orgs/bandada-infra/discussions/367",
-    LAUNCH_APP: "https://bandada.pse.dev/"
+    LAUNCH_APP: "https://bandada.pse.dev/",
+    GOOD_FIRST_ISSUES:
+        "https://github.com/bandada-infra/bandada/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"
 }
 
 export const SOCIAL_LINKS: SocialLink[] = [
