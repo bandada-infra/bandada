@@ -63,7 +63,7 @@ const config: Config = {
             },
             items: [
                 {
-                    href: "https://bandada.pse.dev",
+                    href: "https://app.bandada.pse.dev",
                     label: "App",
                     position: "right"
                 },
@@ -104,7 +104,7 @@ const config: Config = {
                     items: [
                         {
                             label: "App",
-                            href: "https://bandada.pse.dev"
+                            href: "https://app.bandada.pse.dev"
                         },
                         {
                             label: "API",

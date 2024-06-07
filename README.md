@@ -187,7 +187,7 @@ The applications will be deployed at the following URLs without any changes to t
 | App                | Development           | Production                     | Staging                                |
 | ------------------ | --------------------- | ------------------------------ | -------------------------------------- |
 | Bandada API        | http://localhost:3000 | https://api.bandada.pse.dev    | https://api-staging.bandada.pse.dev    |
-| Bandada Dashboard  | http://localhost:3001 | https://bandada.pse.dev        | https://staging.bandada.pse.dev        |
+| Bandada Dashboard  | http://localhost:3001 | https://app.bandada.pse.dev    | https://staging.bandada.pse.dev        |
 | Bandada Client App | http://localhost:3002 | https://client.bandada.pse.dev | https://client-staging.bandada.pse.dev |
 
 ## 🛠 Installation
