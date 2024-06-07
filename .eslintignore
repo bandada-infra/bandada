@@ -32,4 +32,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Next.js
 !apps/docs
+!apps/website/app/build
