@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground-rgb: 255, 255, 255;
+        --background-start-rgb: 0, 0, 0;
+        --background-end-rgb: 0, 0, 0;
+    }
+}
+
+body {
+    font-size: 10px;
+    color: rgb(var(--foreground-rgb));
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+.markdown-image {
+    max-width: unset !important;
+}
+
+.rotate-y-180 {
+    transform: rotateY(180deg);
+}
+
+.dashed-line {
+    --c: #c0b8c1; /* color */
+    --t: 6px; /* thickness of the lines */
+    --g: 6px; /* gap between lines */
+    --s: 2px; /* size of the dashes*/
+
+    background: conic-gradient(at var(--t) 50%, #0000 75%, var(--c) 0) var(--g) /
+        calc(var(--g) + var(--t)) var(--s);
+    background-repeat: repeat no-repeat;
+}
+
+.dashed-line-dark {
+    --c: #6b5d6c; /* color */
+    --t: 6px; /* thickness of the lines */
+    --g: 6px; /* gap between lines */
+    --s: 2px; /* size of the dashes*/
+
+    background: conic-gradient(at var(--t) 50%, #0000 75%, var(--c) 0) var(--g) /
+        calc(var(--g) + var(--t)) var(--s);
+    background-repeat: repeat no-repeat;
+}
