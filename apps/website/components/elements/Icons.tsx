@@ -198,7 +198,7 @@ export const Icons: Record<string, any> = {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M6.74309 9.12904L0 0.75H5.34101L9.50347 5.92882L13.9504 0.773318H16.8919L10.9257 7.69836L18 16.5H12.6749L8.16784 10.8994L3.35607 16.4845H0.398583L6.74309 9.12904ZM13.4511 14.9475L3.27493 2.30249H4.56424L14.7276 14.9475H13.4511Z"
-                fill="white"
+                fill="currentColor"
             />
         </svg>
     ),

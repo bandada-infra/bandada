@@ -1,7 +1,7 @@
 import { classed } from "@tw-classed/react"
 
 const CardBase = classed.div(
-    "rounded-lg break-all overflow-hidden duration-300 ease-in-out cursor-pointer",
+    "rounded-lg overflow-hidden duration-300 ease-in-out cursor-pointer",
     {
         variants: {
             border: {

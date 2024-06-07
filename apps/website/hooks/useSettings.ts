@@ -18,8 +18,8 @@ export default function useSettings() {
             setIsMobile(md.current?.mobile() !== null)
             setIsTablet(md.current?.tablet() !== null)
             setIsLoaded(true)
-            setClientHeight(window?.document?.documentElement?.clientHeight)
-            setClientWidth(window?.document?.documentElement?.clientWidth)
+            setClientHeight(window?.innerHeight)
+            setClientWidth(window?.innerWidth)
         }
     }, [])
 

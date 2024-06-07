@@ -34,7 +34,7 @@ function AppFooter() {
                                         key={index}
                                         external={external}
                                     >
-                                        <Label.MenuItem className="flex items-center">
+                                        <Label.MenuItem className="flex items-center hover:text-classic-rose-500 duration-300">
                                             {label}
 
                                             {external && (
@@ -57,7 +57,7 @@ function AppFooter() {
                                         >
                                             <Label.MenuItem
                                                 key={index}
-                                                className="flex items-center"
+                                                className="flex items-center hover:text-classic-rose-500 duration-300"
                                             >
                                                 <Icon />
                                                 <span>{label}</span>
@@ -79,7 +79,7 @@ function AppFooter() {
                         className="order-1 md:order-2 py-2"
                         external
                     >
-                        <Label.MenuItem className="flex gap-2">
+                        <Label.MenuItem className="flex gap-2 hover:text-classic-rose-500 duration-300">
                             {LABELS.FOOTER.FEEDBACK}
                             <Icons.ExternalLink size={20} />
                         </Label.MenuItem>

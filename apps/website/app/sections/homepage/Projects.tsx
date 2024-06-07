@@ -14,7 +14,7 @@ import "glider-js/glider.min.css"
 import useSettings from "@/hooks/useSettings"
 
 export function Projects() {
-    const { clientWidth } = useSettings()
+    const { clientWidth, isLoaded } = useSettings()
     const ref = useRef<HTMLDivElement>(null)
     const refSlider = useRef<any>(null)
 
@@ -32,6 +32,8 @@ export function Projects() {
         element.style.marginRight = `${sliderSpacer}px`
     }, [clientWidth])
 
+    if (!isLoaded) return null
+
     return (
         <div className="bg-baltic-sea-950 flex flex-col gap-12 py-30">
             <AppContainer
@@ -43,7 +45,7 @@ export function Projects() {
                     {LABELS.HOMEPAGE.PROJECTS.TITLE}
                 </Label.Section>
             </AppContainer>
-            <div>
+            <div className="2xl:pl-0">
                 <Glider
                     ref={refSlider}
                     draggable

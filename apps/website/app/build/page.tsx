@@ -14,6 +14,7 @@ import { Divider } from "@/components/elements/Divider"
 import { Icons } from "@/components/elements/Icons"
 import { Section } from "@/components/typography/Section"
 import { LABELS } from "@/shared/labels"
+import { AppLink } from "@/components/AppLink"
 
 function Illustration() {
     return (
@@ -147,9 +148,9 @@ export default function BuildPage() {
                 title="Project ideas to explore with Bandada"
                 description="The team has created this list of project ideas to build with Bandada, but there are many more to be discovered."
             >
-                <Link href={LINKS.GET_INSPIRED} target="_blank">
+                <AppLink href={LINKS.GET_INSPIRED} external>
                     <Button color="black">{LABELS.COMMON.GET_INSPIRED}</Button>
-                </Link>
+                </AppLink>
             </Banner>
         </div>
     )
