@@ -39,6 +39,7 @@ export class GroupsController {
 
     @Get()
     @ApiQuery({ name: "adminId", required: false, type: String })
+    @ApiQuery({ name: "memberId", required: false, type: String })
     @ApiOperation({ description: "Returns the list of groups." })
     @ApiCreatedResponse({ type: Group, isArray: true })
     async getGroups(
