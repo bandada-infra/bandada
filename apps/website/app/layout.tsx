@@ -34,11 +34,11 @@ export const metadata: Metadata = {
         siteName: "Bandada",
         images: [
             {
-                url: `/og-image.png`
+                url: `og-image.png`
             }
         ]
     },
-    twitter: { card: "summary_large_image", images: "/og-image.png" }
+    twitter: { card: "summary_large_image", images: "og-image.png" }
 }
 
 export default function RootLayout({
