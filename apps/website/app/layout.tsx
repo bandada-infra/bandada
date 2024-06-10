@@ -21,22 +21,24 @@ export const metadata: Metadata = {
     description: APP_SETTINGS.APP_DESCRIPTION,
     icons: {
         icon: "/favicon.ico",
-        shortcut: "/favicon.ico"
+        shortcut: "/favicon.ico",
+        apple: "/favicon.ico"
     },
+    metadataBase: new URL("https://bandada.pse.dev"),
     openGraph: {
         type: "website",
         locale: "en_US",
+        url: "https://bandada.pse.dev",
         title: APP_SETTINGS.APP_TITLE,
         description: APP_SETTINGS.APP_DESCRIPTION,
+        siteName: "Bandada",
         images: [
             {
-                url: `/og-image.png`,
-                width: 1200,
-                height: 630,
-                alt: "Bandada"
+                url: `og-image.png`
             }
         ]
-    }
+    },
+    twitter: { card: "summary_large_image", images: "og-image.png" }
 }
 
 export default function RootLayout({
