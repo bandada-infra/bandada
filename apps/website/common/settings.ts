@@ -47,7 +47,7 @@ export const LINKS: Record<string, string> = {
     DISCORD: "https://discord.com/invite/sF5CT5rzrR",
     TWITTER: "https://twitter.com/BandadaDevs",
     GET_INSPIRED: "https://github.com/orgs/bandada-infra/discussions/367",
-    LAUNCH_APP: "https://bandada.pse.dev/",
+    LAUNCH_APP: "https://app.bandada.pse.dev/",
     GOOD_FIRST_ISSUES:
         "https://github.com/bandada-infra/bandada/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"
 }
