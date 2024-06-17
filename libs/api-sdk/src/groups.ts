@@ -371,3 +371,26 @@ export async function removeMembersByApiKey(
 
     await request(requestUrl, newConfig)
 }
+
+/**
+ * Generate a custorm url for joining a credential group.
+ * @param baseUrl Base url.
+ * @param groupId Group id.
+ * @param commitment Identity commitment.
+ * @param providerName Group credential provider name.
+ * @param redirectUri Redirect uri.
+ * @returns Url string.
+ */
+export function joinCredentialGroup(
+    baseUrl: string,
+    groupId: string,
+    commitment: string,
+    providerName: string,
+    redirectUri?: string
+) {
+    if (redirectUri) {
+        return `${baseUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}&redirect_uri=${redirectUri}/groups?redirect=true`
+    }
+
+    return `${baseUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}`
+}
