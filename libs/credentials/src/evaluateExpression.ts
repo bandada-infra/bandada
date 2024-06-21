@@ -1,6 +1,3 @@
-// This algorithm is an adaptation of the Shunting Yard algorithm for evaluating logical operators.
-// https://en.wikipedia.org/wiki/Shunting_yard_algorithm
-
 /**
  * Tokenization function to split the expression into meaningful tokens.
  * @param expression The expression to tokenize.
@@ -50,7 +47,10 @@ function applyOp(op: string, a: boolean, b?: boolean): boolean {
 }
 
 /**
- * Function to evaluate the tokenized expression
+ * Function to evaluate the tokenized expression.
+ * This algorithm is an adaptation of the
+ * {@link https://en.wikipedia.org/wiki/Shunting_yard_algorithm | Shunting Yard}
+ * algorithm to evaluate expressions with logical operators.
  * @param tokens Tokens of the expression.
  * The tokens can be boolean values, operators or parenthesis.
  * They represent a valid expression.
