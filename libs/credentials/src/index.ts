@@ -6,7 +6,10 @@ import getProvider from "./getProvider"
 import getValidator from "./getValidator"
 import providers from "./providers"
 import * as testUtils from "./testUtils"
-import validateCredentials from "./validateCredentials"
+import {
+    validateCredentials,
+    validateManyCredentials
+} from "./validateCredentials"
 import validators from "./validators"
 
 export * from "./providers/index"
@@ -14,6 +17,7 @@ export * from "./types"
 export * from "./validators/index"
 export {
     validateCredentials,
+    validateManyCredentials,
     addValidator,
     getProvider,
     getValidator,

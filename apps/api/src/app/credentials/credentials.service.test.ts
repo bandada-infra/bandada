@@ -43,6 +43,7 @@ jest.mock("@bandada/credentials", () => ({
         getJsonRpcProvider: jest.fn()
     })),
     validateCredentials: jest.fn(() => true),
+    validateManyCredentials: jest.fn(() => true),
     providers: [{ name: "twitter" }, { name: "github" }, { name: "blockchain" }]
 }))
 
@@ -155,7 +156,7 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            await credentialsService.addMember(_stateId, "code")
+            await credentialsService.addMember([_stateId], ["code"])
 
             const fun = credentialsService.setOAuthState({
                 groupId,
@@ -171,7 +172,7 @@ describe("CredentialsService", () => {
 
     describe("# addMember", () => {
         it("Should throw an error if the OAuth does not exist", async () => {
-            const fun = credentialsService.addMember("123", "code")
+            const fun = credentialsService.addMember(["123"], ["code"])
 
             await expect(fun).rejects.toThrow(`OAuth state does not exist`)
         })
@@ -184,8 +185,8 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                _stateId,
-                "code"
+                [_stateId],
+                ["code"]
             )
 
             expect(clientRedirectUri).toBeUndefined()
@@ -231,15 +232,15 @@ describe("CredentialsService", () => {
             )
 
             const clientRedirectUri1 = await credentialsService.addMember(
-                _stateId1,
-                "code"
+                [_stateId1],
+                ["code"]
             )
 
             expect(clientRedirectUri1).toBeUndefined()
 
             const clientRedirectUri2 = await credentialsService.addMember(
-                _stateId2,
-                "code"
+                [_stateId2],
+                ["code"]
             )
 
             expect(clientRedirectUri2).toBeUndefined()
@@ -265,7 +266,7 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            const fun = credentialsService.addMember(_stateId, "code")
+            const fun = credentialsService.addMember([_stateId], ["code"])
 
             await expect(fun).rejects.toThrow(
                 `OAuth account does not match criteria`
@@ -289,7 +290,7 @@ describe("CredentialsService", () => {
                 providerName: "github"
             })
 
-            const fun = credentialsService.addMember(_stateId, "code")
+            const fun = credentialsService.addMember([_stateId], ["code"])
 
             await expect(fun).rejects.toThrow(
                 `OAuth account has already joined the group`
@@ -323,9 +324,9 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                _stateId,
+                [_stateId],
                 undefined,
-                "0x"
+                ["0x"]
             )
 
             expect(clientRedirectUri).toBeUndefined()
@@ -339,9 +340,60 @@ describe("CredentialsService", () => {
             })
 
             const clientRedirectUri = await credentialsService.addMember(
-                _stateId,
+                [_stateId],
                 undefined,
-                "0x1"
+                ["0x1"]
+            )
+
+            expect(clientRedirectUri).toBeUndefined()
+        })
+        it("Should add a member to a group with many credentials", async () => {
+            const { id } = await groupsService.createGroup(
+                {
+                    name: "Group3",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: JSON.stringify({
+                        credentials: [
+                            {
+                                id: "BLOCKCHAIN_TRANSACTIONS",
+                                criteria: {
+                                    minTransactions: 12,
+                                    network: "sepolia"
+                                }
+                            },
+                            {
+                                id: "GITHUB_FOLLOWERS",
+                                criteria: {
+                                    minFollowers: 5
+                                }
+                            }
+                        ],
+                        expression: ["", "and", ""]
+                    })
+                },
+                "admin"
+            )
+
+            groupId = id
+
+            const _stateId1 = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "1",
+                providerName: "blockchain"
+            })
+
+            const _stateId2 = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "1",
+                providerName: "github"
+            })
+
+            const clientRedirectUri = await credentialsService.addMember(
+                [_stateId1, _stateId2],
+                ["code"],
+                ["0x"]
             )
 
             expect(clientRedirectUri).toBeUndefined()
