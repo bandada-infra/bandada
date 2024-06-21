@@ -37,7 +37,7 @@ export default function NavBar(): JSX.Element {
                 backgroundRepeat="no-repeat"
                 backgroundSize="450px"
             >
-                <a href="https://bandada.pse.dev">
+                <a href="https://app.bandada.pse.dev">
                     <HStack spacing="1">
                         <Image
                             src={icon1Image}

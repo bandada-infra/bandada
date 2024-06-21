@@ -39,3 +39,9 @@ hardhat-dependency-compiler
 .cache-loader
 
 !apps/docs
+
+# Next.js
+.next/
+public
+
+!apps/website/app/build

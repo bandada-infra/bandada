@@ -23,6 +23,9 @@
     },
     "plugins": ["@typescript-eslint", "jest"],
     "rules": {
+        "import/extensions": "off",
+        "react/no-array-index-key": "off",
+        "react/jsx-pascal-case": "off",
         "import/prefer-default-export": "off",
         "import/no-cycle": "off",
         "@typescript-eslint/lines-between-class-members": "off",

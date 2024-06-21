@@ -1,12 +1,13 @@
 {
     "name": "@bandada/utils",
-    "version": "2.2.7",
+    "version": "2.2.9",
     "description": "General Bandada utility functions.",
     "license": "MIT",
     "main": "dist/index.node.js",
     "exports": {
         "import": "./dist/index.mjs",
-        "require": "./dist/index.node.js"
+        "require": "./dist/index.node.js",
+        "types": "./dist/types/index.d.ts"
     },
     "types": "dist/types/index.d.ts",
     "files": [

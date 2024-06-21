@@ -1,12 +1,13 @@
 {
     "name": "@bandada/api-sdk",
-    "version": "2.2.7",
+    "version": "2.2.9",
     "description": "A Typescript SDK for the Bandada API.",
     "license": "MIT",
     "main": "dist/index.node.js",
     "exports": {
         "import": "./dist/index.mjs",
-        "require": "./dist/index.node.js"
+        "require": "./dist/index.node.js",
+        "types": "./dist/types/index.d.ts"
     },
     "types": "dist/types/index.d.ts",
     "files": [
@@ -29,7 +30,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@bandada/utils": "2.2.7"
+        "@bandada/utils": "2.2.9"
     },
     "devDependencies": {
         "@rollup/plugin-typescript": "^11.0.0",
