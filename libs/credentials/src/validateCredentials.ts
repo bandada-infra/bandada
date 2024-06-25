@@ -50,6 +50,7 @@ export async function validateCredentials(
  * can be used by validators.
  * @param credentials The credentials of a group.
  * @param contexts A list of sets of context variables.
+ * @param expression Expression with the logical operators.
  * @returns True if the user meets the credentials.
  */
 export async function validateManyCredentials(
@@ -58,7 +59,7 @@ export async function validateManyCredentials(
     expression: string[]
 ): Promise<boolean> {
     let position = 0
-    const expressionTokens: string[] = [...expression]
+    const expressionTokens: string[] = expression.slice()
     for (let i = 0; i < expression.length; i += 1) {
         if (expression[i] === "") {
             // eslint-disable-next-line no-await-in-loop
