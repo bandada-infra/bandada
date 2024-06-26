@@ -63,11 +63,11 @@ export async function validateManyCredentials(
     for (let i = 0; i < expression.length; i += 1) {
         if (expression[i] === "") {
             // eslint-disable-next-line no-await-in-loop
-            const elem = await validateCredentials(
+            const isValidCredential = await validateCredentials(
                 credentials[position],
                 contexts[position]
             )
-            expressionTokens[i] = elem.toString()
+            expressionTokens[i] = isValidCredential.toString()
             position += 1
         }
     }
