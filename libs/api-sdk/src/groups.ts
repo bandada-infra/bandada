@@ -388,9 +388,11 @@ export function joinCredentialGroup(
     providerName: string,
     redirectUri?: string
 ): string {
+    let resultUrl = `${baseUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}`
+
     if (redirectUri) {
-        return `${baseUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}&redirect_uri=${redirectUri}/groups?redirect=true`
+        resultUrl += `&redirect_uri=${redirectUri}?redirect=true`
     }
 
-    return `${baseUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}`
+    return resultUrl
 }
