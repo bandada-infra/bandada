@@ -3,7 +3,8 @@ import {
     Group,
     Invite,
     GroupCreationDetails,
-    GroupUpdateDetails
+    GroupUpdateDetails,
+    DashboardUrl
 } from "./types"
 import checkParameter from "./checkParameter"
 import {
@@ -354,7 +355,7 @@ export default class ApiSdk {
 
     /**
      * Generate a custom url for joining a credential group.
-     * @param baseUrl Base url.
+     * @param dashboardUrl Dashboard base url.
      * @param groupId Group id.
      * @param commitment Identity commitment.
      * @param providerName Group credential provider name.
@@ -362,14 +363,14 @@ export default class ApiSdk {
      * @returns Url string.
      */
     getCredentialGroupJoinUrl(
-        baseUrl: string,
+        dashboardUrl: DashboardUrl,
         groupId: string,
         commitment: string,
         providerName: string,
         redirectUri?: string
     ): string {
         const url = getCredentialGroupJoinUrl(
-            baseUrl,
+            dashboardUrl,
             groupId,
             commitment,
             providerName,

@@ -408,14 +408,16 @@ const invite = await apiSdk.getInvite(inviteCode)
 Returns a custom URL string for joining a credential group.
 
 ```ts
-const baseUrl = "http://localhost:3000"
+import { DashboardUrl } from "@bandada/api-sdk"
+
+const dashboardUrl = DashboardUrl.DEV
 const groupId = "10402173435763029700781503965100"
 const commitment = "1"
 const providerName = "github"
 const redirectUri = "http://localhost:3003"
 
 const url = apiSdk.getCredentialGroupJoinUrl(
-    baseUrl,
+    dashboardUrl,
     groupId,
     commitment,
     providerName,
