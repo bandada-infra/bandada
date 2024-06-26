@@ -401,7 +401,7 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const invite = await apiSdk.getInvite(inviteCode)
 ```
 
-## Join credential group
+## Get credential group join URL
 
 \# **getCredentialGroupJoinUrl**(): _string_
 
