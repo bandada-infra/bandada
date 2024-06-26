@@ -102,6 +102,7 @@ describe("Credentials library", () => {
         })
         it("Should return true if an account has a balance greater than or equal to 10 and greater than or equal to 10 transactions", async () => {
             jsonRpcProviderMocked.getBalance.mockReturnValue(BigNumber.from(12))
+            jsonRpcProviderMocked.getTransactionCount.mockReturnValue(12)
 
             const credentials = [
                 {

@@ -124,7 +124,7 @@ export default function CredentialsPage() {
                     let groupCredentials: any
 
                     if (group?.credentials) {
-                        // get the group credentials
+                        // Get the group credentials
                         groupCredentials = JSON.parse(group.credentials)
                     }
 
@@ -140,7 +140,7 @@ export default function CredentialsPage() {
                         localStorage.setItem(LOCAL_STORAGE, "")
                     }
 
-                    // check if the browser has any data saved, if not, save
+                    // Check if the browser has any data saved, if not, save
                     // the possible providers
                     // and start generating the urls
 

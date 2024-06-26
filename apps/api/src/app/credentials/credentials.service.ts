@@ -108,16 +108,18 @@ export class CredentialsService {
             credentials.credentials !== undefined &&
             credentials.expression !== undefined
         ) {
-            // multiple check
+            // The group has multiple credentials
+
             const contexts = []
             let accountHash: string
 
             for (let i = 0; i < credentials.credentials.length; i += 1) {
-                // get the name of the provider of the credential
+                // Get the name of the provider of the credential
                 const credentialProvider = credentials.credentials[i].id
                     .split("_")[0]
                     .toLowerCase()
 
+                // Find the OAuthState for this credential provider
                 const credentialOAuthState = oAuthState.find(
                     (s) =>
                         this.oAuthState.get(s).providerName ===
@@ -128,7 +130,7 @@ export class CredentialsService {
                     return
                 }
 
-                // get the oAuthState for this credential
+                // Get the oAuthState data for this credential
                 ;({
                     groupId,
                     memberId,
