@@ -367,7 +367,7 @@ export default class ApiSdk {
         commitment: string,
         providerName: string,
         redirectUri?: string
-    ) {
+    ): string {
         const url = joinCredentialGroup(
             baseUrl,
             groupId,
