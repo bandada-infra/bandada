@@ -23,7 +23,7 @@ import {
     removeMembersByApiKey,
     getGroupsByAdminId,
     getGroupsByMemberId,
-    joinCredentialGroup
+    getCredentialGroupJoinUrl
 } from "./groups"
 import { createInvite, getInvite } from "./invites"
 
@@ -361,14 +361,14 @@ export default class ApiSdk {
      * @param redirectUri Redirect uri.
      * @returns Url string.
      */
-    joinCredentialGroup(
+    getCredentialGroupJoinUrl(
         baseUrl: string,
         groupId: string,
         commitment: string,
         providerName: string,
         redirectUri?: string
     ): string {
-        const url = joinCredentialGroup(
+        const url = getCredentialGroupJoinUrl(
             baseUrl,
             groupId,
             commitment,

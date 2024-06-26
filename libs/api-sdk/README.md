@@ -403,7 +403,7 @@ const invite = await apiSdk.getInvite(inviteCode)
 
 ## Join credential group
 
-\# **joinCredentialGroup**(): _string_
+\# **getCredentialGroupJoinUrl**(): _string_
 
 Returns a custom URL string for joining a credential group.
 
@@ -414,7 +414,7 @@ const commitment = "1"
 const providerName = "github"
 const redirectUri = "http://localhost:3003"
 
-const url = apiSdk.joinCredentialGroup(
+const url = apiSdk.getCredentialGroupJoinUrl(
     baseUrl,
     groupId,
     commitment,

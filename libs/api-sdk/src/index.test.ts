@@ -583,16 +583,16 @@ describe("Bandada API SDK", () => {
                 })
             })
 
-            describe("#joinCredentialGroup", () => {
+            describe("#getCredentialGroupJoinUrl", () => {
                 it("Should generate a custom url for joining a credential group", async () => {
                     const baseUrl = "http://localhost:3000"
                     const groupId = "10402173435763029700781503965100"
                     const commitment = "1"
-                    const providerName = "GITHUB"
+                    const providerName = "github"
                     const redirectUri = "http://localhost:3003"
 
                     apiSdk = new ApiSdk(SupportedUrl.DEV)
-                    const res = apiSdk.joinCredentialGroup(
+                    const res = apiSdk.getCredentialGroupJoinUrl(
                         baseUrl,
                         groupId,
                         commitment,
@@ -600,7 +600,7 @@ describe("Bandada API SDK", () => {
                         redirectUri
                     )
 
-                    const url = `${baseUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}&redirect_uri=${redirectUri}/groups?redirect=true`
+                    const url = `${baseUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}&redirect_uri=${redirectUri}?redirect=true`
 
                     expect(res).toBe(url)
                 })

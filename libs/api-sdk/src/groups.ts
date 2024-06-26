@@ -381,7 +381,7 @@ export async function removeMembersByApiKey(
  * @param redirectUri Redirect uri.
  * @returns Url string.
  */
-export function joinCredentialGroup(
+export function getCredentialGroupJoinUrl(
     baseUrl: string,
     groupId: string,
     commitment: string,
