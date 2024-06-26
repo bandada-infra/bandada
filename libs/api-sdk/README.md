@@ -405,7 +405,7 @@ const invite = await apiSdk.getInvite(inviteCode)
 
 \# **joinCredentialGroup**(): _string_
 
-Returns a custom URL string for joining credential group.
+Returns a custom URL string for joining a credential group.
 
 ```ts
 const baseUrl = "http://localhost:3000"
