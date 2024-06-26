@@ -3,7 +3,8 @@ import {
     Group,
     Invite,
     GroupCreationDetails,
-    GroupUpdateDetails
+    GroupUpdateDetails,
+    DashboardUrl
 } from "./types"
 import checkParameter from "./checkParameter"
 import {
@@ -22,7 +23,8 @@ import {
     removeMemberByApiKey,
     removeMembersByApiKey,
     getGroupsByAdminId,
-    getGroupsByMemberId
+    getGroupsByMemberId,
+    getCredentialGroupJoinUrl
 } from "./groups"
 import { createInvite, getInvite } from "./invites"
 
@@ -349,5 +351,32 @@ export default class ApiSdk {
         const invite = await getInvite(this._config, inviteCode)
 
         return invite
+    }
+
+    /**
+     * Generate a custom url for joining a credential group.
+     * @param dashboardUrl Dashboard base url.
+     * @param groupId Group id.
+     * @param commitment Identity commitment.
+     * @param providerName Group credential provider name.
+     * @param redirectUri Redirect uri.
+     * @returns Url string.
+     */
+    getCredentialGroupJoinUrl(
+        dashboardUrl: DashboardUrl,
+        groupId: string,
+        commitment: string,
+        providerName: string,
+        redirectUri?: string
+    ): string {
+        const url = getCredentialGroupJoinUrl(
+            dashboardUrl,
+            groupId,
+            commitment,
+            providerName,
+            redirectUri
+        )
+
+        return url
     }
 }
