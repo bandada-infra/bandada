@@ -411,7 +411,7 @@ Returns a custom URL string for joining a credential group.
 const baseUrl = "http://localhost:3000"
 const groupId = "10402173435763029700781503965100"
 const commitment = "1"
-const providerName = "GITHUB"
+const providerName = "github"
 const redirectUri = "http://localhost:3003"
 
 const url = apiSdk.joinCredentialGroup(
