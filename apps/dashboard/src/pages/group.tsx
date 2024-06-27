@@ -245,19 +245,53 @@ ${memberIds.join("\n")}
     }
     let credentialsId = ""
     let credentialsCriteria = ""
+    const credentialsIds: string[] = []
+    const credentialsCriterias: string[] = []
+    const expression: string[] = []
     if (_group && _group.credentials) {
         const credentialsObj = JSON.parse(_group.credentials)
-        credentialsId = `${credentialsObj.id}`
 
-        if (credentialsObj.criteria) {
-            for (const key in credentialsObj.criteria) {
-                if (
-                    Object.prototype.hasOwnProperty.call(
-                        credentialsObj.criteria,
-                        key
-                    )
-                ) {
-                    credentialsCriteria += `${key}:${credentialsObj.criteria[key]} `
+        if (credentialsObj.id) {
+            credentialsId = `${credentialsObj.id}`
+
+            if (credentialsObj.criteria) {
+                for (const key in credentialsObj.criteria) {
+                    if (
+                        Object.prototype.hasOwnProperty.call(
+                            credentialsObj.criteria,
+                            key
+                        )
+                    ) {
+                        credentialsCriteria += `${key}:${credentialsObj.criteria[key]} `
+                    }
+                }
+            }
+        } else {
+            // The group has multiple credentials
+            for (let i = 0; i < credentialsObj.credentials.length; i += 1) {
+                let credentialsCriteriaTemp: string = ""
+                credentialsIds.push(credentialsObj.credentials[i].id)
+                if (credentialsObj.credentials[i].criteria) {
+                    for (const key in credentialsObj.credentials[i].criteria) {
+                        if (
+                            Object.prototype.hasOwnProperty.call(
+                                credentialsObj.credentials[i].criteria,
+                                key
+                            )
+                        ) {
+                            credentialsCriteriaTemp += `${key}:${credentialsObj.credentials[i].criteria[key]} `
+                        }
+                    }
+                }
+                credentialsCriterias.push(credentialsCriteriaTemp)
+            }
+            let pos = 0
+            for (let i = 0; i < credentialsObj.expression.length; i += 1) {
+                if (credentialsObj.expression[i] === "") {
+                    expression.push(credentialsCriterias[pos])
+                    pos += 1
+                } else {
+                    expression.push(credentialsObj.expression[i])
                 }
             }
         }
@@ -388,20 +422,61 @@ ${memberIds.join("\n")}
                             borderRadius="8px"
                         >
                             <Text fontSize="20px">Credentials</Text>
-                            <Input
-                                pr="50px"
-                                placeholder="Credentials ID"
-                                mb="10px"
-                                mt="10px"
-                                value={credentialsId}
-                                isDisabled
-                            />
-                            <Input
-                                pr="50px"
-                                placeholder="Credentials Criteria"
-                                value={credentialsCriteria}
-                                isDisabled
-                            />
+                            {JSON.parse(_group.credentials).credentials ? (
+                                // The group has multiple credentials
+                                <>
+                                    <>
+                                        {credentialsIds.map((id, i) => (
+                                            <VStack key={id}>
+                                                <Input
+                                                    pr="50px"
+                                                    placeholder="Credential IDs"
+                                                    mb="10px"
+                                                    mt="10px"
+                                                    value={id}
+                                                    isDisabled
+                                                />
+                                                <Input
+                                                    pr="50px"
+                                                    placeholder="Credentials Criteria"
+                                                    value={
+                                                        credentialsCriterias[i]
+                                                    }
+                                                    isDisabled
+                                                />
+                                            </VStack>
+                                        ))}
+                                    </>
+                                    <Text fontSize="20px" mt="3">
+                                        Expression
+                                    </Text>
+                                    <Input
+                                        pr="50px"
+                                        placeholder="Expression"
+                                        mb="10px"
+                                        mt="10px"
+                                        value={expression.join(" ")}
+                                        isDisabled
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <Input
+                                        pr="50px"
+                                        placeholder="Credentials ID"
+                                        mb="10px"
+                                        mt="10px"
+                                        value={credentialsId}
+                                        isDisabled
+                                    />
+                                    <Input
+                                        pr="50px"
+                                        placeholder="Credentials Criteria"
+                                        value={credentialsCriteria}
+                                        isDisabled
+                                    />
+                                </>
+                            )}
                         </Box>
                     )}
                     {/* {groupType === "off-chain" &&

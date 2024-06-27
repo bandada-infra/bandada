@@ -1,14 +1,17 @@
-import { IsString, IsOptional } from "class-validator"
+import { IsArray, ArrayNotEmpty, IsOptional } from "class-validator"
 
 export class AddMemberDto {
-    @IsString()
-    readonly oAuthState: string
+    @IsArray()
+    @ArrayNotEmpty()
+    readonly oAuthState: string[]
 
     @IsOptional()
-    @IsString()
-    readonly oAuthCode: string
+    @IsArray()
+    @ArrayNotEmpty()
+    readonly oAuthCode: string[]
 
     @IsOptional()
-    @IsString()
-    readonly address: string
+    @IsArray()
+    @ArrayNotEmpty()
+    readonly address: string[]
 }
