@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers"
+import { utils } from "ethers"
 import { BlockchainContext, Validator } from "../.."
 
 export type Criteria = {
@@ -38,13 +38,16 @@ const validator: Validator = {
                     ? criteria.blockNumber
                     : undefined
 
-            const balance = await (
+            const balanceWei = await (
                 context as BlockchainContext
             ).jsonRpcProvider.getBalance(
                 (context as BlockchainContext).address,
                 blockNumber
             )
-            return balance >= BigNumber.from(criteria.minBalance)
+
+            const balanceETH = utils.formatEther(balanceWei)
+            
+            return parseFloat(balanceETH) >= parseFloat(criteria.minBalance)
         }
         throw new Error("No address value found")
     }
