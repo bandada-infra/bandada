@@ -8,7 +8,9 @@ describe("BlockchainBalance", () => {
     }
 
     it("Should return true if an account has a balance greater than or equal to 10", async () => {
-        jsonRpcProviderMocked.getBalance.mockReturnValue(BigNumber.from("12000000000000000000"))
+        jsonRpcProviderMocked.getBalance.mockReturnValue(
+            BigNumber.from("12000000000000000000")
+        )
 
         const result = await validateCredentials(
             {
@@ -28,7 +30,9 @@ describe("BlockchainBalance", () => {
     })
 
     it("Should return true if an account has a balance greater than or equal to 10 using the block number", async () => {
-        jsonRpcProviderMocked.getBalance.mockReturnValue(BigNumber.from("12000000000000000000"))
+        jsonRpcProviderMocked.getBalance.mockReturnValue(
+            BigNumber.from("12000000000000000000")
+        )
 
         const result = await validateCredentials(
             {

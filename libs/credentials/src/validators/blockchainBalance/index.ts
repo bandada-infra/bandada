@@ -46,7 +46,7 @@ const validator: Validator = {
             )
 
             const balanceETH = utils.formatEther(balanceWei)
-            
+
             return parseFloat(balanceETH) >= parseFloat(criteria.minBalance)
         }
         throw new Error("No address value found")
