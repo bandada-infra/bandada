@@ -55,3 +55,9 @@ export enum SupportedUrl {
     PROD = "https://api.bandada.pse.dev",
     STAGING = "https://api-staging.bandada.pse.dev"
 }
+
+export enum DashboardUrl {
+    DEV = "http://localhost:3001",
+    PROD = "https://app.bandada.pse.dev",
+    STAGING = "https://app-staging.bandada.pse.dev"
+}

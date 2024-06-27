@@ -1,5 +1,10 @@
 import { request } from "@bandada/utils"
-import type { GroupCreationDetails, Group, GroupUpdateDetails } from "./types"
+import type {
+    GroupCreationDetails,
+    Group,
+    GroupUpdateDetails,
+    DashboardUrl
+} from "./types"
 
 const url = "/groups"
 
@@ -370,4 +375,29 @@ export async function removeMembersByApiKey(
     newConfig.headers["x-api-key"] = apiKey
 
     await request(requestUrl, newConfig)
+}
+
+/**
+ * Generate a custorm url for joining a credential group.
+ * @param dashboardUrl Dashboard url.
+ * @param groupId Group id.
+ * @param commitment Identity commitment.
+ * @param providerName Group credential provider name.
+ * @param redirectUri Redirect uri.
+ * @returns Url string.
+ */
+export function getCredentialGroupJoinUrl(
+    dashboardUrl: DashboardUrl,
+    groupId: string,
+    commitment: string,
+    providerName: string,
+    redirectUri?: string
+): string {
+    let resultUrl = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}`
+
+    if (redirectUri) {
+        resultUrl += `&redirect_uri=${redirectUri}?redirect=true`
+    }
+
+    return resultUrl
 }

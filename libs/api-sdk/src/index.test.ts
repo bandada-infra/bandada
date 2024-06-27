@@ -5,7 +5,8 @@ import {
     Group,
     GroupUpdateDetails,
     Invite,
-    SupportedUrl
+    SupportedUrl,
+    DashboardUrl
 } from "./types"
 import checkParameter from "./checkParameter"
 
@@ -580,6 +581,29 @@ describe("Bandada API SDK", () => {
                         apiKey
                     )
                     expect(res).toBeUndefined()
+                })
+            })
+
+            describe("#getCredentialGroupJoinUrl", () => {
+                it("Should generate a custom url for joining a credential group", async () => {
+                    const dashboardUrl = DashboardUrl.DEV
+                    const groupId = "10402173435763029700781503965100"
+                    const commitment = "1"
+                    const providerName = "github"
+                    const redirectUri = "http://localhost:3003"
+
+                    apiSdk = new ApiSdk(SupportedUrl.DEV)
+                    const res = apiSdk.getCredentialGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        commitment,
+                        providerName,
+                        redirectUri
+                    )
+
+                    const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}&redirect_uri=${redirectUri}?redirect=true`
+
+                    expect(res).toBe(url)
                 })
             })
         })
