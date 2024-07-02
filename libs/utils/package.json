@@ -1,6 +1,6 @@
 {
     "name": "@bandada/utils",
-    "version": "2.2.11",
+    "version": "2.3.0",
     "description": "General Bandada utility functions.",
     "license": "MIT",
     "main": "dist/index.node.js",
