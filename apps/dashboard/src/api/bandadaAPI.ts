@@ -201,18 +201,21 @@ export async function setOAuthState(
  * @param oAuthCode The OAuth code.
  */
 export async function addMemberByCredentials(
-    oAuthState: string,
-    oAuthCode?: string,
-    address?: string
+    oAuthState: string[],
+    oAuthCode?: string[],
+    address?: string[]
 ): Promise<string | null> {
     try {
         return await request(`${API_URL}/credentials`, {
             method: "POST",
-            data: {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
                 oAuthState,
                 oAuthCode,
                 address
-            }
+            })
         })
     } catch (error: any) {
         console.error(error)
