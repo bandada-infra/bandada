@@ -143,6 +143,7 @@ describe("GroupsService", () => {
                     id,
                     {
                         description: "This is a new description",
+                        treeDepth: 16,
                         fingerprintDuration: 1000,
                         credentials: {
                             id: "TWITTER_FOLLOWERS",
@@ -266,7 +267,7 @@ describe("GroupsService", () => {
         })
     })
 
-    describe("# addMember", () => {
+    describe("# joinGroup", () => {
         let invite: Invite
 
         beforeAll(async () => {
@@ -306,6 +307,40 @@ describe("GroupsService", () => {
             })
 
             await expect(fun).rejects.toThrow("already exists")
+        })
+    })
+
+    describe("# addMember", () => {
+        let _group: Group
+        const memberId = "123123"
+
+        beforeAll(async () => {
+            _group = await groupsService.createGroup(
+                {
+                    name: "MemberGroup",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+        })
+
+        it("Should add member to the group", async () => {
+            const { members } = await groupsService.addMember(
+                _group.id,
+                memberId
+            )
+
+            expect(members).toHaveLength(1)
+        })
+
+        it("Should not add member to a group if the member is already in the group", async () => {
+            const fun = groupsService.addMember(_group.id, memberId)
+
+            await expect(fun).rejects.toThrow(
+                `Member '${memberId}' is already in the group '${_group.name}'`
+            )
         })
     })
 
@@ -1162,6 +1197,34 @@ describe("GroupsService", () => {
             expect(members).toHaveLength(3)
         })
 
+        it("Should not add a member to the group via API if the group is a credential group", async () => {
+            const _group = await groupsService.createGroup(
+                {
+                    name: "Credential Group",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: {
+                        id: "GITHUB_FOLLOWERS",
+                        criteria: {
+                            minFollowers: 5
+                        }
+                    }
+                },
+                admin.id
+            )
+
+            const fun = groupsService.addMembersWithAPIKey(
+                _group.id,
+                ["123123", "456456", "789789"],
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `The group '${_group.name}' is a credential group. You cannot add members to a credential group using an API Key.`
+            )
+        })
+
         it("Should not add a member if they already exist", async () => {
             const fun = groupsService.addMembersWithAPIKey(
                 group.id,
@@ -1355,6 +1418,34 @@ describe("GroupsService", () => {
                 "122121",
                 "456456"
             ])
+        })
+
+        it("Should not add a member to the group if the group is a credential group", async () => {
+            const _group = await groupsService.createGroup(
+                {
+                    name: "Credential Group",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: {
+                        id: "GITHUB_FOLLOWERS",
+                        criteria: {
+                            minFollowers: 5
+                        }
+                    }
+                },
+                "admin"
+            )
+
+            const fun = groupsService.addMembersManually(
+                _group.id,
+                ["789789", "122121", "456456"],
+                "admin"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `The group '${_group.name}' is a credential group. You cannot manually add members to a credential group.`
+            )
         })
 
         it("Should not add members if they already exists", async () => {
@@ -1773,6 +1864,32 @@ describe("GroupsService", () => {
             await expect(fun).rejects.toThrow(
                 `You are not the admin of the group '${groupId1}'`
             )
+        })
+    })
+
+    describe("# fingerprint", () => {
+        it("Should get fingerprint", async () => {
+            const fingerprint = await groupsService.getFingerprint(groupId)
+
+            expect(fingerprint).toBeDefined()
+        })
+
+        it("Should get fingerprints", async () => {
+            const group = await groupsService.createGroup(
+                {
+                    name: "Fingerprint Group",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+            const fingerprints = await groupsService.getFingerprints([
+                groupId,
+                group.id
+            ])
+
+            expect(fingerprints).toHaveLength(2)
         })
     })
 
