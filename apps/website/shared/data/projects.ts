@@ -66,13 +66,11 @@ export const PROJECT_ITEMS: Project[] = [
     },
     {
         name: "Pairwise",
-        tagline:
-            "A fun pseudonymous way to signal in Retro Funding 4.",
+        tagline: "A fun pseudonymous way to signal in Retro Funding 4.",
         pse: false,
         categories: ["Retro Funding", "public goods", "privacy", "community"],
         links: {
-            website:
-                "https://www.pairwise.vote/"
+            website: "https://www.pairwise.vote/"
         }
     }
 ]
