@@ -63,5 +63,16 @@ export const PROJECT_ITEMS: Project[] = [
             website:
                 "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/cluz8gb2701a9z301ptjuvhlo/idea"
         }
+    },
+    {
+        name: "Pairwise",
+        tagline:
+            "A fun pseudonymous way to signal in Retro Funding 4.",
+        pse: false,
+        categories: ["Retro Funding", "public goods", "privacy", "community"],
+        links: {
+            website:
+                "https://www.pairwise.vote/"
+        }
     }
 ]
