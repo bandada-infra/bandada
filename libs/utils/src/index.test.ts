@@ -1,3 +1,4 @@
+import { blockchainCredentialSupportedNetworks } from "./getSupportedNetworks"
 import shortenAddress from "./shortenAddress"
 
 describe("Utils", () => {
@@ -8,6 +9,32 @@ describe("Utils", () => {
             )
 
             expect(address).toBe("0x1234...7890")
+        })
+    })
+
+    describe("# blockchainCredentialSupportedNetworks", () => {
+        it("Should return a list of blockchain credential supported network", () => {
+            const networks = blockchainCredentialSupportedNetworks
+
+            expect(networks).toHaveLength(
+                blockchainCredentialSupportedNetworks.length
+            )
+        })
+
+        it("Should return a blockchain credential supported network", () => {
+            const expected = {
+                id: "sepolia",
+                name: "Sepolia"
+            }
+            const id = blockchainCredentialSupportedNetworks.find(
+                (i) => i.id === expected.id
+            )
+            const name = blockchainCredentialSupportedNetworks.find(
+                (i) => i.name === expected.name
+            )
+
+            expect(id).toMatchObject(expected)
+            expect(name).toMatchObject(expected)
         })
     })
 })
