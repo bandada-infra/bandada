@@ -2,6 +2,7 @@ import { BigNumber } from "ethers"
 import blockchainBalance from "./validators/blockchainBalance"
 import blockchainTransactions from "./validators/blockchainTransactions"
 import githubPersonalStars from "./validators/githubPersonalStars"
+import githubFollowers  from "./validators/githubFollowers"
 import addProvider from "./addProvider"
 import addProviders from "./addProviders"
 import addValidator from "./addValidator"
@@ -14,7 +15,7 @@ import {
     validateCredentials,
     validateManyCredentials
 } from "./validateCredentials"
-import { githubFollowers, testUtils } from "."
+import { testUtils } from "."
 import { evaluate, tokenize } from "./evaluateExpression"
 import checkCriteria from "./checkCriteria"
 import getJsonRpcProvider from "./getJsonRpcProvider"
