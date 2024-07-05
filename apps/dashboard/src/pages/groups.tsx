@@ -11,7 +11,7 @@ import {
     InputRightElement,
     Spinner,
     Text,
-    VStack,
+    VStack
 } from "@chakra-ui/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
