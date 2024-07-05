@@ -11,28 +11,30 @@
         "@bandada/credentials": "2.3.0",
         "@bandada/utils": "2.3.0",
         "@chakra-ui/icons": "^2.1.1",
-        "@chakra-ui/react": "^2.5.1",
+        "@chakra-ui/react": "^2.5.5",
         "@chakra-ui/styled-system": "^2.0.0",
         "@chakra-ui/theme-tools": "^2.0.16",
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@fontsource-variable/unbounded": "^5.0.5",
-        "@rainbow-me/rainbowkit": "^0.12.8",
+        "@rainbow-me/rainbowkit": "^2.1.2",
         "@semaphore-protocol/data": "patch:@semaphore-protocol/data@npm%3A3.10.0#~/.yarn/patches/@semaphore-protocol-data-npm-3.10.0-48e6c0f59e.patch",
+        "@tanstack/react-query": "^5.45.0",
         "ethers": "5.5.1",
         "framer-motion": "^10.0.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-icons": "^4.10.1",
         "react-router-dom": "^6.8.1",
-        "siwe": "^1.1.6",
-        "wagmi": "^0.12.12"
+        "siwe": "1.1.6",
+        "viem": "2.x",
+        "wagmi": "^2.10.2"
     },
     "devDependencies": {
-        "@types/react": "^18.0.27",
-        "@types/react-dom": "^18.0.10",
+        "@types/react": "^18.3.3",
+        "@types/react-dom": "^18.3.0",
         "@vitejs/plugin-react": "^3.1.0",
-        "typescript": "^4.9.3",
+        "typescript": "^5.0.4",
         "vite": "^4.1.0"
     }
 }
