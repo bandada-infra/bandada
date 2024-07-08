@@ -95,7 +95,6 @@ export default function ApiKeyComponent({
                     "Successfully refreshed",
                     "success"
                 )
-                getAdminInfo()
             }
         }
     }
@@ -136,7 +135,6 @@ export default function ApiKeyComponent({
                         ? "API key has been enabled."
                         : "API key has been disabled."
             }
-            getAdminInfo()
             showToast(toastTitle, toastDescription, "success")
         }
     }
