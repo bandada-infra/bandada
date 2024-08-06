@@ -1,4 +1,8 @@
-import { getProvider, validateCredentials } from "@bandada/credentials"
+import {
+    getProvider,
+    validateCredentials,
+    validateManyCredentials
+} from "@bandada/credentials"
 import { ScheduleModule } from "@nestjs/schedule"
 import { Test } from "@nestjs/testing"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -175,6 +179,37 @@ describe("CredentialsService", () => {
             const fun = credentialsService.addMember(["123"], ["code"])
 
             await expect(fun).rejects.toThrow(`OAuth state does not exist`)
+        })
+
+        it("Should throw an error if the credential group blockchain network is not supported", async () => {
+            const { id: _groupId } = await groupsService.createGroup(
+                {
+                    name: "Group2",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: JSON.stringify({
+                        id: "BLOCKCHAIN_TRANSACTIONS",
+                        criteria: {
+                            minTransactions: 12,
+                            network: "test_network"
+                        }
+                    })
+                },
+                "admin"
+            )
+
+            const _stateId = await credentialsService.setOAuthState({
+                groupId: _groupId,
+                memberId: "123",
+                providerName: "blockchain"
+            })
+
+            const fun = credentialsService.addMember([_stateId], undefined, [
+                "0x"
+            ])
+
+            await expect(fun).rejects.toThrow(`The network is not supported`)
         })
 
         it("Should add a member to a credential group", async () => {
@@ -397,6 +432,168 @@ describe("CredentialsService", () => {
             )
 
             expect(clientRedirectUri).toBeUndefined()
+        })
+
+        it("Should not add a member to a group with many credentials and return undefined if the OAuth state does not match the credential provider", async () => {
+            const { id: _groupId } = await groupsService.createGroup(
+                {
+                    name: "Group4",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: JSON.stringify({
+                        credentials: [
+                            {
+                                id: "BLOCKCHAIN_TRANSACTIONS",
+                                criteria: {
+                                    minTransactions: 12,
+                                    network: "sepolia"
+                                }
+                            },
+                            {
+                                id: "GITHUB_FOLLOWERS",
+                                criteria: {
+                                    minFollowers: 5
+                                }
+                            }
+                        ],
+                        expression: ["", "and", ""]
+                    })
+                },
+                "admin"
+            )
+
+            const _stateId1 = await credentialsService.setOAuthState({
+                groupId: _groupId,
+                memberId: "1",
+                providerName: "blockchain"
+            })
+
+            const _stateId2 = await credentialsService.setOAuthState({
+                groupId: _groupId,
+                memberId: "1",
+                providerName: "twitter"
+            })
+
+            const clientRedirectUri = await credentialsService.addMember(
+                [_stateId1, _stateId2],
+                ["code"],
+                ["0x"]
+            )
+
+            const group = await groupsService.getGroup(_groupId)
+
+            expect(clientRedirectUri).toBeUndefined()
+            expect(group.members).toHaveLength(0)
+        })
+
+        it("Should throw an error if the group with many credentials contains unsupported network", async () => {
+            const { id: _groupId } = await groupsService.createGroup(
+                {
+                    name: "Group5",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: JSON.stringify({
+                        credentials: [
+                            {
+                                id: "BLOCKCHAIN_TRANSACTIONS",
+                                criteria: {
+                                    minTransactions: 12,
+                                    network: "test_network"
+                                }
+                            },
+                            {
+                                id: "GITHUB_FOLLOWERS",
+                                criteria: {
+                                    minFollowers: 5
+                                }
+                            }
+                        ],
+                        expression: ["", "and", ""]
+                    })
+                },
+                "admin"
+            )
+
+            const _stateId1 = await credentialsService.setOAuthState({
+                groupId: _groupId,
+                memberId: "1",
+                providerName: "blockchain"
+            })
+
+            const _stateId2 = await credentialsService.setOAuthState({
+                groupId: _groupId,
+                memberId: "1",
+                providerName: "github"
+            })
+
+            const fun = credentialsService.addMember(
+                [_stateId1, _stateId2],
+                ["code"],
+                ["0x"]
+            )
+
+            await expect(fun).rejects.toThrow(`The network is not supported`)
+        })
+
+        it("Should throw an error if the OAuth account has already joined the group with many credentials", async () => {
+            const _stateId1 = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "123",
+                providerName: "blockchain"
+            })
+
+            const _stateId2 = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "123",
+                providerName: "github"
+            })
+
+            const fun = credentialsService.addMember(
+                [_stateId1, _stateId2],
+                ["code"]
+            )
+
+            await expect(fun).rejects.toThrow(
+                `OAuth account has already joined the group`
+            )
+        })
+
+        it("Should throw an error if the OAuth account does not match the criteria of the group with many credentials", async () => {
+            ;(getProvider as any).mockImplementation(
+                () =>
+                    ({
+                        getAccessToken: jest.fn(() => "2"),
+                        getProfile: jest.fn(() => ({
+                            id: "id2"
+                        }))
+                    } as any)
+            )
+            ;(validateManyCredentials as any).mockImplementationOnce(
+                async () => false
+            )
+
+            const _stateId1 = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "124",
+                providerName: "blockchain"
+            })
+
+            const _stateId2 = await credentialsService.setOAuthState({
+                groupId,
+                memberId: "124",
+                providerName: "github"
+            })
+
+            const fun = credentialsService.addMember(
+                [_stateId1, _stateId2],
+                ["code"]
+            )
+
+            await expect(fun).rejects.toThrow(
+                `OAuth account does not match criteria`
+            )
         })
     })
 })
