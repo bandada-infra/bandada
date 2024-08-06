@@ -50,7 +50,7 @@ export const PROJECT_ITEMS: Project[] = [
         categories: ["review", "feedback", "privacy"],
         links: {
             website:
-                "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/clux971fz00nuvq01mh9g5phl/idea"
+                "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/cluz8gb2701a9z301ptjuvhlo/idea"
         }
     },
     {
@@ -61,7 +61,7 @@ export const PROJECT_ITEMS: Project[] = [
         categories: ["feedback", "nft", "privacy", "community"],
         links: {
             website:
-                "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/cluz8gb2701a9z301ptjuvhlo/idea"
+                "https://taikai.network/cryptocanal/hackathons/ethdam2024/projects/clux971fz00nuvq01mh9g5phl/idea"
         }
     },
     {
