@@ -1,10 +1,9 @@
+import { evaluate } from "@zk-kit/logical-expressions"
 import checkCriteria from "./checkCriteria"
 import getAPI from "./getAPI"
 import getProvider from "./getProvider"
 import getValidator from "./getValidator"
 import { Context, Credentials, Web2Provider } from "./types"
-
-import { evaluate } from "./evaluateExpression"
 
 /**
  * It checks if the user meets the credentials of a group.
