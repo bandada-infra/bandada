@@ -2345,6 +2345,7 @@ __metadata:
   dependencies:
     "@bandada/utils": "npm:2.3.0"
     "@rollup/plugin-typescript": "npm:^11.0.0"
+    "@zk-kit/logical-expressions": "npm:1.0.0"
     ethers: "npm:5.7.0"
     rimraf: "npm:^4.1.2"
     rollup: "npm:^3.17.2"
@@ -10449,6 +10450,13 @@ __metadata:
   version: 1.1.0
   resolution: "@zk-kit/incremental-merkle-tree@npm:1.1.0"
   checksum: 10/4860cdaa5a479fc9b4ab7bb75b73aad5c7202f4b1cb68e441d42da482ef272ad43e21ed84208ceea62770ac50b27e25a7d964343e9144301270ce014baa45f6d
+  languageName: node
+  linkType: hard
+
+"@zk-kit/logical-expressions@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@zk-kit/logical-expressions@npm:1.0.0"
+  checksum: 10/d1309904bc7080b55b56e2fce8fa1d99bda63f7671045bfa5012c7460b9b00d10f58f7b27943e995c1288cb597f4ec5b09861bb1c62c1721fad7810109baa2af
   languageName: node
   linkType: hard
 
