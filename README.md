@@ -168,6 +168,10 @@ Please see the latest [documentation](https://pse-team.notion.site/Bandada-82d0d
     <tbody>
 </table>
 
+## Bandada board
+
+All the Bandada board tasks are public. You can view the current tasks, their statuses, and more details [here](https://github.com/orgs/bandada-infra/projects/1).
+
 ## 🔧 Configuration
 
 ### Prerequisites
@@ -295,6 +299,12 @@ To enable API access for a group, go to the group page in the dashboard and togg
 To see the complete list of available endpoints, please visit https://api.bandada.pse.dev.
 
 ## 👨‍💻 Contributing
+
+### Good First Issues
+
+Check out the list of open [Good First Issues](https://github.com/bandada-infra/bandada/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) to find tasks that are ideal for new contributors.
+
+Alternatively, for a more visual organization, check out the [Good First Issues board view](https://github.com/orgs/bandada-infra/projects/1/views/5).
 
 ### Code quality and formatting
 
