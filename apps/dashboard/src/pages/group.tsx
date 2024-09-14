@@ -517,7 +517,7 @@ ${memberIds.join("\n")}
                             <Text fontSize="20px">Download group</Text>
                             <Flex align="center" mt="2">
                                 <Text my="10px" fontWeight="400">
-                                    Get the group&apos; data JSON format.
+                                    Get the group&apos;s data JSON format.
                                 </Text>
                                 <Spacer />
                                 <Button
