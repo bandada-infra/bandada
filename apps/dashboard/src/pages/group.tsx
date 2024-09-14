@@ -17,6 +17,7 @@ import {
     MenuButton,
     MenuItem,
     MenuList,
+    Spacer,
     // Switch,
     Text,
     Tooltip,
@@ -242,6 +243,34 @@ ${memberIds.join("\n")}
 
     const handleDeselectAll = () => {
         setSelectedMembers([])
+    }
+
+    const handleDownload = async () => {
+        if (!_group) return
+
+        try {
+            const response = await bandadaApi.getGroup(_group.id)
+            if (response) {
+                const json = JSON.stringify(response, null, 2)
+                const blob = new Blob([json], { type: "application/json" })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement("a")
+                a.href = url
+                a.download = `${_group.name}.json`
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+                URL.revokeObjectURL(url)
+            }
+        } catch (error) {
+            console.error("Failed to download group data:", error)
+            toast({
+                title: "Error",
+                description: "Failed to download group data.",
+                status: "error",
+                duration: 3000
+            })
+        }
     }
     let credentialsId = ""
     let credentialsCriteria = ""
@@ -477,6 +506,28 @@ ${memberIds.join("\n")}
                                     />
                                 </>
                             )}
+                        </Box>
+                    )}
+                    {_group.type === "off-chain" && isGroupAdmin && (
+                        <Box
+                            bgColor="balticSea.50"
+                            p="25px 30px 25px 30px"
+                            borderRadius="8px"
+                        >
+                            <Text fontSize="20px">Download group</Text>
+                            <Flex align="center" mt="2">
+                                <Text my="10px" fontWeight="400">
+                                    Get the group&apos;s data JSON format.
+                                </Text>
+                                <Spacer />
+                                <Button
+                                    variant="solid"
+                                    colorScheme="tertiary"
+                                    onClick={handleDownload}
+                                >
+                                    Download
+                                </Button>
+                            </Flex>
                         </Box>
                     )}
                     {/* {groupType === "off-chain" &&
