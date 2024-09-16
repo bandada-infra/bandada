@@ -40,9 +40,13 @@ export async function generateMagicLink(
  * @param adminId The admin id.
  * @returns The list of groups or null.
  */
-export async function getGroups(adminId: string): Promise<Group[] | null> {
+export async function getGroups(adminId?: string): Promise<Group[] | null> {
     try {
-        const groups = await request(`${API_URL}/groups/?adminId=${adminId}`)
+        const url = adminId
+            ? `${API_URL}/groups/?adminId=${adminId}`
+            : `${API_URL}/groups/`
+
+        const groups = await request(url)
 
         return groups.map((group: Group) => ({
             ...group,
