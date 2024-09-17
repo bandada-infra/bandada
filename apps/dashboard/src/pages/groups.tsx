@@ -27,6 +27,7 @@ export default function GroupsPage(): JSX.Element {
     const { admin } = useContext(AuthContext)
     const [_isLoading, setIsLoading] = useState(false)
     const [_groups, setGroups] = useState<Group[]>([])
+    const [_allCredentialGroups, setAllCredentialGroups] = useState<Group[]>([])
     const [_searchField, setSearchField] = useState<string>("")
     const navigate = useNavigate()
 
@@ -35,6 +36,7 @@ export default function GroupsPage(): JSX.Element {
             if (admin) {
                 setIsLoading(true)
                 setGroups([])
+                setAllCredentialGroups([])
 
                 await Promise.all([
                     getOnchainGroups(admin.address).then((onchainGroups) => {
@@ -48,6 +50,14 @@ export default function GroupsPage(): JSX.Element {
                                 ...groups,
                                 ...offchainGroups
                             ])
+                        }
+                    }),
+                    getOffchainGroups().then((allOffchainGroups) => {
+                        if (allOffchainGroups) {
+                            const credentialGroups = allOffchainGroups.filter(
+                                (group) => group.credentials !== null
+                            )
+                            setAllCredentialGroups(credentialGroups)
                         }
                     })
                 ])
@@ -139,6 +149,52 @@ export default function GroupsPage(): JSX.Element {
                             .sort(
                                 (a, b) =>
                                     new Date(b.createdAt || "").getTime() - // Convert string to Date object
+                                    new Date(a.createdAt || "").getTime()
+                            )
+                            .map((group) => (
+                                <Link
+                                    key={group.id + group.name}
+                                    to={`/groups/${group.type}/${group.id}`}
+                                >
+                                    <GridItem>
+                                        <GroupCard {...group} />
+                                    </GridItem>
+                                </Link>
+                            ))}
+                    </Grid>
+                )}
+
+                <Box h="100px" />
+
+                <HStack justifyContent="space-between" width="100%">
+                    <Heading fontSize="40px" as="h1">
+                        All credential groups
+                    </Heading>
+                </HStack>
+
+                {_isLoading && (
+                    <Box pt="100px">
+                        <Spinner />
+                    </Box>
+                )}
+
+                {!_isLoading && _allCredentialGroups.length === 0 && (
+                    <Text fontSize="2xl" fontWeight="bold" pt="100px">
+                        No credential groups found
+                    </Text>
+                )}
+
+                {!_isLoading && _allCredentialGroups.length > 0 && (
+                    <Grid
+                        templateColumns="repeat(3, 1fr)"
+                        gap={10}
+                        w="100%"
+                        mt="60px"
+                    >
+                        {_allCredentialGroups
+                            .sort(
+                                (a, b) =>
+                                    new Date(b.createdAt || "").getTime() -
                                     new Date(a.createdAt || "").getTime()
                             )
                             .map((group) => (
