@@ -6,8 +6,8 @@ export const blockchainCredentialSupportedNetworks: BlockchainNetwork[] = [
         name: "Sepolia"
     },
     {
-        id: "polygon_mumbai",
-        name: "Polygon Mumbai"
+        id: "polygon_amoy",
+        name: "Polygon Amoy"
     },
     {
         id: "optimism_sepolia",
