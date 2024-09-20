@@ -7,6 +7,13 @@ export type Event = {
 
 export const EVENTS: Event[] = [
     {
+        event: "DIF - Decentralized Identity Foundation",
+        date: "Oct 1 - Nov 4, 2024",
+        description:
+            "Bandada team will deliver a talk and sponsor prizes for the online hackathon.",
+        link: "https://identity.foundation/"
+    },
+    {
         event: "ETHRome",
         date: "Oct 4-6, 2024",
         description:
