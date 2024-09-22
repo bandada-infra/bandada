@@ -350,7 +350,7 @@ ${memberIds.join("\n")}
                 </Heading>
 
                 {_group.description && (
-                    <Text mt="15px" color="balticSea.800">
+                    <Text mt="15px" color="balticSea.800" maxW="70vw">
                         {_group.description}
                     </Text>
                 )}
