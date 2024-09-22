@@ -40,6 +40,7 @@ export default function GroupCard({
             fontFamily="DM Sans, sans-serif"
             p="24px"
             minW="330px"
+            maxW="370px"
             h="280px"
         >
             <Box>
@@ -84,6 +85,7 @@ export default function GroupCard({
 
                 <Text
                     mt="12px"
+                    noOfLines={2}
                     color={!description ? "balticSea.300" : "balticSea.600"}
                 >
                     {type !== "on-chain" &&
