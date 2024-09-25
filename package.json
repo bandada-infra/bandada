@@ -10,6 +10,7 @@
         "start": "yarn workspaces foreach --exclude bandada-docs -A -pi run start",
         "dev": "yarn workspaces foreach --exclude contracts --exclude bandada-website -A -pi run dev",
         "test": "jest && yarn workspace contracts test",
+        "test:library": "jest libs/${0}",
         "test:coverage": "yarn test:jest:coverage && yarn test:contracts:coverage",
         "test:jest:coverage": "jest --coverage",
         "test:contracts:coverage": "yarn workspace contracts test:coverage",

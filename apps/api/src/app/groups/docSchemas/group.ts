@@ -20,5 +20,5 @@ export class Group {
     @ApiProperty({ isArray: true })
     members: string
     @ApiProperty()
-    credentials: object
+    credentials: string
 }

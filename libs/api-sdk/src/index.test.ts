@@ -125,10 +125,124 @@ describe("Bandada API SDK", () => {
                 expect(group.name).toBe(expectedGroup.name)
                 expect(group.treeDepth).toBe(expectedGroup.treeDepth)
                 expect(group.fingerprintDuration).toBe(
-                    group.fingerprintDuration
+                    expectedGroup.fingerprintDuration
                 )
                 expect(group.members).toHaveLength(0)
                 expect(group.credentials).toBeNull()
+            })
+            it("Should create a credential group", async () => {
+                const credentials = {
+                    id: "BLOCKCHAIN_BALANCE",
+                    criteria: {
+                        minBalance: "10",
+                        network: "Sepolia"
+                    }
+                }
+
+                const expectedGroup: GroupCreationDetails = {
+                    name: "Group1",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials
+                }
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: JSON.stringify(credentials)
+                        }
+                    ])
+                )
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: Group = await apiSdk.createGroup(
+                    expectedGroup,
+                    apiKey
+                )
+
+                expect(group.description).toBe(expectedGroup.description)
+                expect(group.name).toBe(expectedGroup.name)
+                expect(group.treeDepth).toBe(expectedGroup.treeDepth)
+                expect(group.fingerprintDuration).toBe(
+                    expectedGroup.fingerprintDuration
+                )
+                expect(group.members).toHaveLength(0)
+                expect(group.credentials).toStrictEqual(
+                    JSON.stringify(expectedGroup.credentials)
+                )
+            })
+            it("Should create a multiple credentials group", async () => {
+                const credentials = {
+                    credentials: [
+                        {
+                            id: "BLOCKCHAIN_TRANSACTIONS",
+                            criteria: {
+                                minTransactions: 10,
+                                network: "Sepolia"
+                            }
+                        },
+                        {
+                            id: "BLOCKCHAIN_BALANCE",
+                            criteria: {
+                                minBalance: "5",
+                                network: "Sepolia"
+                            }
+                        }
+                    ],
+                    expression: ["", "and", ""]
+                }
+
+                const expectedGroup: GroupCreationDetails = {
+                    name: "Group1",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials
+                }
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: JSON.stringify(credentials)
+                        }
+                    ])
+                )
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: Group = await apiSdk.createGroup(
+                    expectedGroup,
+                    apiKey
+                )
+
+                expect(group.description).toBe(expectedGroup.description)
+                expect(group.name).toBe(expectedGroup.name)
+                expect(group.treeDepth).toBe(expectedGroup.treeDepth)
+                expect(group.fingerprintDuration).toBe(
+                    expectedGroup.fingerprintDuration
+                )
+                expect(group.members).toHaveLength(0)
+                expect(group.credentials).toStrictEqual(
+                    JSON.stringify(expectedGroup.credentials)
+                )
             })
         })
         describe("#createGroups", () => {
@@ -189,7 +303,7 @@ describe("Bandada API SDK", () => {
                     expect(group.name).toBe(expectedGroups[i].name)
                     expect(group.treeDepth).toBe(expectedGroups[i].treeDepth)
                     expect(group.fingerprintDuration).toBe(
-                        group.fingerprintDuration
+                        expectedGroups[i].fingerprintDuration
                     )
                     expect(group.members).toHaveLength(0)
                     expect(group.credentials).toBeNull()
@@ -345,6 +459,27 @@ describe("Bandada API SDK", () => {
                 const groups: Group[] = await apiSdk.getGroups()
                 expect(groups).toHaveLength(1)
             })
+            it("Should return all groups and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: {}
+                        }
+                    ])
+                )
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroups()
+                expect(groups).toHaveLength(1)
+                expect(groups[0].credentials).toBeNull()
+            })
         })
         describe("#getGroupsByAdminId", () => {
             it("Should return all groups by admin id", async () => {
@@ -374,6 +509,34 @@ describe("Bandada API SDK", () => {
                     expect(group.admin).toBe(adminId)
                 })
             })
+            it("Should return all groups by admin id and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: {}
+                        }
+                    ])
+                )
+
+                const adminId =
+                    "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847"
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByAdminId(adminId)
+                expect(groups).toHaveLength(1)
+                groups.forEach((group: Group) => {
+                    expect(group.admin).toBe(adminId)
+                    expect(group.credentials).toBeNull()
+                })
+            })
         })
         describe("#getGroupsByMemberId", () => {
             it("Should return all groups by member id", async () => {
@@ -401,6 +564,32 @@ describe("Bandada API SDK", () => {
                 )
                 expect(groups).toHaveLength(1)
             })
+            it("Should return all groups by member id and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: {}
+                        }
+                    ])
+                )
+
+                const memberId = "1"
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByMemberId(
+                    memberId
+                )
+                expect(groups).toHaveLength(1)
+                expect(groups[0].credentials).toBeNull()
+            })
         })
         describe("#getGroup", () => {
             it("Should return a group", async () => {
@@ -422,6 +611,55 @@ describe("Bandada API SDK", () => {
                 apiSdk = new ApiSdk(SupportedUrl.DEV)
                 const group: Group = await apiSdk.getGroup(groupId)
                 expect(group.id).toBe(groupId)
+            })
+            it("Should return a credential group", async () => {
+                const credentials = {
+                    id: "BLOCKCHAIN_BALANCE",
+                    criteria: {
+                        minBalance: "10",
+                        network: "Sepolia"
+                    }
+                }
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve({
+                        id: "10402173435763029700781503965100",
+                        name: "Group1",
+                        description: "This is a new group",
+                        admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600,
+                        createdAt: "2023-07-15T08:21:05.000Z",
+                        members: [],
+                        credentials: JSON.stringify(credentials)
+                    })
+                )
+                const groupId = "10402173435763029700781503965100"
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: Group = await apiSdk.getGroup(groupId)
+                expect(group.id).toBe(groupId)
+                expect(group.credentials).toStrictEqual(credentials)
+            })
+            it("Should return null in credentials if credentials is not a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve({
+                        id: "10402173435763029700781503965100",
+                        name: "Group1",
+                        description: "This is a new group",
+                        admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600,
+                        createdAt: "2023-07-15T08:21:05.000Z",
+                        members: [],
+                        credentials: {}
+                    })
+                )
+                const groupId = "10402173435763029700781503965100"
+
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: Group = await apiSdk.getGroup(groupId)
+                expect(group.id).toBe(groupId)
+                expect(group.credentials).toBeNull()
             })
         })
         describe("#isGroupMember", () => {

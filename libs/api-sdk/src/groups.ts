@@ -13,12 +13,22 @@ const url = "/groups"
  * @returns List of groups.
  */
 export async function getGroups(config: object): Promise<Group[]> {
-    const groups = await request(url, config)
+    let groups = await request(url, config)
 
-    groups.map((group: any) => ({
-        ...group,
-        credentials: JSON.parse(group.credentials)
-    }))
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
 
     return groups
 }
@@ -34,12 +44,22 @@ export async function getGroupsByAdminId(
 ): Promise<Group[]> {
     const requestUrl = `${url}?adminId=${adminId}`
 
-    const groups = await request(requestUrl, config)
+    let groups = await request(requestUrl, config)
 
-    groups.map((group: any) => ({
-        ...group,
-        credentials: JSON.parse(group.credentials)
-    }))
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
 
     return groups
 }
@@ -55,12 +75,22 @@ export async function getGroupsByMemberId(
 ): Promise<Group[]> {
     const requestUrl = `${url}?memberId=${memberId}`
 
-    const groups = await request(requestUrl, config)
+    let groups = await request(requestUrl, config)
 
-    groups.map((group: any) => ({
-        ...group,
-        credentials: JSON.parse(group.credentials)
-    }))
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
 
     return groups
 }
@@ -76,9 +106,22 @@ export async function createGroups(
     groupsCreationDetails: Array<GroupCreationDetails>,
     apiKey: string
 ): Promise<Array<Group>> {
+    const groupsCreationDetailsRequest = groupsCreationDetails.map((group) => {
+        if (group.credentials) {
+            return {
+                ...group,
+                credentials: JSON.stringify(group.credentials)
+            }
+        }
+
+        return {
+            ...group
+        }
+    })
+
     const newConfig: any = {
         method: "post",
-        data: groupsCreationDetails,
+        data: groupsCreationDetailsRequest,
         ...config
     }
 
@@ -204,7 +247,15 @@ export async function getGroup(
 
     const group = await request(requestUrl, config)
 
-    group.credentials = JSON.parse(group.credentials)
+    let credentials
+
+    try {
+        credentials = JSON.parse(group.credentials)
+    } catch (error) {
+        credentials = null
+    }
+
+    group.credentials = credentials
 
     return group
 }

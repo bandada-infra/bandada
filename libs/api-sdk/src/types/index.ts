@@ -1,7 +1,4 @@
-export type Credential = {
-    id: string
-    criteria: Record<string, any>
-}
+export type Credential = any
 
 export type Group = {
     id: string
