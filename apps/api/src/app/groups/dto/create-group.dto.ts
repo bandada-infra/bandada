@@ -43,6 +43,10 @@ export class CreateGroupDto {
 
     @IsJSON()
     @IsOptional()
-    @ApiProperty()
+    @ApiProperty({
+        default:
+            '{"id":"BLOCKCHAIN_BALANCE","criteria":{"minBalance":"10","network":"Sepolia"}}',
+        type: String
+    })
     readonly credentials?: any
 }
