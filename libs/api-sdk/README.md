@@ -133,6 +133,72 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
 ```
 
+## Create a credential group
+
+\# **createGroup**(): _Promise\<Group>_
+
+Creates a Bandada credential group.
+
+```ts
+const credentials = {
+    id: "BLOCKCHAIN_BALANCE",
+    criteria: {
+        minBalance: "10",
+        network: "Sepolia"
+    }
+}
+
+const groupCreateDetails = {
+    name: "Group 1",
+    description: "This is Group 1.",
+    treeDepth: 16,
+    fingerprintDuration: 3600,
+    credentials
+}
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
+```
+
+## Create a multiple credentials group
+
+\# **createGroup**(): _Promise\<Group>_
+
+Creates a Bandada multiple credential group.
+
+```ts
+const credentials = {
+    credentials: [
+        {
+            id: "BLOCKCHAIN_TRANSACTIONS",
+            criteria: {
+                minTransactions: 10,
+                network: "Sepolia"
+            }
+        },
+        {
+            id: "BLOCKCHAIN_BALANCE",
+            criteria: {
+                minBalance: "5",
+                network: "Sepolia"
+            }
+        }
+    ],
+    expression: ["", "and", ""]
+}
+
+const groupCreateDetails = {
+    name: "Group 1",
+    description: "This is Group 1.",
+    treeDepth: 16,
+    fingerprintDuration: 3600,
+    credentials
+}
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
+```
+
 ## Create groups
 
 \# **createGroups**(): _Promise\<Group[]>_

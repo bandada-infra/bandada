@@ -1,6 +1,6 @@
 {
     "name": "@bandada/api-sdk",
-    "version": "2.3.1",
+    "version": "2.3.2",
     "description": "A Typescript SDK for the Bandada API.",
     "license": "MIT",
     "main": "dist/index.node.js",
@@ -30,7 +30,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@bandada/utils": "2.3.1"
+        "@bandada/utils": "2.3.2"
     },
     "devDependencies": {
         "@rollup/plugin-typescript": "^11.0.0",
