@@ -373,20 +373,23 @@ ${memberIds.join("\n")}
                                 {shortenNumber(_group.members.length)}
                             </Heading>
                         </Box>
-                        <Box
-                            flex="1"
-                            bgColor="balticSea.50"
-                            p="25px 30px 12px 30px"
-                            borderRadius="8px"
-                        >
-                            <Text fontSize="13px" color="balticSea.500">
-                                MAX CAPACITY
-                            </Text>
+                        {groupType === "off-chain" && (
+                            <Box
+                                flex="1"
+                                bgColor="balticSea.50"
+                                p="25px 30px 12px 30px"
+                                borderRadius="8px"
+                            >
+                                <Text fontSize="13px" color="balticSea.500">
+                                    MAX CAPACITY
+                                </Text>
 
-                            <Heading fontSize="31px">
-                                {shortenNumber(2 ** _group.treeDepth)}
-                            </Heading>
-                        </Box>
+                                <Heading fontSize="31px">
+                                    {shortenNumber(2 ** _group.treeDepth)}
+                                </Heading>
+                            </Box>
+                        )}
+
                         <Box
                             flex="1"
                             bgColor="balticSea.50"

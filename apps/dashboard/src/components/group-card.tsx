@@ -57,8 +57,14 @@ export default function GroupCard({
                                 ? icon2Image
                                 : icon1Image
                         }
-                        filter={treeDepth ? "inherit" : "grayscale(100%)"}
-                        opacity={treeDepth ? "inherit" : ".4"}
+                        filter={
+                            treeDepth || type === "on-chain"
+                                ? "inherit"
+                                : "grayscale(100%)"
+                        }
+                        opacity={
+                            treeDepth || type === "on-chain" ? "inherit" : ".4"
+                        }
                         htmlWidth="35px"
                         alt="Bandada icon"
                     />

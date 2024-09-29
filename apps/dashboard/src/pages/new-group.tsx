@@ -46,8 +46,7 @@ export default function NewGroupPage(): JSX.Element {
                 />
 
                 <HStack w="100%" align="start">
-                    {(_group.type === "on-chain" && _currentStep !== 2) ||
-                    (_group.type === "off-chain" && _currentStep !== 3) ? (
+                    {_group.type === "off-chain" && _currentStep !== 3 ? (
                         <>
                             <StepperPreview group={_group} />
 
