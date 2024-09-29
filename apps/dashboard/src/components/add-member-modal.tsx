@@ -132,7 +132,7 @@ ${memberIds.join("\n")}
             try {
                 const semaphore = getSemaphoreContract("sepolia", signer as any)
 
-                await semaphore.addMembers(group.name, memberIds)
+                await semaphore.addMembers(group.id, memberIds)
 
                 setIsLoading(false)
                 onClose(memberIds)

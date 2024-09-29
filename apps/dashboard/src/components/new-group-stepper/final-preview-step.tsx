@@ -1,4 +1,3 @@
-import { formatBytes32String } from "@ethersproject/strings"
 import { getSemaphoreContract } from "@bandada/utils"
 import { Box, Button, Heading, HStack, VStack } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
@@ -28,9 +27,13 @@ export default function FinalPreviewStep({
                 const semaphore = getSemaphoreContract("sepolia", signer as any)
                 const admin = await signer.getAddress()
 
-                await semaphore.createGroup(group.name, group.treeDepth, admin)
+                const receipt = await semaphore.createGroup(admin)
 
-                const groupId = BigInt(formatBytes32String(group.name))
+                const groupIdBigNumber =
+                    receipt.events?.[0]?.args?.[0].toString()
+
+                const groupId = groupIdBigNumber.toString()
+
                 navigate(`/groups/on-chain/${groupId}`)
             } catch (error) {
                 setLoading(false)
@@ -98,7 +101,7 @@ export default function FinalPreviewStep({
                     Back
                 </Button>
                 <Button
-                    isDisabled={!group.treeDepth}
+                    isDisabled={group.type === "off-chain" && !group.treeDepth}
                     variant="solid"
                     colorScheme="primary"
                     onClick={createGroup}

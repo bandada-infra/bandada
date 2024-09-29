@@ -2,7 +2,6 @@
 
 import { Signer } from "@ethersproject/abstract-signer"
 import { Contract, ContractReceipt } from "@ethersproject/contracts"
-import { formatBytes32String } from "@ethersproject/strings"
 import getContract from "./getContract"
 import { Network } from "./types"
 
@@ -13,26 +12,16 @@ export class SemaphoreContract {
         this.contract = contract
     }
 
-    async createGroup(
-        groupName: string,
-        merkleTreeDepth: number,
-        admin: string
-    ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
-
-        const transaction = await this.contract[
-            "createGroup(uint256,uint256,address)"
-        ](groupId, merkleTreeDepth, admin)
+    async createGroup(admin: string): Promise<ContractReceipt> {
+        const transaction = await this.contract["createGroup(address)"](admin)
 
         return transaction.wait(1)
     }
 
     async updateGroupAdmin(
-        groupName: string,
+        groupId: string,
         newAdmin: string
     ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
-
         const transaction = await this.contract.updateGroupAdmin(
             groupId,
             newAdmin
@@ -41,24 +30,31 @@ export class SemaphoreContract {
         return transaction.wait(1)
     }
 
-    async addMember(
-        groupName: string,
-        member: string
-    ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
-
+    async addMember(groupId: string, member: string): Promise<ContractReceipt> {
         const transaction = await this.contract.addMember(groupId, member)
 
         return transaction.wait(1)
     }
 
     async addMembers(
-        groupName: string,
+        groupId: string,
         members: string[]
     ): Promise<ContractReceipt> {
-        const groupId = BigInt(formatBytes32String(groupName))
-
         const transaction = await this.contract.addMembers(groupId, members)
+
+        return transaction.wait(1)
+    }
+
+    async removeMember(
+        groupId: string,
+        member: string,
+        siblings: bigint[]
+    ): Promise<ContractReceipt> {
+        const transaction = await this.contract.removeMember(
+            groupId,
+            member,
+            siblings
+        )
 
         return transaction.wait(1)
     }
