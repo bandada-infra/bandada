@@ -18,6 +18,7 @@
         "@emotion/styled": "^11.10.6",
         "@fontsource-variable/unbounded": "^5.0.5",
         "@rainbow-me/rainbowkit": "^0.12.8",
+        "@semaphore-protocol/core": "^4.0.3",
         "@semaphore-protocol/data": "4.0.3",
         "ethers": "5.5.1",
         "framer-motion": "^10.0.1",

@@ -35,6 +35,9 @@ import {
     MdOutlineMoreVert
 } from "react-icons/md"
 import { Link, useNavigate, useParams } from "react-router-dom"
+import { useSigner } from "wagmi"
+import { getSemaphoreContract } from "@bandada/utils"
+import { Group as Semaphorev4Group } from "@semaphore-protocol/core"
 import * as bandadaApi from "../api/bandadaAPI"
 import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
 import image1 from "../assets/image1.svg"
@@ -65,6 +68,7 @@ export default function GroupPage(): JSX.Element {
             ? _group.admin === admin.id
             : _group.admin === admin.address.toLowerCase())
     )
+    const { data: signer } = useSigner()
 
     useEffect(() => {
         ;(async () => {
@@ -143,17 +147,54 @@ export default function GroupPage(): JSX.Element {
                 return
             }
 
-            if (
-                (await bandadaApi.removeMember(_group!.id, memberId)) === null
-            ) {
-                return
-            }
+            if (_group?.type === "off-chain") {
+                if (
+                    (await bandadaApi.removeMember(_group!.id, memberId)) ===
+                    null
+                ) {
+                    return
+                }
+                _group!.members = _group!.members.filter((m) => m !== memberId)
+            } else {
+                if (!signer) {
+                    alert("No valid signer for your transaction!")
+                    return
+                }
 
-            _group!.members = _group!.members.filter((m) => m !== memberId)
+                try {
+                    const semaphore = getSemaphoreContract(
+                        "sepolia",
+                        signer as any
+                    )
+
+                    const semaphorev4Group = new Semaphorev4Group(
+                        _group!.members
+                    )
+
+                    const index = semaphorev4Group.indexOf(memberId)
+
+                    const merkleProof =
+                        semaphorev4Group.generateMerkleProof(index)
+
+                    await semaphore.removeMember(
+                        _group!.id,
+                        memberId,
+                        merkleProof.siblings
+                    )
+                } catch (error) {
+                    alert(
+                        "Some error occurred! Check if you're on Sepolia network and the transaction is signed and completed"
+                    )
+                    return
+                }
+                _group!.members = _group!.members.map((m) =>
+                    m !== memberId ? m : "0"
+                )
+            }
 
             setGroup({ ..._group! })
         },
-        [_group]
+        [_group, signer]
     )
 
     const removeMembers = useCallback(
@@ -746,46 +787,39 @@ ${memberIds.join("\n")}
                                         </Text>
                                     </HStack>
 
-                                    {_group.type === "off-chain" &&
-                                        isGroupAdmin && (
-                                            <Menu>
-                                                <MenuButton
-                                                    as={IconButton}
-                                                    aria-label="Options"
+                                    {isGroupAdmin && (
+                                        <Menu>
+                                            <MenuButton
+                                                as={IconButton}
+                                                aria-label="Options"
+                                                icon={
+                                                    <Icon
+                                                        color="balticSea.300"
+                                                        boxSize="6"
+                                                        as={MdOutlineMoreVert}
+                                                    />
+                                                }
+                                                variant="link"
+                                            />
+                                            <MenuList>
+                                                <MenuItem
                                                     icon={
                                                         <Icon
+                                                            mt="5px"
                                                             color="balticSea.300"
                                                             boxSize="6"
-                                                            as={
-                                                                MdOutlineMoreVert
-                                                            }
+                                                            as={MdOutlineCancel}
                                                         />
                                                     }
-                                                    variant="link"
-                                                />
-                                                <MenuList>
-                                                    <MenuItem
-                                                        icon={
-                                                            <Icon
-                                                                mt="5px"
-                                                                color="balticSea.300"
-                                                                boxSize="6"
-                                                                as={
-                                                                    MdOutlineCancel
-                                                                }
-                                                            />
-                                                        }
-                                                        onClick={() =>
-                                                            removeMember(
-                                                                memberId
-                                                            )
-                                                        }
-                                                    >
-                                                        Remove
-                                                    </MenuItem>
-                                                </MenuList>
-                                            </Menu>
-                                        )}
+                                                    onClick={() =>
+                                                        removeMember(memberId)
+                                                    }
+                                                >
+                                                    Remove
+                                                </MenuItem>
+                                            </MenuList>
+                                        </Menu>
+                                    )}
                                 </HStack>
                             </Flex>
                         ))

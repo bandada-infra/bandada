@@ -44,6 +44,20 @@ export class SemaphoreContract {
 
         return transaction.wait(1)
     }
+
+    async removeMember(
+        groupId: string,
+        member: string,
+        siblings: bigint[]
+    ): Promise<ContractReceipt> {
+        const transaction = await this.contract.removeMember(
+            groupId,
+            member,
+            siblings
+        )
+
+        return transaction.wait(1)
+    }
 }
 
 export default function getSemaphoreContract(
