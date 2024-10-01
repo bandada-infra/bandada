@@ -1,4 +1,5 @@
-import { Context, EASContext, Validator } from "../.."
+import { Context, Validator } from "../.."
+import provider from "../../providers/eas"
 
 export type Criteria = {
     minAttestations: number
@@ -51,9 +52,7 @@ const validator: Validator = {
      * @returns True if the user meets the criteria.
      */
     async validate(criteria: Criteria, context: Context) {
-        if ("queryGraph" in context) {
-            const getAttestations = (context as EASContext).queryGraph
-
+        if ("network" in context) {
             const {
                 recipient,
                 attester,
@@ -63,21 +62,31 @@ const validator: Validator = {
                 isOffchain
             } = criteria
 
-            const attestations = await getAttestations(`
-                query {
-                    attestations {
-                        recipient
-                        attester
-                        revocable
-                        revoked
-                        schemaId
-                        isOffchain
+            const query = `query {
+                attestations(where: {
+                    recipient: {
+                        equals: "${criteria.recipient}"
+                    },
+                    attester: {
+                        equals: "${context.address}"
                     }
+                }) {
+                    recipient
+                    attester
+                    revocable
+                    revoked
+                    schemaId
+                    isOffchain
                 }
-            `)
+            }`
 
-            const filteredAttestations = attestations.filter(
-                (attestation: any) => {
+            const getAttestations = await provider.queryGraph(
+                context.network,
+                query
+            )
+
+            const filteredAttestations =
+                getAttestations.data.attestations.filter((attestation: any) => {
                     // Criteria checks.
                     if (attestation.recipient !== recipient) return false
 
@@ -108,8 +117,7 @@ const validator: Validator = {
                         return false
 
                     return true
-                }
-            )
+                })
 
             return filteredAttestations.length >= criteria.minAttestations
         }
