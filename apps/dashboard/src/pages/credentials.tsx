@@ -3,7 +3,8 @@ import {
     blockchain,
     Web2Provider,
     twitter,
-    github
+    github,
+    eas
 } from "@bandada/credentials"
 import { Flex, Text, Button } from "@chakra-ui/react"
 import { useEffect, useState, useCallback, useContext } from "react"
@@ -224,6 +225,57 @@ export default function CredentialsPage() {
                         } else {
                             setMessage("You have joined the group!")
                         }
+                    }
+                }
+
+                // If the credential is EAS
+                if (
+                    providerName === eas.name &&
+                    isLoggedInAdmin() &&
+                    state &&
+                    admin
+                ) {
+                    if (groupType) {
+                        const bandadaCredentials =
+                            localStorage.getItem(LOCAL_STORAGE)
+                        if (!bandadaCredentials) return null
+                        const providers = JSON.parse(bandadaCredentials)
+                        providers[providerName] = [
+                            state,
+                            undefined,
+                            admin.address
+                        ]
+                        localStorage.setItem(
+                            LOCAL_STORAGE,
+                            JSON.stringify(providers)
+                        )
+                        if (!groupId || !memberId) return
+                        const url = getUrlNextEmpty(groupId, memberId)
+
+                        if (url === null) {
+                            const clientRedirectUrl =
+                                await validateCredentials()
+                            if (clientRedirectUrl) {
+                                window.location.replace(clientRedirectUrl)
+                            } else {
+                                setMessage("You have joined the group!")
+                            }
+                            return
+                        }
+
+                        window.location.replace(url)
+                    }
+
+                    const redirectUrl = await addMemberByCredentials(
+                        [state],
+                        undefined,
+                        [admin.address]
+                    )
+
+                    if (redirectUrl) {
+                        window.location.replace(redirectUrl)
+                    } else {
+                        setMessage("You have joined the group!")
                     }
                 }
 
