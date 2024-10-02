@@ -6,7 +6,9 @@ import {
     Web2Provider,
     providers,
     Web2Context,
-    BlockchainContext
+    BlockchainContext,
+    EASContext,
+    EASNetworks
 } from "@bandada/credentials"
 import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
@@ -139,7 +141,7 @@ export class CredentialsService {
                 } = this.oAuthState.get(credentialOAuthState))
                 const provider = getProvider(providerName)
 
-                let context: Web2Context | BlockchainContext
+                let context: Web2Context | BlockchainContext | EASContext
 
                 if (address && credentialProvider === "blockchain") {
                     const { network } = credentials.credentials[i].criteria
@@ -169,6 +171,14 @@ export class CredentialsService {
                     context = {
                         address: address[0],
                         jsonRpcProvider
+                    }
+
+                    // Check if the same account has already joined the group.
+                    accountHash = id(address + groupId)
+                } else if (address && credentialProvider === "eas") {
+                    context = {
+                        network: EASNetworks.ETHEREUM_SEPOLIA,
+                        address: address[0]
                     }
 
                     // Check if the same account has already joined the group.
@@ -259,30 +269,44 @@ export class CredentialsService {
 
         let accountHash: string
 
-        let context: Web2Context | BlockchainContext
+        let context: Web2Context | BlockchainContext | EASContext
 
         if (address) {
-            const { network } = JSON.parse(group.credentials).criteria
+            const { network, recipient } = JSON.parse(
+                group.credentials
+            ).criteria
 
-            const supportedNetwork = blockchainCredentialSupportedNetworks.find(
-                (n) => n.name.toLowerCase() === network.toLowerCase()
-            )
+            if (network) {
+                const supportedNetwork =
+                    blockchainCredentialSupportedNetworks.find(
+                        (n) => n.name.toLowerCase() === network.toLowerCase()
+                    )
 
-            if (supportedNetwork === undefined)
-                throw new BadRequestException(`The network is not supported`)
+                if (supportedNetwork === undefined)
+                    throw new BadRequestException(
+                        `The network is not supported`
+                    )
 
-            const networkEnvVariableName = supportedNetwork.id.toUpperCase()
+                const networkEnvVariableName = supportedNetwork.id.toUpperCase()
 
-            const web3providerRpcURL =
-                process.env[`${networkEnvVariableName}_RPC_URL`]
+                const web3providerRpcURL =
+                    process.env[`${networkEnvVariableName}_RPC_URL`]
 
-            const jsonRpcProvider = await (
-                provider as BlockchainProvider
-            ).getJsonRpcProvider(web3providerRpcURL)
+                const jsonRpcProvider = await (
+                    provider as BlockchainProvider
+                ).getJsonRpcProvider(web3providerRpcURL)
 
-            context = {
-                address: address[0],
-                jsonRpcProvider
+                context = {
+                    address: address[0],
+                    jsonRpcProvider
+                }
+            }
+
+            if (recipient) {
+                context = {
+                    network: EASNetworks.ETHEREUM_SEPOLIA,
+                    address: address[0]
+                }
             }
 
             // Check if the same account has already joined the group.
