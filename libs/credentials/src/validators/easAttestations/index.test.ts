@@ -15,7 +15,8 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 3,
-                    recipient: "0xBB00B71E34Df590847060A4c597821Bad585ED6d"
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c"
                 }
             },
             {
@@ -35,7 +36,7 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 1,
-                    recipient: "0xBB00B71E34Df590847060A4c597821Bad585ED6d",
+                    recipient: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
                     attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
@@ -191,12 +192,13 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 3,
-                    recipient: "0xBB00B71E34Df590847060A4c597821Bad585ED6d"
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c"
                 }
             },
             {
                 network: EASNetworks.ETHEREUM_SEPOLIA,
-                address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d4"
+                address: "0x"
             }
         )
 
@@ -238,7 +240,8 @@ describe("EASAttestations", () => {
                     id: easAttestations.id,
                     criteria: {
                         minAttestations: 1,
-                        recipient: "0xBB00B71E34Df590847060A4c597821Bad585ED6d",
+                        schemaId:
+                            "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
                         test: 123
                     }
                 },
@@ -264,7 +267,8 @@ describe("EASAttestations", () => {
                     id: easAttestations.id,
                     criteria: {
                         minAttestations: "1",
-                        recipient: "0xBB00B71E34Df590847060A4c597821Bad585ED6d"
+                        schemaId:
+                            "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c"
                     }
                 },
                 {

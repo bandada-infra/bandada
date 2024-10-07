@@ -3,9 +3,9 @@ import provider from "../../providers/eas"
 
 export type Criteria = {
     minAttestations: number
-    recipient: string
+    schemaId: string
     attester?: string
-    schemaId?: string
+    recipient?: string
     revocable?: boolean
     revoked?: boolean
     isOffchain?: boolean
@@ -19,7 +19,7 @@ const validator: Validator = {
             type: "number",
             optional: false
         },
-        recipient: {
+        schemaId: {
             type: "string",
             optional: false
         },
@@ -27,7 +27,7 @@ const validator: Validator = {
             type: "string",
             optional: true
         },
-        schemaId: {
+        recipient: {
             type: "string",
             optional: true
         },
@@ -64,10 +64,10 @@ const validator: Validator = {
 
             const query = `query {
                 attestations(where: {
-                    recipient: {
-                        equals: "${criteria.recipient}"
+                    schemaId: {
+                        equals: "${criteria.schemaId}"
                     },
-                    attester: {
+                    recipient: {
                         equals: "${context.address}"
                     }
                 }) {
@@ -88,16 +88,16 @@ const validator: Validator = {
             const filteredAttestations =
                 getAttestations.data.attestations.filter((attestation: any) => {
                     // Criteria checks.
-                    if (attestation.recipient !== recipient) return false
+                    if (attestation.schemaId !== schemaId) return false
+                    if (
+                        recipient !== undefined &&
+                        attestation.recipient !== recipient
+                    )
+                        return false
 
                     if (
                         attester !== undefined &&
                         attestation.attester !== attester
-                    )
-                        return false
-                    if (
-                        schemaId !== undefined &&
-                        attestation.schemaId !== schemaId
                     )
                         return false
                     if (
