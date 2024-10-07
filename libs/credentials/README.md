@@ -67,16 +67,182 @@ yarn add @bandada/credentials
 
 ## 📜 Usage
 
-\# **validateCredentials**(credentials: _Credentials_, context: _Context_)
+## Validate credentials
+
+## Validate blockchain balance
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates the blockchain balance of a user.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the blockchain balance validation.
+    -   **criteria**:
+        -   **minBalance**: The minimum number of balance required.
+        -   **network**: The blockchain network to validate against.
+        -   **blockNumber** (_optional_): The block number at which to check the balance.
+-   **context** (_Context_):
+    -   **address**: The blockchain address to validate.
+    -   **jsonRpcProvider**: The JSON-RPC provider to use for blockchain interactions.
+
+```typescript
+import {
+    validateCredentials,
+    blockchainBalance,
+    getProvider,
+    BlockchainProvider
+} from "@bandada/credentials"
+
+const provider = getProvider("blockchain")
+
+const jsonRpcProvider = await (
+    provider as BlockchainProvider
+).getJsonRpcProvider("https://rpc-url.com")
+
+validateCredentials(
+    {
+        id: blockchainBalance.id,
+        criteria: {
+            minBalance: "10",
+            network: "sepolia",
+            blockNumber: 4749638
+        }
+    },
+    {
+        address: "0x",
+        jsonRpcProvider
+    }
+)
+```
+
+## Validate blockchain transactions
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates the blockchain transactions of a user.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the blockchain transactions validation.
+    -   **criteria**:
+        -   **minTransactions**: The minimum number of transactions required.
+        -   **network**: The blockchain network to validate against.
+        -   **blockNumber** (_optional_): The block number at which to check the transactions.
+-   **context** (_Context_):
+    -   **address**: The blockchain address to validate.
+    -   **jsonRpcProvider**: The JSON-RPC provider to use for blockchain interactions.
+
+```typescript
+import {
+    validateCredentials,
+    blockchainTransactions,
+    getProvider,
+    BlockchainProvider
+} from "@bandada/credentials"
+
+const provider = getProvider("blockchain")
+
+const jsonRpcProvider = await (
+    provider as BlockchainProvider
+).getJsonRpcProvider("https://rpc-url.com")
+
+validateCredentials(
+    {
+        id: blockchainTransactions.id,
+        criteria: {
+            minTransactions: 10,
+            network: "sepolia",
+            blockNumber: 4749638
+        }
+    },
+    {
+        address: "0x",
+        jsonRpcProvider
+    }
+)
+```
+
+## Validate EAS (Ethereum Attestation Service) attestations
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates the EAS attestations of a user.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the EAS attestations validation.
+    -   **criteria**:
+        -   **minAttestations**: The minimum number of attestations required.
+        -   **recipient**: The recipient of the attestation.
+        -   **attester** (_optional_): The attester of the attestation.
+        -   **schemaId** (_optional_): The schema id of the attestation.
+        -   **revocable** (_optional_): The revocable option of the attestation.
+        -   **revoked** (_optional_): The revocation status of the attestation.
+        -   **isOffchain** (_optional_): The type of chain of the attestation.
+-   **context** (_Context_):
+    -   **network**: The EAS network chain.
+    -   **address**: The user address to validate.
+
+```typescript
+import {
+    validateCredentials,
+    easAttestations,
+    EASNetworks
+} from "@bandada/credentials"
+
+validateCredentials(
+    {
+        id: easAttestations.id,
+        criteria: {
+            minAttestations: 1,
+            recipient: "0x0",
+            attester: "0x1",
+            schemaId: "0x2",
+            revocable: false,
+            revoked: false,
+            isOffchain: false
+        }
+    },
+    {
+        network: EASNetworks.ETHEREUM_SEPOLIA,
+        address: "0x1"
+    }
+)
+```
+
+## Validate GitHub followers
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates the number of followers of a GitHub user.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the GitHub followers validation.
+    -   **criteria**:
+        -   **minFollowers**: The minimum number of GitHub followers required.
+-   **context** (_Context_):
+    -   **profile**: The user's GitHub profile.
+    -   **accessTokens**:
+        -   **github**: The user's GitHub login access token.
 
 ```typescript
 import {
     validateCredentials,
     githubFollowers,
-    EASNetworks
+    getProvider,
+    Web2Provider
 } from "@bandada/credentials"
 
-// Validate Web2 credentials
+const provider = getProvider("github")
+
+const accessToken = await (provider as Web2Provider).getAccessToken(
+    "clientId",
+    "clientSecret",
+    "oAuthCode",
+    "oAuthState",
+    "redirectUri"
+)
+
+const profile = await (provider as Web2Provider).getProfile(accessToken)
+
 validateCredentials(
     {
         id: githubFollowers.id,
@@ -85,8 +251,215 @@ validateCredentials(
         }
     },
     {
-        accessToken: {
-            github: "token"
+        profile,
+        accessTokens: {
+            github: accessToken
+        }
+    }
+)
+```
+
+## Validate GitHub personal stars
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates the number of stars in a GitHub user's personal repositories.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the GitHub personal stars validation.
+    -   **criteria**:
+        -   **minStars**: The minimum number of GitHub personal stars required.
+-   **context** (_Context_):
+    -   **profile**: The user's GitHub profile.
+    -   **accessTokens**:
+        -   **github**: The user's GitHub login access token.
+
+```typescript
+import {
+    validateCredentials,
+    githubPersonalStars,
+    getProvider,
+    Web2Provider
+} from "@bandada/credentials"
+
+const provider = getProvider("github")
+
+const accessToken = await (provider as Web2Provider).getAccessToken(
+    "clientId",
+    "clientSecret",
+    "oAuthCode",
+    "oAuthState",
+    "redirectUri"
+)
+
+const profile = await (provider as Web2Provider).getProfile(accessToken)
+
+validateCredentials(
+    {
+        id: githubPersonalStars.id,
+        criteria: {
+            minStars: 100
+        }
+    },
+    {
+        profile,
+        accessTokens: {
+            github: accessToken
+        }
+    }
+)
+```
+
+## Validate GitHub repository commits
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates the number of commits by a GitHub user in a specific repository.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the GitHub repository commit validation.
+    -   **criteria**:
+        -   **minCommits**: The minimum number of GitHub commits required.
+        -   **repository**: The name of the target GitHub repository.
+-   **context** (_Context_):
+    -   **profile**: The user's GitHub profile.
+    -   **accessTokens**:
+        -   **github**: The user's GitHub login access token.
+
+```typescript
+import {
+    validateCredentials,
+    githubRepositoryCommits,
+    getProvider,
+    Web2Provider
+} from "@bandada/credentials"
+
+const provider = getProvider("github")
+
+const accessToken = await (provider as Web2Provider).getAccessToken(
+    "clientId",
+    "clientSecret",
+    "oAuthCode",
+    "oAuthState",
+    "redirectUri"
+)
+
+const profile = await (provider as Web2Provider).getProfile(accessToken)
+
+validateCredentials(
+    {
+        id: githubRepositoryCommits.id,
+        criteria: {
+            repository: "hello-world",
+            minCommits: 100
+        }
+    },
+    {
+        profile,
+        accessTokens: {
+            github: accessToken
+        }
+    }
+)
+```
+
+## Validate Twitter(X) followers
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates the number of followers of a Twitter(X) user.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the Twitter(X) followers validation.
+    -   **criteria**:
+        -   **minFollowers**: The minimum number of followers required.
+-   **context** (_Context_):
+    -   **profile**: The user's Twitter(X) profile.
+    -   **accessTokens**:
+        -   **github**: The user's Twitter(X) login access token.
+
+```typescript
+import {
+    validateCredentials,
+    twitterFollowers,
+    getProvider,
+    Web2Provider
+} from "@bandada/credentials"
+
+const provider = getProvider("twitter")
+
+const accessToken = await (provider as Web2Provider).getAccessToken(
+    "clientId",
+    "clientSecret",
+    "oAuthCode",
+    "oAuthState",
+    "redirectUri"
+)
+
+const profile = await (provider as Web2Provider).getProfile(accessToken)
+
+validateCredentials(
+    {
+        id: twitterFollowers.id,
+        criteria: {
+            minFollowers: 100
+        }
+    },
+    {
+        profile,
+        accessTokens: {
+            twitter: accessToken
+        }
+    }
+)
+```
+
+## Validate Twitter(X) following user
+
+\# **validateCredentials**(credentials: _Credentials_, context: _Context_): _Promise\<boolean>_
+
+Validates whether a Twitter(X) user follows a specific user.
+
+-   **credentials** (_Credentials_):
+    -   **id**: The id for the Twitter(X) following user validation.
+    -   **criteria**:
+        -   **username**: The username of the target Twitter(X) user.
+-   **context** (_Context_):
+    -   **profile**: The user's Twitter(X) profile.
+    -   **accessTokens**:
+        -   **github**: The user's Twitter(X) login access token.
+
+```typescript
+import {
+    validateCredentials,
+    twitterFollowingUser,
+    getProvider,
+    Web2Provider
+} from "@bandada/credentials"
+
+const provider = getProvider("twitter")
+
+const accessToken = await (provider as Web2Provider).getAccessToken(
+    "clientId",
+    "clientSecret",
+    "oAuthCode",
+    "oAuthState",
+    "redirectUri"
+)
+
+const profile = await (provider as Web2Provider).getProfile(accessToken)
+
+validateCredentials(
+    {
+        id: twitterFollowingUser.id,
+        criteria: {
+            username: "hello"
+        }
+    },
+    {
+        profile,
+        accessTokens: {
+            twitter: accessToken
         }
     }
 )
@@ -128,7 +501,71 @@ validateCredentials(
 )
 ```
 
-### Custom validators
+## Validate many credentials
+
+\# **validateManyCredentials**(credentials: _Credentials_[], context: _Context_[], expression: _string_[]): _Promise\<boolean>_
+
+Validates many credentials with parentheses in the expression.
+
+-   **credentials** (_Credentials_[]):
+    -   Refer to examples above for different criteria objects.
+-   **context** (_Context_[]):
+    -   Refer to examples above for different context objects.
+-   **expressions** (_string_[]):
+    -   Array of string for expressions.
+
+```typescript
+import {
+    validateManyCredentials,
+    blockchainBalance,
+    blockchainTransactions,
+    githubPersonalStars
+} from "@bandada/credentials"
+
+const credentials = [
+    {
+        id: blockchainBalance.id,
+        criteria: {
+            minBalance: "10",
+            network: "sepolia"
+        }
+    },
+    {
+        id: blockchainTransactions.id,
+        criteria: {
+            minTransactions: 10,
+            network: "sepolia"
+        }
+    },
+    {
+        id: githubPersonalStars.id,
+        criteria: {
+            minStars: 100
+        }
+    }
+]
+
+const contexts = [
+    {
+        address: "0x",
+        jsonRpcProvider
+    },
+    {
+        address: "0x",
+        jsonRpcProvider
+    },
+    {
+        profile: {},
+        accessTokens: { github: "token" }
+    }
+]
+
+const expression = ["", "and", "(", "", "or", "", ")"]
+
+validateManyCredentials(credentials, contexts, expression)
+```
+
+## Custom validators
 
 The library has been built to allow external devs to add their own validators. A validator is a simple file that exports 3 JavaScript values:
 
