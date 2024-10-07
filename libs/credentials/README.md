@@ -70,13 +70,8 @@ yarn add @bandada/credentials
 \# **validateCredentials**(credentials: _Credentials_, context: _Context_)
 
 ```typescript
-import {
-    validateCredentials,
-    githubFollowers,
-    EASNetworks
-} from "@bandada/credentials"
+import { validateCredentials, githubFollowers } from "@bandada/credentials"
 
-// Validate Web2 credentials
 validateCredentials(
     {
         id: githubFollowers.id,
@@ -88,42 +83,6 @@ validateCredentials(
         accessToken: {
             github: "token"
         }
-    }
-)
-
-// Validate blockchain credentials
-validateCredentials(
-    {
-        id: blockchainBalance.id,
-        criteria: {
-            minBalance: "10",
-            network: "sepolia",
-            blockNumber: 4749638
-        }
-    },
-    {
-        address: "0x",
-        jsonRpcProvider
-    }
-)
-
-// Validate EAS attestations credentials
-validateCredentials(
-    {
-        id: easAttestations.id,
-        criteria: {
-            minAttestations: 1,
-            recipient: "0x0",
-            attester: "0x1",
-            schemaId: "0x2",
-            revocable: true,
-            revoked: false,
-            isOffchain: false
-        }
-    },
-    {
-        network: EASNetworks.ETHEREUM,
-        address: "0x1"
     }
 )
 ```
