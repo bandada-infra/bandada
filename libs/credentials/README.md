@@ -171,9 +171,9 @@ Validates the EAS attestations of a user.
     -   **id**: The id for the EAS attestations validation.
     -   **criteria**:
         -   **minAttestations**: The minimum number of attestations required.
-        -   **schemaId**: The schema id of the attestation.
-        -   **recipient**(_optional_): The recipient of the attestation.
+        -   **recipient** (_optional_): The recipient of the attestation.
         -   **attester** (_optional_): The attester of the attestation.
+        -   **schemaId** (_optional_): The schema id of the attestation.
         -   **revocable** (_optional_): The revocable option of the attestation.
         -   **revoked** (_optional_): The revocation status of the attestation.
         -   **isOffchain** (_optional_): The type of chain of the attestation.
