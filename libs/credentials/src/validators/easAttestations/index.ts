@@ -57,37 +57,30 @@ const validator: Validator = {
                 isOffchain
             } = criteria
 
+            let whereConditions = `recipient: { equals: "${context.address}" }`
+
+            if (attester !== undefined && attester !== null) {
+                whereConditions += `attester: { equals: "${attester}" },`
+            }
+
+            if (schemaId !== undefined && schemaId !== null) {
+                whereConditions += `schemaId: { equals: "${schemaId}" },`
+            }
+
+            if (revocable !== undefined && revocable !== null) {
+                whereConditions += `revocable: { equals: ${revocable} },`
+            }
+
+            if (revoked !== undefined && revoked !== null) {
+                whereConditions += `revoked: { equals: ${revoked} },`
+            }
+
+            if (isOffchain !== undefined && isOffchain !== null) {
+                whereConditions += `isOffchain: { equals: ${isOffchain} },`
+            }
+
             const query = `query {
-                attestations(where: {                
-                    recipient: {
-                        equals: "${context.address}"
-                    },
-                    ${
-                        attester !== undefined && attester !== null
-                            ? `attester: { equals: "${attester}" },`
-                            : ""
-                    }
-                    ${
-                        schemaId !== undefined && schemaId !== null
-                            ? `schemaId: { equals: "${schemaId}" },`
-                            : ""
-                    }
-                    ${
-                        revocable !== undefined && revocable !== null
-                            ? `revocable: { equals: ${revocable} },`
-                            : ""
-                    }
-                    ${
-                        revoked !== undefined && revoked !== null
-                            ? `revoked: { equals: ${revoked} },`
-                            : ""
-                    }
-                    ${
-                        isOffchain !== undefined && isOffchain !== null
-                            ? `isOffchain: { equals: ${isOffchain} },`
-                            : ""
-                    }
-                }) {
+                attestations(where: { ${whereConditions} }) {
                     recipient
                     attester
                     schemaId
