@@ -147,12 +147,16 @@ describe("Credentials library", () => {
     })
 
     describe("# queryGraph", () => {
-        it("Should return a function that can be used to query graphs data using GraphQL", () => {
-            const query = queryGraph(
+        it("Should return a function that can be used to query graphs data using GraphQL", async () => {
+            const query = await queryGraph(
                 "https://easscan.org/graphql",
                 `
                 query {
-                    attestations {
+                    attestations(where: {
+                        recipient: {
+                            equals: "0x"
+                        }
+                    }) {
                         recipient
                         attester
                         revocable
@@ -164,7 +168,7 @@ describe("Credentials library", () => {
             `
             )
 
-            expect(query).toBeUndefined()
+            expect(query).toEqual({})
         })
     })
 

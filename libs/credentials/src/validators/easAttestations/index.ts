@@ -1,10 +1,10 @@
-import { Context, EASContext, Validator } from "../.."
+import { Context, Validator } from "../.."
+import provider from "../../providers/eas"
 
 export type Criteria = {
     minAttestations: number
-    recipient: string
-    attester?: string
     schemaId?: string
+    attester?: string
     revocable?: boolean
     revoked?: boolean
     isOffchain?: boolean
@@ -16,10 +16,6 @@ const validator: Validator = {
     criteriaABI: {
         minAttestations: {
             type: "number",
-            optional: false
-        },
-        recipient: {
-            type: "string",
             optional: false
         },
         attester: {
@@ -51,11 +47,9 @@ const validator: Validator = {
      * @returns True if the user meets the criteria.
      */
     async validate(criteria: Criteria, context: Context) {
-        if ("queryGraph" in context) {
-            const getAttestations = (context as EASContext).queryGraph
-
+        if ("network" in context) {
             const {
-                recipient,
+                minAttestations,
                 attester,
                 schemaId,
                 revocable,
@@ -63,55 +57,45 @@ const validator: Validator = {
                 isOffchain
             } = criteria
 
-            const attestations = await getAttestations(`
-                query {
-                    attestations {
-                        recipient
-                        attester
-                        revocable
-                        revoked
-                        schemaId
-                        isOffchain
-                    }
+            let whereConditions = `recipient: { equals: "${context.address}" }`
+
+            if (attester !== undefined && attester !== null) {
+                whereConditions += `attester: { equals: "${attester}" },`
+            }
+
+            if (schemaId !== undefined && schemaId !== null) {
+                whereConditions += `schemaId: { equals: "${schemaId}" },`
+            }
+
+            if (revocable !== undefined && revocable !== null) {
+                whereConditions += `revocable: { equals: ${revocable} },`
+            }
+
+            if (revoked !== undefined && revoked !== null) {
+                whereConditions += `revoked: { equals: ${revoked} },`
+            }
+
+            if (isOffchain !== undefined && isOffchain !== null) {
+                whereConditions += `isOffchain: { equals: ${isOffchain} },`
+            }
+
+            const query = `query {
+                attestations(where: { ${whereConditions} }) {
+                    recipient
+                    attester
+                    schemaId
+                    revocable
+                    revoked
+                    isOffchain
                 }
-            `)
+            }`
 
-            const filteredAttestations = attestations.filter(
-                (attestation: any) => {
-                    // Criteria checks.
-                    if (attestation.recipient !== recipient) return false
-
-                    if (
-                        attester !== undefined &&
-                        attestation.attester !== attester
-                    )
-                        return false
-                    if (
-                        schemaId !== undefined &&
-                        attestation.schemaId !== schemaId
-                    )
-                        return false
-                    if (
-                        revocable !== undefined &&
-                        attestation.revocable !== revocable
-                    )
-                        return false
-                    if (
-                        revoked !== undefined &&
-                        attestation.revoked !== revoked
-                    )
-                        return false
-                    if (
-                        isOffchain !== undefined &&
-                        attestation.isOffchain !== isOffchain
-                    )
-                        return false
-
-                    return true
-                }
+            const attestations = await provider.queryGraph(
+                context.network,
+                query
             )
 
-            return filteredAttestations.length >= criteria.minAttestations
+            return attestations.data.attestations.length >= minAttestations
         }
 
         throw new Error("No recipient value found")

@@ -27,7 +27,8 @@ export type BlockchainContext = {
 }
 
 export type EASContext = {
-    queryGraph: (query: string) => Promise<any>
+    network: EASNetworks
+    address: BigNumberish
 }
 
 export type Context = Web2Context | BlockchainContext | EASContext

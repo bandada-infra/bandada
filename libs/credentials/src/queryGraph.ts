@@ -8,7 +8,7 @@ import { request } from "@bandada/utils"
  * @returns The function to query the graph.
  */
 export default function queryGraph(endpoint: string, query: string) {
-    request(endpoint, {
+    return request(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: JSON.stringify({
