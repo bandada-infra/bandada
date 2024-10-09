@@ -3,7 +3,7 @@ import easAttestations from "./index"
 
 jest.mock("../..", () => ({
     EASNetworks: { ETHEREUM_SEPOLIA: "sepolia" },
-    validateCredentials: jest.fn(() => true)
+    validateCredentials: jest.fn()
 }))
 
 describe("EASAttestations", () => {
