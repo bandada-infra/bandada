@@ -3,9 +3,8 @@ import provider from "../../providers/eas"
 
 export type Criteria = {
     minAttestations: number
-    schemaId: string
+    schemaId?: string
     attester?: string
-    recipient?: string
     revocable?: boolean
     revoked?: boolean
     isOffchain?: boolean
@@ -18,10 +17,6 @@ const validator: Validator = {
         minAttestations: {
             type: "number",
             optional: false
-        },
-        recipient: {
-            type: "string",
-            optional: true
         },
         attester: {
             type: "string",
