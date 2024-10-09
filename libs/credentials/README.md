@@ -201,7 +201,7 @@ validateCredentials(
     },
     {
         network: EASNetworks.ETHEREUM_SEPOLIA,
-        address: "0x1"
+        address: "0x2"
     }
 )
 ```
