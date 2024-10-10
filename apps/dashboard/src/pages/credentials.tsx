@@ -3,7 +3,8 @@ import {
     blockchain,
     Web2Provider,
     twitter,
-    github
+    github,
+    eas
 } from "@bandada/credentials"
 import { Flex, Text, Button } from "@chakra-ui/react"
 import { useEffect, useState, useCallback, useContext } from "react"
@@ -175,9 +176,10 @@ export default function CredentialsPage() {
                     clientRedirectUri
                 )
 
-                // If the credential is blockchain
+                // If the credential is blockchain or eas attestations
                 if (
-                    providerName === blockchain.name &&
+                    (providerName === blockchain.name ||
+                        providerName === eas.name) &&
                     isLoggedInAdmin() &&
                     state
                 ) {
