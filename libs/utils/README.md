@@ -161,3 +161,27 @@ import { getContractAddresses } from "@bandada/utils"
 
 const addresses = getContractAddresses("sepolia")
 ```
+
+\# **blockchainCredentialSupportedNetworks**
+
+Returns the list of supported blockchain networks.
+
+```ts
+import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
+
+const networks = blockchainCredentialSupportedNetworks
+const id = blockchainCredentialSupportedNetworks.find("sepolia")
+const name = blockchainCredentialSupportedNetworks.find("Sepolia")
+```
+
+\# **easCredentialSupportedNetworks**
+
+Returns the list of supported EAS attestations networks. List of supported networks can be found [here](https://docs.attest.org/docs/developer-tools/api).
+
+```ts
+import { easCredentialSupportedNetworks } from "@bandada/utils"
+
+const networks = easCredentialSupportedNetworks
+const id = easCredentialSupportedNetworks.find("sepolia")
+const name = easCredentialSupportedNetworks.find("Ethereum (Sepolia)")
+```
