@@ -7,8 +7,7 @@ import {
     providers,
     Web2Context,
     BlockchainContext,
-    EASContext,
-    EASNetworks
+    EASContext
 } from "@bandada/credentials"
 import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
 import { id } from "@ethersproject/hash"
@@ -177,7 +176,6 @@ export class CredentialsService {
                     accountHash = id(address + groupId)
                 } else if (address && credentialProvider === "eas") {
                     context = {
-                        network: EASNetworks.ETHEREUM_SEPOLIA,
                         address: address[0]
                     }
 
@@ -276,7 +274,7 @@ export class CredentialsService {
                 group.credentials
             ).criteria
 
-            if (network) {
+            if (network && !minAttestations) {
                 const supportedNetwork =
                     blockchainCredentialSupportedNetworks.find(
                         (n) => n.name.toLowerCase() === network.toLowerCase()
@@ -302,9 +300,8 @@ export class CredentialsService {
                 }
             }
 
-            if (minAttestations) {
+            if (network && minAttestations) {
                 context = {
-                    network: EASNetworks.ETHEREUM_SEPOLIA,
                     address: address[0]
                 }
             }
