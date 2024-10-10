@@ -67,6 +67,10 @@ const validator: Validator = {
                 isOffchain
             } = criteria
 
+            if (!Object.values(EASNetworks).includes(network as EASNetworks)) {
+                throw new Error("Invalid network")
+            }
+
             let whereConditions = `recipient: { equals: "${context.address}" }`
 
             if (attester !== undefined && attester !== null) {
