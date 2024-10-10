@@ -1,4 +1,7 @@
-import { blockchainCredentialSupportedNetworks } from "./getSupportedNetworks"
+import {
+    blockchainCredentialSupportedNetworks,
+    easCredentialSupportedNetworks
+} from "./getSupportedNetworks"
 import shortenAddress from "./shortenAddress"
 
 describe("Utils", () => {
@@ -30,6 +33,30 @@ describe("Utils", () => {
                 (i) => i.id === expected.id
             )
             const name = blockchainCredentialSupportedNetworks.find(
+                (i) => i.name === expected.name
+            )
+
+            expect(id).toMatchObject(expected)
+            expect(name).toMatchObject(expected)
+        })
+    })
+
+    describe("# easCredentialSupportedNetworks", () => {
+        it("Should return a list of EAS attestations credential supported network", () => {
+            const networks = easCredentialSupportedNetworks
+
+            expect(networks).toHaveLength(easCredentialSupportedNetworks.length)
+        })
+
+        it("Should return a blockchain credential supported network", () => {
+            const expected = {
+                id: "sepolia",
+                name: "Ethereum (Sepolia)"
+            }
+            const id = easCredentialSupportedNetworks.find(
+                (i) => i.id === expected.id
+            )
+            const name = easCredentialSupportedNetworks.find(
                 (i) => i.name === expected.name
             )
 

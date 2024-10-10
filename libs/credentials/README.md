@@ -171,6 +171,7 @@ Validates the EAS attestations of a user.
     -   **id**: The id for the EAS attestations validation.
     -   **criteria**:
         -   **minAttestations**: The minimum number of attestations required.
+        -   **network**: The id of the supported attestation network.
         -   **attester** (_optional_): The attester of the attestation.
         -   **schemaId** (_optional_): The schema id of the attestation.
         -   **revocable** (_optional_): The revocable option of the attestation.
@@ -181,17 +182,21 @@ Validates the EAS attestations of a user.
     -   **address**: The user address to validate.
 
 ```typescript
+import { easCredentialSupportedNetworks } from "@bandada/utils"
 import {
     validateCredentials,
     easAttestations,
     EASNetworks
 } from "@bandada/credentials"
 
+const network = easCredentialSupportedNetworks.find("sepolia")
+
 validateCredentials(
     {
         id: easAttestations.id,
         criteria: {
             minAttestations: 1,
+            network: network.id,
             schemaId: "0x",
             attester: "0x1",
             revocable: false,
@@ -200,7 +205,6 @@ validateCredentials(
         }
     },
     {
-        network: EASNetworks.ETHEREUM_SEPOLIA,
         address: "0x2"
     }
 )
