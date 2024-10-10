@@ -72,5 +72,27 @@ export const PROJECT_ITEMS: Project[] = [
         links: {
             website: "https://www.pairwise.vote/"
         }
+    },
+    {
+        name: "Joby",
+        tagline:
+            "Apply for jobs without the fear of bias, your skills and experience speak louder than your identity",
+        pse: false,
+        categories: ["privacy", "community", "jobs", "experience"],
+        links: {
+            website:
+                "https://taikai.network/ethrome/hackathons/ethrome-24/projects/cm1w31xiy03sqwqfmytvm3qq7/positions"
+        }
+    },
+    {
+        name: "ＳＨＩＥＬＤ ＳＰＡＣＥ",
+        tagline:
+            "Secure platform for sensitive communities hosting private, confidential events.",
+        pse: false,
+        categories: ["events", "privacy", "community", "security"],
+        links: {
+            website:
+                "https://taikai.network/ethrome/hackathons/ethrome-24/projects/cm1wr1y8t0021h12dolec3083/idea"
+        }
     }
 ]
