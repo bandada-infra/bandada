@@ -1,5 +1,7 @@
-import { easCredentialSupportedNetworks } from "./getEasSupportedNetwork"
-import { blockchainCredentialSupportedNetworks } from "./getSupportedNetworks"
+import {
+    blockchainCredentialSupportedNetworks,
+    easCredentialSupportedNetworks
+} from "./getSupportedNetworks"
 import shortenAddress from "./shortenAddress"
 
 describe("Utils", () => {
