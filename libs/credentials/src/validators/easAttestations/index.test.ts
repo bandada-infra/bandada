@@ -274,4 +274,31 @@ describe("EASAttestations", () => {
             "Parameter 'minAttestations' is not a number"
         )
     })
+
+    it("Should throw invalid network error if the network is invalid", async () => {
+        ;(validateCredentials as any).mockImplementationOnce(async () => {
+            throw new Error("Invalid network")
+        })
+
+        const fun = validateCredentials(
+            {
+                id: easAttestations.id,
+                criteria: {
+                    minAttestations: 1,
+                    network: "test",
+                    attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
+                    schemaId:
+                        "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
+                    revocable: true,
+                    revoked: false,
+                    isOffchain: false
+                }
+            },
+            {
+                address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
+            }
+        )
+
+        await expect(fun).rejects.toThrow("Invalid network")
+    })
 })
