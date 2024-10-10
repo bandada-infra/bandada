@@ -4,11 +4,15 @@ export enum EASNetworks {
     ETHEREUM = "ethereum",
     ETHEREUM_SEPOLIA = "sepolia",
     ARBITRUM = "arbitrum",
+    ARIBITRUM_NOVA = "arbitrum-nova",
     BASE = "base",
-    BASE_GOERLI = "base-goerli",
+    BASE_SEPOLIA = "base-sepolia",
     LINEA = "linea",
     OPTIMISM = "optimism",
-    OPTIMISM_GOERLI = "optimism-goerli"
+    OPTIMISM_SEPOLIA = "optimism-sepolia-bedrock",
+    SCROLL = "scroll",
+    POLYGON = "polygon",
+    CELO = "celo"
 }
 
 export type Web2Context = {
@@ -27,7 +31,6 @@ export type BlockchainContext = {
 }
 
 export type EASContext = {
-    network: EASNetworks
     address: BigNumberish
 }
 
