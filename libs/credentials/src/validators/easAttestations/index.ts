@@ -1,8 +1,9 @@
-import { Context, Validator } from "../.."
+import { Context, EASNetworks, Validator } from "../.."
 import provider from "../../providers/eas"
 
 export type Criteria = {
     minAttestations: number
+    network: string
     schemaId?: string
     attester?: string
     revocable?: boolean
@@ -16,6 +17,10 @@ const validator: Validator = {
     criteriaABI: {
         minAttestations: {
             type: "number",
+            optional: false
+        },
+        network: {
+            type: "string",
             optional: false
         },
         attester: {
@@ -47,9 +52,14 @@ const validator: Validator = {
      * @returns True if the user meets the criteria.
      */
     async validate(criteria: Criteria, context: Context) {
-        if ("network" in context) {
+        if (
+            "address" in context &&
+            criteria.minAttestations &&
+            criteria.network
+        ) {
             const {
                 minAttestations,
+                network,
                 attester,
                 schemaId,
                 revocable,
@@ -91,14 +101,14 @@ const validator: Validator = {
             }`
 
             const attestations = await provider.queryGraph(
-                context.network,
+                network as EASNetworks,
                 query
             )
 
             return attestations.data.attestations.length >= minAttestations
         }
 
-        throw new Error("No recipient value found")
+        throw new Error("No address value found")
     }
 }
 

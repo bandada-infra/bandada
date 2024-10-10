@@ -1,4 +1,4 @@
-import { EASNetworks, validateCredentials } from "../.."
+import { validateCredentials } from "../.."
 import easAttestations from "./index"
 
 jest.mock("../..", () => ({
@@ -15,12 +15,12 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 3,
+                    network: "sepolia",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c"
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
             }
         )
@@ -36,6 +36,7 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 1,
+                    network: "sepolia",
                     attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
@@ -45,7 +46,6 @@ describe("EASAttestations", () => {
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
             }
         )
@@ -61,6 +61,7 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 1,
+                    network: "sepolia",
                     attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d4",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
@@ -70,7 +71,6 @@ describe("EASAttestations", () => {
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d4"
             }
         )
@@ -86,6 +86,7 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 1,
+                    network: "sepolia",
                     attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5d",
@@ -95,7 +96,6 @@ describe("EASAttestations", () => {
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
             }
         )
@@ -111,6 +111,7 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 1,
+                    network: "sepolia",
                     attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
@@ -120,7 +121,6 @@ describe("EASAttestations", () => {
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
             }
         )
@@ -136,6 +136,7 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 1,
+                    network: "sepolia",
                     attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
@@ -145,7 +146,6 @@ describe("EASAttestations", () => {
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
             }
         )
@@ -161,6 +161,7 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 1,
+                    network: "sepolia",
                     attester: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
@@ -170,7 +171,6 @@ describe("EASAttestations", () => {
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
             }
         )
@@ -186,12 +186,12 @@ describe("EASAttestations", () => {
                 id: easAttestations.id,
                 criteria: {
                     minAttestations: 3,
+                    network: "sepolia",
                     schemaId:
                         "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c"
                 }
             },
             {
-                network: EASNetworks.ETHEREUM_SEPOLIA,
                 address: "0x"
             }
         )
@@ -211,7 +211,6 @@ describe("EASAttestations", () => {
                     criteria: {}
                 },
                 {
-                    network: EASNetworks.ETHEREUM_SEPOLIA,
                     address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
                 }
             )
@@ -234,13 +233,13 @@ describe("EASAttestations", () => {
                     id: easAttestations.id,
                     criteria: {
                         minAttestations: 1,
+                        network: "sepolia",
                         schemaId:
                             "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c",
                         test: 123
                     }
                 },
                 {
-                    network: EASNetworks.ETHEREUM_SEPOLIA,
                     address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
                 }
             )
@@ -261,12 +260,12 @@ describe("EASAttestations", () => {
                     id: easAttestations.id,
                     criteria: {
                         minAttestations: "1",
+                        network: "sepolia",
                         schemaId:
                             "0xe2636f31239f7948afdd9a9c477048b7fc2a089c347af60e3aa1251e5bf63e5c"
                     }
                 },
                 {
-                    network: EASNetworks.ETHEREUM_SEPOLIA,
                     address: "0x63A35A52c0ac206108EBbf559E4C7109dAd281d3"
                 }
             )
