@@ -8,7 +8,10 @@ import getWallet from "./getWallet"
 import getBandadaContract, { BandadaContract } from "./getBandadaContract"
 import request from "./request"
 import shortenAddress from "./shortenAddress"
-import { blockchainCredentialSupportedNetworks } from "./getSupportedNetworks"
+import {
+    blockchainCredentialSupportedNetworks,
+    easCredentialSupportedNetworks
+} from "./getSupportedNetworks"
 
 export {
     ApiKeyActions,
@@ -30,5 +33,6 @@ export {
     getContractAddresses,
     SemaphoreABI,
     BandadaABI,
-    blockchainCredentialSupportedNetworks
+    blockchainCredentialSupportedNetworks,
+    easCredentialSupportedNetworks
 }
