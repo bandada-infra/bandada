@@ -1,5 +1,5 @@
 import { validators } from "@bandada/credentials"
-import { blockchainCredentialSupportedNetworks } from "@bandada/utils"
+import { blockchainCredentialSupportedNetworks, easCredentialSupportedNetworks } from "@bandada/utils"
 import {
     Box,
     Button,
@@ -254,7 +254,15 @@ export default function AccessModeStep({
                                                     })
                                                 }
                                             >
-                                                {blockchainCredentialSupportedNetworks.map(
+                                                {validators[_validator].criteriaABI.minAttestations ? easCredentialSupportedNetworks.map(
+                                                    (network: any) => (
+                                                        <option
+                                                            value={network.id}
+                                                        >
+                                                            {network.name}
+                                                        </option>
+                                                    )
+                                                ) : blockchainCredentialSupportedNetworks.map(
                                                     (network: any) => (
                                                         <option
                                                             value={network.name}
