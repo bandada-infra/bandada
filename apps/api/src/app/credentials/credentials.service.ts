@@ -270,11 +270,10 @@ export class CredentialsService {
         let context: Web2Context | BlockchainContext | EASContext
 
         if (address) {
-            const { network, minAttestations } = JSON.parse(
-                group.credentials
-            ).criteria
+            const { network, minBalance, minTransactions, minAttestations } =
+                JSON.parse(group.credentials).criteria
 
-            if (network && !minAttestations) {
+            if (network && (minBalance || minTransactions)) {
                 const supportedNetwork =
                     blockchainCredentialSupportedNetworks.find(
                         (n) => n.name.toLowerCase() === network.toLowerCase()
