@@ -28,7 +28,7 @@ export class Group {
 
     @Column({
         type: "simple-enum",
-        enum: GroupType,
+        enum: ["on-chain", "off-chain"],
         nullable: true
     })
     type: GroupType

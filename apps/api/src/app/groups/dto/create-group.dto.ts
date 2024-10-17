@@ -32,9 +32,9 @@ export class CreateGroupDto {
     @ApiProperty()
     readonly description: string
 
-    @IsEnum(GroupType)
+    @IsEnum(["on-chain", "off-chain"])
     @ApiProperty({
-        enum: GroupType
+        enum: ["on-chain", "off-chain"]
     })
     readonly type: GroupType
 

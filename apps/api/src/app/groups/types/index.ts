@@ -5,7 +5,4 @@ export type MerkleProof = {
     pathIndices: number[]
 }
 
-export enum GroupType {
-    ONCHAIN = "on-chain",
-    OFFCHAIN = "off-chain"
-}
+export type GroupType = "on-chain" | "off-chain"
