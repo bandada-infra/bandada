@@ -11,7 +11,6 @@ import { InvitesService } from "./invites.service"
 import { AdminsModule } from "../admins/admins.module"
 import { AdminsService } from "../admins/admins.service"
 import { Admin } from "../admins/entities/admin.entity"
-import { GroupType } from "../groups/types"
 
 jest.mock("@bandada/utils", () => {
     const originalModule = jest.requireActual("@bandada/utils")
@@ -72,7 +71,7 @@ describe("InvitesService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
-                type: GroupType.OFFCHAIN,
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -106,7 +105,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -162,7 +161,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -193,7 +192,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -288,7 +287,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -323,7 +322,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {

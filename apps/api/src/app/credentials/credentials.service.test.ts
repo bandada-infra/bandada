@@ -14,7 +14,6 @@ import { InvitesService } from "../invites/invites.service"
 import { OAuthAccount } from "./entities/credentials-account.entity"
 import { CredentialsService } from "./credentials.service"
 import { AdminsModule } from "../admins/admins.module"
-import { GroupType } from "../groups/types"
 
 jest.mock("@bandada/utils", () => {
     const originalModule = jest.requireActual("@bandada/utils")
@@ -84,7 +83,7 @@ describe("CredentialsService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
-                type: GroupType.OFFCHAIN,
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600,
                 credentials: JSON.stringify({
@@ -106,7 +105,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -189,7 +188,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -236,7 +235,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -342,7 +341,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -393,7 +392,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -446,7 +445,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group4",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -500,7 +499,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group5",
                     description: "This is a description",
-                    type: GroupType.OFFCHAIN,
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
