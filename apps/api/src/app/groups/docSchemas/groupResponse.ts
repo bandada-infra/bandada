@@ -8,6 +8,8 @@ export class GroupResponse {
     @ApiProperty()
     description: string
     @ApiProperty()
+    type: string
+    @ApiProperty()
     adminId: string
     @ApiProperty()
     treeDepth: number

@@ -8,9 +8,11 @@ import {
     MinLength,
     NotContains,
     IsNumberString,
-    IsJSON
+    IsJSON,
+    IsEnum
 } from "class-validator"
 import { ApiProperty } from "@nestjs/swagger"
+import { GroupType } from "../types"
 
 export class CreateGroupDto {
     @IsString()
@@ -29,6 +31,12 @@ export class CreateGroupDto {
     @MinLength(10)
     @ApiProperty()
     readonly description: string
+
+    @IsEnum(GroupType)
+    @ApiProperty({
+        enum: GroupType
+    })
+    readonly type: GroupType
 
     @IsNumber()
     @Min(16)
