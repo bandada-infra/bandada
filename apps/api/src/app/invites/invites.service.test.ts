@@ -71,6 +71,7 @@ describe("InvitesService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -104,6 +105,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -159,6 +161,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -189,6 +192,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -283,6 +287,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -317,6 +322,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
