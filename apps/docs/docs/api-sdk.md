@@ -102,6 +102,7 @@ Creates a Bandada group.
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600
 }
@@ -128,6 +129,7 @@ const credentials = {
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600,
     credentials
@@ -167,6 +169,7 @@ const credentials = {
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600,
     credentials
@@ -187,12 +190,14 @@ const groupsCreateDetails = [
     {
         name: "Group 1",
         description: "This is Group 1.",
+        type: "off-chain",
         treeDepth: 16,
         fingerprintDuration: 3600
     },
     {
         name: "Group 2",
         description: "This is Group 2.",
+        type: "off-chain",
         treeDepth: 16,
         fingerprintDuration: 3600
     }
