@@ -6,6 +6,7 @@ export type Group = {
     id: string
     name: string
     description: string
+    type: GroupType | null
     admin: string
     treeDepth: number
     fingerprint: string
@@ -35,6 +36,7 @@ type GroupSummary = {
     id: string
     name: string
     description: string
+    type: GroupType | null
     adminId: string
     treeDepth: number
     fingerprintDuration: number
