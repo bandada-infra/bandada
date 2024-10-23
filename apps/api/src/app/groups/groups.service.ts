@@ -18,7 +18,7 @@ import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
-import { MerkleProof } from "./types"
+import { GroupType, MerkleProof } from "./types"
 import { getAndCheckAdmin } from "../utils"
 
 @Injectable()
@@ -816,6 +816,7 @@ export class GroupsService {
     async getGroups(filters?: {
         adminId?: string
         memberId?: string
+        type?: GroupType
     }): Promise<Group[]> {
         let where = {}
 
@@ -830,6 +831,13 @@ export class GroupsService {
                 members: {
                     id: filters.memberId
                 },
+                ...where
+            }
+        }
+
+        if (filters?.type) {
+            where = {
+                type: filters.type,
                 ...where
             }
         }
