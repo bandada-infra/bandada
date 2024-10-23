@@ -309,6 +309,23 @@ describe("Bandada API SDK", () => {
                     expect(group.credentials).toBeNull()
                 })
             })
+
+            it("Should not create a group if the treeDepth is not between 16 and 32", async () => {
+                const expectedGroups: Array<GroupCreationDetails> = [
+                    {
+                        name: "Group3",
+                        description: "This is a new group",
+                        treeDepth: 15,
+                        fingerprintDuration: 3600
+                    }
+                ]
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+                const fun = apiSdk.createGroups([expectedGroups[0]], apiKey)
+
+                await expect(fun).rejects.toThrow(
+                    "The tree depth must be between 16 and 32"
+                )
+            })
         })
         describe("#removeGroup", () => {
             it("Should create a group", async () => {
