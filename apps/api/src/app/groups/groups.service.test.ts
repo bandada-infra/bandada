@@ -90,6 +90,22 @@ describe("GroupsService", () => {
             expect(treeDepth).toBe(16)
             expect(members).toHaveLength(0)
         })
+
+        it("Should not create a group if the treeDepth is not between 16 and 32", async () => {
+            const fun = groupsService.createGroup(
+                {
+                    name: "Group3",
+                    description: "This is a description",
+                    treeDepth: 15,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            await expect(fun).rejects.toThrow(
+                "The tree depth must be between 16 and 32."
+            )
+        })
     })
 
     describe("# removeGroup", () => {
