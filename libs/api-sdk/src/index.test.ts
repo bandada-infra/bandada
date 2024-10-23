@@ -320,6 +320,7 @@ describe("Bandada API SDK", () => {
                     }
                 ]
                 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+                apiSdk = new ApiSdk(SupportedUrl.DEV)
                 const fun = apiSdk.createGroups([expectedGroups[0]], apiKey)
 
                 await expect(fun).rejects.toThrow(
