@@ -3,7 +3,8 @@ import type {
     GroupCreationDetails,
     Group,
     GroupUpdateDetails,
-    DashboardUrl
+    DashboardUrl,
+    GroupType
 } from "./types"
 
 const url = "/groups"
@@ -74,6 +75,99 @@ export async function getGroupsByMemberId(
     memberId: string
 ): Promise<Group[]> {
     const requestUrl = `${url}?memberId=${memberId}`
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
+ * Returns the list of groups by type.
+ * @param type "on-chain" or "off-chain".
+ * @returns List of groups by type.
+ */
+export async function getGroupsByType(
+    config: object,
+    type: GroupType
+): Promise<Group[]> {
+    const requestUrl = `${url}?type=${type}`
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
+ * Returns the list of groups by name.
+ * @param name Group name.
+ * @returns List of groups by name.
+ */
+export async function getGroupsByName(
+    config: object,
+    name: string
+): Promise<Group[]> {
+    const requestUrl = `${url}?name=${name}`
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
+ * Returns the list of associated groups.
+ * @param name Group name.
+ * @returns List of associated groups.
+ */
+export async function getAssociatedGroups(
+    config: object,
+    name: string
+): Promise<Group[]> {
+    const requestUrl = `${url}?name=${name}&?type=on-chain`
 
     let groups = await request(requestUrl, config)
 
