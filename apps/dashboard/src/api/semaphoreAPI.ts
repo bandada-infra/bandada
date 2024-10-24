@@ -78,21 +78,11 @@ export async function getAssociatedGroup(
             members: true
         })
 
+        const members = group.members as string[]
         const bandadaGroup = await getGroupByName(group.id)
 
         if (bandadaGroup && bandadaGroup.length > 0) {
-            const members = group.members as string[]
             members.push(...bandadaGroup[0].members)
-
-            return {
-                id: group.id,
-                name: parseGroupName(group.id),
-                treeDepth: group.merkleTree.depth,
-                fingerprintDuration: 3600,
-                members,
-                admin: group.admin as string,
-                type: "on-chain"
-            }
         }
 
         return {
@@ -100,7 +90,7 @@ export async function getAssociatedGroup(
             name: parseGroupName(group.id),
             treeDepth: group.merkleTree.depth,
             fingerprintDuration: 3600,
-            members: group.members as string[],
+            members,
             admin: group.admin as string,
             type: "on-chain"
         }
