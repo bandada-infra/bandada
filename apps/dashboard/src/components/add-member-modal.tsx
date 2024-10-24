@@ -147,7 +147,21 @@ ${memberIds.join("\n")}
     }, [onClose, _memberIds, group, signer])
 
     const generateInviteLink = useCallback(async () => {
-        const inviteLink = await bandadaAPI.generateMagicLink(group.id)
+        let inviteLink = null
+
+        if (group.type === "off-chain") {
+            inviteLink = await bandadaAPI.generateMagicLink(group.id)
+        } else {
+            const associatedGroup = await bandadaAPI.getGroupByName(group.name)
+
+            if (associatedGroup && associatedGroup.length > 0) {
+                inviteLink = await bandadaAPI.generateMagicLink(
+                    associatedGroup[0].id
+                )
+            } else {
+                alert("No associated on-chain group found")
+            }
+        }
 
         if (inviteLink === null) {
             return
@@ -212,63 +226,59 @@ ${memberIds.join("\n")}
                         </Box>
                     )}
 
-                    {group.type === "off-chain" && (
-                        <Box mb="30px">
-                            <Text mb="10px" color="balticSea.800">
-                                {!group.credentials
-                                    ? "Share invite link"
-                                    : "Share access link"}
-                            </Text>
+                    <Box mb="30px">
+                        <Text mb="10px" color="balticSea.800">
+                            {!group.credentials
+                                ? "Share invite link"
+                                : "Share access link"}
+                        </Text>
 
-                            <InputGroup size="lg">
-                                <Input
-                                    pr="50px"
-                                    placeholder={
-                                        !group.credentials
-                                            ? "Invite link"
-                                            : "Access link"
-                                    }
-                                    value={_clientLink}
-                                    isDisabled
-                                />
-                                <InputRightElement mr="5px">
-                                    <Tooltip
-                                        label={hasCopied ? "Copied!" : "Copy"}
-                                        closeOnClick={false}
-                                        hasArrow
-                                    >
-                                        <IconButton
-                                            variant="link"
-                                            aria-label="Copy invite link"
-                                            onClick={onCopy}
-                                            onMouseDown={(e) =>
-                                                e.preventDefault()
-                                            }
-                                            icon={
-                                                <Icon
-                                                    color="sunsetOrange.600"
-                                                    boxSize="5"
-                                                    as={FiCopy}
-                                                />
-                                            }
-                                        />
-                                    </Tooltip>
-                                </InputRightElement>
-                            </InputGroup>
-
-                            {!group.credentials && (
-                                <Button
-                                    mt="10px"
-                                    variant="link"
-                                    color="balticSea.600"
-                                    textDecoration="underline"
-                                    onClick={generateInviteLink}
+                        <InputGroup size="lg">
+                            <Input
+                                pr="50px"
+                                placeholder={
+                                    !group.credentials
+                                        ? "Invite link"
+                                        : "Access link"
+                                }
+                                value={_clientLink}
+                                isDisabled
+                            />
+                            <InputRightElement mr="5px">
+                                <Tooltip
+                                    label={hasCopied ? "Copied!" : "Copy"}
+                                    closeOnClick={false}
+                                    hasArrow
                                 >
-                                    Generate new link
-                                </Button>
-                            )}
-                        </Box>
-                    )}
+                                    <IconButton
+                                        variant="link"
+                                        aria-label="Copy invite link"
+                                        onClick={onCopy}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        icon={
+                                            <Icon
+                                                color="sunsetOrange.600"
+                                                boxSize="5"
+                                                as={FiCopy}
+                                            />
+                                        }
+                                    />
+                                </Tooltip>
+                            </InputRightElement>
+                        </InputGroup>
+
+                        {!group.credentials && (
+                            <Button
+                                mt="10px"
+                                variant="link"
+                                color="balticSea.600"
+                                textDecoration="underline"
+                                onClick={generateInviteLink}
+                            >
+                                Generate new link
+                            </Button>
+                        )}
+                    </Box>
 
                     <Button
                         width="100%"
