@@ -47,6 +47,7 @@ export default function FinalPreviewStep({
             const response = await bandadaAPI.createGroup(
                 group.name,
                 group.description,
+                group.type,
                 group.treeDepth,
                 group.fingerprintDuration,
                 group.credentials

@@ -1,6 +1,6 @@
 import { ApiKeyActions, request } from "@bandada/utils"
 import { SiweMessage } from "siwe"
-import { Admin, Group } from "../types"
+import { Admin, Group, GroupType } from "../types"
 import createAlert from "../utils/createAlert"
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -80,12 +80,16 @@ export async function getGroup(groupId: string): Promise<Group | null> {
  * It creates a new group.
  * @param name The group name.
  * @param description The group description.
+ * @param type The group type ("on-chain" | "off-chain").
  * @param treeDepth The Merkle tree depth.
+ * @param fingerprintDuration The fingerprint duration.
+ * @param credentials The group credentials.
  * @returns The group details.
  */
 export async function createGroup(
     name: string,
     description: string,
+    type: GroupType,
     treeDepth: number,
     fingerprintDuration: number,
     credentials?: any
@@ -97,6 +101,7 @@ export async function createGroup(
                 {
                     name,
                     description,
+                    type,
                     treeDepth,
                     fingerprintDuration,
                     credentials: JSON.stringify(credentials)

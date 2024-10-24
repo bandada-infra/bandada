@@ -5,6 +5,7 @@ export function mapGroupToResponseDTO(group: Group, fingerprint: string = "") {
         id: group.id,
         name: group.name,
         description: group.description,
+        type: group.type,
         admin: group.adminId,
         treeDepth: group.treeDepth,
         fingerprint,

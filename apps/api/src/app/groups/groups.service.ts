@@ -149,6 +149,7 @@ export class GroupsService {
             id: groupId,
             name,
             description,
+            type,
             treeDepth,
             fingerprintDuration,
             credentials
@@ -173,6 +174,7 @@ export class GroupsService {
             id: _groupId,
             name,
             description,
+            type,
             treeDepth,
             fingerprintDuration,
             credentials,
