@@ -39,8 +39,8 @@ export class CreateGroupDto {
     readonly type: GroupType
 
     @IsNumber()
-    @Min(16)
-    @Max(32)
+    @Min(16, { message: "The tree depth must be between 16 and 32." })
+    @Max(32, { message: "The tree depth must be between 16 and 32." })
     @ApiProperty()
     readonly treeDepth: number
 

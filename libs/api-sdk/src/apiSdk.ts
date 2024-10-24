@@ -121,6 +121,13 @@ export default class ApiSdk {
         groupCreationDetails: GroupCreationDetails,
         apiKey: string
     ): Promise<Group> {
+        if (
+            groupCreationDetails.treeDepth < 16 ||
+            groupCreationDetails.treeDepth > 32
+        ) {
+            throw new Error("The tree depth must be between 16 and 32")
+        }
+
         const groups = await createGroups(
             this._config,
             [groupCreationDetails],
@@ -140,6 +147,12 @@ export default class ApiSdk {
         groupsCreationDetails: Array<GroupCreationDetails>,
         apiKey: string
     ): Promise<Array<Group>> {
+        for (const group of groupsCreationDetails) {
+            if (group.treeDepth < 16 || group.treeDepth > 32) {
+                throw new Error("The tree depth must be between 16 and 32")
+            }
+        }
+
         const groups = await createGroups(
             this._config,
             groupsCreationDetails,

@@ -164,6 +164,12 @@ export class GroupsService {
 
         if (credentials === undefined) credentials = null
 
+        if (treeDepth < 16 || treeDepth > 32) {
+            throw new BadRequestException(
+                "The tree depth must be between 16 and 32."
+            )
+        }
+
         const group = this.groupRepository.create({
             id: _groupId,
             name,
