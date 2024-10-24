@@ -79,7 +79,7 @@ export async function getAssociatedGroup(
         })
 
         const members = group.members as string[]
-        const bandadaGroup = await getGroupByName(group.id)
+        const bandadaGroup = await getGroupByName(group.id, "on-chain")
 
         if (bandadaGroup && bandadaGroup.length > 0) {
             members.push(...bandadaGroup[0].members)

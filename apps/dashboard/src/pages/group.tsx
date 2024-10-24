@@ -196,7 +196,8 @@ export default function GroupPage(): JSX.Element {
                 }
 
                 const associatedGroup = await bandadaApi.getGroupByName(
-                    _group!.name
+                    _group!.name,
+                    "on-chain"
                 )
 
                 if (

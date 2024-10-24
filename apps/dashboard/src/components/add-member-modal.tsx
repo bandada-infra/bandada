@@ -152,7 +152,10 @@ ${memberIds.join("\n")}
         if (group.type === "off-chain") {
             inviteLink = await bandadaAPI.generateMagicLink(group.id)
         } else {
-            const associatedGroup = await bandadaAPI.getGroupByName(group.name)
+            const associatedGroup = await bandadaAPI.getGroupByName(
+                group.name,
+                "on-chain"
+            )
 
             if (associatedGroup && associatedGroup.length > 0) {
                 inviteLink = await bandadaAPI.generateMagicLink(

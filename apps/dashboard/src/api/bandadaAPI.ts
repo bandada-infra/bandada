@@ -70,9 +70,16 @@ export async function getGroups(
  * @param name
  * @returns The group details.
  */
-export async function getGroupByName(name: string): Promise<Group[] | null> {
+export async function getGroupByName(
+    name: string,
+    type?: GroupType
+): Promise<Group[] | null> {
     try {
-        return await request(`${API_URL}/groups/?name=${name}`)
+        const groupType = type || "off-chain"
+
+        return await request(
+            `${API_URL}/groups/?name=${name}&?type=${groupType}`
+        )
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)
