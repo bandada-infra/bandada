@@ -325,6 +325,7 @@ describe("Bandada API SDK", () => {
                     {
                         name: "Group3",
                         description: "This is a new group",
+                        type: "off-chain",
                         treeDepth: 15,
                         fingerprintDuration: 3600
                     }

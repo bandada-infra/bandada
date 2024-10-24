@@ -100,6 +100,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 15,
                     fingerprintDuration: 3600
                 },
