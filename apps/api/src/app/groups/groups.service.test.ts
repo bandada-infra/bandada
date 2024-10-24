@@ -278,6 +278,14 @@ describe("GroupsService", () => {
 
             expect(result).toHaveLength(1)
         })
+
+        it("Should return a list of groups by group name", async () => {
+            const result = await groupsService.getGroups({
+                name: "OnChainGroup"
+            })
+
+            expect(result).toHaveLength(1)
+        })
     })
 
     describe("# getGroup", () => {

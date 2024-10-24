@@ -817,6 +817,7 @@ export class GroupsService {
         adminId?: string
         memberId?: string
         type?: GroupType
+        name?: string
     }): Promise<Group[]> {
         let where = {}
 
@@ -838,6 +839,13 @@ export class GroupsService {
         if (filters?.type) {
             where = {
                 type: filters.type,
+                ...where
+            }
+        }
+
+        if (filters?.name) {
+            where = {
+                name: filters.name,
                 ...where
             }
         }
