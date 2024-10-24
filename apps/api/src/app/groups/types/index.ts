@@ -4,3 +4,5 @@ export type MerkleProof = {
     siblings: any[]
     pathIndices: number[]
 }
+
+export type GroupType = "on-chain" | "off-chain"

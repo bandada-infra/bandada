@@ -125,6 +125,7 @@ Creates a Bandada group.
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600
 }
@@ -151,6 +152,7 @@ const credentials = {
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600,
     credentials
@@ -190,6 +192,7 @@ const credentials = {
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600,
     credentials
@@ -210,12 +213,14 @@ const groupsCreateDetails = [
     {
         name: "Group 1",
         description: "This is Group 1.",
+        type: "off-chain",
         treeDepth: 16,
         fingerprintDuration: 3600
     },
     {
         name: "Group 2",
         description: "This is Group 2.",
+        type: "off-chain",
         treeDepth: 16,
         fingerprintDuration: 3600
     }
@@ -343,6 +348,39 @@ Returns the list of groups by member id.
 ```ts
 const memberId = "1"
 const groups = await apiSdk.getGroupsByMemberId(memberId)
+```
+
+## Get groups by type
+
+\# **getGroupsByType**(): _Promise\<Group[]>_
+
+Returns the list of groups by type.
+
+```ts
+const type = "off-chain"
+const groups = await apiSdk.getGroupsByType(type)
+```
+
+## Get groups by name
+
+\# **getGroupsByName**(): _Promise\<Group[]>_
+
+Returns the list of groups by name.
+
+```ts
+const name = "Group1"
+const groups = await apiSdk.getGroupsByName(name)
+```
+
+## Get associated groups
+
+\# **getAssociatedGroups**(): _Promise\<Group[]>_
+
+Returns the list of associated groups.
+
+```ts
+const name = "Group1"
+const groups = await apiSdk.getAssociatedGroups(name)
 ```
 
 ## Is group member

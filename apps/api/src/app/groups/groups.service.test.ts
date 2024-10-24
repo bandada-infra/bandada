@@ -66,6 +66,7 @@ describe("GroupsService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -77,16 +78,19 @@ describe("GroupsService", () => {
 
     describe("# createGroup", () => {
         it("Should create a group", async () => {
-            const { treeDepth, members } = await groupsService.createGroup(
-                {
-                    name: "Group2",
-                    description: "This is a description",
-                    treeDepth: 16,
-                    fingerprintDuration: 3600
-                },
-                "admin"
-            )
+            const { type, treeDepth, members } =
+                await groupsService.createGroup(
+                    {
+                        name: "Group2",
+                        description: "This is a description",
+                        type: "off-chain",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    },
+                    "admin"
+                )
 
+            expect(type).toBe("off-chain")
             expect(treeDepth).toBe(16)
             expect(members).toHaveLength(0)
         })
@@ -96,6 +100,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 15,
                     fingerprintDuration: 3600
                 },
@@ -114,6 +119,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -142,6 +148,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group4",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -216,6 +223,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group01",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -227,6 +235,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group02",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -245,6 +254,7 @@ describe("GroupsService", () => {
                 {
                     name: "MemberGroup",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -262,6 +272,33 @@ describe("GroupsService", () => {
 
             const result = await groupsService.getGroups({
                 memberId: "123456"
+            })
+
+            expect(result).toHaveLength(1)
+        })
+
+        it("Should return a list of groups by group type", async () => {
+            await groupsService.createGroup(
+                {
+                    name: "OnChainGroup",
+                    description: "This is a description",
+                    type: "on-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin02"
+            )
+
+            const result = await groupsService.getGroups({
+                type: "on-chain"
+            })
+
+            expect(result).toHaveLength(1)
+        })
+
+        it("Should return a list of groups by group name", async () => {
+            const result = await groupsService.getGroups({
+                name: "OnChainGroup"
             })
 
             expect(result).toHaveLength(1)
@@ -335,6 +372,7 @@ describe("GroupsService", () => {
                 {
                     name: "MemberGroup",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -398,6 +436,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 21,
                     fingerprintDuration: 3600
                 },
@@ -442,6 +481,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 21,
                     fingerprintDuration: 3600
                 },
@@ -471,6 +511,7 @@ describe("GroupsService", () => {
         const groupDto: CreateGroupDto = {
             name: "Group",
             description: "This is a new group",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -627,6 +668,7 @@ describe("GroupsService", () => {
                 id: "1",
                 name: "Group1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -634,6 +676,7 @@ describe("GroupsService", () => {
                 id: "2",
                 name: "Group2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -641,6 +684,7 @@ describe("GroupsService", () => {
                 id: "3",
                 name: "Group3",
                 description: "This is a new group3",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             }
@@ -801,6 +845,7 @@ describe("GroupsService", () => {
             id: "1",
             name: "Group1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -904,6 +949,7 @@ describe("GroupsService", () => {
                 id: "1",
                 name: "Group1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -911,6 +957,7 @@ describe("GroupsService", () => {
                 id: "2",
                 name: "Group2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1044,6 +1091,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1194,6 +1242,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1218,6 +1267,7 @@ describe("GroupsService", () => {
                 {
                     name: "Credential Group",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -1366,6 +1416,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1414,6 +1465,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1441,6 +1493,7 @@ describe("GroupsService", () => {
                 {
                     name: "Credential Group",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -1492,6 +1545,7 @@ describe("GroupsService", () => {
             id: "1",
             name: "Group1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -1534,6 +1588,7 @@ describe("GroupsService", () => {
                 id: "1",
                 name: "Group1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -1541,6 +1596,7 @@ describe("GroupsService", () => {
                 id: "2",
                 name: "Group2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1587,6 +1643,7 @@ describe("GroupsService", () => {
             id: "1",
             name: "Group1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -1639,6 +1696,7 @@ describe("GroupsService", () => {
                 id: "1",
                 name: "Group1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -1646,6 +1704,7 @@ describe("GroupsService", () => {
                 id: "2",
                 name: "Group2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1722,6 +1781,7 @@ describe("GroupsService", () => {
             id: "1",
             name: "Group1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -1794,6 +1854,7 @@ describe("GroupsService", () => {
                 id: "1",
                 name: "Group1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -1801,6 +1862,7 @@ describe("GroupsService", () => {
                 id: "2",
                 name: "Group2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1895,6 +1957,7 @@ describe("GroupsService", () => {
                 {
                     name: "Fingerprint Group",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },

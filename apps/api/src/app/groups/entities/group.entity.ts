@@ -12,6 +12,7 @@ import {
 import { OAuthAccount } from "../../credentials/entities/credentials-account.entity"
 import { Member } from "./member.entity"
 import { Invite } from "../../invites/entities/invite.entity"
+import { GroupType } from "../types"
 
 @Entity("groups")
 export class Group {
@@ -24,6 +25,13 @@ export class Group {
 
     @Column()
     description: string
+
+    @Column({
+        type: "simple-enum",
+        enum: ["on-chain", "off-chain"],
+        nullable: true
+    })
+    type: GroupType
 
     @Column({ name: "admin_id" })
     adminId: string
