@@ -28,6 +28,15 @@ export default function NewGroupPage(): JSX.Element {
         }
     }, [])
 
+    const finalPreviewBack = useCallback(() => {
+        if (_group.type === "on-chain") {
+            setGroup({ type: "off-chain", fingerprintDuration: 3600 })
+            setCurrentStep(0)
+        } else {
+            setCurrentStep(_currentStep - 1)
+        }
+    }, [_group, _currentStep])
+
     return (
         <Container maxW="container.xl" px="8" pb="20">
             <VStack spacing="9" flex="1">
@@ -85,7 +94,7 @@ export default function NewGroupPage(): JSX.Element {
                     ) : (
                         <FinalPreviewStep
                             group={_group}
-                            onBack={() => setCurrentStep(_currentStep - 1)}
+                            onBack={() => finalPreviewBack()}
                         />
                     )}
                 </HStack>
