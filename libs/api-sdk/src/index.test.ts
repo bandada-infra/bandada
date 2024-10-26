@@ -65,16 +65,12 @@ describe("Bandada API SDK", () => {
                 },
                 baseURL: SupportedUrl.PROD
             }
-            const fun = () => {
-                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV, config)
-            }
+            const fun = () =>  new ApiSdk(SupportedUrl.DEV, config)
             expect(fun).toThrow("The url and baseURL should be the same")
         })
         it("Should throw an error when the url has the wrong type", () => {
             const url = 123
-            const fun = () => {
-                const apiSdk: ApiSdk = new ApiSdk(url as any)
-            }
+            const fun = () => new ApiSdk(url as any)
             expect(fun).toThrow("Parameter 'url' is not a string")
         })
         it("Should add the baseURL to config", () => {
