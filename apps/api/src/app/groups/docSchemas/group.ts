@@ -8,6 +8,8 @@ export class Group {
     @ApiProperty()
     description: string
     @ApiProperty()
+    type: string
+    @ApiProperty()
     admin: string
     @ApiProperty()
     treeDepth: number

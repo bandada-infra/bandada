@@ -83,6 +83,7 @@ describe("CredentialsService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600,
                 credentials: JSON.stringify({
@@ -104,6 +105,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -186,6 +188,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -232,6 +235,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -337,6 +341,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -387,6 +392,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -439,6 +445,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group4",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -492,6 +499,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group5",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({

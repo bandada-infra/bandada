@@ -1,9 +1,12 @@
 export type Credential = any
 
+export type GroupType = "on-chain" | "off-chain"
+
 export type Group = {
     id: string
     name: string
     description: string
+    type: GroupType | null
     admin: string
     treeDepth: number
     fingerprint: string
@@ -16,6 +19,7 @@ export type Group = {
 export type GroupCreationDetails = {
     name: string
     description: string
+    type: GroupType
     treeDepth: number
     fingerprintDuration: number
     credentials?: Credential
@@ -32,6 +36,7 @@ type GroupSummary = {
     id: string
     name: string
     description: string
+    type: GroupType | null
     adminId: string
     treeDepth: number
     fingerprintDuration: number
