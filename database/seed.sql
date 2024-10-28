@@ -16,6 +16,7 @@ CREATE TABLE groups (
     id character varying(32) PRIMARY KEY,
     name character varying NOT NULL,
     description character varying NOT NULL,
+    type character varying,
     admin_id character varying NOT NULL,
     tree_depth integer NOT NULL,
     fingerprint_duration integer NOT NULL,
