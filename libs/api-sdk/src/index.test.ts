@@ -645,7 +645,7 @@ describe("Bandada API SDK", () => {
 
                 const type = "off-chain"
 
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Group[] = await apiSdk.getGroupsByType(type)
                 expect(groups).toHaveLength(1)
             })
@@ -669,7 +669,7 @@ describe("Bandada API SDK", () => {
 
                 const type = "off-chain"
 
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Group[] = await apiSdk.getGroupsByType(type)
                 expect(groups).toHaveLength(1)
                 expect(groups[0].credentials).toBeNull()
@@ -696,7 +696,7 @@ describe("Bandada API SDK", () => {
 
                 const name = "Group1"
 
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Group[] = await apiSdk.getGroupsByName(name)
                 expect(groups).toHaveLength(1)
             })
@@ -720,7 +720,7 @@ describe("Bandada API SDK", () => {
 
                 const name = "Group1"
 
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Group[] = await apiSdk.getGroupsByName(name)
                 expect(groups).toHaveLength(1)
                 expect(groups[0].credentials).toBeNull()
@@ -747,7 +747,7 @@ describe("Bandada API SDK", () => {
 
                 const name = "Group1"
 
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Group[] = await apiSdk.getAssociatedGroups(name)
                 expect(groups).toHaveLength(1)
                 expect(groups[0].type).toBe("on-chain")
@@ -772,7 +772,7 @@ describe("Bandada API SDK", () => {
 
                 const name = "Group1"
 
-                apiSdk = new ApiSdk(SupportedUrl.DEV)
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
                 const groups: Group[] = await apiSdk.getAssociatedGroups(name)
                 expect(groups).toHaveLength(1)
                 expect(groups[0].type).toBe("on-chain")
