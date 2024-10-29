@@ -212,9 +212,11 @@ Creates an associated group to an on-chain group.
 const onchainGroupId = "1"
 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-const associatedGroup = await apiSdk.createAssociatedGroup(onchainGroupId, apiKey)
+const associatedGroup = await apiSdk.createAssociatedGroup(
+    onchainGroupId,
+    apiKey
+)
 ```
-
 
 ## Create groups
 
