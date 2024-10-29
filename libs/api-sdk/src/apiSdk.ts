@@ -28,7 +28,8 @@ import {
     getCredentialGroupJoinUrl,
     getAssociatedGroups,
     getGroupsByName,
-    getGroupsByType
+    getGroupsByType,
+    createAssociatedGroup
 } from "./groups"
 import { createInvite, getInvite } from "./invites"
 
@@ -197,6 +198,21 @@ export default class ApiSdk {
         )
 
         return groups
+    }
+
+    /**
+     * Creates an associated group to an on-chain group using the API key.
+     * @param groupId The group id of the on-chain group.
+     * @param apiKey The API key of the admin of the group.
+     * @returns The created associated group.
+     */
+    async createAssociatedGroup(
+        groupId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await createAssociatedGroup(this._config, groupId, apiKey)
+
+        return group[0]
     }
 
     /**

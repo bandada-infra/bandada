@@ -227,6 +227,38 @@ export async function createGroups(
 }
 
 /**
+ * Creates an associated group to an on-chain group.
+ * @param groupId The group id.
+ * @param apiKey API Key of the admin.
+ * @returns The created associated group.
+ */
+export async function createAssociatedGroup(
+    config: object,
+    groupId: string,
+    apiKey: string
+): Promise<Group> {
+    const groupCreationDetails = {
+        name: groupId,
+        description: `This group is associated to the on-chain group ${groupId}`,
+        type: "on-chain",
+        treeDepth: 16,
+        fingerprintDuration: 3600
+    }
+
+    const newConfig: any = {
+        method: "post",
+        data: groupCreationDetails,
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(url, newConfig)
+
+    return req
+}
+
+/**
  * Removes the group.
  * @param groupId The group id.
  * @param apiKey API Key of the admin.
