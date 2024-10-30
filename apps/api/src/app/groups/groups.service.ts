@@ -170,6 +170,14 @@ export class GroupsService {
             )
         }
 
+        const uniqueName = await this.groupRepository.findOne({
+            where: { name, adminId }
+        })
+
+        if (uniqueName) {
+            throw new BadRequestException(`Group name '${name}' already exists`)
+        }
+
         const group = this.groupRepository.create({
             id: _groupId,
             name,
