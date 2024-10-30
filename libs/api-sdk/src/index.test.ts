@@ -245,6 +245,39 @@ describe("Bandada API SDK", () => {
                     JSON.stringify(expectedGroup.credentials)
                 )
             })
+            it("Should create an associated group", async () => {
+                const groupId = "1"
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: groupId,
+                            description: `This is an associated group to the on-chain group ${groupId}`,
+                            type: "on-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: Group = await apiSdk.createAssociatedGroup(
+                    groupId,
+                    apiKey
+                )
+
+                expect(group.name).toBe(groupId)
+                expect(group.treeDepth).toBe(16)
+                expect(group.fingerprintDuration).toBe(3600)
+                expect(group.members).toHaveLength(0)
+                expect(group.credentials).toBeNull()
+            })
         })
         describe("#createGroups", () => {
             it("Should create the groups", async () => {

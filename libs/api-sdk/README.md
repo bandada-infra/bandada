@@ -202,6 +202,22 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
 ```
 
+## Create associated group
+
+\# **createAssociatedGroup**(): _Promise\<Group>_
+
+Creates an associated group to an on-chain group.
+
+```ts
+const onchainGroupId = "1"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const associatedGroup = await apiSdk.createAssociatedGroup(
+    onchainGroupId,
+    apiKey
+)
+```
+
 ## Create groups
 
 \# **createGroups**(): _Promise\<Group[]>_
