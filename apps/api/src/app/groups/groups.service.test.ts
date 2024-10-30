@@ -111,6 +111,39 @@ describe("GroupsService", () => {
                 "The tree depth must be between 16 and 32."
             )
         })
+
+        it("Should not create a group if the group name already exist", async () => {
+            const fun = groupsService.createGroup(
+                {
+                    name: "Group1",
+                    description: "This is a description",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            await expect(fun).rejects.toThrow("already exists")
+        })
+
+        it("Should create a group with same name but different admin", async () => {
+            const { name, treeDepth, members } =
+                await groupsService.createGroup(
+                    {
+                        name: "Group1",
+                        description: "This is a description",
+                        type: "off-chain",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    },
+                    "different-admin"
+                )
+
+            expect(name).toBe("Group1")
+            expect(treeDepth).toBe(16)
+            expect(members).toHaveLength(0)
+        })
     })
 
     describe("# removeGroup", () => {
@@ -215,7 +248,7 @@ describe("GroupsService", () => {
         it("Should return a list of groups", async () => {
             const result = await groupsService.getGroups()
 
-            expect(result).toHaveLength(3)
+            expect(result).toHaveLength(4)
         })
 
         it("Should return a list of groups by admin", async () => {
