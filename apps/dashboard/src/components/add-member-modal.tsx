@@ -162,7 +162,20 @@ ${memberIds.join("\n")}
                     associatedGroup[0].id
                 )
             } else {
-                alert("No associated on-chain group found")
+                const description = `This group is associated to the on-chain group ${group.name}`
+                const newAssociatedGroup = await bandadaAPI.createGroup(
+                    group.name,
+                    description,
+                    "on-chain",
+                    16,
+                    3600
+                )
+
+                if (newAssociatedGroup) {
+                    inviteLink = await bandadaAPI.generateMagicLink(
+                        newAssociatedGroup.id
+                    )
+                }
             }
         }
 
