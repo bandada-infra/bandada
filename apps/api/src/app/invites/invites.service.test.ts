@@ -159,7 +159,7 @@ describe("InvitesService", () => {
 
             await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "Group3",
                     description: "This is a description",
                     type: "off-chain",
                     treeDepth: 16,
@@ -190,7 +190,7 @@ describe("InvitesService", () => {
 
             const group = await groupsService.createGroup(
                 {
-                    name: "Group3",
+                    name: "Group4",
                     description: "This is a description",
                     type: "off-chain",
                     treeDepth: 16,
@@ -285,7 +285,7 @@ describe("InvitesService", () => {
 
             await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "Group5",
                     description: "This is a description",
                     type: "off-chain",
                     treeDepth: 16,
@@ -320,7 +320,7 @@ describe("InvitesService", () => {
 
             const group = await groupsService.createGroup(
                 {
-                    name: "Group3",
+                    name: "Group6",
                     description: "This is a description",
                     type: "off-chain",
                     treeDepth: 16,
