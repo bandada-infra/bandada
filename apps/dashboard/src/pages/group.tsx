@@ -52,10 +52,14 @@ export default function GroupPage(): JSX.Element {
     const addMembersModal = useDisclosure()
     const toast = useToast()
     const { groupId, groupType } = useParams()
+    const {adminId, adminType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
     // const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
         groupId || ""
+    )
+    const { hasCopied: hasCopiedAdminId, onCopy: onCopyAdminId } = useClipboard(
+        adminId || ""
     )
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
@@ -71,7 +75,7 @@ export default function GroupPage(): JSX.Element {
     const { data: signer } = useSigner()
 
     useEffect(() => {
-        ;(async () => {
+        ; (async () => {
             if (groupId) {
                 const group =
                     groupType === "on-chain"
@@ -141,7 +145,7 @@ export default function GroupPage(): JSX.Element {
         async (memberId: string) => {
             if (
                 !window.confirm(
-                    `Are you sure you want to remove member '${memberId}'?`
+                    Are you sure you want to remove member '${memberId}'?
                 )
             ) {
                 return
@@ -297,7 +301,7 @@ ${memberIds.join("\n")}
                 const url = URL.createObjectURL(blob)
                 const a = document.createElement("a")
                 a.href = url
-                a.download = `${_group.name}.json`
+                a.download = ${_group.name}.json
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
@@ -322,7 +326,7 @@ ${memberIds.join("\n")}
         const credentialsObj = JSON.parse(_group.credentials)
 
         if (credentialsObj.id) {
-            credentialsId = `${credentialsObj.id}`
+            credentialsId = ${credentialsObj.id}
 
             if (credentialsObj.criteria) {
                 for (const key in credentialsObj.criteria) {
@@ -474,6 +478,46 @@ ${memberIds.join("\n")}
                                         variant="link"
                                         aria-label="Copy Group id"
                                         onClick={onCopyGroupId}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        icon={
+                                            <Icon
+                                                color="sunsetOrange.600"
+                                                boxSize="5"
+                                                as={FiCopy}
+                                            />
+                                        }
+                                    />
+                                </Tooltip>
+                            </InputRightElement>
+                        </InputGroup>
+                    </Box>
+                    <Box
+                        bgColor="balticSea.50"
+                        p="25px 30px 25px 30px"
+                        borderRadius="8px"
+                    >
+                        <Text fontSize="20px">Admin ID</Text>
+
+                        <InputGroup size="lg" mt="10px">
+                            <Input
+                                pr="50px"
+                                placeholder="Admin ID"
+                                value={adminId}
+                                isDisabled
+                            />
+
+                            <InputRightElement mr="5px">
+                                <Tooltip
+                                    label={
+                                        hasCopiedAdminId ? "Copied!" : "Copy"
+                                    }
+                                    closeOnClick={false}
+                                    hasArrow
+                                >
+                                    <IconButton
+                                        variant="link"
+                                        aria-label="Copy Group id"
+                                        onClick={onCopyAdminId}
                                         onMouseDown={(e) => e.preventDefault()}
                                         icon={
                                             <Icon
