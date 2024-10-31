@@ -1,7 +1,6 @@
 import { SemaphoreSubgraph } from "@semaphore-protocol/data"
 import { Group } from "../types"
 import parseGroupName from "../utils/parseGroupName"
-import { getGroupByName } from "./bandadaAPI"
 
 const ETHEREUM_NETWORK = import.meta.env.VITE_ETHEREUM_NETWORK
 
@@ -55,42 +54,6 @@ export async function getGroup(groupId: string): Promise<Group | null> {
             treeDepth: group.merkleTree.depth,
             fingerprintDuration: 3600,
             members: group.members as string[],
-            admin: group.admin as string,
-            type: "on-chain"
-        }
-    } catch (error) {
-        console.error(error)
-
-        return null
-    }
-}
-
-/**
- * It returns the details of a specific on-chain group together with the associated off-chain group details.
- * @param groupId
- * @returns The group details.
- */
-export async function getAssociatedGroup(
-    groupId: string
-): Promise<Group | null> {
-    try {
-        const group = await subgraph.getGroup(groupId, {
-            members: true
-        })
-
-        const members = group.members as string[]
-        const bandadaGroup = await getGroupByName(group.id, "on-chain")
-
-        if (bandadaGroup && bandadaGroup.length > 0) {
-            members.push(...bandadaGroup[0].members)
-        }
-
-        return {
-            id: group.id,
-            name: parseGroupName(group.id),
-            treeDepth: group.merkleTree.depth,
-            fingerprintDuration: 3600,
-            members,
             admin: group.admin as string,
             type: "on-chain"
         }

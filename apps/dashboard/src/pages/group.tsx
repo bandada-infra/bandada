@@ -75,7 +75,7 @@ export default function GroupPage(): JSX.Element {
             if (groupId) {
                 const group =
                     groupType === "on-chain"
-                        ? await semaphoreApi.getAssociatedGroup(groupId)
+                        ? await semaphoreApi.getGroup(groupId)
                         : await bandadaApi.getGroup(groupId)
 
                 if (group === null) {
@@ -193,22 +193,6 @@ export default function GroupPage(): JSX.Element {
                         )
                         return
                     }
-                }
-
-                const associatedGroup = await bandadaApi.getGroupByName(
-                    _group!.name,
-                    "on-chain"
-                )
-
-                if (
-                    associatedGroup &&
-                    associatedGroup.length > 0 &&
-                    associatedGroup[0].members.includes(memberId)
-                ) {
-                    await bandadaApi.removeMember(
-                        associatedGroup[0].id,
-                        memberId
-                    )
                 }
 
                 _group!.members = _group!.members.map((m) =>
