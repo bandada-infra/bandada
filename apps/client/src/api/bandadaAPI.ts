@@ -72,3 +72,22 @@ export async function addMemberByInviteCode(
         return null
     }
 }
+
+export async function redeemInvite(
+    inviteCode: string,
+    groupId: string
+): Promise<Invite | null> {
+    try {
+        return await api.redeemInvite(inviteCode, groupId)
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return null
+    }
+}
