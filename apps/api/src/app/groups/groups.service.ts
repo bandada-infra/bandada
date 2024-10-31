@@ -18,7 +18,7 @@ import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
 import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
-import { MerkleProof } from "./types"
+import { GroupType, MerkleProof } from "./types"
 import { getAndCheckAdmin } from "../utils"
 
 @Injectable()
@@ -168,6 +168,14 @@ export class GroupsService {
             throw new BadRequestException(
                 "The tree depth must be between 16 and 32."
             )
+        }
+
+        const uniqueName = await this.groupRepository.findOne({
+            where: { name, adminId }
+        })
+
+        if (uniqueName) {
+            throw new BadRequestException(`Group name '${name}' already exists`)
         }
 
         const group = this.groupRepository.create({
@@ -822,6 +830,8 @@ export class GroupsService {
     async getGroups(filters?: {
         adminId?: string
         memberId?: string
+        type?: GroupType
+        name?: string
     }): Promise<Group[]> {
         let where = {}
 
@@ -836,6 +846,20 @@ export class GroupsService {
                 members: {
                     id: filters.memberId
                 },
+                ...where
+            }
+        }
+
+        if (filters?.type) {
+            where = {
+                type: filters.type,
+                ...where
+            }
+        }
+
+        if (filters?.name) {
+            where = {
+                name: filters.name,
                 ...where
             }
         }

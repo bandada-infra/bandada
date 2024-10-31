@@ -202,6 +202,22 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
 ```
 
+## Create associated group
+
+\# **createAssociatedGroup**(): _Promise\<Group>_
+
+Creates an associated group to an on-chain group.
+
+```ts
+const onchainGroupId = "1"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const associatedGroup = await apiSdk.createAssociatedGroup(
+    onchainGroupId,
+    apiKey
+)
+```
+
 ## Create groups
 
 \# **createGroups**(): _Promise\<Group[]>_
@@ -348,6 +364,39 @@ Returns the list of groups by member id.
 ```ts
 const memberId = "1"
 const groups = await apiSdk.getGroupsByMemberId(memberId)
+```
+
+## Get groups by type
+
+\# **getGroupsByType**(): _Promise\<Group[]>_
+
+Returns the list of groups by type.
+
+```ts
+const type = "off-chain"
+const groups = await apiSdk.getGroupsByType(type)
+```
+
+## Get groups by name
+
+\# **getGroupsByName**(): _Promise\<Group[]>_
+
+Returns the list of groups by name.
+
+```ts
+const name = "Group1"
+const groups = await apiSdk.getGroupsByName(name)
+```
+
+## Get associated groups
+
+\# **getAssociatedGroups**(): _Promise\<Group[]>_
+
+Returns the list of associated groups.
+
+```ts
+const name = "Group1"
+const groups = await apiSdk.getAssociatedGroups(name)
 ```
 
 ## Is group member

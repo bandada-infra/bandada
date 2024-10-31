@@ -34,6 +34,23 @@ export default function FinalPreviewStep({
 
                 const groupId = groupIdBigNumber.toString()
 
+                const description = `This group is associated to the on-chain group ${groupId}`
+                const response = await bandadaAPI.createGroup(
+                    groupId,
+                    description,
+                    group.type,
+                    16,
+                    3600
+                )
+
+                if (response === null) {
+                    setLoading(false)
+                    alert(
+                        "Some error occured when creating the off-chain association group"
+                    )
+                    return
+                }
+
                 navigate(`/groups/on-chain/${groupId}`)
             } catch (error) {
                 setLoading(false)

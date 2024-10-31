@@ -40,18 +40,46 @@ export async function generateMagicLink(
  * @param adminId The admin id.
  * @returns The list of groups or null.
  */
-export async function getGroups(adminId?: string): Promise<Group[] | null> {
+export async function getGroups(
+    adminId?: string,
+    type?: GroupType
+): Promise<Group[] | null> {
     try {
-        const url = adminId
-            ? `${API_URL}/groups/?adminId=${adminId}`
-            : `${API_URL}/groups/`
+        const groupType = type || "off-chain"
+        let url = `${API_URL}/groups/?type=${groupType}`
+
+        if (adminId) {
+            url += `&?adminId=${adminId}`
+        }
 
         const groups = await request(url)
 
         return groups.map((group: Group) => ({
             ...group,
-            type: "off-chain"
+            type: groupType
         }))
+    } catch (error: any) {
+        console.error(error)
+        createAlert(error.response.data.message)
+        return null
+    }
+}
+
+/**
+ * It returns the list of groups by group name.
+ * @param name
+ * @returns The group details.
+ */
+export async function getGroupByName(
+    name: string,
+    type?: GroupType
+): Promise<Group[] | null> {
+    try {
+        const groupType = type || "off-chain"
+
+        return await request(
+            `${API_URL}/groups/?name=${name}&?type=${groupType}`
+        )
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)
@@ -109,7 +137,7 @@ export async function createGroup(
             ]
         })
 
-        return { ...groups.at(0), type: "off-chain" }
+        return { ...groups.at(0) }
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)

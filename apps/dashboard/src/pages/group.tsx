@@ -39,7 +39,7 @@ import { useSigner } from "wagmi"
 import { getSemaphoreContract } from "@bandada/utils"
 import { Group as Semaphorev4Group } from "@semaphore-protocol/core"
 import * as bandadaApi from "../api/bandadaAPI"
-import { getGroup as getOnchainGroup } from "../api/semaphoreAPI"
+import * as semaphoreApi from "../api/semaphoreAPI"
 import image1 from "../assets/image1.svg"
 import AddMemberModal from "../components/add-member-modal"
 import { Group } from "../types"
@@ -75,7 +75,7 @@ export default function GroupPage(): JSX.Element {
             if (groupId) {
                 const group =
                     groupType === "on-chain"
-                        ? await getOnchainGroup(groupId)
+                        ? await semaphoreApi.getGroup(groupId)
                         : await bandadaApi.getGroup(groupId)
 
                 if (group === null) {
@@ -161,32 +161,40 @@ export default function GroupPage(): JSX.Element {
                     return
                 }
 
-                try {
-                    const semaphore = getSemaphoreContract(
-                        "sepolia",
-                        signer as any
-                    )
+                const semaphoreGroup = await semaphoreApi.getGroup(_group!.id)
 
-                    const semaphorev4Group = new Semaphorev4Group(
-                        _group!.members
-                    )
+                if (
+                    semaphoreGroup &&
+                    semaphoreGroup.members.includes(memberId)
+                ) {
+                    try {
+                        const semaphore = getSemaphoreContract(
+                            "sepolia",
+                            signer as any
+                        )
 
-                    const index = semaphorev4Group.indexOf(memberId)
+                        const semaphorev4Group = new Semaphorev4Group(
+                            _group!.members
+                        )
 
-                    const merkleProof =
-                        semaphorev4Group.generateMerkleProof(index)
+                        const index = semaphorev4Group.indexOf(memberId)
 
-                    await semaphore.removeMember(
-                        _group!.id,
-                        memberId,
-                        merkleProof.siblings
-                    )
-                } catch (error) {
-                    alert(
-                        "Some error occurred! Check if you're on Sepolia network and the transaction is signed and completed"
-                    )
-                    return
+                        const merkleProof =
+                            semaphorev4Group.generateMerkleProof(index)
+
+                        await semaphore.removeMember(
+                            _group!.id,
+                            memberId,
+                            merkleProof.siblings
+                        )
+                    } catch (error) {
+                        alert(
+                            "Some error occurred! Check if you're on Sepolia network and the transaction is signed and completed"
+                        )
+                        return
+                    }
                 }
+
                 _group!.members = _group!.members.map((m) =>
                     m !== memberId ? m : "0"
                 )

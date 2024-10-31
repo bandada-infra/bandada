@@ -3,7 +3,8 @@ import type {
     GroupCreationDetails,
     Group,
     GroupUpdateDetails,
-    DashboardUrl
+    DashboardUrl,
+    GroupType
 } from "./types"
 
 const url = "/groups"
@@ -96,6 +97,99 @@ export async function getGroupsByMemberId(
 }
 
 /**
+ * Returns the list of groups by type.
+ * @param type "on-chain" or "off-chain".
+ * @returns List of groups by type.
+ */
+export async function getGroupsByType(
+    config: object,
+    type: GroupType
+): Promise<Group[]> {
+    const requestUrl = `${url}?type=${type}`
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
+ * Returns the list of groups by name.
+ * @param name Group name.
+ * @returns List of groups by name.
+ */
+export async function getGroupsByName(
+    config: object,
+    name: string
+): Promise<Group[]> {
+    const requestUrl = `${url}?name=${name}`
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
+ * Returns the list of associated groups.
+ * @param name Group name.
+ * @returns List of associated groups.
+ */
+export async function getAssociatedGroups(
+    config: object,
+    name: string
+): Promise<Group[]> {
+    const requestUrl = `${url}?name=${name}&?type=on-chain`
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
  * Creates one or more groups with the provided details.
  * @param groupsCreationDetails Data to create the groups.
  * @param apiKey API Key of the admin.
@@ -122,6 +216,38 @@ export async function createGroups(
     const newConfig: any = {
         method: "post",
         data: groupsCreationDetailsRequest,
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(url, newConfig)
+
+    return req
+}
+
+/**
+ * Creates an associated group to an on-chain group.
+ * @param groupId The group id.
+ * @param apiKey API Key of the admin.
+ * @returns The created associated group.
+ */
+export async function createAssociatedGroup(
+    config: object,
+    groupId: string,
+    apiKey: string
+): Promise<Group> {
+    const groupCreationDetails = {
+        name: groupId,
+        description: `This group is associated to the on-chain group ${groupId}`,
+        type: "on-chain",
+        treeDepth: 16,
+        fingerprintDuration: 3600
+    }
+
+    const newConfig: any = {
+        method: "post",
+        data: groupCreationDetails,
         ...config
     }
 
