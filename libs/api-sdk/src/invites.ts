@@ -46,3 +46,20 @@ export async function createInvite(
 
     return req
 }
+
+export async function redeemInvite(
+    config: object,
+    inviteCode: string,
+    groupId: string
+): Promise<Invite> {
+    const requestUrl = `${url}/redeem/${inviteCode}/group/${groupId}`
+
+    const newConfig: any = {
+        method: "post",
+        ...config
+    }
+
+    const req = await request(requestUrl, newConfig)
+
+    return req
+}
