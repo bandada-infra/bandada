@@ -72,4 +72,19 @@ export class InvitesController {
 
         return mapEntity(invite)
     }
+
+    @Post("redeem/:code/group/:group")
+    @ApiOperation({ description: "Redeems a specific invite." })
+    @ApiCreatedResponse({ type: InviteResponse })
+    async redeemInvite(
+        @Param("code") inviteCode: string,
+        @Param("group") groupId: string
+    ): Promise<InviteResponse> {
+        const invite = await this.invitesService.redeemInvite(
+            inviteCode,
+            groupId
+        )
+
+        return mapEntity(invite)
+    }
 }
