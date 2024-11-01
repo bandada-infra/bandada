@@ -1,6 +1,8 @@
 import { ApiSdk, Group, Invite } from "@bandada/api-sdk"
+import { request } from "@bandada/utils"
 
 const api = new ApiSdk(import.meta.env.VITE_API_URL)
+const API_URL = import.meta.env.VITE_API_URL
 
 export async function getInvite(inviteCode: string): Promise<Invite | null> {
     try {
@@ -60,6 +62,30 @@ export async function addMemberByInviteCode(
 ): Promise<void | null> {
     try {
         return await api.addMemberByInviteCode(groupId, memberId, inviteCode)
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return null
+    }
+}
+
+export async function redeemInvite(
+    inviteCode: string,
+    groupId: string
+): Promise<Invite | null> {
+    try {
+        return await request(
+            `${API_URL}/invites/redeem/${inviteCode}/group/${groupId}`,
+            {
+                method: "post"
+            }
+        )
     } catch (error: any) {
         console.error(error)
 

@@ -118,6 +118,10 @@ export default function HomePage(): JSX.Element {
                         )
 
                         await semaphore.addMember(group.id, identityCommitment)
+                        await bandadaAPI.redeemInvite(
+                            inviteCode,
+                            invite.group.id
+                        )
                     } catch (error) {
                         alert(
                             "Some error occurred! Check if you're on Sepolia network and the transaction is signed and completed"
