@@ -53,10 +53,14 @@ export async function redeemInvite(
     groupId: string,
     apiKey: string
 ): Promise<Invite> {
-    const requestUrl = `${url}/redeem/${inviteCode}/group/${groupId}`
+    const requestUrl = `${url}/redeem`
 
     const newConfig: any = {
-        method: "post",
+        method: "patch",
+        data: {
+            inviteCode,
+            groupId
+        },
         ...config
     }
 
