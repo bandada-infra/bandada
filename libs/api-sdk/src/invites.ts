@@ -50,7 +50,8 @@ export async function createInvite(
 export async function redeemInvite(
     config: object,
     inviteCode: string,
-    groupId: string
+    groupId: string,
+    apiKey: string
 ): Promise<Invite> {
     const requestUrl = `${url}/redeem/${inviteCode}/group/${groupId}`
 
@@ -58,6 +59,8 @@ export async function redeemInvite(
         method: "post",
         ...config
     }
+
+    newConfig.headers["x-api-key"] = apiKey
 
     const req = await request(requestUrl, newConfig)
 

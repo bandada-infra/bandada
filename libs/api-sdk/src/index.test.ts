@@ -1171,6 +1171,7 @@ describe("Bandada API SDK", () => {
                     createdAt: "2023-08-09T18:09:53.000Z",
                     updatedAt: "2023-08-09T18:09:53.000Z"
                 }
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
                 const inviteCode = "C5VAG4HD"
                 const inviteCreatedAt = "2023-08-09T18:10:02.000Z"
 
@@ -1184,7 +1185,11 @@ describe("Bandada API SDK", () => {
                 )
 
                 const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
-                const invite = await apiSdk.redeemInvite(inviteCode, groupId)
+                const invite = await apiSdk.redeemInvite(
+                    inviteCode,
+                    groupId,
+                    apiKey
+                )
 
                 expect(invite.code).toBe(inviteCode)
                 expect(invite.isRedeemed).toBe(true)

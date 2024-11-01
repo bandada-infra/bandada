@@ -423,10 +423,20 @@ export default class ApiSdk {
      * Redeems a specific invite.
      * @param inviteCode Invite code.
      * @param groupId Group id.
+     * @param apiKey The api key.
      * @returns The updated invite.
      */
-    async redeemInvite(inviteCode: string, groupId: string): Promise<Invite> {
-        const invite = await redeemInvite(this._config, inviteCode, groupId)
+    async redeemInvite(
+        inviteCode: string,
+        groupId: string,
+        apiKey: string
+    ): Promise<Invite> {
+        const invite = await redeemInvite(
+            this._config,
+            inviteCode,
+            groupId,
+            apiKey
+        )
 
         return invite
     }
