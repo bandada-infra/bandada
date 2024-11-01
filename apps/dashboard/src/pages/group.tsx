@@ -57,6 +57,9 @@ export default function GroupPage(): JSX.Element {
     const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
         groupId || ""
     )
+    const { hasCopied: hasCopiedAdminId, onCopy: onCopyAdminId } = useClipboard(
+        (_group && _group.admin) || ""
+    )
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
     const [_selectedMembers, setSelectedMembers] = useState<string[]>([])
@@ -453,7 +456,6 @@ ${memberIds.join("\n")}
                         borderRadius="8px"
                     >
                         <Text fontSize="20px">Group ID</Text>
-
                         <InputGroup size="lg" mt="10px">
                             <Input
                                 pr="50px"
@@ -461,7 +463,6 @@ ${memberIds.join("\n")}
                                 value={groupId}
                                 isDisabled
                             />
-
                             <InputRightElement mr="5px">
                                 <Tooltip
                                     label={
@@ -474,6 +475,44 @@ ${memberIds.join("\n")}
                                         variant="link"
                                         aria-label="Copy Group id"
                                         onClick={onCopyGroupId}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        icon={
+                                            <Icon
+                                                color="sunsetOrange.600"
+                                                boxSize="5"
+                                                as={FiCopy}
+                                            />
+                                        }
+                                    />
+                                </Tooltip>
+                            </InputRightElement>
+                        </InputGroup>
+                    </Box>
+                    <Box
+                        bgColor="balticSea.50"
+                        p="25px 30px 25px 30px"
+                        borderRadius="8px"
+                    >
+                        <Text fontSize="20px">Admin ID</Text>
+                        <InputGroup size="lg" mt="10px">
+                            <Input
+                                pr="50px"
+                                placeholder="Admin ID"
+                                value={_group.admin}
+                                isDisabled
+                            />
+                            <InputRightElement mr="5px">
+                                <Tooltip
+                                    label={
+                                        hasCopiedAdminId ? "Copied!" : "Copy"
+                                    }
+                                    closeOnClick={false}
+                                    hasArrow
+                                >
+                                    <IconButton
+                                        variant="link"
+                                        aria-label="Copy Group id"
+                                        onClick={onCopyAdminId}
                                         onMouseDown={(e) => e.preventDefault()}
                                         icon={
                                             <Icon
