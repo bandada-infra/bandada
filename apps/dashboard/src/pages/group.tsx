@@ -52,14 +52,14 @@ export default function GroupPage(): JSX.Element {
     const addMembersModal = useDisclosure()
     const toast = useToast()
     const { groupId, groupType } = useParams()
-    const {adminId, adminType } = useParams()
+   
     const [_group, setGroup] = useState<Group | null>()
     // const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
         groupId || ""
     )
     const { hasCopied: hasCopiedAdminId, onCopy: onCopyAdminId } = useClipboard(
-        adminId || ""
+        (_group && _group.admin) || ""
     )
     const [_searchMember, setSearchMember] = useState<string>("")
     const [_removeGroupName, setRemoveGroupName] = useState<string>("")
