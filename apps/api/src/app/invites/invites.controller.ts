@@ -5,6 +5,7 @@ import {
     Headers,
     NotImplementedException,
     Param,
+    Patch,
     Post,
     Req
 } from "@nestjs/common"
@@ -22,6 +23,7 @@ import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 import { mapEntity } from "../utils"
+import { RedeemInviteDto } from "./dto/redeem-invite.dto"
 
 @ApiTags("invites")
 @Controller("invites")
@@ -73,15 +75,15 @@ export class InvitesController {
         return mapEntity(invite)
     }
 
-    @Post("redeem/:code/group/:group")
+    @Patch("redeem")
+    @ApiBody({ type: RedeemInviteDto })
     @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({ description: "Redeems a specific invite." })
     @ApiCreatedResponse({ type: InviteResponse })
     async redeemInvite(
         @Headers() headers: Headers,
         @Req() req: Request,
-        @Param("code") inviteCode: string,
-        @Param("group") groupId: string
+        @Body() { inviteCode, groupId }: RedeemInviteDto
     ): Promise<InviteResponse> {
         let invite: Invite
 
