@@ -502,7 +502,7 @@ ${memberIds.join("\n")}
                             <Input
                                 pr="50px"
                                 placeholder="Admin ID"
-                                value={adminId}
+                                value={_group.admin}
                                 isDisabled
                             />
 
