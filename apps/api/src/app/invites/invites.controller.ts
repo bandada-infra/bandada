@@ -74,16 +74,34 @@ export class InvitesController {
     }
 
     @Post("redeem/:code/group/:group")
+    @ApiHeader({ name: "x-api-key", required: true })
     @ApiOperation({ description: "Redeems a specific invite." })
     @ApiCreatedResponse({ type: InviteResponse })
     async redeemInvite(
+        @Headers() headers: Headers,
+        @Req() req: Request,
         @Param("code") inviteCode: string,
         @Param("group") groupId: string
     ): Promise<InviteResponse> {
-        const invite = await this.invitesService.redeemInvite(
-            inviteCode,
-            groupId
-        )
+        let invite: Invite
+
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            invite = await this.invitesService.redeemInviteWithApiKey(
+                inviteCode,
+                groupId,
+                apiKey
+            )
+        } else if (req.session.adminId) {
+            invite = await this.invitesService.redeemInviteKeyManually(
+                inviteCode,
+                groupId,
+                req.session.adminId
+            )
+        } else {
+            throw new NotImplementedException()
+        }
 
         return mapEntity(invite)
     }
