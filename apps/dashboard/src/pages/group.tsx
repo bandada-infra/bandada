@@ -75,7 +75,7 @@ export default function GroupPage(): JSX.Element {
     const { data: signer } = useSigner()
 
     useEffect(() => {
-        ; (async () =>
+        ; (async () => {
             if (groupId) {
                 const group =
                     groupType === "on-chain"
@@ -145,7 +145,7 @@ export default function GroupPage(): JSX.Element {
         async (memberId: string) => {
             if (
                 !window.confirm(
-                    Are you sure you want to remove member '${memberId}'?
+                    `Are you sure you want to remove member '${memberId}'?`
                 )
             ) {
                 return
@@ -301,7 +301,7 @@ ${memberIds.join("\n")}
                 const url = URL.createObjectURL(blob)
                 const a = document.createElement("a")
                 a.href = url
-                a.download = ${_group.name}.json
+                a.download = `${_group.name}.json`
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
@@ -326,7 +326,7 @@ ${memberIds.join("\n")}
         const credentialsObj = JSON.parse(_group.credentials)
 
         if (credentialsObj.id) {
-            credentialsId = ${credentialsObj.id}
+            credentialsId = `${credentialsObj.id}`
 
             if (credentialsObj.criteria) {
                 for (const key in credentialsObj.criteria) {
