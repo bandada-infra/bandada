@@ -52,7 +52,6 @@ export default function GroupPage(): JSX.Element {
     const addMembersModal = useDisclosure()
     const toast = useToast()
     const { groupId, groupType } = useParams()
-   
     const [_group, setGroup] = useState<Group | null>()
     // const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
     const { hasCopied: hasCopiedGroupId, onCopy: onCopyGroupId } = useClipboard(
@@ -457,7 +456,6 @@ ${memberIds.join("\n")}
                         borderRadius="8px"
                     >
                         <Text fontSize="20px">Group ID</Text>
-
                         <InputGroup size="lg" mt="10px">
                             <Input
                                 pr="50px"
@@ -465,7 +463,6 @@ ${memberIds.join("\n")}
                                 value={groupId}
                                 isDisabled
                             />
-
                             <InputRightElement mr="5px">
                                 <Tooltip
                                     label={
@@ -497,7 +494,6 @@ ${memberIds.join("\n")}
                         borderRadius="8px"
                     >
                         <Text fontSize="20px">Admin ID</Text>
-
                         <InputGroup size="lg" mt="10px">
                             <Input
                                 pr="50px"
@@ -505,7 +501,6 @@ ${memberIds.join("\n")}
                                 value={_group.admin}
                                 isDisabled
                             />
-
                             <InputRightElement mr="5px">
                                 <Tooltip
                                     label={
