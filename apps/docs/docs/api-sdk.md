@@ -478,6 +478,19 @@ const groupId = "10402173435763029700781503965100"
 const isValid = await apiSdk.checkInvite(inviteCode, groupId)
 ```
 
+## Redeem invite
+
+\# **redeemInvite**(): _Promise\<Invite>_
+
+Redeems a specific invite.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const inviteCode = "C5VAG4HD"
+
+const invite = await apiSdk.redeemInvite(inviteCode, groupId)
+```
+
 ## Get credential group join URL
 
 \# **getCredentialGroupJoinUrl**(): _string_
