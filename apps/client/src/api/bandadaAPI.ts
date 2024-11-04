@@ -75,6 +75,27 @@ export async function addMemberByInviteCode(
     }
 }
 
+export async function checkInvite(
+    inviteCode: string,
+    groupId: string
+): Promise<boolean> {
+    try {
+        return await request(
+            `${API_URL}/invites/check/${inviteCode}/group/${groupId}`
+        )
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return false
+    }
+}
+
 export async function redeemInvite(
     inviteCode: string,
     groupId: string

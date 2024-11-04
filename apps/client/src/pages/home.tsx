@@ -63,6 +63,17 @@ export default function HomePage(): JSX.Element {
                     return
                 }
 
+                const isValid = await bandadaAPI.checkInvite(
+                    inviteCode,
+                    invite.group.id
+                )
+
+                if (!isValid) {
+                    setLoading(false)
+                    alert("Invalid invite code")
+                    return
+                }
+
                 const signer = library.getSigner(account)
 
                 const message = `Sign this message to generate your Semaphore identity.`
