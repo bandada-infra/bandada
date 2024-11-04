@@ -1152,6 +1152,25 @@ describe("Bandada API SDK", () => {
             })
         })
 
+        describe("# checkInvite", () => {
+            it("Should check if an invite is valid", async () => {
+                const groupId = "95633257675970239314311768035433"
+                const inviteCode = "C5VAG4HD"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve(true)
+                )
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const isInviteValid = await apiSdk.checkInvite(
+                    inviteCode,
+                    groupId
+                )
+
+                expect(isInviteValid).toBeTruthy()
+            })
+        })
+
         describe("# redeemInvite", () => {
             it("Should redeem an invite", async () => {
                 const groupId = "95633257675970239314311768035433"
