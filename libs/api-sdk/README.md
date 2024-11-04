@@ -521,6 +521,19 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const invite = await apiSdk.getInvite(inviteCode)
 ```
 
+## Check invite
+
+\# **checkInvite**(): _Promise\<boolean>_
+
+Returns boolean value if the invite code is valid.
+
+```ts
+const inviteCode = "C5VAG4HD"
+const groupId = "10402173435763029700781503965100"
+
+const isValid = await apiSdk.checkInvite(inviteCode, groupId)
+```
+
 ## Redeem invite
 
 \# **redeemInvite**(): _Promise\<Invite>_
