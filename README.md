@@ -178,7 +178,7 @@ All the Bandada board tasks are public. You can view the current tasks, their st
 
 -   [NodeJS](https://nodejs.org/en) >= v18.17.0
 
-Each package and application brings its own set of environment variables. To getting started with Bandada, you can get rid of the configuration and just use the default settings. Copy the environment variables used by the [`api`](/apps/api/) application by running this command:
+Each package and application brings its own set of environment variables. To get started with Bandada, you can get rid of the configuration and just use the default settings. Copy the environment variables used by the [`api`](/apps/api/) application by running this command:
 
 ```bash
 cp apps/api/.env.example apps/api/.env
@@ -294,7 +294,7 @@ To enable API access for a group, go to the group page in the dashboard and togg
 
 [Enable API access toggle for off-chain group](https://github.com/bandada-infra/bandada/assets/20580910/e7106f24-39c8-422d-97a5-11756200ae03)
 
-## 🔌 APIs endpoints
+## 🔌 API endpoints
 
 To see the complete list of available endpoints, please visit https://api.bandada.pse.dev.
 
@@ -314,7 +314,7 @@ Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
 yarn lint
 ```
 
-Run [Prettier](https://prettier.io/) to check formatting rules:
+Use [Prettier](https://prettier.io/) to check formatting rules:
 
 ```bash
 yarn prettier
@@ -328,7 +328,7 @@ yarn prettier:write
 
 ### Conventional commits
 
-Bandada utilises [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which follow a standardised format for commit messages. To use this format, you can run the [command line utility](https://github.com/commitizen/cz-cli) by running:
+Bandada uses [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which follow a standardised format for commit messages. To use this format, you can run the [command line utility](https://github.com/commitizen/cz-cli) by running:
 
 ```bash
 yarn commit
@@ -362,4 +362,4 @@ git push origin <version>
 # e.g. git push origin v2.0.0
 ```
 
-After pushing the new git tag, a workflow will be triggered and will publish the Bandada packages on [npm](https://www.npmjs.com/) and release a new version on Github with its changelogs automatically.
+After pushing the new git tag, a workflow will be triggered to publish the Bandada packages on [npm](https://www.npmjs.com/) and release a new version on GitHub with its changelogs automatically.
