@@ -75,6 +75,16 @@ export class InvitesController {
         return mapEntity(invite)
     }
 
+    @Get("check/:code/group/:groupId")
+    @ApiOperation({ description: "Checks if a specific invite is valid." })
+    @ApiCreatedResponse({ type: Boolean })
+    async checkInvite(
+        @Param("code") inviteCode: string,
+        @Param("groupId") groupId: string
+    ): Promise<boolean> {
+        return this.invitesService.checkInvite(inviteCode, groupId)
+    }
+
     @Patch("redeem")
     @ApiBody({ type: RedeemInviteDto })
     @ApiHeader({ name: "x-api-key", required: true })

@@ -367,6 +367,25 @@ describe("InvitesService", () => {
         })
     })
 
+    describe("# checkInvite", () => {
+        it("Should return true if invite is valid", async () => {
+            const { code } = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const invite = await invitesService.checkInvite(code, groupId)
+
+            expect(invite).toBeTruthy()
+        })
+
+        it("Should return false if invite is invalid", async () => {
+            const invite = await invitesService.checkInvite("12345", groupId)
+
+            expect(invite).toBeFalsy()
+        })
+    })
+
     describe("# redeemInvite", () => {
         let invite: Invite
 

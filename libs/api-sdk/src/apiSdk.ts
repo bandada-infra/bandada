@@ -31,7 +31,7 @@ import {
     getGroupsByType,
     createAssociatedGroup
 } from "./groups"
-import { createInvite, getInvite, redeemInvite } from "./invites"
+import { checkInvite, createInvite, getInvite, redeemInvite } from "./invites"
 
 export default class ApiSdk {
     private _url: string
@@ -417,6 +417,22 @@ export default class ApiSdk {
         const invite = await getInvite(this._config, inviteCode)
 
         return invite
+    }
+
+    /**
+     * Returns boolean value if the invite code is valid.
+     * @param inviteCode Invite code.
+     * @param groupId Group id.
+     * @returns Boolean.
+     */
+    async checkInvite(inviteCode: string, groupId: string): Promise<boolean> {
+        const isInviteValid = await checkInvite(
+            this._config,
+            inviteCode,
+            groupId
+        )
+
+        return isInviteValid
     }
 
     /**

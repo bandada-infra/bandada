@@ -118,6 +118,24 @@ export class InvitesService {
     }
 
     /**
+     * Returns boolean value if the invite code is valid.
+     * @param inviteCode Invite code.
+     * @param groupId Group id.
+     * @returns Boolean.
+     */
+    async checkInvite(inviteCode: string, groupId: string): Promise<boolean> {
+        const invite = await this.inviteRepository.findOne({
+            where: {
+                code: inviteCode,
+                group: { id: groupId }
+            },
+            relations: ["group"]
+        })
+
+        return !!invite
+    }
+
+    /**
      * Redeems an invite by consuming its code. Every invite
      * can be used only once.
      * @param inviteCode Invite code to be redeemed.
