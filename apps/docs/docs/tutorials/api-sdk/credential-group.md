@@ -1,14 +1,14 @@
 ---
 sidebar_position: 1
-title: Credential groups
+title: Create and manage groups
 ---
 
 import Tabs from "@theme/Tabs"
 import TabItem from "@theme/TabItem"
 
-# Credential groups
+# Create and manage groups with API SDK
 
-This tutorial will guide you on how to create a credential group and a multiple credentials group using the API SDK.
+This tutorial will guide you on the complete process of creating and managing a group by using the API SDK.
 
 ## Install library
 
@@ -45,7 +45,7 @@ pnpm add @bandada/api-sdk
 
 ## Create a new instance
 
-After installing the API SDK, create a new instance of ApiSdk using the API URL and the [config](https://axios-http.com/docs/req_config).
+After installing the API SDK, create a new instance of `ApiSdk` using the API URL and the [config](https://axios-http.com/docs/req_config).
 
 You can choose to:
 
@@ -64,16 +64,32 @@ import { ApiSdk, SupportedUrl } from "@bandada/api-sdk"
 
 const apiSdk = new ApiSdk(SupportedUrl.DEV)
 ```
-## Create a credential group
+
+## Create a group
+
+### Manual group
+
+Create a new manual group using the API SDK.
+
+```ts
+const apiKey = "your-api-key"
+
+const groupCreationDetails = {
+    name: "Manual Group",
+    description: "This is a description",
+    treeDepth: 16,
+    fingerprintDuration: 3600
+}
+
+const group = apiSdk.createGroup(groupCreationDetails, apiKey)
+```
+
+### Credential group
 
 Create a new credential group using the API SDK.
 
 ```ts
-import { ApiSdk, SupportedUrl } from "@bandada/api-sdk"
-
-const apiSdk = new ApiSdk(SupportedUrl.DEV)
-
-const apiKey = "0x"
+const apiKey = "your-api-key"
 
 const credentials = {
     id: "BLOCKCHAIN_BALANCE",
@@ -93,16 +109,12 @@ const groupCreationDetails = {
 
 const credentialGroup = apiSdk.createGroup(groupCreationDetails, apiKey)
 ```
-## Create a multiple credentials group
+### Multiple credentials group
 
-Create a multiple credentials group using the API SDK
+Create a multiple-credentials group using the API SDK
 
 ```ts
-import { ApiSdk, SupportedUrl } from "@bandada/api-sdk"
-
-const apiSdk = new ApiSdk(SupportedUrl.DEV)
-
-const apiKey = "0x"
+const apiKey = "your-api-key"
 
 const credentials = {
     credentials: [
@@ -125,7 +137,7 @@ const credentials = {
 }
 
 const groupCreationDetails = {
-    name: "Credential Group",
+    name: "Multiple Credentials Group",
     description: "This is a description",
     treeDepth: 16,
     fingerprintDuration: 3600,
@@ -135,3 +147,92 @@ const groupCreationDetails = {
 const credentialGroup = apiSdk.createGroup(groupCreationDetails, apiKey)
 ```
 More details on the credentials can be found at the [Credentials library](https://github.com/bandada-infra/bandada/tree/main/libs/credentials).
+
+## Add members to a group
+
+### Manual group
+
+You can add users to a manual group by using the API SDK.
+
+```ts
+const groupId = "your-group-id"
+const memberId = "member-id-1"
+const apiKey = "your-api-key"
+
+await apiSdk.addMemberByApiKey(
+    groupId,
+    memberId,
+    apiKey
+)
+```
+
+### Credential and multiple credentials group
+
+You can invite users to join a credential and multiple credentials group by generating the credential group join URL.
+
+```ts
+import { DashboardUrl } from "@bandada/api-sdk"
+
+const dashboardUrl = DashboardUrl.DEV
+const groupId = "your-group-id"
+const commitment = "commitment-value"
+const providerName = "github"
+const redirectUri = "http://localhost:3003"
+
+const url = apiSdk.getCredentialGroupJoinUrl(
+    dashboardUrl,
+    groupId,
+    commitment,
+    providerName,
+    redirectUri
+)
+```
+
+Send the generated URL to the users you want to invite.
+
+Upon clicking the generated URL, users will be redirected to the dashboard where they will have to validate their credentials based on the group credentials criteria.
+
+Once the user has completed and passed the criteria validation, they will be added as a member to the group.
+
+## Remove member from a group
+
+You can remove members from a group by using the API SDK.
+
+```ts
+const groupId = "your-group-id"
+const memberId = "member-id-1"
+const apiKey = "your-api-key"
+
+await apiSdk.removeMemberByApiKey(
+    groupId,
+    memberId,
+    apiKey
+)
+```
+
+## Remove multiple members from a group
+
+You can remove multiple members from a group by using the API SDK.
+
+```ts
+const groupId = "your-group-id"
+const memberId = ["member-id-1", "member-id-2", "member-id-3"]
+const apiKey = "your-api-key"
+
+await apiSdk.removeMemberByApiKey(
+    groupId,
+    memberId,
+    apiKey
+)
+```
+
+## Remove group
+
+You can remove a group by using the API SDK.
+
+```ts
+const groupId = "your-group-id"
+const apiKey = "your-api-key"
+
+await apiSdk.removeGroup(groupId, apiKey)
+```
