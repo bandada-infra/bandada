@@ -30,7 +30,7 @@ Depending on the group type, you will be presented with different methods to add
         ![Add members manually step 2](../../../static/img/tutorial/addmember-manual-2.png)
 
 - `Off-chain` groups with `Credentials` and `Multiple credentials`:
-    - Copy and share the invite link to the person you want to invite.        
+    - Copy and share the access link to the person you want to invite.        
         - Upon visiting the invite link, click on `Join group` to join the group.
         - The invite link can be reused even after the user successfully joins the group.
         
