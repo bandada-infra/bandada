@@ -168,7 +168,7 @@ await apiSdk.addMemberByApiKey(
 
 ### Credential group
 
-You can invite users to join a credential and multiple credentials group by generating the credential group join URL.
+You can invite users to join a credential group by generating the credential group join URL.
 
 ```ts
 import { DashboardUrl } from "@bandada/api-sdk"
