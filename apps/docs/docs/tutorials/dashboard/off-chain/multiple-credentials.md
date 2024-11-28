@@ -11,7 +11,7 @@ title: Multiple credentials access
 
 ![Create off-chain group multiple credentials access](../../../../static/img/tutorial/offchain-mult-credentials.png)
 
-2. You can select multiple types of credentials for the off-chain group so that only users that fit the criteria can join the group. Currently supported credentials and providers are:
+2. You can select multiple types of credentials for the off-chain group so that only users that fit the criteria can join the group. Users can use parentheses and logical operators such as `AND`, `OR`, `NOT` and `XOR` to chain multiple credentials together. Currently supported credentials and providers are:
     - **Provider**: GitHub.
         - **Credential**: Followers.  
         **Input**: Minimum followers.
@@ -32,8 +32,6 @@ title: Multiple credentials access
     - **Provider**: EAS.
         - **Credential**: Attestations.  
         **Input**: Minimum attestations, network, attestation details.  
-  
-3. Users can also use logical operators like `AND`, `OR`, `NOT`, `XOR`, `(`, and `)` to chain multiple credentials together.
 4. Click `Continue` to proceed.
 5. You will be redirected to the `Group Preview` page to review the group details.
 6. Click `Create Group` to finalize the group creation.
