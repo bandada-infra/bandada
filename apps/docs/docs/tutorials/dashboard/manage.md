@@ -45,6 +45,6 @@ Group administrators can remove group members by:
 
 ![Remove members using checkbox](../../../static/img/tutorial/deletemember-checkbox.png)
 
-- Click on the option button to the right of the member ID, then click on `Remove`.            
+- Clicking on the option button to the right of the member ID, then clicking on `Remove`.            
 
 ![Remove members using option](../../../static/img/tutorial/deletemember-option.png)
