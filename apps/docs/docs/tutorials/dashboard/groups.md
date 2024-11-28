@@ -30,7 +30,7 @@ title: Login, view, and create groups
 1. Click on the `Add group` button.
 2. You will be redirected to the `New Group` page.
 3. Select the type of group you want to create:
-    - **Off-chain**: The group will be stored on the Bandada server, but the fingerprint will still be stored on-chain.
+    - **Off-chain**: The group will be stored on the Bandada server.
     - **On-chain**: The group will be fully decentralized and will be on the Ethereum blockchain.
 
 ![Create group](../../../static/img/tutorial/create.png)
