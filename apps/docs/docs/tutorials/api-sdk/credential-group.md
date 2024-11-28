@@ -166,7 +166,7 @@ await apiSdk.addMemberByApiKey(
 )
 ```
 
-### Credential and multiple credentials group
+### Credential group
 
 You can invite users to join a credential and multiple credentials group by generating the credential group join URL.
 
