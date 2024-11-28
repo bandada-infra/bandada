@@ -41,7 +41,7 @@ Depending on the group type, you will be presented with different methods to add
 ## Remove members
 
 Group administrators can remove group members by:
-- Check the checkbox to the left of the member ID, then click on `Remove Selected Members`.
+- Checking the checkbox to the left of the member ID, then clicking on `Remove Selected Members`.
 
 ![Remove members using checkbox](../../../static/img/tutorial/deletemember-checkbox.png)
 
