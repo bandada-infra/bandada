@@ -26,6 +26,7 @@ import {
     getGroupsByAdminId,
     getGroupsByMemberId,
     getCredentialGroupJoinUrl,
+    getMultipleCredentialsGroupJoinUrl,
     getAssociatedGroups,
     getGroupsByName,
     getGroupsByType,
@@ -479,6 +480,27 @@ export default class ApiSdk {
             commitment,
             providerName,
             redirectUri
+        )
+
+        return url
+    }
+
+    /**
+     * Generate a custom url for joining a multiple credentials group.
+     * @param dashboardUrl Dashboard base url.
+     * @param groupId Group id.
+     * @param commitment Identity commitment.
+     * @returns Url string.
+     */
+    getMultipleCredentialsGroupJoinUrl(
+        dashboardUrl: DashboardUrl,
+        groupId: string,
+        commitment: string
+    ): string {
+        const url = getMultipleCredentialsGroupJoinUrl(
+            dashboardUrl,
+            groupId,
+            commitment
         )
 
         return url

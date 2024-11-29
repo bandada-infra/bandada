@@ -578,3 +578,20 @@ export function getCredentialGroupJoinUrl(
 
     return resultUrl
 }
+
+/**
+ * Generate a custorm url for joining a multiple credentials group.
+ * @param dashboardUrl Dashboard url.
+ * @param groupId Group id.
+ * @param commitment Identity commitment.
+ * @returns Url string.
+ */
+export function getMultipleCredentialsGroupJoinUrl(
+    dashboardUrl: DashboardUrl,
+    groupId: string,
+    commitment: string
+): string {
+    const resultUrl = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+
+    return resultUrl
+}

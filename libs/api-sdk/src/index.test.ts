@@ -1068,6 +1068,25 @@ describe("Bandada API SDK", () => {
                     expect(res).toBe(url)
                 })
             })
+
+            describe("#getMultipleCredentialGroupJoinUrl", () => {
+                it("Should generate a custom url for joining a multiple credential group", async () => {
+                    const dashboardUrl = DashboardUrl.DEV
+                    const groupId = "10402173435763029700781503965100"
+                    const commitment = "1"
+
+                    const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                    const res = apiSdk.getMultipleCredentialsGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        commitment
+                    )
+
+                    const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+
+                    expect(res).toBe(url)
+                })
+            })
         })
     })
     describe("Invites", () => {

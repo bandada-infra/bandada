@@ -16,23 +16,20 @@ const provider: Web2Provider = {
         state: string,
         redirectUri: string
     ): Promise<string> {
-        const { data } = await request(
-            "https://api.twitter.com/2/oauth2/token",
-            {
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    Authorization: `Basic ${Buffer.from(
-                        `${clientId}:${clientSecret}`
-                    ).toString("base64")}`
-                },
-                method: "POST",
-                data:
-                    `redirect_uri=${redirectUri}&` +
-                    `grant_type=authorization_code&` +
-                    `code_verifier=${state}&` +
-                    `code=${code}`
-            }
-        )
+        const data = await request("https://api.twitter.com/2/oauth2/token", {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                Authorization: `Basic ${Buffer.from(
+                    `${clientId}:${clientSecret}`
+                ).toString("base64")}`
+            },
+            method: "POST",
+            data:
+                `redirect_uri=${redirectUri}&` +
+                `grant_type=authorization_code&` +
+                `code_verifier=${state}&` +
+                `code=${code}`
+        })
 
         return data.access_token
     },
