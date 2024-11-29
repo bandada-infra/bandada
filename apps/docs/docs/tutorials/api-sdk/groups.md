@@ -189,27 +189,6 @@ Here is an example of the custom URL structure:
 https://<custom-domain>?inviteCode=<invite-code>
 ```
 
-
-#### Create invite for on-chain groups
-
-You will have to create an associated off-chain group first in order to use the create invite feature for on-chain groups.
-
-```ts
-const apiKey = "your-api-key"
-const groupName = "onchain-group-name"
-const description = `This group is associated to the on-chain group ${groupName}`
-
-const associatedGroup = await apiSdk.createGroup(
-    groupName,
-    description,
-    "on-chain",
-    16,
-    3600
-)
-
-const invite = await apiSdk.createInvite(associatedGroup.id, apiKey)
-```
-
 #### Get invite
 
 Returns a specific invite along with the group details associated to the invite.
