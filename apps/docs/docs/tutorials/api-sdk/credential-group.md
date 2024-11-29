@@ -8,7 +8,7 @@ import TabItem from "@theme/TabItem"
 
 # Create and manage groups with API SDK
 
-This tutorial will guide you on the complete process of creating and managing a group by using the API SDK.
+This tutorial will guide you through the complete process of creating and managing a group by using the API SDK.
 
 ## Install library
 
@@ -49,7 +49,7 @@ After installing the API SDK, create a new instance of `ApiSdk` using the API UR
 
 You can choose to:
 
--   Create a new instance using the Bandada API URL and the default config.
+-   Create a new instance using the Bandada API URL with the default config.
 
 ```ts
 import { ApiSdk } from "@bandada/api-sdk"
@@ -152,7 +152,7 @@ More details on the credentials can be found at the [Credentials library](https:
 
 ### Manual group
 
-You can add users to a manual group by using the API SDK.
+You can add users directly to a manual group by using the API SDK.
 
 ```ts
 const groupId = "your-group-id"
@@ -165,6 +165,80 @@ await apiSdk.addMemberByApiKey(
     apiKey
 )
 ```
+
+### Add members using an invite code
+
+You can invite users to join a manual group by invite code by using the API SDK.
+
+#### Create invite
+
+Create a new group invite.
+
+```ts
+const groupId = "your-group-id"
+const apiKey = "your-api-key"
+
+const invite = await apiSdk.createInvite(groupId, apiKey)
+```
+
+You can wrap the invite code into a custom URL for your app, where it will handle the logic for adding a member to the group by invite code.
+
+Here is an example of the custom URL structure.
+
+```
+https://<custom-domain>?inviteCode=<invite-code>
+```
+
+#### Get invite
+
+Returns a specific invite along with the group details associated with the invite.
+
+```ts
+const inviteCode = "INVITECODE"
+const apiKey = "your-api-key"
+
+const invite = await apiSdk.getInvite(inviteCode)
+```
+
+#### Add member using an invite code
+
+Adds a member to a group using an invite code.
+
+```ts
+const groupId = "your-group-id"
+const apiKey = "member-id-1"
+const inviteCode = "INVITECODE"
+
+await apiSdk.addMemberByInviteCode(groupId, memberId, inviteCode)
+```
+
+#### Full example
+
+This is an example of how the whole code would look like:
+
+```ts
+const groupId = "your-group-id"
+const memberId = "member-id-1"
+const apiKey = "your-api-key"
+
+// generate invite code
+const inviteCode = await apiSdk.createInvite(groupId, apiKey)
+
+// wrap the invite code into a custom URL for easier sharing
+const inviteLink = `https://client.bandada.pse.dev?inviteCode=${inviteCode.code}`
+
+// upon receiving the invite link, validate the invite code
+const invite = await apiSdk.getInvite(inviteCode.code)
+
+// add member to group by invite code
+const response = await apiSdk.addMemberByInviteCode(
+    invite.group.id, 
+    memberId, 
+    inviteCode.code
+)
+```
+
+You can also refer to the [Client app](https://github.com/bandada-infra/bandada/blob/main/apps/client/src/pages/home.tsx) for more example of the add member to group by invite code logic.
 
 ### Credential group
 
@@ -190,7 +264,7 @@ const url = apiSdk.getCredentialGroupJoinUrl(
 
 Send the generated URL to the users you want to invite.
 
-Upon clicking the generated URL, users will be redirected to the dashboard where they will have to validate their credentials based on the group credentials criteria.
+Upon clicking the generated URL, users will be redirected to the dashboard where they will need to validate their credentials based on the group credentials criteria.
 
 Once the user has completed and passed the criteria validation, they will be added as a member to the group.
 
