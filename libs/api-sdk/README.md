@@ -490,3 +490,23 @@ const url = apiSdk.getCredentialGroupJoinUrl(
     redirectUri
 )
 ```
+
+## Get multiple credentials group join URL
+
+\# **getMultipleCredentialGroupJoinUrl**(): _string_
+
+Returns a custom URL string for joining a multiple credentials group.
+
+```ts
+import { DashboardUrl } from "@bandada/api-sdk"
+
+const dashboardUrl = DashboardUrl.DEV
+const groupId = "10402173435763029700781503965100"
+const commitment = "1"
+
+const url = apiSdk.getMultipleCredentialsGroupJoinUrl(
+    dashboardUrl,
+    groupId,
+    commitment
+)
+```
