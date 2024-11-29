@@ -50,7 +50,7 @@ pnpm add @bandada/api-sdk
 
 Creates a new instance of ApiSdk using the API URL and the [config](https://axios-http.com/docs/req_config).
 
--   Create a new instance using the Bandada API URL and the default config.
+-   Create a new instance using the Bandada API URL with the default config.
 
 This is what you need if you are using the production Bandada API.
 
