@@ -168,7 +168,7 @@ await apiSdk.addMemberByApiKey(
 
 ### Add members using an invite code
 
-You can invite users to join a manual group by invite code by using the API SDK.
+Using the API SDK, you can invite users to join a manual group by sharing an invite code.
 
 #### Create invite
 
@@ -222,23 +222,20 @@ const memberId = "member-id-1"
 const apiKey = "your-api-key"
 
 // generate invite code
-const inviteCode = await apiSdk.createInvite(groupId, apiKey)
+const invite = await apiSdk.createInvite(groupId, apiKey)
 
 // wrap the invite code into a custom URL for easier sharing
-const inviteLink = `https://client.bandada.pse.dev?inviteCode=${inviteCode.code}`
-
-// upon receiving the invite link, validate the invite code
-const invite = await apiSdk.getInvite(inviteCode.code)
+const inviteLink = `https://client.bandada.pse.dev?inviteCode=${invite.code}`
 
 // add member to group by invite code
 const response = await apiSdk.addMemberByInviteCode(
     invite.group.id, 
     memberId, 
-    inviteCode.code
+    invite.code
 )
 ```
 
-You can also refer to the [Client app](https://github.com/bandada-infra/bandada/blob/main/apps/client/src/pages/home.tsx) for more example of the add member to group by invite code logic.
+You can refer to the [Client app](https://github.com/bandada-infra/bandada/blob/main/apps/client/src/pages/home.tsx) to better understand the context and logic for adding members to a group using an invite code.
 
 ### Credential group
 
@@ -259,6 +256,24 @@ const url = apiSdk.getCredentialGroupJoinUrl(
     commitment,
     providerName,
     redirectUri
+)
+```
+
+### Multiple credentials group
+
+You can invite users to join a multiple credentials group by generating the multiple credentials group join URL.
+
+```ts
+import { DashboardUrl } from "@bandada/api-sdk"
+
+const dashboardUrl = DashboardUrl.DEV
+const groupId = "your-group-id"
+const commitment = "commitment-value"
+
+const url = apiSdk.getMultipleCredentialsGroupJoinUrl(
+    dashboardUrl,
+    groupId,
+    commitment
 )
 ```
 
