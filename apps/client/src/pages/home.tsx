@@ -200,7 +200,9 @@ export default function HomePage(): JSX.Element {
                                 onChange={(event) =>
                                     setInviteCode(event.target.value)
                                 }
-                                disabled={!!_searchParams.get("credentialGroupId")}
+                                disabled={
+                                    !!_searchParams.get("credentialGroupId")
+                                }
                             />
                         </VStack>
 
