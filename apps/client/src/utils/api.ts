@@ -1,6 +1,8 @@
-import { ApiSdk, Group, Invite } from "@bandada/api-sdk"
+import { ApiSdk, DashboardUrl, Group, Invite } from "@bandada/api-sdk"
 
 const api = new ApiSdk(import.meta.env.VITE_API_URL)
+
+export { DashboardUrl }
 
 export async function getInvite(inviteCode: string): Promise<Invite | null> {
     try {
@@ -60,6 +62,34 @@ export async function addMemberByInviteCode(
 ): Promise<void | null> {
     try {
         return await api.addMemberByInviteCode(groupId, memberId, inviteCode)
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return null
+    }
+}
+
+export function getCredentialGroupJoinUrl(
+    dashboardUrl: DashboardUrl,
+    groupId: string,
+    commitment: string,
+    providerName: string,
+    redirectUri?: string
+): string | null {
+    try {
+        return api.getCredentialGroupJoinUrl(
+            dashboardUrl,
+            groupId,
+            commitment,
+            providerName,
+            redirectUri
+        )
     } catch (error: any) {
         console.error(error)
 
