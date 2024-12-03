@@ -20,6 +20,8 @@ import { useSearchParams } from "react-router-dom"
 import icon1Image from "../assets/icon1.svg"
 import {
     addMemberByInviteCode,
+    DashboardUrl,
+    getCredentialGroupJoinUrl,
     getGroup,
     getInvite,
     isGroupMember
@@ -129,11 +131,18 @@ export default function HomePage(): JSX.Element {
                 const identity = new Identity(await signer.signMessage(message))
                 const identityCommitment = identity.getCommitment().toString()
 
-                window.open(
-                    `${
-                        import.meta.env.VITE_DASHBOARD_URL
-                    }/credentials?group=${groupId}&member=${identityCommitment}&provider=${providerName}`
+                const dashboardUrl = import.meta.env
+                    .VITE_DASHBOARD_URL as DashboardUrl
+                const credentialGroupJoinUrl = getCredentialGroupJoinUrl(
+                    dashboardUrl,
+                    groupId,
+                    identityCommitment,
+                    providerName
                 )
+
+                if (credentialGroupJoinUrl) {
+                    window.open(credentialGroupJoinUrl, "_blank")
+                }
 
                 setLoading(false)
             }
