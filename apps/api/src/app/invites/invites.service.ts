@@ -150,6 +150,42 @@ export class InvitesService {
     }
 
     /**
+     * Redeems an invite by using API Key.
+     * @param inviteCode Invite code to be redeemed.
+     * @param groupId Group id.
+     * @param apiKey The API Key.
+     * @returns The updated invite.
+     */
+    async redeemInviteWithApiKey(
+        inviteCode: string,
+        groupId: string,
+        apiKey: string
+    ) {
+        await getAndCheckAdmin(this.adminsService, apiKey, groupId)
+
+        return this.redeemInvite(inviteCode, groupId)
+    }
+
+    /**
+     * Redeems an invite manually without using API Key.
+     * @param inviteCode Invite code to be redeemed.
+     * @param groupId Group id.
+     * @param adminId Group admin id.
+     * @returns The updated invite.
+     */
+    async redeemInviteKeyManually(
+        inviteCode: string,
+        groupId: string,
+        adminId: string
+    ) {
+        const admin = await this.adminsService.findOne({ id: adminId })
+
+        if (!admin) throw new BadRequestException(`You are not an admin`)
+
+        return this.redeemInvite(inviteCode, groupId)
+    }
+
+    /**
      * Generates a random code with a given number of characters.
      * The list of available characters have been chosen to be human readable.
      * @param length Number of characters.
