@@ -26,5 +26,12 @@ export const EVENTS: Event[] = [
         description:
             "Bandada team will deliver an in-person talk and run workshops.",
         link: "https://devcon.org/en/"
+    },
+    {
+        event: "ETHIndia",
+        date: "Dec 6-8, 2024",
+        description:
+            "Semaphore team will deliver an in-person talk on Semaphore and Bandada.",
+        link: "https://ethindia.co"
     }
 ]
