@@ -46,3 +46,34 @@ export async function createInvite(
 
     return req
 }
+
+/**
+ * Redeems a specific invite.
+ * @param inviteCode Invite code to be redeemed.
+ * @param groupId Group id.
+ * @param apiKey API Key of the admin.
+ * @returns The updated redeemed invite.
+ */
+export async function redeemInvite(
+    config: object,
+    inviteCode: string,
+    groupId: string,
+    apiKey: string
+): Promise<Invite> {
+    const requestUrl = `${url}/redeem`
+
+    const newConfig: any = {
+        method: "patch",
+        data: {
+            inviteCode,
+            groupId
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(requestUrl, newConfig)
+
+    return req
+}

@@ -27,7 +27,7 @@ import {
     getCredentialGroupJoinUrl,
     getMultipleCredentialsGroupJoinUrl
 } from "./groups"
-import { createInvite, getInvite } from "./invites"
+import { createInvite, getInvite, redeemInvite } from "./invites"
 
 export default class ApiSdk {
     private _url: string
@@ -363,6 +363,28 @@ export default class ApiSdk {
      */
     async getInvite(inviteCode: string): Promise<Invite> {
         const invite = await getInvite(this._config, inviteCode)
+
+        return invite
+    }
+
+    /**
+     * Redeems a specific invite.
+     * @param inviteCode Invite code.
+     * @param groupId Group id.
+     * @param apiKey The api key.
+     * @returns The updated invite.
+     */
+    async redeemInvite(
+        inviteCode: string,
+        groupId: string,
+        apiKey: string
+    ): Promise<Invite> {
+        const invite = await redeemInvite(
+            this._config,
+            inviteCode,
+            groupId,
+            apiKey
+        )
 
         return invite
     }
