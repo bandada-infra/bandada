@@ -24,6 +24,7 @@ import {
     getCredentialGroupJoinUrl,
     getGroup,
     getInvite,
+    getMultipleCredentialsGroupJoinUrl,
     isGroupMember
 } from "../utils/api"
 
@@ -121,10 +122,6 @@ export default function HomePage(): JSX.Element {
                     return
                 }
 
-                const providerName = group.credentials.id
-                    .split("_")[0]
-                    .toLowerCase()
-
                 const signer = library.getSigner(account)
 
                 const message = `Sign this message to generate your Semaphore identity.`
@@ -133,12 +130,27 @@ export default function HomePage(): JSX.Element {
 
                 const dashboardUrl = import.meta.env
                     .VITE_DASHBOARD_URL as DashboardUrl
-                const credentialGroupJoinUrl = getCredentialGroupJoinUrl(
-                    dashboardUrl,
-                    groupId,
-                    identityCommitment,
-                    providerName
-                )
+
+                let credentialGroupJoinUrl
+
+                if (Array.isArray(group.credentials.credentials)) {
+                    credentialGroupJoinUrl = getMultipleCredentialsGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        identityCommitment
+                    )
+                } else {
+                    const providerName = group.credentials.id
+                        .split("_")[0]
+                        .toLowerCase()
+
+                    credentialGroupJoinUrl = getCredentialGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        identityCommitment,
+                        providerName
+                    )
+                }
 
                 if (credentialGroupJoinUrl) {
                     window.open(credentialGroupJoinUrl, "_blank")

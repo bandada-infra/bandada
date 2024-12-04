@@ -102,3 +102,27 @@ export function getCredentialGroupJoinUrl(
         return null
     }
 }
+
+export function getMultipleCredentialsGroupJoinUrl(
+    dashboardUrl: DashboardUrl,
+    groupId: string,
+    commitment: string
+): string | null {
+    try {
+        return api.getMultipleCredentialsGroupJoinUrl(
+            dashboardUrl,
+            groupId,
+            commitment
+        )
+    } catch (error: any) {
+        console.error(error)
+
+        if (error.response) {
+            alert(error.response.statusText)
+        } else {
+            alert("Some error occurred!")
+        }
+
+        return null
+    }
+}
