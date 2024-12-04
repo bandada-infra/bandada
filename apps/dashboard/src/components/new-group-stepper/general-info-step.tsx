@@ -50,6 +50,24 @@ export default function GeneralInfoStep({
         group.fingerprintDuration
     )
 
+    const validateGroup = () => {
+        if (group.type === "off-chain") {
+            const isNameInvalid = !_groupName
+            const isDescriptionInvalid =
+                !_groupDescription || _groupDescription.length < 10
+            const isFingerprintDurationInvalid =
+                _fingerprintDuration === undefined || _fingerprintDuration < 0
+
+            return (
+                isNameInvalid ||
+                isDescriptionInvalid ||
+                isFingerprintDurationInvalid
+            )
+        }
+
+        return false
+    }
+
     return (
         <>
             <Text>What type of group is this?</Text>
@@ -122,31 +140,33 @@ export default function GeneralInfoStep({
                         <Text color="balticSea.700" px="16px" py="10px">
                             {groupType === "on-chain"
                                 ? "The group will be fully decentralized and will live on the Ethereum blockchain."
-                                : "The group will be stored in the Bandada servers but the fingerprint will still be stored on-chain."}
+                                : "The group will be stored in the Bandada servers."}
                         </Text>
                     </VStack>
                 ))}
             </HStack>
 
-            <VStack align="left" pt="20px">
-                <Text>Name</Text>
-
-                <Input
-                    size="lg"
-                    value={_groupName ?? ""}
-                    maxLength={31}
-                    onChange={(event) => setGroupName(event.target.value)}
-                    onBlur={() =>
-                        onSubmit({ ...group, name: _groupName }, false)
-                    }
-                />
-                <Text fontSize="13px" color="balticSea.500">
-                    Give it a cool name you can recognize.
-                </Text>
-            </VStack>
-
             {group.type === "off-chain" && (
                 <>
+                    <VStack align="left" pt="20px">
+                        <Text>Name</Text>
+
+                        <Input
+                            size="lg"
+                            value={_groupName ?? ""}
+                            maxLength={31}
+                            onChange={(event) =>
+                                setGroupName(event.target.value)
+                            }
+                            onBlur={() =>
+                                onSubmit({ ...group, name: _groupName }, false)
+                            }
+                        />
+                        <Text fontSize="13px" color="balticSea.500">
+                            Give it a cool name you can recognize.
+                        </Text>
+                    </VStack>
+
                     <VStack align="left" pt="20px">
                         <Text>Description</Text>
 
@@ -242,18 +262,10 @@ export default function GeneralInfoStep({
                     Cancel
                 </Button>
                 <Button
-                    isDisabled={
-                        !group.type ||
-                        !_groupName ||
-                        (group.type === "off-chain" &&
-                            (_fingerprintDuration === undefined ||
-                                !_groupDescription ||
-                                _groupDescription.length < 10)) ||
-                        _fingerprintDuration < 0
-                    }
+                    isDisabled={validateGroup()}
                     variant="solid"
                     colorScheme="primary"
-                    onClick={() => onSubmit()}
+                    onClick={() => onSubmit(group)}
                 >
                     Continue
                 </Button>

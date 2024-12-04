@@ -86,16 +86,16 @@ export default function GroupCard({
                     mt="12px"
                     color={!name ? "balticSea.400" : "inherit"}
                 >
-                    {name || "[untitled]"}
+                    {name || (type === "off-chain" ? "[untitled]" : "")}
                 </Text>
-
                 <Text
                     mt="12px"
                     noOfLines={2}
                     color={!description ? "balticSea.300" : "balticSea.600"}
                 >
-                    {type !== "on-chain" &&
-                        (description || "[no description yet]")}
+                    {type === "off-chain"
+                        ? description || "[no description yet]"
+                        : null}
                 </Text>
             </Box>
 
