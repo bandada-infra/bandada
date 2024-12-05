@@ -20,8 +20,11 @@ import { useSearchParams } from "react-router-dom"
 import icon1Image from "../assets/icon1.svg"
 import {
     addMemberByInviteCode,
+    DashboardUrl,
+    getCredentialGroupJoinUrl,
     getGroup,
     getInvite,
+    getMultipleCredentialsGroupJoinUrl,
     isGroupMember
 } from "../utils/api"
 
@@ -119,21 +122,39 @@ export default function HomePage(): JSX.Element {
                     return
                 }
 
-                const providerName = group.credentials.id
-                    .split("_")[0]
-                    .toLowerCase()
-
                 const signer = library.getSigner(account)
 
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
                 const identityCommitment = identity.getCommitment().toString()
 
-                window.open(
-                    `${
-                        import.meta.env.VITE_DASHBOARD_URL
-                    }/credentials?group=${groupId}&member=${identityCommitment}&provider=${providerName}`
-                )
+                const dashboardUrl = import.meta.env
+                    .VITE_DASHBOARD_URL as DashboardUrl
+
+                let credentialGroupJoinUrl
+
+                if (Array.isArray(group.credentials.credentials)) {
+                    credentialGroupJoinUrl = getMultipleCredentialsGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        identityCommitment
+                    )
+                } else {
+                    const providerName = group.credentials.id
+                        .split("_")[0]
+                        .toLowerCase()
+
+                    credentialGroupJoinUrl = getCredentialGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        identityCommitment,
+                        providerName
+                    )
+                }
+
+                if (credentialGroupJoinUrl) {
+                    window.open(credentialGroupJoinUrl, "_blank")
+                }
 
                 setLoading(false)
             }
