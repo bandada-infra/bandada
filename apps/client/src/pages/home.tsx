@@ -73,7 +73,7 @@ export default function HomePage(): JSX.Element {
 
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
-                const identityCommitment = identity.getCommitment().toString()
+                const identityCommitment = identity.commitment.toString()
 
                 const hasJoined = await isGroupMember(
                     invite.group.id,
@@ -126,7 +126,7 @@ export default function HomePage(): JSX.Element {
 
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
-                const identityCommitment = identity.getCommitment().toString()
+                const identityCommitment = identity.commitment.toString()
 
                 const dashboardUrl = import.meta.env
                     .VITE_DASHBOARD_URL as DashboardUrl
