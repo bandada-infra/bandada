@@ -10,7 +10,7 @@ const CONTRACT_ADDRESSES: { [K in Network]: { [Y in ContractName]: string } } =
             BandadaSemaphore: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
         },
         sepolia: {
-            Semaphore: "0x1e0d7FF1610e480fC93BdEC510811ea2Ba6d7c2f",
+            Semaphore: "0x06d1530c829366A7fff0069e77c5af6A6FA7db2E",
             Bandada: "0xD2873C967079D8B1eAd9dc86B8F8f3948e29564E",
             BandadaSemaphore: "0x35ce7AFd20b031b4EEa83748D15f319Be9378d2C"
         }
