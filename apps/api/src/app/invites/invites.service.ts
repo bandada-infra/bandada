@@ -146,7 +146,11 @@ export class InvitesService {
 
         invite.isRedeemed = true
 
-        return this.inviteRepository.save(invite)
+        await this.inviteRepository.save(invite)
+
+        Logger.log(`InvitesService: invite '${invite.code}' has been redeemed`)
+
+        return invite
     }
 
     /**
