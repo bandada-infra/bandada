@@ -5,6 +5,7 @@ import {
     Headers,
     NotImplementedException,
     Param,
+    Patch,
     Post,
     Req
 } from "@nestjs/common"
@@ -22,6 +23,7 @@ import { CreateInviteDto } from "./dto/create-invite.dto"
 import { Invite } from "./entities/invite.entity"
 import { InvitesService } from "./invites.service"
 import { mapEntity } from "../utils"
+import { RedeemInviteDto } from "./dto/redeem-invite.dto"
 
 @ApiTags("invites")
 @Controller("invites")
@@ -69,6 +71,49 @@ export class InvitesController {
         @Param("code") inviteCode: string
     ): Promise<InviteResponse> {
         const invite = await this.invitesService.getInvite(inviteCode)
+
+        return mapEntity(invite)
+    }
+
+    @Get("check/:code/group/:groupId")
+    @ApiOperation({ description: "Checks if a specific invite is valid." })
+    @ApiCreatedResponse({ type: Boolean })
+    async checkInvite(
+        @Param("code") inviteCode: string,
+        @Param("groupId") groupId: string
+    ): Promise<boolean> {
+        return this.invitesService.checkInvite(inviteCode, groupId)
+    }
+
+    @Patch("redeem")
+    @ApiBody({ type: RedeemInviteDto })
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiOperation({ description: "Redeems a specific invite." })
+    @ApiCreatedResponse({ type: InviteResponse })
+    async redeemInvite(
+        @Headers() headers: Headers,
+        @Req() req: Request,
+        @Body() { inviteCode, groupId }: RedeemInviteDto
+    ): Promise<InviteResponse> {
+        let invite: Invite
+
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            invite = await this.invitesService.redeemInviteWithApiKey(
+                inviteCode,
+                groupId,
+                apiKey
+            )
+        } else if (req.session.adminId) {
+            invite = await this.invitesService.redeemInviteKeyManually(
+                inviteCode,
+                groupId,
+                req.session.adminId
+            )
+        } else {
+            throw new NotImplementedException()
+        }
 
         return mapEntity(invite)
     }

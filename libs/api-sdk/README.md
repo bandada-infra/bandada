@@ -125,6 +125,7 @@ Creates a Bandada group.
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600
 }
@@ -151,6 +152,7 @@ const credentials = {
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600,
     credentials
@@ -190,6 +192,7 @@ const credentials = {
 const groupCreateDetails = {
     name: "Group 1",
     description: "This is Group 1.",
+    type: "off-chain",
     treeDepth: 16,
     fingerprintDuration: 3600,
     credentials
@@ -197,6 +200,22 @@ const groupCreateDetails = {
 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 const group = await apiSdk.createGroup(groupCreateDetails, apiKey)
+```
+
+## Create associated group
+
+\# **createAssociatedGroup**(): _Promise\<Group>_
+
+Creates an associated group to an on-chain group.
+
+```ts
+const onchainGroupId = "1"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const associatedGroup = await apiSdk.createAssociatedGroup(
+    onchainGroupId,
+    apiKey
+)
 ```
 
 ## Create groups
@@ -210,12 +229,14 @@ const groupsCreateDetails = [
     {
         name: "Group 1",
         description: "This is Group 1.",
+        type: "off-chain",
         treeDepth: 16,
         fingerprintDuration: 3600
     },
     {
         name: "Group 2",
         description: "This is Group 2.",
+        type: "off-chain",
         treeDepth: 16,
         fingerprintDuration: 3600
     }
@@ -345,6 +366,39 @@ const memberId = "1"
 const groups = await apiSdk.getGroupsByMemberId(memberId)
 ```
 
+## Get groups by type
+
+\# **getGroupsByType**(): _Promise\<Group[]>_
+
+Returns the list of groups by type.
+
+```ts
+const type = "off-chain"
+const groups = await apiSdk.getGroupsByType(type)
+```
+
+## Get groups by name
+
+\# **getGroupsByName**(): _Promise\<Group[]>_
+
+Returns the list of groups by name.
+
+```ts
+const name = "Group1"
+const groups = await apiSdk.getGroupsByName(name)
+```
+
+## Get associated groups
+
+\# **getAssociatedGroups**(): _Promise\<Group[]>_
+
+Returns the list of associated groups.
+
+```ts
+const name = "Group1"
+const groups = await apiSdk.getAssociatedGroups(name)
+```
+
 ## Is group member
 
 \# **isGroupMember**(): _Promise\<boolean>_
@@ -465,6 +519,32 @@ const inviteCode = "C5VAG4HD"
 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
 const invite = await apiSdk.getInvite(inviteCode)
+```
+
+## Check invite
+
+\# **checkInvite**(): _Promise\<boolean>_
+
+Returns boolean value if the invite code is valid.
+
+```ts
+const inviteCode = "C5VAG4HD"
+const groupId = "10402173435763029700781503965100"
+
+const isValid = await apiSdk.checkInvite(inviteCode, groupId)
+```
+
+## Redeem invite
+
+\# **redeemInvite**(): _Promise\<Invite>_
+
+Redeems a specific invite.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const inviteCode = "C5VAG4HD"
+
+const invite = await apiSdk.redeemInvite(inviteCode, groupId)
 ```
 
 ## Get credential group join URL

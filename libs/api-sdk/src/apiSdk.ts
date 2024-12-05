@@ -4,7 +4,8 @@ import {
     Invite,
     GroupCreationDetails,
     GroupUpdateDetails,
-    DashboardUrl
+    DashboardUrl,
+    GroupType
 } from "./types"
 import checkParameter from "./checkParameter"
 import {
@@ -25,9 +26,13 @@ import {
     getGroupsByAdminId,
     getGroupsByMemberId,
     getCredentialGroupJoinUrl,
-    getMultipleCredentialsGroupJoinUrl
+    getMultipleCredentialsGroupJoinUrl,
+    getAssociatedGroups,
+    getGroupsByName,
+    getGroupsByType,
+    createAssociatedGroup
 } from "./groups"
-import { createInvite, getInvite } from "./invites"
+import { checkInvite, createInvite, getInvite, redeemInvite } from "./invites"
 
 export default class ApiSdk {
     private _url: string
@@ -113,6 +118,39 @@ export default class ApiSdk {
     }
 
     /**
+     * Returns the list of groups by type.
+     * @param type "onchain" or "offchain".
+     * @returns List of groups by type.
+     */
+    async getGroupsByType(type: GroupType): Promise<Group[]> {
+        const groups = await getGroupsByType(this._config, type)
+
+        return groups
+    }
+
+    /**
+     * Returns the list of groups by name.
+     * @param name Group name.
+     * @returns List of groups by name.
+     */
+    async getGroupsByName(name: string): Promise<Group[]> {
+        const groups = await getGroupsByName(this._config, name)
+
+        return groups
+    }
+
+    /**
+     * Returns the list of associated groups.
+     * @param name Group name.
+     * @returns List of associated groups.
+     */
+    async getAssociatedGroups(name: string): Promise<Group[]> {
+        const groups = await getAssociatedGroups(this._config, name)
+
+        return groups
+    }
+
+    /**
      * Creates a group using the API key.
      * @param groupCreationDetails Data to create the group.
      * @param apiKey The API key of the admin of the group.
@@ -161,6 +199,21 @@ export default class ApiSdk {
         )
 
         return groups
+    }
+
+    /**
+     * Creates an associated group to an on-chain group using the API key.
+     * @param groupId The group id of the on-chain group.
+     * @param apiKey The API key of the admin of the group.
+     * @returns The created associated group.
+     */
+    async createAssociatedGroup(
+        groupId: string,
+        apiKey: string
+    ): Promise<Group> {
+        const group = await createAssociatedGroup(this._config, groupId, apiKey)
+
+        return group[0]
     }
 
     /**
@@ -363,6 +416,44 @@ export default class ApiSdk {
      */
     async getInvite(inviteCode: string): Promise<Invite> {
         const invite = await getInvite(this._config, inviteCode)
+
+        return invite
+    }
+
+    /**
+     * Returns boolean value if the invite code is valid.
+     * @param inviteCode Invite code.
+     * @param groupId Group id.
+     * @returns Boolean.
+     */
+    async checkInvite(inviteCode: string, groupId: string): Promise<boolean> {
+        const isInviteValid = await checkInvite(
+            this._config,
+            inviteCode,
+            groupId
+        )
+
+        return isInviteValid
+    }
+
+    /**
+     * Redeems a specific invite.
+     * @param inviteCode Invite code.
+     * @param groupId Group id.
+     * @param apiKey The api key.
+     * @returns The updated invite.
+     */
+    async redeemInvite(
+        inviteCode: string,
+        groupId: string,
+        apiKey: string
+    ): Promise<Invite> {
+        const invite = await redeemInvite(
+            this._config,
+            inviteCode,
+            groupId,
+            apiKey
+        )
 
         return invite
     }

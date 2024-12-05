@@ -83,6 +83,7 @@ describe("CredentialsService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600,
                 credentials: JSON.stringify({
@@ -104,6 +105,7 @@ describe("CredentialsService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -184,8 +186,9 @@ describe("CredentialsService", () => {
         it("Should throw an error if the credential group blockchain network is not supported", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -230,8 +233,9 @@ describe("CredentialsService", () => {
         it("Should add the same credential with different identities in different groups", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "Group4",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -335,8 +339,9 @@ describe("CredentialsService", () => {
         it("Should add a member to a credential group using the number of transactions", async () => {
             const { id } = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "Group5",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -385,8 +390,9 @@ describe("CredentialsService", () => {
         it("Should add a member to a group with many credentials", async () => {
             const { id } = await groupsService.createGroup(
                 {
-                    name: "Group3",
+                    name: "Group6",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -437,8 +443,9 @@ describe("CredentialsService", () => {
         it("Should not add a member to a group with many credentials and return undefined if the OAuth state does not match the credential provider", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
-                    name: "Group4",
+                    name: "Group7",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({
@@ -490,8 +497,9 @@ describe("CredentialsService", () => {
         it("Should throw an error if the group with many credentials contains unsupported network", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
-                    name: "Group5",
+                    name: "Group8",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: JSON.stringify({

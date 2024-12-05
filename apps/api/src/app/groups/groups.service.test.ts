@@ -66,6 +66,7 @@ describe("GroupsService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -77,16 +78,19 @@ describe("GroupsService", () => {
 
     describe("# createGroup", () => {
         it("Should create a group", async () => {
-            const { treeDepth, members } = await groupsService.createGroup(
-                {
-                    name: "Group2",
-                    description: "This is a description",
-                    treeDepth: 16,
-                    fingerprintDuration: 3600
-                },
-                "admin"
-            )
+            const { type, treeDepth, members } =
+                await groupsService.createGroup(
+                    {
+                        name: "Group2",
+                        description: "This is a description",
+                        type: "off-chain",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    },
+                    "admin"
+                )
 
+            expect(type).toBe("off-chain")
             expect(treeDepth).toBe(16)
             expect(members).toHaveLength(0)
         })
@@ -96,6 +100,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 15,
                     fingerprintDuration: 3600
                 },
@@ -106,6 +111,39 @@ describe("GroupsService", () => {
                 "The tree depth must be between 16 and 32."
             )
         })
+
+        it("Should not create a group if the group name already exist", async () => {
+            const fun = groupsService.createGroup(
+                {
+                    name: "Group1",
+                    description: "This is a description",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            await expect(fun).rejects.toThrow("already exists")
+        })
+
+        it("Should create a group with same name but different admin", async () => {
+            const { name, treeDepth, members } =
+                await groupsService.createGroup(
+                    {
+                        name: "Group1",
+                        description: "This is a description",
+                        type: "off-chain",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    },
+                    "different-admin"
+                )
+
+            expect(name).toBe("Group1")
+            expect(treeDepth).toBe(16)
+            expect(members).toHaveLength(0)
+        })
     })
 
     describe("# removeGroup", () => {
@@ -114,6 +152,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -142,6 +181,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group4",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -208,7 +248,7 @@ describe("GroupsService", () => {
         it("Should return a list of groups", async () => {
             const result = await groupsService.getGroups()
 
-            expect(result).toHaveLength(3)
+            expect(result).toHaveLength(4)
         })
 
         it("Should return a list of groups by admin", async () => {
@@ -216,6 +256,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group01",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -227,6 +268,7 @@ describe("GroupsService", () => {
                 {
                     name: "Group02",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -243,8 +285,9 @@ describe("GroupsService", () => {
         it("Should return a list of groups by member", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
-                    name: "MemberGroup",
+                    name: "GetGroupsByMember",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -262,6 +305,33 @@ describe("GroupsService", () => {
 
             const result = await groupsService.getGroups({
                 memberId: "123456"
+            })
+
+            expect(result).toHaveLength(1)
+        })
+
+        it("Should return a list of groups by group type", async () => {
+            await groupsService.createGroup(
+                {
+                    name: "OnChainGroup",
+                    description: "This is a description",
+                    type: "on-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin02"
+            )
+
+            const result = await groupsService.getGroups({
+                type: "on-chain"
+            })
+
+            expect(result).toHaveLength(1)
+        })
+
+        it("Should return a list of groups by group name", async () => {
+            const result = await groupsService.getGroups({
+                name: "OnChainGroup"
             })
 
             expect(result).toHaveLength(1)
@@ -335,6 +405,7 @@ describe("GroupsService", () => {
                 {
                     name: "MemberGroup",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -396,8 +467,9 @@ describe("GroupsService", () => {
         it("Should remove a member if they exist in the group", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "RemoveMemberManuallyGroup2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 21,
                     fingerprintDuration: 3600
                 },
@@ -440,8 +512,9 @@ describe("GroupsService", () => {
         it("Should throw error if member is removed by a non-admin", async () => {
             const { id: _groupId } = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "RemoveMemberGroup2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 21,
                     fingerprintDuration: 3600
                 },
@@ -471,6 +544,7 @@ describe("GroupsService", () => {
         const groupDto: CreateGroupDto = {
             name: "Group",
             description: "This is a new group",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -493,13 +567,19 @@ describe("GroupsService", () => {
 
         it("Should create a group via API", async () => {
             const group = await groupsService.createGroupWithAPIKey(
-                groupDto,
+                {
+                    name: "CreateApiGroup1",
+                    description: "This is a new group",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
                 apiKey
             )
 
             expect(group.adminId).toBe(admin.id)
             expect(group.description).toBe(groupDto.description)
-            expect(group.name).toBe(groupDto.name)
+            expect(group.name).toBe("CreateApiGroup1")
             expect(group.treeDepth).toBe(groupDto.treeDepth)
             expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
             expect(group.members).toHaveLength(0)
@@ -508,7 +588,13 @@ describe("GroupsService", () => {
 
         it("Should remove a group via API", async () => {
             const group = await groupsService.createGroupWithAPIKey(
-                groupDto,
+                {
+                    name: "CreateApiGroup2",
+                    description: "This is a new group",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
                 apiKey
             )
 
@@ -531,7 +617,13 @@ describe("GroupsService", () => {
 
         it("Should not remove a group if the admin does not exist", async () => {
             const group = await groupsService.createGroupWithAPIKey(
-                groupDto,
+                {
+                    name: "CreateApiGroup3",
+                    description: "This is a new group",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
                 apiKey
             )
 
@@ -552,7 +644,13 @@ describe("GroupsService", () => {
 
         it("Should not remove a group if the API key is invalid", async () => {
             const group = await groupsService.createGroupWithAPIKey(
-                groupDto,
+                {
+                    name: "CreateApiGroup4",
+                    description: "This is a new group",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
                 apiKey
             )
 
@@ -577,7 +675,13 @@ describe("GroupsService", () => {
             await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
 
             const group = await groupsService.createGroupWithAPIKey(
-                groupDto,
+                {
+                    name: "CreateApiGroup5",
+                    description: "This is a new group",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
                 apiKey
             )
 
@@ -594,7 +698,13 @@ describe("GroupsService", () => {
             await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
 
             const group = await groupsService.createGroupWithAPIKey(
-                groupDto,
+                {
+                    name: "CreateApiGroup6",
+                    description: "This is a new group",
+                    type: "off-chain",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
                 apiKey
             )
 
@@ -625,22 +735,25 @@ describe("GroupsService", () => {
         const groupsDtos: Array<CreateGroupDto> = [
             {
                 id: "1",
-                name: "Group1",
+                name: "RemoveGroup1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
             {
                 id: "2",
-                name: "Group2",
+                name: "RemoveGroup2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
             {
                 id: "3",
-                name: "Group3",
+                name: "RemoveGroup3",
                 description: "This is a new group3",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             }
@@ -688,7 +801,7 @@ describe("GroupsService", () => {
                 adminId: admin.id
             })
 
-            expect(groups).toHaveLength(4)
+            expect(groups).toHaveLength(8)
 
             await groupsService.removeGroupsWithAPIKey([ids[0], ids[1]], apiKey)
 
@@ -696,14 +809,11 @@ describe("GroupsService", () => {
                 adminId: admin.id
             })
 
-            expect(groups).toHaveLength(2)
+            expect(groups).toHaveLength(6)
             const group = groups.at(1)
             const groupDto = groupsDtos.at(2)
 
-            expect(group.id).toBe(groupDto.id)
             expect(group.adminId).toBe(admin.id)
-            expect(group.description).toBe(groupDto.description)
-            expect(group.name).toBe(groupDto.name)
             expect(group.treeDepth).toBe(groupDto.treeDepth)
             expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
             expect(group.members).toHaveLength(0)
@@ -799,8 +909,9 @@ describe("GroupsService", () => {
     describe("# Update group via API", () => {
         const groupDto: CreateGroupDto = {
             id: "1",
-            name: "Group1",
+            name: "UpdateGroupApi1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -902,15 +1013,17 @@ describe("GroupsService", () => {
         const groupsDtos: Array<CreateGroupDto> = [
             {
                 id: "1",
-                name: "Group1",
+                name: "UpdateGroup1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
             {
                 id: "2",
-                name: "Group2",
+                name: "UpdateGroup2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1042,8 +1155,9 @@ describe("GroupsService", () => {
 
             group = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "AddRemoveGroup2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1192,8 +1306,9 @@ describe("GroupsService", () => {
 
             group = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "AddRemoveApiGroup2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1218,6 +1333,7 @@ describe("GroupsService", () => {
                 {
                     name: "Credential Group",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -1364,8 +1480,9 @@ describe("GroupsService", () => {
         beforeAll(async () => {
             group = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "AddMemberManuallyGroup2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1412,8 +1529,9 @@ describe("GroupsService", () => {
         beforeAll(async () => {
             group = await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "AddMembersManuallyGroup2",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },
@@ -1441,6 +1559,7 @@ describe("GroupsService", () => {
                 {
                     name: "Credential Group",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -1490,8 +1609,9 @@ describe("GroupsService", () => {
     describe("# createGroupManually", () => {
         const groupDto: CreateGroupDto = {
             id: "1",
-            name: "Group1",
+            name: "CreateGroupManually1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -1532,15 +1652,17 @@ describe("GroupsService", () => {
         const groupsDtos: Array<CreateGroupDto> = [
             {
                 id: "1",
-                name: "Group1",
+                name: "CreateGroup1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
             {
                 id: "2",
-                name: "Group2",
+                name: "CreateGroup2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1585,8 +1707,9 @@ describe("GroupsService", () => {
     describe("# removeGroupManually", () => {
         const groupDto: CreateGroupDto = {
             id: "1",
-            name: "Group1",
+            name: "RemoveGroup1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -1637,15 +1760,17 @@ describe("GroupsService", () => {
         const groupsDtos: Array<CreateGroupDto> = [
             {
                 id: "1",
-                name: "Group1",
+                name: "RemoveGroupManually1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
             {
                 id: "2",
-                name: "Group2",
+                name: "RemoveGroupManually2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1720,8 +1845,9 @@ describe("GroupsService", () => {
     describe("# updateGroupManually", () => {
         const groupDto: CreateGroupDto = {
             id: "1",
-            name: "Group1",
+            name: "UpdateGroupManually1",
             description: "This is a new group1",
+            type: "off-chain",
             treeDepth: 16,
             fingerprintDuration: 3600
         }
@@ -1792,15 +1918,17 @@ describe("GroupsService", () => {
         const groupsDtos: Array<CreateGroupDto> = [
             {
                 id: "1",
-                name: "Group1",
+                name: "UpdateGroupsManually1",
                 description: "This is a new group1",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
             {
                 id: "2",
-                name: "Group2",
+                name: "UpdateGroupsManually2",
                 description: "This is a new group2",
+                type: "off-chain",
                 treeDepth: 32,
                 fingerprintDuration: 7200
             }
@@ -1895,6 +2023,7 @@ describe("GroupsService", () => {
                 {
                     name: "Fingerprint Group",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 },

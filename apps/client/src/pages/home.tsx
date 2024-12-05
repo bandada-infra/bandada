@@ -17,13 +17,10 @@ import { providers } from "ethers"
 import { useCallback, useEffect, useState } from "react"
 import { FiGithub } from "react-icons/fi"
 import { useSearchParams } from "react-router-dom"
+import { getSemaphoreContract } from "@bandada/utils"
 import icon1Image from "../assets/icon1.svg"
-import {
-    addMemberByInviteCode,
-    getGroup,
-    getInvite,
-    isGroupMember
-} from "../utils/api"
+import * as bandadaAPI from "../api/bandadaAPI"
+import * as semaphoreAPI from "../api/semaphoreAPI"
 
 const injectedConnector = new InjectedConnector({})
 
@@ -59,10 +56,21 @@ export default function HomePage(): JSX.Element {
             if (account && library) {
                 setLoading(true)
 
-                const invite = await getInvite(inviteCode)
+                const invite = await bandadaAPI.getInvite(inviteCode)
 
                 if (invite === null) {
                     setLoading(false)
+                    return
+                }
+
+                const isValid = await bandadaAPI.checkInvite(
+                    inviteCode,
+                    invite.group.id
+                )
+
+                if (!isValid) {
+                    setLoading(false)
+                    alert("Invalid invite code")
                     return
                 }
 
@@ -72,31 +80,65 @@ export default function HomePage(): JSX.Element {
                 const identity = new Identity(await signer.signMessage(message))
                 const identityCommitment = identity.getCommitment().toString()
 
-                const hasJoined = await isGroupMember(
-                    invite.group.id,
-                    identityCommitment
-                )
+                if (invite.group.type === "off-chain") {
+                    const hasJoined = await bandadaAPI.isGroupMember(
+                        invite.group.id,
+                        identityCommitment
+                    )
 
-                if (hasJoined === null) {
-                    setLoading(false)
-                    return
-                }
+                    if (hasJoined === null) {
+                        setLoading(false)
+                        return
+                    }
 
-                if (hasJoined) {
-                    setLoading(false)
-                    alert("You have already joined this group")
-                    return
-                }
+                    if (hasJoined) {
+                        setLoading(false)
+                        alert("You have already joined this group")
+                        return
+                    }
 
-                const response = await addMemberByInviteCode(
-                    invite.group.id,
-                    identityCommitment,
-                    inviteCode
-                )
+                    const response = await bandadaAPI.addMemberByInviteCode(
+                        invite.group.id,
+                        identityCommitment,
+                        inviteCode
+                    )
 
-                if (response === null) {
-                    setLoading(false)
-                    return
+                    if (response === null) {
+                        setLoading(false)
+                        return
+                    }
+                } else {
+                    const group = await semaphoreAPI.getGroup(invite.group.name)
+
+                    if (group === null) {
+                        setLoading(false)
+                        alert("Invalid group")
+                        return
+                    }
+
+                    if (group.members.includes(identityCommitment)) {
+                        setLoading(false)
+                        alert("You have already joined this group")
+                        return
+                    }
+
+                    try {
+                        const semaphore = getSemaphoreContract(
+                            "sepolia",
+                            signer
+                        )
+
+                        await semaphore.addMember(group.id, identityCommitment)
+                        await bandadaAPI.redeemInvite(
+                            inviteCode,
+                            invite.group.id
+                        )
+                    } catch (error) {
+                        alert(
+                            "Some error occurred! Check if you're on Sepolia network and the transaction is signed and completed"
+                        )
+                        return
+                    }
                 }
 
                 setInviteCode("")
@@ -112,7 +154,7 @@ export default function HomePage(): JSX.Element {
             if (account && library) {
                 setLoading(true)
 
-                const group = await getGroup(groupId)
+                const group = await bandadaAPI.getGroup(groupId)
 
                 if (group === null || group.credentials === null) {
                     setLoading(false)

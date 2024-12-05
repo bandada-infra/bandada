@@ -89,6 +89,7 @@ describe("Bandada API SDK", () => {
                 const expectedGroup: GroupCreationDetails = {
                     name: "Group1",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600
                 }
@@ -100,6 +101,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -137,6 +139,7 @@ describe("Bandada API SDK", () => {
                 const expectedGroup: GroupCreationDetails = {
                     name: "Group1",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials
@@ -149,6 +152,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -200,6 +204,7 @@ describe("Bandada API SDK", () => {
                 const expectedGroup: GroupCreationDetails = {
                     name: "Group1",
                     description: "This is a new group",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials
@@ -212,6 +217,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -239,6 +245,39 @@ describe("Bandada API SDK", () => {
                     JSON.stringify(expectedGroup.credentials)
                 )
             })
+            it("Should create an associated group", async () => {
+                const groupId = "1"
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: groupId,
+                            description: `This is an associated group to the on-chain group ${groupId}`,
+                            type: "on-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: Group = await apiSdk.createAssociatedGroup(
+                    groupId,
+                    apiKey
+                )
+
+                expect(group.name).toBe(groupId)
+                expect(group.treeDepth).toBe(16)
+                expect(group.fingerprintDuration).toBe(3600)
+                expect(group.members).toHaveLength(0)
+                expect(group.credentials).toBeNull()
+            })
         })
         describe("#createGroups", () => {
             it("Should create the groups", async () => {
@@ -246,12 +285,14 @@ describe("Bandada API SDK", () => {
                     {
                         name: "Group1",
                         description: "This is a new group",
+                        type: "off-chain",
                         treeDepth: 16,
                         fingerprintDuration: 3600
                     },
                     {
                         name: "Group2",
                         description: "This is a new group",
+                        type: "off-chain",
                         treeDepth: 32,
                         fingerprintDuration: 7200
                     }
@@ -264,6 +305,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -275,6 +317,7 @@ describe("Bandada API SDK", () => {
                             id: "20402173435763029700781503965200",
                             name: "Group2",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 32,
                             fingerprintDuration: 7200,
@@ -310,6 +353,7 @@ describe("Bandada API SDK", () => {
                     {
                         name: "Group3",
                         description: "This is a new group",
+                        type: "off-chain",
                         treeDepth: 15,
                         fingerprintDuration: 3600
                     }
@@ -365,6 +409,7 @@ describe("Bandada API SDK", () => {
                         id: "10402173435763029700781503965100",
                         name: "Group1",
                         description: "This is a new group",
+                        type: "off-chain",
                         admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                         treeDepth: 16,
                         fingerprintDuration: 3600,
@@ -414,6 +459,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group1",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 32,
                             fingerprintDuration: 7200,
@@ -425,6 +471,7 @@ describe("Bandada API SDK", () => {
                             id: "20402173435763029700781503965200",
                             name: "Group1",
                             description: "This is a new group2",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 32,
                             fingerprintDuration: 7200,
@@ -459,6 +506,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -479,6 +527,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -502,6 +551,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -529,6 +579,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -559,6 +610,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -584,6 +636,7 @@ describe("Bandada API SDK", () => {
                             id: "10402173435763029700781503965100",
                             name: "Group1",
                             description: "This is a new group",
+                            type: "off-chain",
                             admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                             treeDepth: 16,
                             fingerprintDuration: 3600,
@@ -604,6 +657,161 @@ describe("Bandada API SDK", () => {
                 expect(groups[0].credentials).toBeNull()
             })
         })
+        describe("#getGroupsByType", () => {
+            it("Should return all groups by type", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            type: "off-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const type = "off-chain"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByType(type)
+                expect(groups).toHaveLength(1)
+            })
+            it("Should return all groups by type and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            type: "off-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: {}
+                        }
+                    ])
+                )
+
+                const type = "off-chain"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByType(type)
+                expect(groups).toHaveLength(1)
+                expect(groups[0].credentials).toBeNull()
+            })
+        })
+        describe("#getGroupsByName", () => {
+            it("Should return all groups by name", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            type: "off-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const name = "Group1"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByName(name)
+                expect(groups).toHaveLength(1)
+            })
+            it("Should return all groups by name and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            type: "off-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: {}
+                        }
+                    ])
+                )
+
+                const name = "Group1"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByName(name)
+                expect(groups).toHaveLength(1)
+                expect(groups[0].credentials).toBeNull()
+            })
+        })
+        describe("#getAssociatedGroups", () => {
+            it("Should return all the associated groups", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            type: "on-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const name = "Group1"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getAssociatedGroups(name)
+                expect(groups).toHaveLength(1)
+                expect(groups[0].type).toBe("on-chain")
+            })
+            it("Should return all the associated groups and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            type: "on-chain",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: ["1"],
+                            credentials: {}
+                        }
+                    ])
+                )
+
+                const name = "Group1"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getAssociatedGroups(name)
+                expect(groups).toHaveLength(1)
+                expect(groups[0].type).toBe("on-chain")
+                expect(groups[0].credentials).toBeNull()
+            })
+        })
         describe("#getGroup", () => {
             it("Should return a group", async () => {
                 requestMocked.mockImplementationOnce(() =>
@@ -611,6 +819,7 @@ describe("Bandada API SDK", () => {
                         id: "10402173435763029700781503965100",
                         name: "Group1",
                         description: "This is a new group",
+                        type: "off-chain",
                         admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                         treeDepth: 16,
                         fingerprintDuration: 3600,
@@ -638,6 +847,7 @@ describe("Bandada API SDK", () => {
                         id: "10402173435763029700781503965100",
                         name: "Group1",
                         description: "This is a new group",
+                        type: "off-chain",
                         admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                         treeDepth: 16,
                         fingerprintDuration: 3600,
@@ -659,6 +869,7 @@ describe("Bandada API SDK", () => {
                         id: "10402173435763029700781503965100",
                         name: "Group1",
                         description: "This is a new group",
+                        type: "off-chain",
                         admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
                         treeDepth: 16,
                         fingerprintDuration: 3600,
@@ -886,6 +1097,7 @@ describe("Bandada API SDK", () => {
                 id: groupId,
                 name: groupName,
                 description: "This is Group 1",
+                type: "off-chain",
                 adminId:
                     "0x63229164c457584616006e31d1e171e6cdd4163695bc9c4bf0227095998ffa4c",
                 treeDepth: 16,
@@ -926,6 +1138,7 @@ describe("Bandada API SDK", () => {
                     id: groupId,
                     name: groupName,
                     description: "This is Group 1",
+                    type: "off-chain",
                     adminId:
                         "0x63229164c457584616006e31d1e171e6cdd4163695bc9c4bf0227095998ffa4c",
                     treeDepth: 16,
@@ -955,6 +1168,69 @@ describe("Bandada API SDK", () => {
                 expect(invite.createdAt).toBe(inviteCreatedAt)
                 expect(invite.code).toBe(inviteCode)
                 expect(invite.group).toStrictEqual(group)
+            })
+        })
+
+        describe("# checkInvite", () => {
+            it("Should check if an invite is valid", async () => {
+                const groupId = "95633257675970239314311768035433"
+                const inviteCode = "C5VAG4HD"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve(true)
+                )
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const isInviteValid = await apiSdk.checkInvite(
+                    inviteCode,
+                    groupId
+                )
+
+                expect(isInviteValid).toBeTruthy()
+            })
+        })
+
+        describe("# redeemInvite", () => {
+            it("Should redeem an invite", async () => {
+                const groupId = "95633257675970239314311768035433"
+                const groupName = "Group 1"
+                const group = {
+                    id: groupId,
+                    name: groupName,
+                    description: "This is Group 1",
+                    type: "off-chain",
+                    adminId:
+                        "0x63229164c457584616006e31d1e171e6cdd4163695bc9c4bf0227095998ffa4c",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: null,
+                    apiEnabled: false,
+                    apiKey: null,
+                    createdAt: "2023-08-09T18:09:53.000Z",
+                    updatedAt: "2023-08-09T18:09:53.000Z"
+                }
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+                const inviteCode = "C5VAG4HD"
+                const inviteCreatedAt = "2023-08-09T18:10:02.000Z"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve({
+                        code: inviteCode,
+                        isRedeemed: true,
+                        createdAt: inviteCreatedAt,
+                        group
+                    })
+                )
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const invite = await apiSdk.redeemInvite(
+                    inviteCode,
+                    groupId,
+                    apiKey
+                )
+
+                expect(invite.code).toBe(inviteCode)
+                expect(invite.isRedeemed).toBe(true)
             })
         })
     })

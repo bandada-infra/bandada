@@ -1,6 +1,6 @@
 import { ApiKeyActions, request } from "@bandada/utils"
 import { SiweMessage } from "siwe"
-import { Admin, Group } from "../types"
+import { Admin, Group, GroupType } from "../types"
 import createAlert from "../utils/createAlert"
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -40,18 +40,46 @@ export async function generateMagicLink(
  * @param adminId The admin id.
  * @returns The list of groups or null.
  */
-export async function getGroups(adminId?: string): Promise<Group[] | null> {
+export async function getGroups(
+    adminId?: string,
+    type?: GroupType
+): Promise<Group[] | null> {
     try {
-        const url = adminId
-            ? `${API_URL}/groups/?adminId=${adminId}`
-            : `${API_URL}/groups/`
+        const groupType = type || "off-chain"
+        let url = `${API_URL}/groups/?type=${groupType}`
+
+        if (adminId) {
+            url += `&?adminId=${adminId}`
+        }
 
         const groups = await request(url)
 
         return groups.map((group: Group) => ({
             ...group,
-            type: "off-chain"
+            type: groupType
         }))
+    } catch (error: any) {
+        console.error(error)
+        createAlert(error.response.data.message)
+        return null
+    }
+}
+
+/**
+ * It returns the list of groups by group name.
+ * @param name
+ * @returns The group details.
+ */
+export async function getGroupByName(
+    name: string,
+    type?: GroupType
+): Promise<Group[] | null> {
+    try {
+        const groupType = type || "off-chain"
+
+        return await request(
+            `${API_URL}/groups/?name=${name}&?type=${groupType}`
+        )
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)
@@ -80,12 +108,16 @@ export async function getGroup(groupId: string): Promise<Group | null> {
  * It creates a new group.
  * @param name The group name.
  * @param description The group description.
+ * @param type The group type ("on-chain" | "off-chain").
  * @param treeDepth The Merkle tree depth.
+ * @param fingerprintDuration The fingerprint duration.
+ * @param credentials The group credentials.
  * @returns The group details.
  */
 export async function createGroup(
     name: string,
     description: string,
+    type: GroupType,
     treeDepth: number,
     fingerprintDuration: number,
     credentials?: any
@@ -97,6 +129,7 @@ export async function createGroup(
                 {
                     name,
                     description,
+                    type,
                     treeDepth,
                     fingerprintDuration,
                     credentials: JSON.stringify(credentials)
@@ -104,7 +137,7 @@ export async function createGroup(
             ]
         })
 
-        return { ...groups.at(0), type: "off-chain" }
+        return { ...groups.at(0) }
     } catch (error: any) {
         console.error(error)
         createAlert(error.response.data.message)

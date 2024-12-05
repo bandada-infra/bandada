@@ -71,6 +71,7 @@ describe("InvitesService", () => {
             {
                 name: "Group1",
                 description: "This is a description",
+                type: "off-chain",
                 treeDepth: 16,
                 fingerprintDuration: 3600
             },
@@ -104,6 +105,7 @@ describe("InvitesService", () => {
                 {
                     name: "Group2",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -157,8 +159,9 @@ describe("InvitesService", () => {
 
             await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "Group3",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -187,8 +190,9 @@ describe("InvitesService", () => {
 
             const group = await groupsService.createGroup(
                 {
-                    name: "Group3",
+                    name: "Group4",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -213,7 +217,7 @@ describe("InvitesService", () => {
     })
 
     describe("# createInviteWithApiKey", () => {
-        it("Should create an invite manually", async () => {
+        it("Should create an invite with api key", async () => {
             const {
                 group,
                 code,
@@ -281,8 +285,9 @@ describe("InvitesService", () => {
 
             await groupsService.createGroup(
                 {
-                    name: "Group2",
+                    name: "Group5",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -315,8 +320,9 @@ describe("InvitesService", () => {
 
             const group = await groupsService.createGroup(
                 {
-                    name: "Group3",
+                    name: "Group6",
                     description: "This is a description",
+                    type: "off-chain",
                     treeDepth: 16,
                     fingerprintDuration: 3600,
                     credentials: {
@@ -361,6 +367,25 @@ describe("InvitesService", () => {
         })
     })
 
+    describe("# checkInvite", () => {
+        it("Should return true if invite is valid", async () => {
+            const { code } = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const invite = await invitesService.checkInvite(code, groupId)
+
+            expect(invite).toBeTruthy()
+        })
+
+        it("Should return false if invite is invalid", async () => {
+            const invite = await invitesService.checkInvite("12345", groupId)
+
+            expect(invite).toBeFalsy()
+        })
+    })
+
     describe("# redeemInvite", () => {
         let invite: Invite
 
@@ -393,6 +418,118 @@ describe("InvitesService", () => {
             const fun = invitesService.redeemInvite("12345", groupId)
 
             await expect(fun).rejects.toThrow("does not exist")
+        })
+    })
+
+    describe("# redeemInviteWithApiKey", () => {
+        it("Should redeem an invite with api key", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
+
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const { isRedeemed: redeemed } =
+                await invitesService.redeemInviteWithApiKey(
+                    invite.code,
+                    groupId,
+                    admin.apiKey
+                )
+
+            expect(redeemed).toBeTruthy()
+        })
+
+        it("Should not reddem an invite if the given api key is invalid", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const fun = invitesService.redeemInviteWithApiKey(
+                invite.code,
+                groupId,
+                "wrong-apikey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the group '${groupId}'`
+            )
+        })
+
+        it("Should not redeem an invite if the given api key does not belong to an admin", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const oldApiKey = admin.apiKey
+
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Generate)
+
+            const fun = invitesService.redeemInviteWithApiKey(
+                invite.code,
+                groupId,
+                oldApiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the group '${groupId}'`
+            )
+        })
+
+        it("Should not redeem an invite if the given api key is disabled", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            admin = await adminsService.findOne({ id: admin.id })
+
+            const fun = invitesService.redeemInviteWithApiKey(
+                invite.code,
+                groupId,
+                admin.apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+    })
+
+    describe("# redeemInviteKeyManually", () => {
+        it("Should redeem an invite manually", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const { isRedeemed: redeemed } =
+                await invitesService.redeemInviteKeyManually(
+                    invite.code,
+                    groupId,
+                    admin.id
+                )
+
+            expect(redeemed).toBeTruthy()
+        })
+
+        it("Should not redeem an invite if the given identifier does not belong to an admin", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const fun = invitesService.redeemInviteKeyManually(
+                invite.code,
+                groupId,
+                "wrong-admin"
+            )
+
+            await expect(fun).rejects.toThrow("You are not an admin")
         })
     })
 
