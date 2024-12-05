@@ -486,7 +486,6 @@ const invite = await apiSdk.redeemInvite(inviteCode, groupId, apiKey)
 
 Returns a custom URL string for joining a credential group.
 
-```ts
 import { DashboardUrl } from "@bandada/api-sdk"
 
 const dashboardUrl = DashboardUrl.DEV
