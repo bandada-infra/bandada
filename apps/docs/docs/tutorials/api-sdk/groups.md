@@ -217,6 +217,10 @@ await apiSdk.addMemberByInviteCode(groupId, memberId, inviteCode)
 This is an example of how the whole code would look like:
 
 ```ts
+import { ApiSdk, SupportedUrl } from "@bandada/api-sdk"
+
+const apiSdk = new ApiSdk(SupportedUrl.DEV)
+
 const groupId = "your-group-id"
 const memberId = "member-id-1"
 const apiKey = "your-api-key"
