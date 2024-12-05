@@ -166,16 +166,18 @@ export default function HomePage(): JSX.Element {
         <Container maxW="container.md" pt="20" pb="20" px="8" centerContent>
             <VStack spacing="20" pb="30px" w="100%">
                 <HStack mb="60px" justify="space-between" w="100%">
-                    <HStack spacing="1">
-                        <Image
-                            src={icon1Image}
-                            htmlWidth="32px"
-                            alt="Bandada icon"
-                        />
-                        <Heading fontSize="22px" as="h1">
-                            bandada
-                        </Heading>
-                    </HStack>
+                    <Link _hover={{ textDecoration: "none" }} href="/">
+                        <HStack spacing="1">
+                            <Image
+                                src={icon1Image}
+                                htmlWidth="32px"
+                                alt="Bandada icon"
+                            />
+                            <Heading fontSize="22px" as="h1">
+                                bandada
+                            </Heading>
+                        </HStack>
+                    </Link>
 
                     <HStack spacing="5">
                         <Link
