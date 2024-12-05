@@ -820,6 +820,7 @@ export class GroupsService {
     async getGroups(filters?: {
         adminId?: string
         memberId?: string
+        name?: string
     }): Promise<Group[]> {
         let where = {}
 
@@ -834,6 +835,13 @@ export class GroupsService {
                 members: {
                     id: filters.memberId
                 },
+                ...where
+            }
+        }
+
+        if (filters?.name) {
+            where = {
+                name: filters.name,
                 ...where
             }
         }

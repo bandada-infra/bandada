@@ -266,6 +266,24 @@ describe("GroupsService", () => {
 
             expect(result).toHaveLength(1)
         })
+
+        it("Should return a list of groups by group name", async () => {
+            await groupsService.createGroup(
+                {
+                    name: "OnChainGroup",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin02"
+            )
+
+            const result = await groupsService.getGroups({
+                name: "OnChainGroup"
+            })
+
+            expect(result).toHaveLength(1)
+        })
     })
 
     describe("# getGroup", () => {

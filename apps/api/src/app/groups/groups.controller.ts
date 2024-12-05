@@ -40,13 +40,19 @@ export class GroupsController {
     @Get()
     @ApiQuery({ name: "adminId", required: false, type: String })
     @ApiQuery({ name: "memberId", required: false, type: String })
+    @ApiQuery({ name: "name", required: false, type: String })
     @ApiOperation({ description: "Returns the list of groups." })
     @ApiCreatedResponse({ type: Group, isArray: true })
     async getGroups(
         @Query("adminId") adminId: string,
-        @Query("memberId") memberId: string
+        @Query("memberId") memberId: string,
+        @Query("name") name: string
     ) {
-        const groups = await this.groupsService.getGroups({ adminId, memberId })
+        const groups = await this.groupsService.getGroups({
+            adminId,
+            memberId,
+            name
+        })
         const groupIds = groups.map((group) => group.id)
         const fingerprints = await this.groupsService.getFingerprints(groupIds)
 

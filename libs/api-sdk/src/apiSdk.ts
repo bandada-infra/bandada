@@ -25,7 +25,8 @@ import {
     getGroupsByAdminId,
     getGroupsByMemberId,
     getCredentialGroupJoinUrl,
-    getMultipleCredentialsGroupJoinUrl
+    getMultipleCredentialsGroupJoinUrl,
+    getGroupsByName
 } from "./groups"
 import { createInvite, getInvite } from "./invites"
 
@@ -108,6 +109,17 @@ export default class ApiSdk {
      */
     async getGroupsByMemberId(memberId: string): Promise<Group[]> {
         const groups = await getGroupsByMemberId(this._config, memberId)
+
+        return groups
+    }
+
+    /**
+     * Returns the list of groups by name.
+     * @param name Group name.
+     * @returns List of groups by name.
+     */
+    async getGroupsByName(name: string): Promise<Group[]> {
+        const groups = await getGroupsByName(this._config, name)
 
         return groups
     }
