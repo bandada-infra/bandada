@@ -467,13 +467,25 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const invite = await apiSdk.getInvite(inviteCode)
 ```
 
+## Redeem invite
+
+\# **redeemInvite**(): _Promise\<Invite>_
+
+Redeems a specific invite.
+
+```ts
+const groupId = "10402173435763029700781503965100"
+const inviteCode = "C5VAG4HD"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const invite = await apiSdk.redeemInvite(inviteCode, groupId, apiKey)
+
 ## Get credential group join URL
 
 \# **getCredentialGroupJoinUrl**(): _string_
 
 Returns a custom URL string for joining a credential group.
 
-```ts
 import { DashboardUrl } from "@bandada/api-sdk"
 
 const dashboardUrl = DashboardUrl.DEV
