@@ -453,9 +453,9 @@ Redeems a specific invite.
 ```ts
 const groupId = "10402173435763029700781503965100"
 const inviteCode = "C5VAG4HD"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-const invite = await apiSdk.redeemInvite(inviteCode, groupId)
-```
+const invite = await apiSdk.redeemInvite(inviteCode, groupId, apiKey)
 
 ## Get credential group join URL
 
