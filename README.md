@@ -314,7 +314,7 @@ Run [ESLint](https://eslint.org/) to analyze the code and catch bugs:
 yarn lint
 ```
 
-Use [Prettier](https://prettier.io/) to check formatting rules:
+Run [Prettier](https://prettier.io/) to check formatting rules:
 
 ```bash
 yarn prettier
