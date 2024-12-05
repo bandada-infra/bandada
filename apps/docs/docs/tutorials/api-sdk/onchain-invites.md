@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: On-chain invites
+title: On-chain group invites
 ---
 
 import Tabs from "@theme/Tabs"
@@ -122,9 +122,15 @@ const group = await semaphore.getGroup(groupId, {
 })
 
 const invite = await apiSdk.getInvite(inviteCode)
+const apiKey = "your-api-key"
 
-await semaphore.addMember(group.id, memberId)
-await apiSdk.redeemInvite(inviteCode, invite.group.id)
+if(invite.isRedeemed) {
+    throw new Error(`Invite code '${inviteCode}' has already been redeemed`)
+} else {
+    await semaphore.addMember(group.id, memberId)
+    
+    await apiSdk.redeemInvite(inviteCode, invite.group.id, apiKey)
+}
 ```
 
 ## Full example
@@ -164,9 +170,14 @@ const associatedGroup = apiSdk.createGroup(groupCreationDetails, apiKey)
 // generate invite code with the associated group id
 const invite = await apiSdk.createInvite(associatedGroup.id, apiKey)
 
-// add member to on-chain group
-await semaphore.addMember(onchainGroupId, memberId)
+// check if the invite code has been redeemed
+if(invite.isRedeemed) {
+    throw new Error(`Invite code '${invite.code}' has already been redeemed`)
+} else {
+    // add member to on-chain group
+    await semaphore.addMember(onchainGroupId, memberId)
 
-// redeem the invite code after successfully adding the member to the on-chain group
-await apiSdk.redeemInvite(invite.code, associatedGroup.id)
+    // redeem the invite code after successfully adding the member to the on-chain group
+    await apiSdk.redeemInvite(invite.code, associatedGroup.id, apiKey)
+}
 ```
