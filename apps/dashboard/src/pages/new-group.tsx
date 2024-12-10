@@ -28,7 +28,7 @@ export default function NewGroupPage(): JSX.Element {
             setCurrentStep((v) => v + 1)
         }
 
-        if (group.type === "on-chain" && !next) {
+        if (group?.type === "on-chain" && !next) {
             setGroup({ type: "on-chain", fingerprintDuration: 3600 })
         }
     }, [])

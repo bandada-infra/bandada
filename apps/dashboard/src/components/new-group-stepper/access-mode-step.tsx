@@ -341,6 +341,14 @@ export default function AccessModeStep({
                                                 i.toString()
                                             ])
 
+                                            if (_credentials?.id) {
+                                                delete _credentials.id
+                                            }
+
+                                            if (_credentials?.criteria) {
+                                                delete _credentials.criteria
+                                            }
+
                                             const tempCredential = {
                                                 ..._credentials
                                             }
