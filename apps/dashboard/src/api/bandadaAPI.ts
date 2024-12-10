@@ -167,7 +167,7 @@ export async function removeGroup(groupId: string): Promise<void | null> {
 }
 
 /**
- * It returns a random string to be used as a OAuth state, to to protect against
+ * It returns a random string to be used as a OAuth state, to protect against
  * forgery attacks. It will be used to retrieve group, member, redirectURI and provider
  * before checking credentials and adding members.
  * @param group The group id.
