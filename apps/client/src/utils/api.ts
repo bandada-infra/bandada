@@ -106,13 +106,15 @@ export function getCredentialGroupJoinUrl(
 export function getMultipleCredentialsGroupJoinUrl(
     dashboardUrl: DashboardUrl,
     groupId: string,
-    commitment: string
+    commitment: string,
+    redirectUri?: string
 ): string | null {
     try {
         return api.getMultipleCredentialsGroupJoinUrl(
             dashboardUrl,
             groupId,
-            commitment
+            commitment,
+            redirectUri
         )
     } catch (error: any) {
         console.error(error)
