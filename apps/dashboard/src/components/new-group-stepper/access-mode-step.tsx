@@ -69,6 +69,12 @@ export default function AccessModeStep({
         }
     }, [_accessMode, _validator, _validators])
 
+    const onClear = () => {
+        setCredentials(undefined)
+        setValidators([])
+        setExpression([])
+    }
+
     return (
         <>
             <HStack>
@@ -621,6 +627,14 @@ export default function AccessModeStep({
             )}
 
             <HStack justify="right" pt="20px">
+                <Button
+                    variant="solid"
+                    colorScheme="tertiary"
+                    hidden={_accessMode !== "multiple_credentials"}
+                    onClick={onClear}
+                >
+                    Clear
+                </Button>
                 <Button variant="solid" colorScheme="tertiary" onClick={onBack}>
                     Back
                 </Button>
