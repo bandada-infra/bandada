@@ -129,7 +129,7 @@ describe("AdminsService", () => {
             expect(admin.apiKey).toBe(apiKey)
         })
 
-        it("Should not create the apikey when the given id does not belog to an admin", async () => {
+        it("Should not create the apikey when the given id does not belong to an admin", async () => {
             const wrongId = "wrongId"
 
             const fun = adminsService.updateApiKey(
@@ -158,7 +158,7 @@ describe("AdminsService", () => {
             )
         })
 
-        it("Shoul throw if the action does not exist", async () => {
+        it("Should throw if the action does not exist", async () => {
             const wrongAction = "wrong-action"
 
             const fun = adminsService.updateApiKey(
