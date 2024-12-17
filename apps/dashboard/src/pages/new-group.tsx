@@ -1,4 +1,4 @@
-import { Container, Heading, HStack, VStack } from "@chakra-ui/react"
+import { Container, Heading, HStack, VStack, Stack } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AccessModeStep from "../components/new-group-stepper/access-mode-step"
@@ -61,7 +61,11 @@ export default function NewGroupPage(): JSX.Element {
                     }
                 />
 
-                <HStack w="100%" align="start">
+                <Stack
+                    w="100%"
+                    align="start"
+                    direction={{ base: "column-reverse", md: "row" }}
+                >
                     {(_group.type === "off-chain" && _currentStep !== 3) ||
                     (_group.type === "on-chain" && _currentStep !== 1) ? (
                         <>
@@ -74,6 +78,7 @@ export default function NewGroupPage(): JSX.Element {
                                 borderRadius="8px"
                                 flex="1"
                                 align="left"
+                                width={{ base: "100%", md: "50%" }}
                             >
                                 {_group.type === "off-chain" &&
                                     (_currentStep === 0 ? (
@@ -113,7 +118,7 @@ export default function NewGroupPage(): JSX.Element {
                             onBack={() => finalPreviewBack()}
                         />
                     )}
-                </HStack>
+                </Stack>
             </VStack>
         </Container>
     )

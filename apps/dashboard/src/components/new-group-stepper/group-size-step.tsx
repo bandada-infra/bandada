@@ -30,7 +30,11 @@ export default function GroupSizeStep({
         <>
             <Text>How big is your group?</Text>
 
-            <HStack w="764px" py="16px" overflowX="scroll">
+            <HStack
+                w={{ base: "100%", lg: "764px" }}
+                py="16px"
+                overflowX="scroll"
+            >
                 {groupSizes.map((groupSize) => (
                     <VStack
                         borderColor={

@@ -16,7 +16,8 @@ import {
     Box,
     ChakraProvider,
     extendTheme,
-    Tooltip
+    Tooltip,
+    Stack
 } from "@chakra-ui/react"
 import { FiHardDrive, FiZap } from "react-icons/fi"
 import { FaInfoCircle } from "react-icons/fa"
@@ -72,7 +73,7 @@ export default function GeneralInfoStep({
         <>
             <Text>What type of group is this?</Text>
 
-            <HStack>
+            <Stack direction={{ base: "column", lg: "row" }}>
                 {groupTypes.map((groupType: any) => (
                     <VStack
                         borderColor={
@@ -82,8 +83,8 @@ export default function GeneralInfoStep({
                         }
                         borderWidth="2px"
                         borderRadius="8px"
-                        w="252px"
-                        h="210px"
+                        w={{ base: "100%", md: "252px" }}
+                        h={{ base: "auto", md: "210px" }}
                         align="left"
                         spacing="0"
                         cursor="pointer"
@@ -144,7 +145,7 @@ export default function GeneralInfoStep({
                         </Text>
                     </VStack>
                 ))}
-            </HStack>
+            </Stack>
 
             {group.type === "off-chain" && (
                 <>

@@ -13,10 +13,11 @@ export default function StepperPreview({
         <VStack
             align="left"
             position="relative"
-            w="374px"
+            w={{ base: "100%", md: "374px" }}
             h="483px"
             bgImg={`url(${image2})`}
             bgRepeat="no-repeat"
+            bgSize={{ base: "cover", md: "contain" }}
             p="20px"
             borderRadius="8px"
         >

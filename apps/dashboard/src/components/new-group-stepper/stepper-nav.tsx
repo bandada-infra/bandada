@@ -35,7 +35,14 @@ export default function StepperNav({
                     >
                         {i + 1}
                     </Text>
-                    <Text>{step}</Text>
+                    <Text
+                        display={{
+                            base: i === index ? "block" : "none",
+                            md: "block"
+                        }}
+                    >
+                        {step}
+                    </Text>
                     {i !== steps.length - 1 && (
                         <Icon as={MdOutlineKeyboardArrowRight} boxSize={5} />
                     )}

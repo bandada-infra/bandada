@@ -39,8 +39,6 @@ export default function GroupCard({
             justify="space-between"
             fontFamily="DM Sans, sans-serif"
             p="24px"
-            minW="330px"
-            maxW="370px"
             h="280px"
         >
             <Box>
