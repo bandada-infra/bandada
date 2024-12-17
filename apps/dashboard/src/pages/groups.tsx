@@ -12,7 +12,7 @@ import {
     Spinner,
     Text,
     VStack,
-    Stack,
+    Stack
 } from "@chakra-ui/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
@@ -83,7 +83,12 @@ export default function GroupsPage(): JSX.Element {
                     </Heading>
                 </HStack>
 
-                <Stack justifyContent="space-between" width="100%" direction={{ base: "column", md: "row" }} spacing={2}>
+                <Stack
+                    justifyContent="space-between"
+                    width="100%"
+                    direction={{ base: "column", md: "row" }}
+                    spacing={2}
+                >
                     <HStack>
                         <InputGroup w={{ base: "250px", md: "300px" }}>
                             <InputRightElement h="48px" pointerEvents="none">
@@ -140,7 +145,11 @@ export default function GroupsPage(): JSX.Element {
 
                 {!_isLoading && _groups.length > 0 && (
                     <Grid
-                        templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+                        templateColumns={{
+                            base: "1fr",
+                            md: "repeat(2, 1fr)",
+                            lg: "repeat(3, 1fr)"
+                        }}
                         gap={10}
                         w="100%"
                         mt="60px"
@@ -187,7 +196,11 @@ export default function GroupsPage(): JSX.Element {
 
                 {!_isLoading && _allCredentialGroups.length > 0 && (
                     <Grid
-                        templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+                        templateColumns={{
+                            base: "1fr",
+                            md: "repeat(2, 1fr)",
+                            lg: "repeat(3, 1fr)"
+                        }}
                         gap={10}
                         w="100%"
                         mt="60px"
