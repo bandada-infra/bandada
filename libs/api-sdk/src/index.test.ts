@@ -604,6 +604,59 @@ describe("Bandada API SDK", () => {
                 expect(groups[0].credentials).toBeNull()
             })
         })
+        describe("getGroupsByGroupIds", () => {
+            it("Should return all groups by group ids", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const groupIds = ["10402173435763029700781503965100"]
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByGroupIds(
+                    groupIds
+                )
+                expect(groups).toHaveLength(1)
+            })
+            it("Should return all groups by group ids and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: {}
+                        }
+                    ])
+                )
+
+                const groupIds = ["10402173435763029700781503965100"]
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByGroupIds(
+                    groupIds
+                )
+                expect(groups).toHaveLength(1)
+                expect(groups[0].credentials).toBeNull()
+            })
+        })
         describe("#getGroup", () => {
             it("Should return a group", async () => {
                 requestMocked.mockImplementationOnce(() =>

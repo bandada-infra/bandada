@@ -24,6 +24,7 @@ import {
     removeMembersByApiKey,
     getGroupsByAdminId,
     getGroupsByMemberId,
+    getGroupsByGroupIds,
     getCredentialGroupJoinUrl,
     getMultipleCredentialsGroupJoinUrl,
     addMemberToGroupsByApiKey
@@ -109,6 +110,17 @@ export default class ApiSdk {
      */
     async getGroupsByMemberId(memberId: string): Promise<Group[]> {
         const groups = await getGroupsByMemberId(this._config, memberId)
+
+        return groups
+    }
+
+    /**
+     * Returns the list of groups by group ids.
+     * @param groupIds Group ids.
+     * @returns List of groups by group ids.
+     */
+    async getGroupsByGroupIds(groupIds: string[]): Promise<Group[]> {
+        const groups = await getGroupsByGroupIds(this._config, groupIds)
 
         return groups
     }

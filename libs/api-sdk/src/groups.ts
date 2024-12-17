@@ -96,6 +96,41 @@ export async function getGroupsByMemberId(
 }
 
 /**
+ * Returns the list of groups by group ids.
+ * @param groupIds Group ids.
+ * @returns List of groups by group ids.
+ */
+export async function getGroupsByGroupIds(
+    config: object,
+    groupIds: string[]
+): Promise<Group[]> {
+    let requestUrl = `${url}?`
+
+    for (const groupId of groupIds) {
+        requestUrl += `&groupIds=${groupId}`
+    }
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
  * Creates one or more groups with the provided details.
  * @param groupsCreationDetails Data to create the groups.
  * @param apiKey API Key of the admin.
