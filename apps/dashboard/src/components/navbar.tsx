@@ -73,9 +73,11 @@ export default function NavBar(): JSX.Element {
                     >
                         {!isLoggedInAdmin()
                             ? "Unconnected account"
-                            : `Connected as ${shortenAddress(
-                                  address as string
-                              )}`}
+                            : `${
+                                  window.screen.availWidth > 375
+                                      ? "Connected as"
+                                      : ""
+                              } ${shortenAddress(address as string)}`}
                     </Button>
                 </HStack>
             </HStack>
