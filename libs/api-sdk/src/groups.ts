@@ -376,6 +376,34 @@ export async function addMemberByInviteCode(
 }
 
 /**
+ * Adds a member to multiple groups.
+ * @param groupIds Array of group ids.
+ * @param memberId Member id.
+ * @param apiKey API Key of the admin.
+ * @returns Array of the groups of added member.
+ */
+export function addMemberToGroupsByApiKey(
+    config: object,
+    groupIds: string[],
+    memberId: string,
+    apiKey: string
+): Promise<Group[]> {
+    const newConfig: any = {
+        method: "post",
+        data: {
+            groupIds
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = request(`${url}/member/${memberId}`, newConfig)
+
+    return req
+}
+
+/**
  * Removes a member from a group using an API Key.
  * @param groupId Group id.
  * @param memberId Member id.
