@@ -266,6 +266,34 @@ describe("GroupsService", () => {
 
             expect(result).toHaveLength(1)
         })
+
+        it("Should return a list of groups by group ids", async () => {
+            const group1 = await groupsService.createGroup(
+                {
+                    name: "Group Id 1",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            const group2 = await groupsService.createGroup(
+                {
+                    name: "Group Id 2",
+                    description: "This is a description",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                "admin"
+            )
+
+            const result = await groupsService.getGroups({
+                groupIds: [group1.id, group2.id]
+            })
+
+            expect(result).toHaveLength(2)
+        })
     })
 
     describe("# getGroup", () => {
@@ -1484,6 +1512,212 @@ describe("GroupsService", () => {
             )
 
             await expect(fun).rejects.toThrow("You are not the admin")
+        })
+    })
+
+    describe("# addMemberToGroupsManually", () => {
+        let groups: Array<Group>
+        let admin: Admin
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            groups = await groupsService.createGroupsManually(
+                [
+                    {
+                        name: "Multiple Group 1",
+                        description: "This is a new group",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    },
+                    {
+                        name: "Multiple Group 2",
+                        description: "This is a new group",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    }
+                ],
+                admin.id
+            )
+        })
+
+        it("Should add a member to multiple groups manually", async () => {
+            const multipleGroups =
+                await groupsService.addMemberToGroupsManually(
+                    groups.map((g) => g.id),
+                    "123123",
+                    admin.id
+                )
+
+            expect(multipleGroups).toHaveLength(2)
+        })
+
+        it("Should not add a member to the groups if the group is a credential group", async () => {
+            const _group = await groupsService.createGroup(
+                {
+                    name: "Multiple Group Credential Group",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: {
+                        id: "GITHUB_FOLLOWERS",
+                        criteria: {
+                            minFollowers: 5
+                        }
+                    }
+                },
+                admin.id
+            )
+
+            const fun = groupsService.addMemberToGroupsManually(
+                [groups[0].id, _group.id],
+                "456456",
+                admin.id
+            )
+
+            await expect(fun).rejects.toThrow(
+                `The group '${_group.name}' is a credential group. You cannot manually add members to a credential group.`
+            )
+        })
+
+        it("Should not add a member to multiple groups if the member already exists", async () => {
+            const fun = groupsService.addMemberToGroupsManually(
+                groups.map((g) => g.id),
+                "123123",
+                admin.id
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Member '123123' already exists in the group '${groups[0].id}'`
+            )
+        })
+
+        it("Should not add a member to multiple groups if the admin is the wrong admin", async () => {
+            const fun = groupsService.addMemberToGroupsManually(
+                groups.map((g) => g.id),
+                "123123",
+                "wrong-admin"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `You are not the admin of the group '${groups[0].id}'`
+            )
+        })
+    })
+
+    describe("# addMembersToGroupsWithAPIKey", () => {
+        let groups: Array<Group>
+        let admin: Admin
+        let apiKey: string
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+
+            groups = await groupsService.createGroupsManually(
+                [
+                    {
+                        name: "Multiple Group API 1",
+                        description: "This is a new group",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    },
+                    {
+                        name: "Multiple Group API 2",
+                        description: "This is a new group",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600
+                    }
+                ],
+                admin.id
+            )
+        })
+
+        it("Should add a member to multiple groups via API", async () => {
+            const multipleGroups =
+                await groupsService.addMemberToGroupsWithAPIKey(
+                    groups.map((g) => g.id),
+                    "123123",
+                    apiKey
+                )
+
+            expect(multipleGroups).toHaveLength(2)
+        })
+
+        it("Should not add a member to the groups if the group is a credential group", async () => {
+            const _group = await groupsService.createGroup(
+                {
+                    name: "Multiple Group Credential Group API",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: {
+                        id: "GITHUB_FOLLOWERS",
+                        criteria: {
+                            minFollowers: 5
+                        }
+                    }
+                },
+                admin.id
+            )
+
+            const fun = groupsService.addMemberToGroupsWithAPIKey(
+                [groups[0].id, _group.id],
+                "456456",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `The group '${_group.name}' is a credential group. You cannot add members to a credential group using an API Key.`
+            )
+        })
+
+        it("Should not add a member to multiple groups if the member already exists", async () => {
+            const fun = groupsService.addMemberToGroupsWithAPIKey(
+                groups.map((g) => g.id),
+                "123123",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Member '123123' already exists in the group '${groups[0].id}'`
+            )
+        })
+
+        it("Should not add a member to multiple groups if the API key is invalid", async () => {
+            const fun = groupsService.addMemberToGroupsWithAPIKey(
+                groups.map((g) => g.id),
+                "123123",
+                "invalid-apikey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+
+        it("Should not add a member to multiple groups if the API key is disabled", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.addMemberToGroupsWithAPIKey(
+                groups.map((g) => g.id),
+                "123123",
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
         })
     })
 
