@@ -24,7 +24,8 @@ import {
     useClipboard,
     useDisclosure,
     useToast,
-    VStack
+    VStack,
+    Stack
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useState, useContext } from "react"
 import { CgProfile } from "react-icons/cg"
@@ -400,9 +401,23 @@ ${memberIds.join("\n")}
                 )}
             </VStack>
 
-            <HStack mt="30px" align="start" spacing="14">
-                <VStack flex="1" align="stretch" spacing="6">
-                    <HStack flex="1" spacing="4">
+            <Stack
+                mt="30px"
+                align="start"
+                spacing="2"
+                direction={{ base: "column-reverse", md: "row" }}
+            >
+                <VStack
+                    flex="1"
+                    align="stretch"
+                    spacing="6"
+                    width={{ base: "100%", md: "auto" }}
+                >
+                    <Stack
+                        flex="1"
+                        spacing="4"
+                        direction={{ base: "column", md: "row" }}
+                    >
                         <Box
                             flex="1"
                             bgColor="balticSea.50"
@@ -448,7 +463,7 @@ ${memberIds.join("\n")}
                                 {_group.treeDepth}
                             </Heading>
                         </Box>
-                    </HStack>
+                    </Stack>
                     (
                     <Box
                         bgColor="balticSea.50"
@@ -742,6 +757,7 @@ ${memberIds.join("\n")}
                     borderColor="classicRose.200"
                     borderWidth="1px"
                     borderRadius="8px"
+                    width={{ base: "100%", md: "auto" }}
                 >
                     <HStack justify="space-between">
                         <Heading fontSize="25px" as="h1">
@@ -864,12 +880,18 @@ ${memberIds.join("\n")}
                         ))
                     )}
                     {_group.type === "off-chain" && isGroupAdmin && (
-                        <Flex mt="20px" justify="space-between" align="center">
-                            <ButtonGroup>
+                        <Flex
+                            mt="20px"
+                            justify="space-between"
+                            align="center"
+                            direction={{ base: "column", lg: "row" }}
+                        >
+                            <ButtonGroup width={{ base: "100%", lg: "auto" }}>
                                 <Button
                                     variant="solid"
                                     colorScheme="tertiary"
                                     onClick={handleSelectAll}
+                                    width={{ base: "50%", lg: "auto" }}
                                 >
                                     Select All
                                 </Button>
@@ -877,6 +899,7 @@ ${memberIds.join("\n")}
                                     variant="solid"
                                     colorScheme="tertiary"
                                     onClick={handleDeselectAll}
+                                    width={{ base: "50%", lg: "auto" }}
                                 >
                                     Deselect
                                 </Button>
@@ -886,14 +909,15 @@ ${memberIds.join("\n")}
                                 colorScheme="danger"
                                 isDisabled={_selectedMembers.length === 0}
                                 onClick={() => removeMembers(_selectedMembers)}
-                                size="sm"
+                                width={{ base: "100%", lg: "auto" }}
+                                mt={{ base: "1rem", lg: "0" }}
                             >
                                 Remove Selected Members
                             </Button>
                         </Flex>
                     )}
                 </Box>
-            </HStack>
+            </Stack>
 
             <AddMemberModal
                 isOpen={addMembersModal.isOpen}
