@@ -21,6 +21,14 @@ export type GroupCreationDetails = {
     credentials?: Credential
 }
 
+export type UnionGroupCreationDetails = {
+    name: string
+    description: string
+    treeDepth: number
+    fingerprintDuration: number
+    groupIds: string[]
+}
+
 export type GroupUpdateDetails = {
     description?: string
     treeDepth?: number

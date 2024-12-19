@@ -3,7 +3,8 @@ import type {
     GroupCreationDetails,
     Group,
     GroupUpdateDetails,
-    DashboardUrl
+    DashboardUrl,
+    UnionGroupCreationDetails
 } from "./types"
 
 const url = "/groups"
@@ -128,6 +129,32 @@ export async function createGroups(
     newConfig.headers["x-api-key"] = apiKey
 
     const req = await request(url, newConfig)
+
+    return req
+}
+
+/**
+ * Creates a union group with the provided details.
+ * @param unionGroupCreationDetails Data to create the union group.
+ * @param apiKey API Key of the admin.
+ * @returns Created union group.
+ */
+export async function createUnionGroup(
+    config: object,
+    unionGroupCreationDetails: UnionGroupCreationDetails,
+    apiKey: string
+): Promise<Group> {
+    const requestUrl = `${url}/union`
+
+    const newConfig: any = {
+        method: "post",
+        data: unionGroupCreationDetails,
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = await request(requestUrl, newConfig)
 
     return req
 }

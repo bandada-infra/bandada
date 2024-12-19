@@ -6,7 +6,8 @@ import {
     GroupUpdateDetails,
     Invite,
     SupportedUrl,
-    DashboardUrl
+    DashboardUrl,
+    UnionGroupCreationDetails
 } from "./types"
 import checkParameter from "./checkParameter"
 
@@ -323,6 +324,69 @@ describe("Bandada API SDK", () => {
                 )
             })
         })
+        describe("#createUnionGroup", () => {
+            it("Should create a union group", async () => {
+                const groups = [
+                    {
+                        id: "10402173435763029700781503965100",
+                        name: "Union Group 1",
+                        description: "This is a new group",
+                        admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600,
+                        members: ["1"]
+                    },
+                    {
+                        id: "20402173435763029700781503965200",
+                        name: "Union Group 2",
+                        description: "This is a new group",
+                        admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                        treeDepth: 32,
+                        fingerprintDuration: 7200,
+                        members: ["2"]
+                    }
+                ]
+
+                const expectedGroup: UnionGroupCreationDetails = {
+                    name: "Union Group 3",
+                    description: "This is a new group",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    groupIds: groups.map((group) => group.id)
+                }
+
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve({
+                        id: "30402173435763029700781503965300",
+                        name: "Union Group 3",
+                        description: "This is a new group",
+                        admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                        treeDepth: 16,
+                        fingerprintDuration: 3600,
+                        createdAt: "2023-07-15T08:21:05.000Z",
+                        members: ["1", "2"],
+                        credentials: null
+                    })
+                )
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const group: Group = await apiSdk.createUnionGroup(
+                    expectedGroup,
+                    apiKey
+                )
+
+                expect(group.description).toBe(expectedGroup.description)
+                expect(group.name).toBe(expectedGroup.name)
+                expect(group.treeDepth).toBe(expectedGroup.treeDepth)
+                expect(group.fingerprintDuration).toBe(
+                    expectedGroup.fingerprintDuration
+                )
+                expect(group.members).toHaveLength(2)
+            })
+        })
+
         describe("#removeGroup", () => {
             it("Should create a group", async () => {
                 const groupId = "10402173435763029700781503965100"
