@@ -85,8 +85,8 @@ export default function GroupsPage(): JSX.Element {
 
                 <Stack
                     justifyContent="space-between"
-                    width="100%"
-                    direction={{ base: "column", md: "row" }}
+                    width={{lg: "100%"}}
+                    direction={{ base: "column", lg: "row" }}
                     spacing={2}
                 >
                     <HStack>
@@ -148,10 +148,10 @@ export default function GroupsPage(): JSX.Element {
                         templateColumns={{
                             base: "1fr",
                             md: "repeat(2, 1fr)",
-                            lg: "repeat(3, 1fr)"
+                            xl: "repeat(3, 1fr)"
                         }}
                         gap={10}
-                        w="100%"
+                        w={{md:"100%"}}
                         mt="60px"
                     >
                         {_groups
@@ -199,10 +199,10 @@ export default function GroupsPage(): JSX.Element {
                         templateColumns={{
                             base: "1fr",
                             md: "repeat(2, 1fr)",
-                            lg: "repeat(3, 1fr)"
+                            xl: "repeat(3, 1fr)"
                         }}
                         gap={10}
-                        w="100%"
+                        w={{md:"100%"}}
                         mt="60px"
                     >
                         {_allCredentialGroups
