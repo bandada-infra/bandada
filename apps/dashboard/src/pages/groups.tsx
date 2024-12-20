@@ -11,7 +11,8 @@ import {
     InputRightElement,
     Spinner,
     Text,
-    VStack
+    VStack,
+    Stack
 } from "@chakra-ui/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { FiSearch } from "react-icons/fi"
@@ -82,9 +83,14 @@ export default function GroupsPage(): JSX.Element {
                     </Heading>
                 </HStack>
 
-                <HStack justifyContent="space-between" width="100%">
+                <Stack
+                    justifyContent="space-between"
+                    width={{lg: "100%"}}
+                    direction={{ base: "column", lg: "row" }}
+                    spacing={2}
+                >
                     <HStack>
-                        <InputGroup w="300px">
+                        <InputGroup w={{ base: "250px", md: "300px" }}>
                             <InputRightElement h="48px" pointerEvents="none">
                                 <FiSearch />
                             </InputRightElement>
@@ -123,7 +129,7 @@ export default function GroupsPage(): JSX.Element {
                     >
                         Add group
                     </Button>
-                </HStack>
+                </Stack>
 
                 {_isLoading && (
                     <Box pt="100px">
@@ -139,9 +145,13 @@ export default function GroupsPage(): JSX.Element {
 
                 {!_isLoading && _groups.length > 0 && (
                     <Grid
-                        templateColumns="repeat(3, 1fr)"
+                        templateColumns={{
+                            base: "1fr",
+                            md: "repeat(2, 1fr)",
+                            xl: "repeat(3, 1fr)"
+                        }}
                         gap={10}
-                        w="100%"
+                        w={{md:"100%"}}
                         mt="60px"
                     >
                         {_groups
@@ -186,9 +196,13 @@ export default function GroupsPage(): JSX.Element {
 
                 {!_isLoading && _allCredentialGroups.length > 0 && (
                     <Grid
-                        templateColumns="repeat(3, 1fr)"
+                        templateColumns={{
+                            base: "1fr",
+                            md: "repeat(2, 1fr)",
+                            xl: "repeat(3, 1fr)"
+                        }}
                         gap={10}
-                        w="100%"
+                        w={{md:"100%"}}
                         mt="60px"
                     >
                         {_allCredentialGroups
