@@ -345,6 +345,21 @@ const memberId = "1"
 const groups = await apiSdk.getGroupsByMemberId(memberId)
 ```
 
+## Get groups by group ids
+
+\# **getGroupByGroupIds**(): _Promise\<Group[]>_
+
+Returns the list of groups by group ids.
+
+```ts
+const groupIds = [
+    "10402173435763029700781503965100",
+    "20402173435763029700781503965200"
+]
+
+const groups = await apiSdk.getGroupsByGroupIds(groupIds)
+```
+
 ## Is group member
 
 \# **isGroupMember**(): _Promise\<boolean>_
@@ -411,6 +426,23 @@ const memberId = "1"
 const inviteCode = "MQYS4UR5"
 
 await apiSdk.addMemberByInviteCode(groupId, memberId, inviteCode)
+```
+
+## Add member to groups using an API Key
+
+\# **addMemberToGroupsByApiKey**(): _Promise\<void>_
+
+Adds a member to multiple groups using an API Key.
+
+```ts
+const groupIds = [
+    "10402173435763029700781503965100",
+    "20402173435763029700781503965200"
+]
+const memberId = "1"
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+await apiSdk.addMemberToGroupsByApiKey(groupIds, memberId, apiKey)
 ```
 
 ## Remove member using an API Key

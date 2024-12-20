@@ -24,8 +24,10 @@ import {
     removeMembersByApiKey,
     getGroupsByAdminId,
     getGroupsByMemberId,
+    getGroupsByGroupIds,
     getCredentialGroupJoinUrl,
-    getMultipleCredentialsGroupJoinUrl
+    getMultipleCredentialsGroupJoinUrl,
+    addMemberToGroupsByApiKey
 } from "./groups"
 import { createInvite, getInvite, redeemInvite } from "./invites"
 
@@ -108,6 +110,17 @@ export default class ApiSdk {
      */
     async getGroupsByMemberId(memberId: string): Promise<Group[]> {
         const groups = await getGroupsByMemberId(this._config, memberId)
+
+        return groups
+    }
+
+    /**
+     * Returns the list of groups by group ids.
+     * @param groupIds Group ids.
+     * @returns List of groups by group ids.
+     */
+    async getGroupsByGroupIds(groupIds: string[]): Promise<Group[]> {
+        const groups = await getGroupsByGroupIds(this._config, groupIds)
 
         return groups
     }
@@ -312,6 +325,26 @@ export default class ApiSdk {
         inviteCode: string
     ): Promise<void> {
         await addMemberByInviteCode(this._config, groupId, memberId, inviteCode)
+    }
+
+    /**
+     * Adds a member to multiple groups using an API Key.
+     * @param groupIds Array of group ids.
+     * @param memberId Member id.
+     * @param apiKey API Key of the admin of the group.
+     * @returns Array of the groups of added member.
+     */
+    async addMemberToGroupsByApiKey(
+        groupIds: string[],
+        memberId: string,
+        apiKey: string
+    ): Promise<void> {
+        await addMemberToGroupsByApiKey(
+            this._config,
+            groupIds,
+            memberId,
+            apiKey
+        )
     }
 
     /**

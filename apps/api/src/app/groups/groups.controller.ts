@@ -31,6 +31,7 @@ import { UpdateGroupsDto } from "./dto/update-groups.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
 import { RemoveGroupsDto } from "./dto/remove-groups.dto"
+import { AddMemberToGroupsDto } from "./dto/add-member-to-groups.dto"
 
 @ApiTags("groups")
 @Controller("groups")
@@ -40,15 +41,26 @@ export class GroupsController {
     @Get()
     @ApiQuery({ name: "adminId", required: false, type: String })
     @ApiQuery({ name: "memberId", required: false, type: String })
+    @ApiQuery({
+        name: "groupIds",
+        required: false,
+        type: String,
+        isArray: true
+    })
     @ApiOperation({ description: "Returns the list of groups." })
     @ApiCreatedResponse({ type: Group, isArray: true })
     async getGroups(
         @Query("adminId") adminId: string,
-        @Query("memberId") memberId: string
+        @Query("memberId") memberId: string,
+        @Query("groupIds") groupIds: string[]
     ) {
-        const groups = await this.groupsService.getGroups({ adminId, memberId })
-        const groupIds = groups.map((group) => group.id)
-        const fingerprints = await this.groupsService.getFingerprints(groupIds)
+        const groups = await this.groupsService.getGroups({
+            adminId,
+            memberId,
+            groupIds
+        })
+        const groupsIds = groups.map((group) => group.id)
+        const fingerprints = await this.groupsService.getFingerprints(groupsIds)
 
         return groups.map((group, index) =>
             mapGroupToResponseDTO(group, fingerprints[index])
@@ -363,6 +375,38 @@ export class GroupsController {
         }
 
         throw new NotImplementedException()
+    }
+
+    @Post("/members/:member")
+    @ApiBody({ type: AddMemberToGroupsDto })
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiOperation({
+        description:
+            "Adds a member to multiple groups. Requires an API Key in the headers or a valid session."
+    })
+    async addMemberToGroups(
+        @Param("member") memberId: string,
+        @Body() dto: AddMemberToGroupsDto,
+        @Headers() headers: Headers,
+        @Req() req: Request
+    ): Promise<void | any> {
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            await this.groupsService.addMemberToGroupsWithAPIKey(
+                dto.groupIds,
+                memberId,
+                apiKey
+            )
+        } else if (req.session.adminId) {
+            await this.groupsService.addMemberToGroupsManually(
+                dto.groupIds,
+                memberId,
+                req.session.adminId
+            )
+        } else {
+            throw new NotImplementedException()
+        }
     }
 
     @Delete(":group/members/:member")
