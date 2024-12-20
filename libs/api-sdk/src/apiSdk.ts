@@ -338,15 +338,13 @@ export default class ApiSdk {
         groupIds: string[],
         memberId: string,
         apiKey: string
-    ): Promise<Group[]> {
-        const groups = await addMemberToGroupsByApiKey(
+    ): Promise<void> {
+        await addMemberToGroupsByApiKey(
             this._config,
             groupIds,
             memberId,
             apiKey
         )
-
-        return groups
     }
 
     /**

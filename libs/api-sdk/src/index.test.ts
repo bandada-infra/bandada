@@ -852,47 +852,7 @@ describe("Bandada API SDK", () => {
 
         describe("#addMemberToGroups", () => {
             it("Should add a member to multiple groups using an API Key", async () => {
-                const expectedGroups: Array<GroupCreationDetails> = [
-                    {
-                        name: "Group1",
-                        description: "This is a new group",
-                        treeDepth: 16,
-                        fingerprintDuration: 3600
-                    },
-                    {
-                        name: "Group2",
-                        description: "This is a new group",
-                        treeDepth: 32,
-                        fingerprintDuration: 7200
-                    }
-                ]
-
-                requestMocked.mockImplementationOnce(() =>
-                    Promise.resolve([
-                        {
-                            id: "10402173435763029700781503965100",
-                            name: "Group1",
-                            description: "This is a new group",
-                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                            treeDepth: 16,
-                            fingerprintDuration: 3600,
-                            createdAt: "2023-07-15T08:21:05.000Z",
-                            members: ["1"],
-                            credentials: null
-                        },
-                        {
-                            id: "20402173435763029700781503965200",
-                            name: "Group2",
-                            description: "This is a new group",
-                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
-                            treeDepth: 32,
-                            fingerprintDuration: 7200,
-                            createdAt: "2023-07-15T08:21:05.000Z",
-                            members: ["1"],
-                            credentials: null
-                        }
-                    ])
-                )
+                requestMocked.mockImplementationOnce(() => Promise.resolve())
 
                 const groupIds = [
                     "10402173435763029700781503965100",
@@ -902,24 +862,13 @@ describe("Bandada API SDK", () => {
                 const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
                 const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
-                const groups = await apiSdk.addMemberToGroupsByApiKey(
+                const res = await apiSdk.addMemberToGroupsByApiKey(
                     groupIds,
                     memberId,
                     apiKey
                 )
 
-                groups.forEach((group: Group, i: number) => {
-                    expect(group.description).toBe(
-                        expectedGroups[i].description
-                    )
-                    expect(group.name).toBe(expectedGroups[i].name)
-                    expect(group.treeDepth).toBe(expectedGroups[i].treeDepth)
-                    expect(group.fingerprintDuration).toBe(
-                        expectedGroups[i].fingerprintDuration
-                    )
-                    expect(group.members).toHaveLength(1)
-                    expect(group.credentials).toBeNull()
-                })
+                expect(res).toBeUndefined()
             })
         })
 

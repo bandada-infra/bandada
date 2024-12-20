@@ -422,7 +422,7 @@ export function addMemberToGroupsByApiKey(
     groupIds: string[],
     memberId: string,
     apiKey: string
-): Promise<Group[]> {
+): Promise<void> {
     const newConfig: any = {
         method: "post",
         data: {

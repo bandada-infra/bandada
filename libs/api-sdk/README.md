@@ -430,7 +430,7 @@ await apiSdk.addMemberByInviteCode(groupId, memberId, inviteCode)
 
 ## Add member to groups using an API Key
 
-\# **addMemberToGroupsByApiKey**(): _Promise\<Group[]>_
+\# **addMemberToGroupsByApiKey**(): _Promise\<void>_
 
 Adds a member to multiple groups using an API Key.
 

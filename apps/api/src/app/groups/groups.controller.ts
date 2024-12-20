@@ -380,7 +380,6 @@ export class GroupsController {
     @Post("/members/:member")
     @ApiBody({ type: AddMemberToGroupsDto })
     @ApiHeader({ name: "x-api-key", required: true })
-    @ApiCreatedResponse({ isArray: true, type: Group })
     @ApiOperation({
         description:
             "Adds a member to multiple groups. Requires an API Key in the headers or a valid session."
@@ -390,20 +389,17 @@ export class GroupsController {
         @Body() dto: AddMemberToGroupsDto,
         @Headers() headers: Headers,
         @Req() req: Request
-    ) {
-        let groups = []
-        const groupsToResponseDTO = []
-
+    ): Promise<void | any> {
         const apiKey = headers["x-api-key"] as string
 
         if (apiKey) {
-            groups = await this.groupsService.addMemberToGroupsWithAPIKey(
+            await this.groupsService.addMemberToGroupsWithAPIKey(
                 dto.groupIds,
                 memberId,
                 apiKey
             )
         } else if (req.session.adminId) {
-            groups = await this.groupsService.addMemberToGroupsManually(
+            await this.groupsService.addMemberToGroupsManually(
                 dto.groupIds,
                 memberId,
                 req.session.adminId
@@ -411,16 +407,6 @@ export class GroupsController {
         } else {
             throw new NotImplementedException()
         }
-
-        for await (const group of groups) {
-            const fingerprint = await this.groupsService.getFingerprint(
-                group.id
-            )
-
-            groupsToResponseDTO.push(mapGroupToResponseDTO(group, fingerprint))
-        }
-
-        return groupsToResponseDTO
     }
 
     @Delete(":group/members/:member")
