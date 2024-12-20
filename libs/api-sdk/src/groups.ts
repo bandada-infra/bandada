@@ -433,7 +433,7 @@ export function addMemberToGroupsByApiKey(
 
     newConfig.headers["x-api-key"] = apiKey
 
-    const req = request(`${url}/member/${memberId}`, newConfig)
+    const req = request(`${url}/members/${memberId}`, newConfig)
 
     return req
 }

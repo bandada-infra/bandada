@@ -377,7 +377,7 @@ export class GroupsController {
         throw new NotImplementedException()
     }
 
-    @Post("/member/:member")
+    @Post("/members/:member")
     @ApiBody({ type: AddMemberToGroupsDto })
     @ApiHeader({ name: "x-api-key", required: true })
     @ApiCreatedResponse({ isArray: true, type: Group })
