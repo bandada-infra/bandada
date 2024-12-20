@@ -759,7 +759,7 @@ ${memberIds.join("\n")}
                     borderRadius="8px"
                     width={{ base: "100%", md: "auto" }}
                 >
-                    <HStack justify="space-between">
+                    <Stack justify="space-between" direction={{base:"column", lg: "row"}}>
                         <Heading fontSize="25px" as="h1">
                             Members
                         </Heading>
@@ -771,7 +771,7 @@ ${memberIds.join("\n")}
                         >
                             Add member
                         </Button>
-                    </HStack>
+                    </Stack>
 
                     <HStack mt="30px" mb="20px">
                         <InputGroup w="100%">
