@@ -404,7 +404,7 @@ ${memberIds.join("\n")}
             <Stack
                 mt="30px"
                 align="start"
-                spacing="2"
+                spacing={{base: "6", lg:"14"}}
                 direction={{ base: "column-reverse", md: "row" }}
             >
                 <VStack
