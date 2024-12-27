@@ -31,7 +31,7 @@ export default function GroupSizeStep({
             <Text>How big is your group?</Text>
 
             <HStack
-                w={{ base: "100%", lg: "764px" }}
+                w={{ base: "100%", xl: "764px" }}
                 py="16px"
                 overflowX="scroll"
             >
