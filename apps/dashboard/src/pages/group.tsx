@@ -404,7 +404,7 @@ ${memberIds.join("\n")}
             <Stack
                 mt="30px"
                 align="start"
-                spacing={{base: "6", lg:"14"}}
+                spacing={{ base: "6", lg: "14" }}
                 direction={{ base: "column-reverse", md: "row" }}
             >
                 <VStack
@@ -759,7 +759,10 @@ ${memberIds.join("\n")}
                     borderRadius="8px"
                     width={{ base: "100%", md: "auto" }}
                 >
-                    <Stack justify="space-between" direction={{base:"column", lg: "row"}}>
+                    <Stack
+                        justify="space-between"
+                        direction={{ base: "column", lg: "row" }}
+                    >
                         <Heading fontSize="25px" as="h1">
                             Members
                         </Heading>
