@@ -37,7 +37,7 @@ export default function NavBar(): JSX.Element {
                 backgroundRepeat="no-repeat"
                 backgroundSize="450px"
             >
-                <a href="https://app.bandada.pse.dev">
+                <a href={import.meta.env.VITE_DASHBOARD_URL}>
                     <HStack spacing="1">
                         <Image
                             src={icon1Image}
