@@ -461,8 +461,6 @@ ${memberIds.join("\n")}
                             </Heading>
                         </Box>
                     </HStack>
-                    
-                    
                     <Box
                         bgColor="balticSea.50"
                         p="25px 30px 25px 30px"
@@ -913,90 +911,82 @@ ${memberIds.join("\n")}
                 onClose={addMember}
                 group={_group}
             />
-            <Box
-                        bgColor="balticSea.50"
-                        p="25px 30px"
-                        borderRadius="8px"
-                    >
-                        {/* Invite Code Section */}
-                        <Text fontSize="20px">Invite Code</Text>
-                        <InputGroup size="lg" mt="10px">
-                            <Input
-                                pr="50px"
-                                placeholder="Invite Code"
-                                value={inviteCode} // This is a state variable holding the generated invite code
-                                isDisabled
-                            />
-                            <InputRightElement mr="5px">
-                                <Tooltip
-                                    label={
-                                        hasCopiedInviteCode ? "Copied!" : "Copy"
-                                    }
-                                    closeOnClick={false}
-                                    hasArrow
-                                >
-                                    <IconButton
-                                        variant="link"
-                                        aria-label="Copy Invite Code"
-                                        onClick={onCopyInviteCode} // Function to copy invite code
-                                        onMouseDown={(e) => e.preventDefault()}
-                                        icon={
-                                            <Icon
-                                                color="sunsetOrange.600"
-                                                boxSize="5"
-                                                as={FiCopy}
-                                            />
-                                        }
-                                    />
-                                </Tooltip>
-                            </InputRightElement>
-                        </InputGroup>
-
-                        {/* Invite Link Section */}
-                        <Text fontSize="20px" mt="20px">
-                            Invite Link
-                        </Text>
-                        <InputGroup size="lg" mt="10px">
-                            <Input
-                                pr="50px"
-                                placeholder="Invite Link"
-                                value={inviteLink} // This is a state variable holding the generated invite link
-                                isDisabled
-                            />
-                            <InputRightElement mr="5px">
-                                <Tooltip
-                                    label={
-                                        hasCopiedInviteLink ? "Copied!" : "Copy"
-                                    }
-                                    closeOnClick={false}
-                                    hasArrow
-                                >
-                                    <IconButton
-                                        variant="link"
-                                        aria-label="Copy Invite Link"
-                                        onClick={onCopyInviteLink} // Function to copy invite link
-                                        onMouseDown={(e) => e.preventDefault()}
-                                        icon={
-                                            <Icon
-                                                color="sunsetOrange.600"
-                                                boxSize="5"
-                                                as={FiCopy}
-                                            />
-                                        }
-                                    />
-                                </Tooltip>
-                            </InputRightElement>
-                        </InputGroup>
-
-                        {/* Generate Button */}
-                        <Button
-                            mt="20px"
-                            colorScheme="blue"
-                            onClick={generateInviteCodeAndLink} // Function to generate code and link
+            <Box bgColor="balticSea.50" p="25px 30px" borderRadius="8px">
+                {/* Invite Code Section */}
+                <Text fontSize="20px">Invite Code</Text>
+                <InputGroup size="lg" mt="10px">
+                    <Input
+                        pr="50px"
+                        placeholder="Invite Code"
+                        value={inviteCode} // This is a state variable holding the generated invite code
+                        isDisabled
+                    />
+                    <InputRightElement mr="5px">
+                        <Tooltip
+                            label={hasCopiedInviteCode ? "Copied!" : "Copy"}
+                            closeOnClick={false}
+                            hasArrow
                         >
-                            Generate new code
-                        </Button>
-                    </Box>
+                            <IconButton
+                                variant="link"
+                                aria-label="Copy Invite Code"
+                                onClick={onCopyInviteCode} // Function to copy invite code
+                                onMouseDown={(e) => e.preventDefault()}
+                                icon={
+                                    <Icon
+                                        color="sunsetOrange.600"
+                                        boxSize="5"
+                                        as={FiCopy}
+                                    />
+                                }
+                            />
+                        </Tooltip>
+                    </InputRightElement>
+                </InputGroup>
+
+                {/* Invite Link Section */}
+                <Text fontSize="20px" mt="20px">
+                    Invite Link
+                </Text>
+                <InputGroup size="lg" mt="10px">
+                    <Input
+                        pr="50px"
+                        placeholder="Invite Link"
+                        value={inviteLink} // This is a state variable holding the generated invite link
+                        isDisabled
+                    />
+                    <InputRightElement mr="5px">
+                        <Tooltip
+                            label={hasCopiedInviteLink ? "Copied!" : "Copy"}
+                            closeOnClick={false}
+                            hasArrow
+                        >
+                            <IconButton
+                                variant="link"
+                                aria-label="Copy Invite Link"
+                                onClick={onCopyInviteLink} // Function to copy invite link
+                                onMouseDown={(e) => e.preventDefault()}
+                                icon={
+                                    <Icon
+                                        color="sunsetOrange.600"
+                                        boxSize="5"
+                                        as={FiCopy}
+                                    />
+                                }
+                            />
+                        </Tooltip>
+                    </InputRightElement>
+                </InputGroup>
+
+                {/* Generate Button */}
+                <Button
+                    mt="20px"
+                    colorScheme="blue"
+                    onClick={generateInviteCodeAndLink} // Function to generate code and link
+                >
+                    Generate new code
+                </Button>
+            </Box>
         </Container>
     ) : (
         <div />
