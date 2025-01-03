@@ -273,11 +273,13 @@ import { DashboardUrl } from "@bandada/api-sdk"
 const dashboardUrl = DashboardUrl.DEV
 const groupId = "your-group-id"
 const commitment = "commitment-value"
+const redirectUri = "http://localhost:3003"
 
 const url = apiSdk.getMultipleCredentialsGroupJoinUrl(
     dashboardUrl,
     groupId,
-    commitment
+    commitment,
+    redirectUri
 )
 ```
 

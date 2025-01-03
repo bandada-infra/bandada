@@ -458,14 +458,20 @@ export function getCredentialGroupJoinUrl(
  * @param dashboardUrl Dashboard url.
  * @param groupId Group id.
  * @param commitment Identity commitment.
+ * @param redirectUri Redirect uri.
  * @returns Url string.
  */
 export function getMultipleCredentialsGroupJoinUrl(
     dashboardUrl: DashboardUrl,
     groupId: string,
-    commitment: string
+    commitment: string,
+    redirectUri?: string
 ): string {
-    const resultUrl = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+    let resultUrl = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+
+    if (redirectUri) {
+        resultUrl += `&redirect_uri=${redirectUri}?redirect=true`
+    }
 
     return resultUrl
 }
