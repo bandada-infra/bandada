@@ -85,7 +85,7 @@ export default function GroupsPage(): JSX.Element {
 
                 <Stack
                     justifyContent="space-between"
-                    width={{lg: "100%"}}
+                    width={{ lg: "100%" }}
                     direction={{ base: "column", lg: "row" }}
                     spacing={2}
                 >
@@ -151,7 +151,7 @@ export default function GroupsPage(): JSX.Element {
                             xl: "repeat(3, 1fr)"
                         }}
                         gap={10}
-                        w={{md:"100%"}}
+                        w={{ md: "100%" }}
                         mt="60px"
                     >
                         {_groups
@@ -202,7 +202,7 @@ export default function GroupsPage(): JSX.Element {
                             xl: "repeat(3, 1fr)"
                         }}
                         gap={10}
-                        w={{md:"100%"}}
+                        w={{ md: "100%" }}
                         mt="60px"
                     >
                         {_allCredentialGroups
