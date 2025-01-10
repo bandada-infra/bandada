@@ -24,9 +24,10 @@ import {
     removeMembersByApiKey,
     getGroupsByAdminId,
     getGroupsByMemberId,
-    getCredentialGroupJoinUrl
+    getCredentialGroupJoinUrl,
+    getMultipleCredentialsGroupJoinUrl
 } from "./groups"
-import { createInvite, getInvite } from "./invites"
+import { createInvite, getInvite, redeemInvite } from "./invites"
 
 export default class ApiSdk {
     private _url: string
@@ -367,6 +368,28 @@ export default class ApiSdk {
     }
 
     /**
+     * Redeems a specific invite.
+     * @param inviteCode Invite code.
+     * @param groupId Group id.
+     * @param apiKey The api key.
+     * @returns The updated invite.
+     */
+    async redeemInvite(
+        inviteCode: string,
+        groupId: string,
+        apiKey: string
+    ): Promise<Invite> {
+        const invite = await redeemInvite(
+            this._config,
+            inviteCode,
+            groupId,
+            apiKey
+        )
+
+        return invite
+    }
+
+    /**
      * Generate a custom url for joining a credential group.
      * @param dashboardUrl Dashboard base url.
      * @param groupId Group id.
@@ -388,6 +411,27 @@ export default class ApiSdk {
             commitment,
             providerName,
             redirectUri
+        )
+
+        return url
+    }
+
+    /**
+     * Generate a custom url for joining a multiple credentials group.
+     * @param dashboardUrl Dashboard base url.
+     * @param groupId Group id.
+     * @param commitment Identity commitment.
+     * @returns Url string.
+     */
+    getMultipleCredentialsGroupJoinUrl(
+        dashboardUrl: DashboardUrl,
+        groupId: string,
+        commitment: string
+    ): string {
+        const url = getMultipleCredentialsGroupJoinUrl(
+            dashboardUrl,
+            groupId,
+            commitment
         )
 
         return url

@@ -1,4 +1,4 @@
-import { Container, Heading, HStack, VStack } from "@chakra-ui/react"
+import { Container, Heading, HStack, VStack, Stack } from "@chakra-ui/react"
 import { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AccessModeStep from "../components/new-group-stepper/access-mode-step"
@@ -8,7 +8,8 @@ import GroupSizeStep from "../components/new-group-stepper/group-size-step"
 import StepperNav from "../components/new-group-stepper/stepper-nav"
 import StepperPreview from "../components/new-group-stepper/stepper-preview"
 
-const steps = ["General info", "Group size", "Access mode", "Summary"]
+const offchainSteps = ["General info", "Group size", "Access mode", "Summary"]
+const onchainSteps = ["General info", "Summary"]
 
 export default function NewGroupPage(): JSX.Element {
     const [_currentStep, setCurrentStep] = useState<number>(0)
@@ -25,6 +26,10 @@ export default function NewGroupPage(): JSX.Element {
 
         if (next) {
             setCurrentStep((v) => v + 1)
+        }
+
+        if (group?.type === "on-chain" && !next) {
+            setGroup({ type: "on-chain", fingerprintDuration: 3600 })
         }
     }, [])
 
@@ -49,13 +54,20 @@ export default function NewGroupPage(): JSX.Element {
                 <StepperNav
                     index={_currentStep}
                     onChange={setCurrentStep}
-                    steps={steps.filter(
-                        (_step, i) => _group.type !== "on-chain" || i !== 2
-                    )}
+                    steps={
+                        _group.type === "off-chain"
+                            ? offchainSteps
+                            : onchainSteps
+                    }
                 />
 
-                <HStack w="100%" align="start">
-                    {_group.type === "off-chain" && _currentStep !== 3 ? (
+                <Stack
+                    w="100%"
+                    align="start"
+                    direction={{ base: "column-reverse", md: "row" }}
+                >
+                    {(_group.type === "off-chain" && _currentStep !== 3) ||
+                    (_group.type === "on-chain" && _currentStep !== 1) ? (
                         <>
                             <StepperPreview group={_group} />
 
@@ -66,28 +78,37 @@ export default function NewGroupPage(): JSX.Element {
                                 borderRadius="8px"
                                 flex="1"
                                 align="left"
+                                width={{ base: "100%", md: "50%" }}
                             >
-                                {_currentStep === 0 ? (
+                                {_group.type === "off-chain" &&
+                                    (_currentStep === 0 ? (
+                                        <GeneralInfoStep
+                                            group={_group}
+                                            onSubmit={goToNextStep}
+                                            onBack={() => navigate("/groups")}
+                                        />
+                                    ) : _currentStep === 1 ? (
+                                        <GroupSizeStep
+                                            group={_group}
+                                            onSubmit={goToNextStep}
+                                            onBack={() => setCurrentStep(0)}
+                                        />
+                                    ) : (
+                                        _currentStep === 2 && (
+                                            <AccessModeStep
+                                                group={_group}
+                                                onSubmit={goToNextStep}
+                                                onBack={() => setCurrentStep(1)}
+                                            />
+                                        )
+                                    ))}
+
+                                {_group.type === "on-chain" && (
                                     <GeneralInfoStep
                                         group={_group}
                                         onSubmit={goToNextStep}
                                         onBack={() => navigate("/groups")}
                                     />
-                                ) : _currentStep === 1 ? (
-                                    <GroupSizeStep
-                                        group={_group}
-                                        onSubmit={goToNextStep}
-                                        onBack={() => setCurrentStep(0)}
-                                    />
-                                ) : (
-                                    _group.type !== "on-chain" &&
-                                    _currentStep === 2 && (
-                                        <AccessModeStep
-                                            group={_group}
-                                            onSubmit={goToNextStep}
-                                            onBack={() => setCurrentStep(1)}
-                                        />
-                                    )
                                 )}
                             </VStack>
                         </>
@@ -97,7 +118,7 @@ export default function NewGroupPage(): JSX.Element {
                             onBack={() => finalPreviewBack()}
                         />
                     )}
-                </HStack>
+                </Stack>
             </VStack>
         </Container>
     )

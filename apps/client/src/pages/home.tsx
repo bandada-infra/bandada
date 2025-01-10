@@ -20,8 +20,11 @@ import { useSearchParams } from "react-router-dom"
 import icon1Image from "../assets/icon1.svg"
 import {
     addMemberByInviteCode,
+    DashboardUrl,
+    getCredentialGroupJoinUrl,
     getGroup,
     getInvite,
+    getMultipleCredentialsGroupJoinUrl,
     isGroupMember
 } from "../utils/api"
 
@@ -70,7 +73,7 @@ export default function HomePage(): JSX.Element {
 
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
-                const identityCommitment = identity.getCommitment().toString()
+                const identityCommitment = identity.commitment.toString()
 
                 const hasJoined = await isGroupMember(
                     invite.group.id,
@@ -119,21 +122,39 @@ export default function HomePage(): JSX.Element {
                     return
                 }
 
-                const providerName = group.credentials.id
-                    .split("_")[0]
-                    .toLowerCase()
-
                 const signer = library.getSigner(account)
 
                 const message = `Sign this message to generate your Semaphore identity.`
                 const identity = new Identity(await signer.signMessage(message))
-                const identityCommitment = identity.getCommitment().toString()
+                const identityCommitment = identity.commitment.toString()
 
-                window.open(
-                    `${
-                        import.meta.env.VITE_DASHBOARD_URL
-                    }/credentials?group=${groupId}&member=${identityCommitment}&provider=${providerName}`
-                )
+                const dashboardUrl = import.meta.env
+                    .VITE_DASHBOARD_URL as DashboardUrl
+
+                let credentialGroupJoinUrl
+
+                if (Array.isArray(group.credentials.credentials)) {
+                    credentialGroupJoinUrl = getMultipleCredentialsGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        identityCommitment
+                    )
+                } else {
+                    const providerName = group.credentials.id
+                        .split("_")[0]
+                        .toLowerCase()
+
+                    credentialGroupJoinUrl = getCredentialGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        identityCommitment,
+                        providerName
+                    )
+                }
+
+                if (credentialGroupJoinUrl) {
+                    window.open(credentialGroupJoinUrl, "_blank")
+                }
 
                 setLoading(false)
             }
@@ -145,16 +166,18 @@ export default function HomePage(): JSX.Element {
         <Container maxW="container.md" pt="20" pb="20" px="8" centerContent>
             <VStack spacing="20" pb="30px" w="100%">
                 <HStack mb="60px" justify="space-between" w="100%">
-                    <HStack spacing="1">
-                        <Image
-                            src={icon1Image}
-                            htmlWidth="32px"
-                            alt="Bandada icon"
-                        />
-                        <Heading fontSize="22px" as="h1">
-                            bandada
-                        </Heading>
-                    </HStack>
+                    <Link _hover={{ textDecoration: "none" }} href="/">
+                        <HStack spacing="1">
+                            <Image
+                                src={icon1Image}
+                                htmlWidth="32px"
+                                alt="Bandada icon"
+                            />
+                            <Heading fontSize="22px" as="h1">
+                                bandada
+                            </Heading>
+                        </HStack>
+                    </Link>
 
                     <HStack spacing="5">
                         <Link
@@ -200,6 +223,9 @@ export default function HomePage(): JSX.Element {
                                 onChange={(event) =>
                                     setInviteCode(event.target.value)
                                 }
+                                disabled={
+                                    !!_searchParams.get("credentialGroupId")
+                                }
                             />
                         </VStack>
 
@@ -213,6 +239,7 @@ export default function HomePage(): JSX.Element {
                                 onChange={(event) =>
                                     setCredentialGroupId(event.target.value)
                                 }
+                                disabled={!!_searchParams.get("inviteCode")}
                             />
                         </VStack>
 

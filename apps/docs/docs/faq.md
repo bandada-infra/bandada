@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # FAQ
@@ -8,7 +8,7 @@ sidebar_position: 4
 
 You can ask questions about Bandada in the [PSE Discord](https://discord.com/invite/sF5CT5rzrR), there is a channel for it called `bandada` or by opening a [Bandada Discussion](https://github.com/orgs/bandada-infra/discussions). 
 
-The most frequent asked questions will be listed below.
+The most frequently asked questions will be listed below.
 
 ## How can I start a project using Bandada?
 
