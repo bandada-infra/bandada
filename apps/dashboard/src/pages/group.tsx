@@ -475,10 +475,7 @@ ${memberIds.join("\n")}
                                 {_group.treeDepth}
                             </Heading>
                         </Box>
-
-
                     </Stack>
-                    
                     <Box
                         bgColor="balticSea.50"
                         p="25px 30px 25px 30px"
