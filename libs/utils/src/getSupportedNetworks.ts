@@ -20,6 +20,46 @@ export const blockchainCredentialSupportedNetworks: BlockchainNetwork[] = [
     {
         id: "avalanche_c_chain_fuji",
         name: "Avalanche C-Chain Fuji"
+    },
+    {
+        id: "base_sepolia",
+        name: "Base Sepolia"
+    },
+    {
+        id: "linea_sepolia",
+        name: "Linea Sepolia"
+    },
+    {
+        id: "scroll_sepolia",
+        name: "Scroll Sepolia"
+    },
+    {
+        id: "ethereum",
+        name: "Ethereum"
+    },
+    {
+        id: "polygon",
+        name: "Polygon"
+    },
+    {
+        id: "optimism",
+        name: "Optimism"
+    },
+    {
+        id: "arbitrum",
+        name: "Arbitrum"
+    },
+    {
+        id: "base",
+        name: "Base"
+    },
+    {
+        id: "linea",
+        name: "Linea"
+    },
+    {
+        id: "scroll",
+        name: "Scroll"
     }
 ]
 
