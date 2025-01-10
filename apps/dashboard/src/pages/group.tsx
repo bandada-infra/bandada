@@ -86,7 +86,7 @@ export default function GroupPage(): JSX.Element {
     const { data: signer } = useSigner()
 
     useEffect(() => {
-        ; (async () => {
+        ;(async () => {
             if (groupId) {
                 const group =
                     groupType === "on-chain"
