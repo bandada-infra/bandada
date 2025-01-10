@@ -857,6 +857,25 @@ describe("Bandada API SDK", () => {
                     expect(res).toBe(url)
                 })
             })
+
+            describe("#getMultipleCredentialGroupJoinUrl", () => {
+                it("Should generate a custom url for joining a multiple credential group", async () => {
+                    const dashboardUrl = DashboardUrl.DEV
+                    const groupId = "10402173435763029700781503965100"
+                    const commitment = "1"
+
+                    const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                    const res = apiSdk.getMultipleCredentialsGroupJoinUrl(
+                        dashboardUrl,
+                        groupId,
+                        commitment
+                    )
+
+                    const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+
+                    expect(res).toBe(url)
+                })
+            })
         })
     })
     describe("Invites", () => {
@@ -936,6 +955,50 @@ describe("Bandada API SDK", () => {
                 expect(invite.createdAt).toBe(inviteCreatedAt)
                 expect(invite.code).toBe(inviteCode)
                 expect(invite.group).toStrictEqual(group)
+            })
+        })
+
+        describe("# redeemInvite", () => {
+            it("Should redeem an invite", async () => {
+                const groupId = "95633257675970239314311768035433"
+                const groupName = "Group 1"
+                const group = {
+                    id: groupId,
+                    name: groupName,
+                    description: "This is Group 1",
+                    type: "off-chain",
+                    adminId:
+                        "0x63229164c457584616006e31d1e171e6cdd4163695bc9c4bf0227095998ffa4c",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600,
+                    credentials: null,
+                    apiEnabled: false,
+                    apiKey: null,
+                    createdAt: "2023-08-09T18:09:53.000Z",
+                    updatedAt: "2023-08-09T18:09:53.000Z"
+                }
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+                const inviteCode = "C5VAG4HD"
+                const inviteCreatedAt = "2023-08-09T18:10:02.000Z"
+
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve({
+                        code: inviteCode,
+                        isRedeemed: true,
+                        createdAt: inviteCreatedAt,
+                        group
+                    })
+                )
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const invite = await apiSdk.redeemInvite(
+                    inviteCode,
+                    groupId,
+                    apiKey
+                )
+
+                expect(invite.code).toBe(inviteCode)
+                expect(invite.isRedeemed).toBe(true)
             })
         })
     })

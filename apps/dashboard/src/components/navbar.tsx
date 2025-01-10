@@ -1,5 +1,12 @@
 import { shortenAddress } from "@bandada/utils"
-import { Button, Container, Heading, HStack, Image } from "@chakra-ui/react"
+import {
+    Button,
+    Container,
+    Heading,
+    HStack,
+    Image,
+    useMediaQuery
+} from "@chakra-ui/react"
 import { useAccountModal, useConnectModal } from "@rainbow-me/rainbowkit"
 import { useCallback, useContext } from "react"
 import { useAccount } from "wagmi"
@@ -25,10 +32,13 @@ export default function NavBar(): JSX.Element {
         [address, admin]
     )
 
+    const [isWideScreen] = useMediaQuery("(min-width: 426px)")
+
     return (
         <Container maxWidth="container.xl">
             <HStack
                 pt="80px"
+                wrap="wrap"
                 pb="40px"
                 align="center"
                 justify="space-between"
@@ -37,7 +47,7 @@ export default function NavBar(): JSX.Element {
                 backgroundRepeat="no-repeat"
                 backgroundSize="450px"
             >
-                <a href="https://app.bandada.pse.dev">
+                <a href={import.meta.env.VITE_DASHBOARD_URL}>
                     <HStack spacing="1">
                         <Image
                             src={icon1Image}
@@ -73,9 +83,9 @@ export default function NavBar(): JSX.Element {
                     >
                         {!isLoggedInAdmin()
                             ? "Unconnected account"
-                            : `Connected as ${shortenAddress(
-                                  address as string
-                              )}`}
+                            : `${
+                                  isWideScreen ? "Connected as" : ""
+                              } ${shortenAddress(address as string)}`}
                     </Button>
                 </HStack>
             </HStack>

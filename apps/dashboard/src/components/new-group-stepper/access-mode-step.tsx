@@ -69,9 +69,18 @@ export default function AccessModeStep({
         }
     }, [_accessMode, _validator, _validators])
 
+    const onClear = () => {
+        setCredentials(undefined)
+        setValidators([])
+        setExpression([])
+    }
+
     return (
         <>
-            <HStack>
+            <HStack
+                overflowX={{ base: "scroll" }}
+                width={{ base: "100%", md: "auto" }}
+            >
                 {accessModes.map((accessMode: any) => (
                     <VStack
                         borderColor={
@@ -82,12 +91,13 @@ export default function AccessModeStep({
                         borderWidth="2px"
                         borderRadius="8px"
                         w="260px"
-                        h="210px"
+                        h={{ base: "250px", lg: "210px" }}
                         align="left"
                         spacing="0"
                         cursor="pointer"
                         onClick={() => setAccessMode(accessMode)}
                         key={accessMode}
+                        minW="200px"
                     >
                         <HStack
                             bgColor={
@@ -100,7 +110,7 @@ export default function AccessModeStep({
                             borderTopRadius="8px"
                             justify="space-between"
                         >
-                            <HStack spacing="3">
+                            <HStack spacing="3" h="50px">
                                 <Icon
                                     color={
                                         _accessMode === accessMode
@@ -325,7 +335,7 @@ export default function AccessModeStep({
                 <>
                     <Text pb="20px">Choose credentials</Text>
 
-                    <SimpleGrid columns={2} spacing={10}>
+                    <SimpleGrid columns={2} spacing={10} minW="300px">
                         <VStack>
                             <Text>Credentials</Text>
                             <VStack>
@@ -340,6 +350,14 @@ export default function AccessModeStep({
                                                 ..._expression,
                                                 i.toString()
                                             ])
+
+                                            if (_credentials?.id) {
+                                                delete _credentials.id
+                                            }
+
+                                            if (_credentials?.criteria) {
+                                                delete _credentials.criteria
+                                            }
 
                                             const tempCredential = {
                                                 ..._credentials
@@ -613,6 +631,14 @@ export default function AccessModeStep({
             )}
 
             <HStack justify="right" pt="20px">
+                <Button
+                    variant="solid"
+                    colorScheme="tertiary"
+                    hidden={_accessMode !== "multiple_credentials"}
+                    onClick={onClear}
+                >
+                    Clear
+                </Button>
                 <Button variant="solid" colorScheme="tertiary" onClick={onBack}>
                     Back
                 </Button>

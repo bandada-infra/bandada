@@ -396,6 +396,118 @@ describe("InvitesService", () => {
         })
     })
 
+    describe("# redeemInviteWithApiKey", () => {
+        it("Should redeem an invite with api key", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Enable)
+
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const { isRedeemed: redeemed } =
+                await invitesService.redeemInviteWithApiKey(
+                    invite.code,
+                    groupId,
+                    admin.apiKey
+                )
+
+            expect(redeemed).toBeTruthy()
+        })
+
+        it("Should not reddem an invite if the given api key is invalid", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const fun = invitesService.redeemInviteWithApiKey(
+                invite.code,
+                groupId,
+                "wrong-apikey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the group '${groupId}'`
+            )
+        })
+
+        it("Should not redeem an invite if the given api key does not belong to an admin", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const oldApiKey = admin.apiKey
+
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Generate)
+
+            const fun = invitesService.redeemInviteWithApiKey(
+                invite.code,
+                groupId,
+                oldApiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the group '${groupId}'`
+            )
+        })
+
+        it("Should not redeem an invite if the given api key is disabled", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            admin = await adminsService.findOne({ id: admin.id })
+
+            const fun = invitesService.redeemInviteWithApiKey(
+                invite.code,
+                groupId,
+                admin.apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
+            )
+        })
+    })
+
+    describe("# redeemInviteKeyManually", () => {
+        it("Should redeem an invite manually", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const { isRedeemed: redeemed } =
+                await invitesService.redeemInviteKeyManually(
+                    invite.code,
+                    groupId,
+                    admin.id
+                )
+
+            expect(redeemed).toBeTruthy()
+        })
+
+        it("Should not redeem an invite if the given identifier does not belong to an admin", async () => {
+            const invite = await invitesService.createInvite(
+                { groupId },
+                admin.id
+            )
+
+            const fun = invitesService.redeemInviteKeyManually(
+                invite.code,
+                groupId,
+                "wrong-admin"
+            )
+
+            await expect(fun).rejects.toThrow("You are not an admin")
+        })
+    })
+
     describe("# generateCode", () => {
         it("Should generate a random code with 8 characters", async () => {
             const result = (invitesService as any).generateCode()
