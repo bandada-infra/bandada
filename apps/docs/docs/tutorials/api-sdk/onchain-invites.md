@@ -68,12 +68,12 @@ const { data: signer } = useSigner()
 const semaphore = getSemaphoreContract("sepolia", signer)
 ```
 
-You can choose to use other signer package of your choice, wagmi is just an example.
+You can choose to use another signer package of your choice, wagmi is just an example.
 
 
 ## Create a group
 
-Create a new on-chain group with associated group.
+Create a new on-chain group with an associated group.
 
 ```ts
 const semaphore = getSemaphoreContract("sepolia", signer as any)
@@ -159,7 +159,7 @@ const memberId = "member-id-1"
 
 const groupCreationDetails = {
     name: onchainGroupId,
-    description: `This group is associated to the on-chain group ${onchainGroupId}`,
+    description: `This group is associated with the on-chain group ${onchainGroupId}`,
     treeDepth: 16,
     fingerprintDuration: 3600
 }
