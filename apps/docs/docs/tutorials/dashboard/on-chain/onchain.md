@@ -13,7 +13,7 @@ title: Create group
 
 2. Unlike an off-chain group, you do not have to input any group details to create an on-chain group.
 3. Click on `Continue` to proceed.
-4. You will be redirected to the `Group Preview` page to reivew the group details.
+4. You will be redirected to the `Group Preview` page to review the group details.
 5. Click `Create Group` to finalize the group creation.
 
 ![Create on-chain group preview](../../../../static/img/tutorial/onchain-preview.png)
