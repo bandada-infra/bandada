@@ -328,7 +328,7 @@ yarn prettier:write
 
 ### Conventional commits
 
-Bandada uses [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which follow a standardised format for commit messages. To use this format, you can run the [command line utility](https://github.com/commitizen/cz-cli) by running:
+Bandada uses [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), which follow a standardized format for commit messages. To use this format, you can run the [command line utility](https://github.com/commitizen/cz-cli) by running:
 
 ```bash
 yarn commit
