@@ -44,7 +44,7 @@ We use [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) to kee
 
 ### Commits
 
-We use [Conventional Commits](https://www.conventionalcommits.org) to add human and machine readable meaning to our commit messages. In particular, we use the [Angular convention](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
+We use [Conventional Commits](https://www.conventionalcommits.org) to add human and machine-readable meaning to our commit messages. In particular, we use the [Angular convention](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
 
 Don't worry if it looks complicated. In our repositories, after adding your files with git (i.e `git add`), you can just run the `commit` script in our `package.json`, and you'll be prompted to fill out any required commit fields at commit time. We use [Commitizen](https://github.com/commitizen/cz-cli) under the hood.
 
@@ -76,7 +76,7 @@ The type must be one of the following:
 
 #### Scope
 
-The scope could be anything specifying place of the commit change. In a monorepo, it could be the name of the package or project affected.
+The scope could be anything specifying the place of the commit change. In a monorepo, it could be the name of the package or project affected.
 
 #### Subject
 
