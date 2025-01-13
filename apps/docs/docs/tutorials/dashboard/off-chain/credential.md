@@ -31,7 +31,7 @@ title: Credential access
         **Input**: Minimum balance, network, block number.
     - **Provider**: EAS.
         - **Credential**: Attestations.  
-        **Input**: Minimum attestations, network, attestation details.  
+        **Input**: Minimum attestations, network, and attestation details.  
   
 3. Click `Continue` to proceed.
 4. You will be redirected to the `Group Preview` page to review the group details.
