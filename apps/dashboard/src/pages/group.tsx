@@ -48,9 +48,6 @@ import shortenMemberId from "../utils/shortenMemberId"
 import shortenNumber from "../utils/shortenNumber"
 import { AuthContext } from "../context/auth-context"
 
-
-
-
 export default function GroupPage(): JSX.Element {
     const navigate = useNavigate()
     const addMembersModal = useDisclosure()
@@ -78,7 +75,7 @@ export default function GroupPage(): JSX.Element {
     const { data: signer } = useSigner()
 
     useEffect(() => {
-        ; (async () => {
+        ;(async () => {
             if (groupId) {
                 const group =
                     groupType === "on-chain"
@@ -929,7 +926,6 @@ ${memberIds.join("\n")}
                 onClose={addMember}
                 group={_group}
             />
-
         </Container>
     ) : (
         <div />
