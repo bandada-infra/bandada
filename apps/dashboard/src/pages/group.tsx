@@ -48,22 +48,13 @@ import shortenMemberId from "../utils/shortenMemberId"
 import shortenNumber from "../utils/shortenNumber"
 import { AuthContext } from "../context/auth-context"
 
+
+
+
 export default function GroupPage(): JSX.Element {
     const navigate = useNavigate()
     const addMembersModal = useDisclosure()
     const toast = useToast()
-    const [inviteCode, setInviteCode] = useState("")
-    const [inviteLink, setInviteLink] = useState<string>("")
-    const { hasCopied: hasCopiedInviteCode, onCopy: onCopyInviteCode } =
-        useClipboard(inviteCode)
-    const { hasCopied: hasCopiedInviteLink, onCopy: onCopyInviteLink } =
-        useClipboard(inviteLink || "")
-
-    const generateInviteCodeAndLink = () => {
-        const code = Math.random().toString(36).substring(2, 10).toUpperCase()
-        setInviteCode(code)
-        setInviteLink(`https://example.com/invite?code=${code}`)
-    }
     const { groupId, groupType } = useParams()
     const [_group, setGroup] = useState<Group | null>()
     // const { hasCopied, setValue: setApiKey, onCopy } = useClipboard("")
@@ -87,7 +78,7 @@ export default function GroupPage(): JSX.Element {
     const { data: signer } = useSigner()
 
     useEffect(() => {
-        ;(async () => {
+        ; (async () => {
             if (groupId) {
                 const group =
                     groupType === "on-chain"
@@ -938,82 +929,7 @@ ${memberIds.join("\n")}
                 onClose={addMember}
                 group={_group}
             />
-            <Box bgColor="balticSea.50" p="25px 30px" borderRadius="8px">
-                {/* Invite Code Section */}
-                <Text fontSize="20px">Invite Code</Text>
-                <InputGroup size="lg" mt="10px">
-                    <Input
-                        pr="50px"
-                        placeholder="Invite Code"
-                        value={inviteCode} // This is a state variable holding the generated invite code
-                        isDisabled
-                    />
-                    <InputRightElement mr="5px">
-                        <Tooltip
-                            label={hasCopiedInviteCode ? "Copied!" : "Copy"}
-                            closeOnClick={false}
-                            hasArrow
-                        >
-                            <IconButton
-                                variant="link"
-                                aria-label="Copy Invite Code"
-                                onClick={onCopyInviteCode} // Function to copy invite code
-                                onMouseDown={(e) => e.preventDefault()}
-                                icon={
-                                    <Icon
-                                        color="sunsetOrange.600"
-                                        boxSize="5"
-                                        as={FiCopy}
-                                    />
-                                }
-                            />
-                        </Tooltip>
-                    </InputRightElement>
-                </InputGroup>
 
-                {/* Invite Link Section */}
-                <Text fontSize="20px" mt="20px">
-                    Invite Link
-                </Text>
-                <InputGroup size="lg" mt="10px">
-                    <Input
-                        pr="50px"
-                        placeholder="Invite Link"
-                        value={inviteLink} // This is a state variable holding the generated invite link
-                        isDisabled
-                    />
-                    <InputRightElement mr="5px">
-                        <Tooltip
-                            label={hasCopiedInviteLink ? "Copied!" : "Copy"}
-                            closeOnClick={false}
-                            hasArrow
-                        >
-                            <IconButton
-                                variant="link"
-                                aria-label="Copy Invite Link"
-                                onClick={onCopyInviteLink} // Function to copy invite link
-                                onMouseDown={(e) => e.preventDefault()}
-                                icon={
-                                    <Icon
-                                        color="sunsetOrange.600"
-                                        boxSize="5"
-                                        as={FiCopy}
-                                    />
-                                }
-                            />
-                        </Tooltip>
-                    </InputRightElement>
-                </InputGroup>
-
-                {/* Generate Button */}
-                <Button
-                    mt="20px"
-                    colorScheme="blue"
-                    onClick={generateInviteCodeAndLink} // Function to generate code and link
-                >
-                    Generate new code
-                </Button>
-            </Box>
         </Container>
     ) : (
         <div />
