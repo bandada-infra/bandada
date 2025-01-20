@@ -79,7 +79,7 @@ export default function GroupsPage(): JSX.Element {
             <VStack spacing="9" flex="1">
                 <HStack justifyContent="space-between" width="100%">
                     <Heading fontSize="40px" as="h1">
-                        My groups
+                        My groups ({_groups.length})
                     </Heading>
                 </HStack>
 
@@ -178,7 +178,7 @@ export default function GroupsPage(): JSX.Element {
 
                 <HStack justifyContent="space-between" width="100%">
                     <Heading fontSize="40px" as="h1">
-                        All credential groups
+                        All credential groups ({_allCredentialGroups.length})
                     </Heading>
                 </HStack>
 
