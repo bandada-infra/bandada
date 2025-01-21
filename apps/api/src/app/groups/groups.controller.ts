@@ -31,6 +31,7 @@ import { UpdateGroupsDto } from "./dto/update-groups.dto"
 import { GroupsService } from "./groups.service"
 import { mapGroupToResponseDTO } from "./groups.utils"
 import { RemoveGroupsDto } from "./dto/remove-groups.dto"
+import { CreateUnionGroupDto } from "./dto/create-union-group.dto"
 
 @ApiTags("groups")
 @Controller("groups")
@@ -106,6 +107,40 @@ export class GroupsController {
         }
 
         return groupsToResponseDTO
+    }
+
+    @Post("union")
+    @ApiBody({ type: CreateUnionGroupDto })
+    @ApiHeader({ name: "x-api-key", required: true })
+    @ApiCreatedResponse({ type: Group })
+    @ApiOperation({
+        description: "Create a union group using an API Key or a valid session."
+    })
+    async createUnionGroup(
+        @Body() dto: CreateUnionGroupDto,
+        @Headers() headers: Headers,
+        @Req() req: Request
+    ) {
+        let group: any
+        const apiKey = headers["x-api-key"] as string
+
+        if (apiKey) {
+            group = await this.groupsService.createUnionGroupWithApiKey(
+                dto,
+                apiKey
+            )
+        } else if (req.session.adminId) {
+            group = await this.groupsService.createUnionGroupManually(
+                dto,
+                req.session.adminId
+            )
+        } else {
+            throw new NotImplementedException()
+        }
+
+        const fingerprint = await this.groupsService.getFingerprint(group.id)
+
+        return mapGroupToResponseDTO(group, fingerprint)
     }
 
     @Delete()

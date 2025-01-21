@@ -20,6 +20,7 @@ import { Group } from "./entities/group.entity"
 import { Member } from "./entities/member.entity"
 import { MerkleProof } from "./types"
 import { getAndCheckAdmin } from "../utils"
+import { CreateUnionGroupDto } from "./dto/create-union-group.dto"
 
 @Injectable()
 export class GroupsService {
@@ -136,6 +137,68 @@ export class GroupsService {
         }
 
         return newGroups
+    }
+
+    /**
+     * Creates a group that are union of existing groups using API Key.
+     * @param dto External parameters used to create a new group.
+     * @param groupIds Existing group ids.
+     * @param apiKey The API Key.
+     * @returns Created group.
+     */
+    async createUnionGroupWithApiKey(
+        dto: CreateUnionGroupDto,
+        apiKey: string
+    ): Promise<Group> {
+        let group = await this.createGroupWithAPIKey(dto, apiKey)
+
+        const members = []
+
+        for await (const groupId of dto.groupIds) {
+            const refGroup = await this.getGroup(groupId)
+
+            if (refGroup) {
+                for (const member of refGroup.members) {
+                    if (!members.includes(member.id)) {
+                        members.push(member.id)
+                    }
+                }
+            }
+        }
+
+        group = await this.addMembers(group.id, members)
+
+        return group
+    }
+
+    /**
+     * Creates a group that are union of existing groups manually without using API Key.
+     * @param dto External parameters used to create a new group.
+     * @param groupIds Existing group ids.
+     * @param adminId Admin id.
+     * @returns Created group.
+     */
+    async createUnionGroupManually(
+        dto: CreateUnionGroupDto,
+        adminId: string
+    ): Promise<Group> {
+        let group = await this.createGroupManually(dto, adminId)
+
+        const members = []
+
+        for await (const groupId of dto.groupIds) {
+            const refGroup = await this.getGroup(groupId)
+
+            if (refGroup) {
+                for (const member of refGroup.members) {
+                    members.push(member.id)
+                }
+            }
+        }
+
+        group = await this.addMembers(group.id, members)
+
+        return group
     }
 
     /**

@@ -13,6 +13,7 @@ import { AdminsModule } from "../admins/admins.module"
 import { Admin } from "../admins/entities/admin.entity"
 import { CreateGroupDto } from "./dto/create-group.dto"
 import { UpdateGroupDto } from "./dto/update-group.dto"
+import { CreateUnionGroupDto } from "./dto/create-union-group.dto"
 
 jest.mock("@bandada/utils", () => {
     const originalModule = jest.requireActual("@bandada/utils")
@@ -792,6 +793,174 @@ describe("GroupsService", () => {
 
             await expect(fun).rejects.toThrow(
                 `You are not the admin of the group '${ids[2]}'`
+            )
+        })
+    })
+
+    describe("# Create union group via API", () => {
+        const unionGroupDto: CreateUnionGroupDto = {
+            name: "Union Group API 1",
+            description: "This is a new union group",
+            treeDepth: 16,
+            fingerprintDuration: 3600,
+            groupIds: []
+        }
+        let admin: Admin
+        let apiKey: string
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+
+            apiKey = await adminsService.updateApiKey(
+                admin.id,
+                ApiKeyActions.Generate
+            )
+
+            admin = await adminsService.findOne({ id: admin.id })
+        })
+
+        it("Should create a union group via API", async () => {
+            const groupsDto: Array<CreateGroupDto> = [
+                {
+                    name: "Ref Group API 1",
+                    description: "This is a new group1",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                {
+                    name: "Ref Group API 2",
+                    description: "This is a new group2",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                }
+            ]
+
+            const groupIds = []
+
+            const groupDto: CreateUnionGroupDto = {
+                name: "Union Group API 1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600,
+                groupIds
+            }
+
+            const groups = await groupsService.createGroupsWithAPIKey(
+                groupsDto,
+                apiKey
+            )
+
+            for await (const [i, group] of groups.entries()) {
+                await groupsService.addMemberManually(
+                    group.id,
+                    `${i}`,
+                    admin.id
+                )
+
+                groupIds.push(group.id)
+            }
+
+            const group = await groupsService.createUnionGroupWithApiKey(
+                groupDto,
+                apiKey
+            )
+
+            expect(group.adminId).toBe(admin.id)
+            expect(group.description).toBe(groupDto.description)
+            expect(group.name).toBe(groupDto.name)
+            expect(group.treeDepth).toBe(groupDto.treeDepth)
+            expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
+            expect(group.members).toHaveLength(2)
+            expect(group.credentials).toBeNull()
+        })
+
+        it("Should not add duplicate members to the union group", async () => {
+            const groupsDto: Array<CreateGroupDto> = [
+                {
+                    name: "Ref Group API 3",
+                    description: "This is a new group3",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                {
+                    name: "Ref Group API 4",
+                    description: "This is a new group4",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                }
+            ]
+
+            const groupIds = []
+
+            const groupDto: CreateUnionGroupDto = {
+                name: "Union Group API 2",
+                description: "This is a new group2",
+                treeDepth: 16,
+                fingerprintDuration: 3600,
+                groupIds
+            }
+
+            const groups = await groupsService.createGroupsWithAPIKey(
+                groupsDto,
+                apiKey
+            )
+
+            for await (const group of groups) {
+                await groupsService.addMemberManually(group.id, "1", admin.id)
+
+                groupIds.push(group.id)
+            }
+
+            await groupsService.createUnionGroupWithApiKey(groupDto, apiKey)
+
+            const group = await groupsService.createUnionGroupWithApiKey(
+                groupDto,
+                apiKey
+            )
+
+            expect(group.adminId).toBe(admin.id)
+            expect(group.description).toBe(groupDto.description)
+            expect(group.name).toBe(groupDto.name)
+            expect(group.treeDepth).toBe(groupDto.treeDepth)
+            expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
+            expect(group.members).toHaveLength(1)
+        })
+
+        it("Should not create a union group if the admin does not exist", async () => {
+            const fun = groupsService.createUnionGroupWithApiKey(
+                unionGroupDto,
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not create a union group if the API key is invalid", async () => {
+            const fun = groupsService.createUnionGroupWithApiKey(
+                unionGroupDto,
+                "apiKey"
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or invalid admin for the groups`
+            )
+        })
+
+        it("Should not create a union group if the API key is disabled for the admin", async () => {
+            await adminsService.updateApiKey(admin.id, ApiKeyActions.Disable)
+
+            const fun = groupsService.createUnionGroupWithApiKey(
+                unionGroupDto,
+                apiKey
+            )
+
+            await expect(fun).rejects.toThrow(
+                `Invalid API key or API access not enabled for admin '${admin.id}'`
             )
         })
     })
@@ -1579,6 +1748,140 @@ describe("GroupsService", () => {
             const fun = groupsService.createGroupsManually(groupsDtos, "wrong")
 
             await expect(fun).rejects.toThrow(`You are not an admin`)
+        })
+    })
+
+    describe("# createUnionGroupManually", () => {
+        let admin: Admin
+
+        beforeAll(async () => {
+            admin = await adminsService.create({
+                id: "admin",
+                address: "0x"
+            })
+        })
+
+        it("Should create a union group manually", async () => {
+            const groupsDto: Array<CreateGroupDto> = [
+                {
+                    name: "Ref Group 1",
+                    description: "This is a new group1",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                {
+                    name: "Ref Group 2",
+                    description: "This is a new group2",
+                    treeDepth: 16,
+                    fingerprintDuration: 7200
+                }
+            ]
+
+            const groupIds = []
+
+            const groupDto: CreateUnionGroupDto = {
+                name: "Union Group 1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600,
+                groupIds
+            }
+
+            const groups = await groupsService.createGroupsManually(
+                groupsDto,
+                admin.id
+            )
+
+            for await (const [i, group] of groups.entries()) {
+                await groupsService.addMemberManually(
+                    group.id,
+                    `${i}`,
+                    admin.id
+                )
+
+                groupIds.push(group.id)
+            }
+
+            const group = await groupsService.createUnionGroupManually(
+                groupDto,
+                admin.id
+            )
+
+            expect(group.adminId).toBe(admin.id)
+            expect(group.description).toBe(groupDto.description)
+            expect(group.name).toBe(groupDto.name)
+            expect(group.treeDepth).toBe(groupDto.treeDepth)
+            expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
+            expect(group.members).toHaveLength(2)
+        })
+
+        it("Should not create a union group manually if the admin doesn't exist", async () => {
+            const groupIds = []
+
+            const groupDto: CreateUnionGroupDto = {
+                name: "Union Group 1",
+                description: "This is a new group1",
+                treeDepth: 16,
+                fingerprintDuration: 3600,
+                groupIds
+            }
+
+            const fun = groupsService.createUnionGroupManually(
+                groupDto,
+                "wrong"
+            )
+
+            await expect(fun).rejects.toThrow(`You are not an admin`)
+        })
+
+        it("Should not add duplicate members to the union group", async () => {
+            const groupsDto: Array<CreateGroupDto> = [
+                {
+                    name: "Ref Group 3",
+                    description: "This is a new group3",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                },
+                {
+                    name: "Ref Group 4",
+                    description: "This is a new group4",
+                    treeDepth: 16,
+                    fingerprintDuration: 3600
+                }
+            ]
+
+            const groupIds = []
+
+            const groupDto: CreateUnionGroupDto = {
+                name: "Union Group 2",
+                description: "This is a new group 2",
+                treeDepth: 16,
+                fingerprintDuration: 3600,
+                groupIds
+            }
+
+            const groups = await groupsService.createGroupsManually(
+                groupsDto,
+                admin.id
+            )
+
+            for await (const group of groups) {
+                await groupsService.addMemberManually(group.id, "1", admin.id)
+
+                groupIds.push(group.id)
+            }
+
+            const group = await groupsService.createUnionGroupManually(
+                groupDto,
+                admin.id
+            )
+
+            expect(group.adminId).toBe(admin.id)
+            expect(group.description).toBe(groupDto.description)
+            expect(group.name).toBe(groupDto.name)
+            expect(group.treeDepth).toBe(groupDto.treeDepth)
+            expect(group.fingerprintDuration).toBe(groupDto.fingerprintDuration)
+            expect(group.members).toHaveLength(1)
         })
     })
 

@@ -4,7 +4,8 @@ import {
     Invite,
     GroupCreationDetails,
     GroupUpdateDetails,
-    DashboardUrl
+    DashboardUrl,
+    UnionGroupCreationDetails
 } from "./types"
 import checkParameter from "./checkParameter"
 import {
@@ -25,7 +26,8 @@ import {
     getGroupsByAdminId,
     getGroupsByMemberId,
     getCredentialGroupJoinUrl,
-    getMultipleCredentialsGroupJoinUrl
+    getMultipleCredentialsGroupJoinUrl,
+    createUnionGroup
 } from "./groups"
 import { createInvite, getInvite, redeemInvite } from "./invites"
 
@@ -136,6 +138,32 @@ export default class ApiSdk {
         )
 
         return groups[0]
+    }
+
+    /**
+     * Creates a union group using the API key.
+     * @param unionGroupCreationDetails Union group creation details.
+     * @param apiKey The API key of the admin of the group.
+     * @returns The created union group.
+     */
+    async createUnionGroup(
+        unionGroupCreationDetails: UnionGroupCreationDetails,
+        apiKey: string
+    ): Promise<Group> {
+        if (
+            unionGroupCreationDetails.treeDepth < 16 ||
+            unionGroupCreationDetails.treeDepth > 32
+        ) {
+            throw new Error("The tree depth must be between 16 and 32")
+        }
+
+        const group = await createUnionGroup(
+            this._config,
+            unionGroupCreationDetails,
+            apiKey
+        )
+
+        return group
     }
 
     /**
