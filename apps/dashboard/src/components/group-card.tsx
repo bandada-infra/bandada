@@ -82,6 +82,7 @@ export default function GroupCard({
                 <Text
                     fontSize="20px"
                     mt="12px"
+                    noOfLines={1}
                     color={!name ? "balticSea.400" : "inherit"}
                 >
                     {name || (type === "off-chain" ? "[untitled]" : "")}

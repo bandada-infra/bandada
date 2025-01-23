@@ -166,8 +166,8 @@ export default function GroupsPage(): JSX.Element {
                                     key={group.id + group.name}
                                     to={`/groups/${group.type}/${group.id}`}
                                 >
-                                    <GridItem>
-                                        <GroupCard {...group} />
+                                    <GridItem maxW="350px">
+                                            <GroupCard {...group} />
                                     </GridItem>
                                 </Link>
                             ))}
