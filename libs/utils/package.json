@@ -19,7 +19,7 @@
     "repository": "https://github.com/bandada-infra/bandada",
     "homepage": "https://github.com/bandada-infra/bandada/tree/main/libs/utils",
     "bugs": {
-        "url": "https://github.com/bandada-infra/bandada.git/issues"
+        "url": "https://github.com/bandada-infra/bandada/issues"
     },
     "scripts": {
         "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",
