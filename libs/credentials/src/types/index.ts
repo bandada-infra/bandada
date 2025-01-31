@@ -4,7 +4,7 @@ export enum EASNetworks {
     ETHEREUM = "ethereum",
     ETHEREUM_SEPOLIA = "sepolia",
     ARBITRUM = "arbitrum",
-    ARIBITRUM_NOVA = "arbitrum-nova",
+    ARBITRUM_NOVA = "arbitrum-nova",
     BASE = "base",
     BASE_SEPOLIA = "base-sepolia",
     LINEA = "linea",
