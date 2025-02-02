@@ -15,6 +15,17 @@ import { CredentialsModule } from "./credentials/credentials.module"
 
 type DB_TYPE = "mysql" | "sqlite" | "postgres"
 
+const TYPEORM_OPTIONS = {
+    autoLoadEntities: true,
+    synchronize: process.env.NODE_ENV !== "production",
+    type: (process.env.DB_TYPE as DB_TYPE) || "postgres",
+    url: process.env.DB_URL,
+    ...(process.env.DB_TYPE === "sqlite" && { database: process.env.DB_URL })
+}
+const schema = process.env.DB_SCHEMA?.trim() || ""
+const typeOrmOptions =
+    schema === "" ? TYPEORM_OPTIONS : { ...TYPEORM_OPTIONS, schema }
+
 @Module({
     imports: [
         AuthModule,
@@ -26,15 +37,7 @@ type DB_TYPE = "mysql" | "sqlite" | "postgres"
             ttl: 60,
             limit: 10
         }),
-        TypeOrmModule.forRoot({
-            type: (process.env.DB_TYPE as DB_TYPE) || "postgres",
-            url: process.env.DB_URL,
-            ...(process.env.DB_TYPE === "sqlite" && {
-                database: process.env.DB_URL
-            }),
-            autoLoadEntities: true,
-            synchronize: process.env.NODE_ENV !== "production"
-        })
+        TypeOrmModule.forRoot(typeOrmOptions)
     ]
 })
 export class AppModule {}
