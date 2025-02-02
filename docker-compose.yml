@@ -8,6 +8,8 @@ services:
             dockerfile: ./apps/api/Dockerfile
         image: bandada-api:latest
         restart: unless-stopped
+        environment:
+            DB_URL: postgres://root:helloworld@postgres:5432/bandada
         env_file:
             - apps/api/.env
         ports:
