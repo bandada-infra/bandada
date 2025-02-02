@@ -34,3 +34,5 @@ yarn-error.log*
 
 !apps/docs
 !apps/website/app/build
+
+apps/api/src/swagger-custom-ui.js
