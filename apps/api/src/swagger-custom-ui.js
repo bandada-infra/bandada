@@ -45,10 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
             tag: "div",
             styles: {
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "end",
+                alignItems: "center",
                 position: "absolute",
-                top: "20px",
+                top: "30px",
                 right: "40px",
                 gap: "8px"
             }
