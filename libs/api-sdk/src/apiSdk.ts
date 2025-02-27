@@ -421,17 +421,20 @@ export default class ApiSdk {
      * @param dashboardUrl Dashboard base url.
      * @param groupId Group id.
      * @param commitment Identity commitment.
+     * @param redirectUri Redirect uri.
      * @returns Url string.
      */
     getMultipleCredentialsGroupJoinUrl(
         dashboardUrl: DashboardUrl,
         groupId: string,
-        commitment: string
+        commitment: string,
+        redirectUri?: string
     ): string {
         const url = getMultipleCredentialsGroupJoinUrl(
             dashboardUrl,
             groupId,
-            commitment
+            commitment,
+            redirectUri
         )
 
         return url

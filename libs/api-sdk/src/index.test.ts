@@ -863,15 +863,17 @@ describe("Bandada API SDK", () => {
                     const dashboardUrl = DashboardUrl.DEV
                     const groupId = "10402173435763029700781503965100"
                     const commitment = "1"
+                    const redirectUri = "http://localhost:3003"
 
                     const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
                     const res = apiSdk.getMultipleCredentialsGroupJoinUrl(
                         dashboardUrl,
                         groupId,
-                        commitment
+                        commitment,
+                        redirectUri
                     )
 
-                    const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+                    const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple&redirect_uri=${redirectUri}?redirect=true`
 
                     expect(res).toBe(url)
                 })
