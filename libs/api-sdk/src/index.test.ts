@@ -604,6 +604,59 @@ describe("Bandada API SDK", () => {
                 expect(groups[0].credentials).toBeNull()
             })
         })
+        describe("getGroupsByGroupIds", () => {
+            it("Should return all groups by group ids", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: null
+                        }
+                    ])
+                )
+
+                const groupIds = ["10402173435763029700781503965100"]
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByGroupIds(
+                    groupIds
+                )
+                expect(groups).toHaveLength(1)
+            })
+            it("Should return all groups by group ids and null in the credentials that don't have a valid JSON string", async () => {
+                requestMocked.mockImplementationOnce(() =>
+                    Promise.resolve([
+                        {
+                            id: "10402173435763029700781503965100",
+                            name: "Group1",
+                            description: "This is a new group",
+                            admin: "0xdf558148e66850ac48dbe2c8119b0eefa7d08bfd19c997c90a142eb97916b847",
+                            treeDepth: 16,
+                            fingerprintDuration: 3600,
+                            createdAt: "2023-07-15T08:21:05.000Z",
+                            members: [],
+                            credentials: {}
+                        }
+                    ])
+                )
+
+                const groupIds = ["10402173435763029700781503965100"]
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const groups: Group[] = await apiSdk.getGroupsByGroupIds(
+                    groupIds
+                )
+                expect(groups).toHaveLength(1)
+                expect(groups[0].credentials).toBeNull()
+            })
+        })
         describe("#getGroup", () => {
             it("Should return a group", async () => {
                 requestMocked.mockImplementationOnce(() =>
@@ -795,86 +848,105 @@ describe("Bandada API SDK", () => {
                 )
                 expect(res).toBeUndefined()
             })
-            describe("#removeMemberByApiKey", () => {
-                it("Should remove a member from a group using an API Key", async () => {
-                    requestMocked.mockImplementationOnce(() =>
-                        Promise.resolve()
-                    )
+        })
 
-                    const groupId = "10402173435763029700781503965100"
-                    const memberId = "1"
-                    const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+        describe("#addMemberToGroups", () => {
+            it("Should add a member to multiple groups using an API Key", async () => {
+                requestMocked.mockImplementationOnce(() => Promise.resolve())
 
-                    const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
-                    const res = await apiSdk.removeMemberByApiKey(
-                        groupId,
-                        memberId,
-                        apiKey
-                    )
-                    expect(res).toBeUndefined()
-                })
+                const groupIds = [
+                    "10402173435763029700781503965100",
+                    "20402173435763029700781503965200"
+                ]
+                const memberId = "1"
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = await apiSdk.addMemberToGroupsByApiKey(
+                    groupIds,
+                    memberId,
+                    apiKey
+                )
+
+                expect(res).toBeUndefined()
             })
+        })
 
-            describe("#removeMembersByApiKey", () => {
-                it("Should remove multiple members from a group using an API Key", async () => {
-                    requestMocked.mockImplementationOnce(() =>
-                        Promise.resolve()
-                    )
+        describe("#removeMemberByApiKey", () => {
+            it("Should remove a member from a group using an API Key", async () => {
+                requestMocked.mockImplementationOnce(() => Promise.resolve())
 
-                    const groupId = "10402173435763029700781503965100"
-                    const memberIds = ["1", "2", "3"]
-                    const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+                const groupId = "10402173435763029700781503965100"
+                const memberId = "1"
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-                    const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
-                    const res = await apiSdk.removeMembersByApiKey(
-                        groupId,
-                        memberIds,
-                        apiKey
-                    )
-                    expect(res).toBeUndefined()
-                })
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = await apiSdk.removeMemberByApiKey(
+                    groupId,
+                    memberId,
+                    apiKey
+                )
+                expect(res).toBeUndefined()
             })
+        })
 
-            describe("#getCredentialGroupJoinUrl", () => {
-                it("Should generate a custom url for joining a credential group", async () => {
-                    const dashboardUrl = DashboardUrl.DEV
-                    const groupId = "10402173435763029700781503965100"
-                    const commitment = "1"
-                    const providerName = "github"
-                    const redirectUri = "http://localhost:3003"
+        describe("#removeMembersByApiKey", () => {
+            it("Should remove multiple members from a group using an API Key", async () => {
+                requestMocked.mockImplementationOnce(() => Promise.resolve())
 
-                    const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
-                    const res = apiSdk.getCredentialGroupJoinUrl(
-                        dashboardUrl,
-                        groupId,
-                        commitment,
-                        providerName,
-                        redirectUri
-                    )
+                const groupId = "10402173435763029700781503965100"
+                const memberIds = ["1", "2", "3"]
+                const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 
-                    const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}&redirect_uri=${redirectUri}?redirect=true`
-
-                    expect(res).toBe(url)
-                })
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = await apiSdk.removeMembersByApiKey(
+                    groupId,
+                    memberIds,
+                    apiKey
+                )
+                expect(res).toBeUndefined()
             })
+        })
 
-            describe("#getMultipleCredentialGroupJoinUrl", () => {
-                it("Should generate a custom url for joining a multiple credential group", async () => {
-                    const dashboardUrl = DashboardUrl.DEV
-                    const groupId = "10402173435763029700781503965100"
-                    const commitment = "1"
+        describe("#getCredentialGroupJoinUrl", () => {
+            it("Should generate a custom url for joining a credential group", async () => {
+                const dashboardUrl = DashboardUrl.DEV
+                const groupId = "10402173435763029700781503965100"
+                const commitment = "1"
+                const providerName = "github"
+                const redirectUri = "http://localhost:3003"
 
-                    const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
-                    const res = apiSdk.getMultipleCredentialsGroupJoinUrl(
-                        dashboardUrl,
-                        groupId,
-                        commitment
-                    )
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = apiSdk.getCredentialGroupJoinUrl(
+                    dashboardUrl,
+                    groupId,
+                    commitment,
+                    providerName,
+                    redirectUri
+                )
 
-                    const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+                const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}&redirect_uri=${redirectUri}?redirect=true`
 
-                    expect(res).toBe(url)
-                })
+                expect(res).toBe(url)
+            })
+        })
+
+        describe("#getMultipleCredentialGroupJoinUrl", () => {
+            it("Should generate a custom url for joining a multiple credential group", async () => {
+                const dashboardUrl = DashboardUrl.DEV
+                const groupId = "10402173435763029700781503965100"
+                const commitment = "1"
+
+                const apiSdk: ApiSdk = new ApiSdk(SupportedUrl.DEV)
+                const res = apiSdk.getMultipleCredentialsGroupJoinUrl(
+                    dashboardUrl,
+                    groupId,
+                    commitment
+                )
+
+                const url = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
+
+                expect(res).toBe(url)
             })
         })
     })

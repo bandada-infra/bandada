@@ -96,6 +96,41 @@ export async function getGroupsByMemberId(
 }
 
 /**
+ * Returns the list of groups by group ids.
+ * @param groupIds Group ids.
+ * @returns List of groups by group ids.
+ */
+export async function getGroupsByGroupIds(
+    config: object,
+    groupIds: string[]
+): Promise<Group[]> {
+    let requestUrl = `${url}?`
+
+    for (const groupId of groupIds) {
+        requestUrl += `&groupIds=${groupId}`
+    }
+
+    let groups = await request(requestUrl, config)
+
+    groups = groups.map((group: any) => {
+        let credentials
+
+        try {
+            credentials = JSON.parse(group.credentials)
+        } catch (error) {
+            credentials = null
+        }
+
+        return {
+            ...group,
+            credentials
+        }
+    })
+
+    return groups
+}
+
+/**
  * Creates one or more groups with the provided details.
  * @param groupsCreationDetails Data to create the groups.
  * @param apiKey API Key of the admin.
@@ -373,6 +408,34 @@ export async function addMemberByInviteCode(
     }
 
     await request(requestUrl, newConfig)
+}
+
+/**
+ * Adds a member to multiple groups.
+ * @param groupIds Array of group ids.
+ * @param memberId Member id.
+ * @param apiKey API Key of the admin.
+ * @returns Array of the groups of added member.
+ */
+export function addMemberToGroupsByApiKey(
+    config: object,
+    groupIds: string[],
+    memberId: string,
+    apiKey: string
+): Promise<void> {
+    const newConfig: any = {
+        method: "post",
+        data: {
+            groupIds
+        },
+        ...config
+    }
+
+    newConfig.headers["x-api-key"] = apiKey
+
+    const req = request(`${url}/members/${memberId}`, newConfig)
+
+    return req
 }
 
 /**

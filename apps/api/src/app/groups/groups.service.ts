@@ -11,7 +11,7 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Group as CachedGroup } from "@semaphore-protocol/group"
-import { Repository } from "typeorm"
+import { Repository, In } from "typeorm"
 import { InvitesService } from "../invites/invites.service"
 import { AdminsService } from "../admins/admins.service"
 import { CreateGroupDto } from "./dto/create-group.dto"
@@ -553,6 +553,98 @@ export class GroupsService {
     }
 
     /**
+     * Add a member to multiple groups manually as an admin.
+     * @param groupIds Array of group ids to be added.
+     * @param memberId Member id.
+     * @param adminId Group admin id.
+     * @returns Array of groups of added member.
+     */
+    async addMemberToGroupsManually(
+        groupIds: string[],
+        memberId: string,
+        adminId: string
+    ): Promise<Group[]> {
+        for await (const groupId of groupIds) {
+            const group = await this.getGroup(groupId)
+
+            if (group.adminId !== adminId) {
+                throw new UnauthorizedException(
+                    `You are not the admin of the group '${groupId}'`
+                )
+            }
+
+            if (group.credentials !== null) {
+                throw new Error(
+                    `The group '${group.name}' is a credential group. You cannot manually add members to a credential group.`
+                )
+            }
+
+            if (this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' already exists in the group '${groupId}'`
+                )
+            }
+        }
+
+        for await (const groupId of groupIds) {
+            await this.addMember(groupId, memberId)
+        }
+
+        return this.getGroups({ groupIds })
+    }
+
+    /**
+     * Add a member to multiple groups using API Key.
+     * @param groupIds Array of group ids to be added.
+     * @param memberId Member id.
+     * @param apiKey API key for the group.
+     * @returns Array of groups of added member.
+     */
+    async addMemberToGroupsWithAPIKey(
+        groupIds: string[],
+        memberId: string,
+        apiKey: string
+    ): Promise<Group[]> {
+        for await (const groupId of groupIds) {
+            const group = await this.getGroup(groupId)
+
+            const admin = await this.adminsService.findOne({
+                id: group.adminId
+            })
+
+            if (!admin) {
+                throw new BadRequestException(
+                    `Invalid admin for group '${groupId}'`
+                )
+            }
+
+            if (!admin.apiEnabled || admin.apiKey !== apiKey) {
+                throw new BadRequestException(
+                    `Invalid API key or API access not enabled for admin '${admin.id}'`
+                )
+            }
+
+            if (group.credentials !== null) {
+                throw new Error(
+                    `The group '${group.name}' is a credential group. You cannot add members to a credential group using an API Key.`
+                )
+            }
+
+            if (this.isGroupMember(groupId, memberId)) {
+                throw new BadRequestException(
+                    `Member '${memberId}' already exists in the group '${groupId}'`
+                )
+            }
+        }
+
+        for await (const groupId of groupIds) {
+            await this.addMember(groupId, memberId)
+        }
+
+        return this.getGroups({ groupIds })
+    }
+
+    /**
      * Add a member to the group.
      * @param groupId Group id.
      * @param memberId ID of the member to be added
@@ -820,6 +912,7 @@ export class GroupsService {
     async getGroups(filters?: {
         adminId?: string
         memberId?: string
+        groupIds?: string[]
     }): Promise<Group[]> {
         let where = {}
 
@@ -834,6 +927,13 @@ export class GroupsService {
                 members: {
                     id: filters.memberId
                 },
+                ...where
+            }
+        }
+
+        if (filters?.groupIds) {
+            where = {
+                id: In(filters.groupIds),
                 ...where
             }
         }
