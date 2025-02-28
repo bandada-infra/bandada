@@ -202,6 +202,31 @@ const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
 const groups = await apiSdk.createGroups(groupsCreateDetails, apiKey)
 ```
 
+## Create union group
+
+\# **createUnionGroup**(): _Promise\<Group>_
+
+Create a union group from multiple groups.
+
+```ts
+const unionGroupCreationDetails = {
+    name: "Group 1",
+    description: "This is Group 1",
+    treeDepth: 16,
+    fingerprintDuration: 3600,
+    groupIds: [
+        "10402173435763029700781503965100",
+        "20402173435763029700781503965200"
+    ]
+}
+const apiKey = "70f07d0d-6aa2-4fe1-b4b9-06c271a641dc"
+
+const unionGroup = await apiSdk.createUnionGroup(
+    unionGroupCreationDetails,
+    apiKey
+)
+```
+
 ## Remove group
 
 \# **removeGroup**(): _Promise\<void>_
