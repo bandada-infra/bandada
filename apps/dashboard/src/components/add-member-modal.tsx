@@ -45,6 +45,12 @@ export default function AddMemberModal({
         setValue: setClientLink,
         onCopy
     } = useClipboard("")
+    const {
+        hasCopied: hasCopiedInviteCode,
+        value: inviteCode,
+        setValue: setInviteCode,
+        onCopy: onCopyInviteCode
+    } = useClipboard("")
     const { data: signer } = useSigner()
 
     useEffect(() => {
@@ -154,7 +160,10 @@ ${memberIds.join("\n")}
         }
 
         setClientLink(inviteLink)
-    }, [group, setClientLink])
+        const index = inviteLink.lastIndexOf("=")
+        const inviteCodeLink = inviteLink.substring(index + 1)
+        setInviteCode(inviteCodeLink)
+    }, [group, setClientLink, setInviteCode])
 
     return (
         <Modal
@@ -214,6 +223,50 @@ ${memberIds.join("\n")}
 
                     {group.type === "off-chain" && (
                         <Box mb="30px">
+                            {!group.credentials && (
+                                <>
+                                    <Text mb="10px" color="balticSea.800">
+                                        Share invite code
+                                    </Text>
+
+                                    <InputGroup size="lg">
+                                        <Input
+                                            pr="50px"
+                                            placeholder="Invite code"
+                                            value={inviteCode}
+                                            isDisabled
+                                        />
+                                        <InputRightElement mr="5px">
+                                            <Tooltip
+                                                label={
+                                                    hasCopiedInviteCode
+                                                        ? "Copied!"
+                                                        : "Copy"
+                                                }
+                                                closeOnClick={false}
+                                                hasArrow
+                                            >
+                                                <IconButton
+                                                    variant="link"
+                                                    aria-label="Copy invite link"
+                                                    onClick={onCopyInviteCode}
+                                                    onMouseDown={(e) =>
+                                                        e.preventDefault()
+                                                    }
+                                                    icon={
+                                                        <Icon
+                                                            color="sunsetOrange.600"
+                                                            boxSize="5"
+                                                            as={FiCopy}
+                                                        />
+                                                    }
+                                                />
+                                            </Tooltip>
+                                        </InputRightElement>
+                                    </InputGroup>
+                                </>
+                            )}
+
                             <Text mb="10px" color="balticSea.800">
                                 {!group.credentials
                                     ? "Share invite link"
