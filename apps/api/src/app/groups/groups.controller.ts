@@ -55,6 +55,19 @@ export class GroupsController {
         @Query("memberId") memberId: string,
         @Query("groupIds") groupIds: string[]
     ) {
+        // Check if groupIds is a string or an array of strings
+        // Convert it to an array if it is a string
+        // Remove empty strings
+        if (groupIds) {
+            if (typeof groupIds === "string") {
+                const trimmed = (groupIds as string).trim()
+                groupIds = trimmed !== "" ? [trimmed] : undefined
+            } else if (Array.isArray(groupIds)) {
+                const filtered = groupIds.filter((id) => id.trim() !== "")
+                groupIds = filtered.length > 0 ? filtered : undefined
+            }
+        }
+
         const groups = await this.groupsService.getGroups({
             adminId,
             memberId,
