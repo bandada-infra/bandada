@@ -18,7 +18,7 @@
         <img alt="GitHub Workflow style" src="https://img.shields.io/github/actions/workflow/status/bandada-infra/bandada/style.yml?branch=main&label=style&style=flat-square&logo=github">
     </a>
     <a href="https://coveralls.io/github/bandada-infra/bandada">
-        <img alt="Coveralls" src="https://img.shields.io/coveralls/github/bandada-infra/bandada?label=coverage (ts)&style=flat-square&logo=coveralls">
+        <img alt="Coveralls" src="https://coveralls.io/repos/github/bandada-infra/bandada/badge.svg?branch=main">
     </a>
     <a href="https://eslint.org/">
         <img alt="Linter eslint" src="https://img.shields.io/badge/linter-eslint-8080f2?style=flat-square&logo=eslint">
