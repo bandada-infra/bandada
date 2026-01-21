@@ -2,7 +2,7 @@ import { Contract } from "ethers"
 import { task, types } from "hardhat/config"
 
 task("deploy:bandada-semaphore", "Deploy a BandadaSemaphore contract")
-    .addOptionalParam<boolean>("logs", "Print the logs", true, types.boolean)
+    .addOptionalParam("logs", "Print the logs", true, types.boolean)
     .addOptionalParam(
         "bandada",
         "Bandada contract address",
