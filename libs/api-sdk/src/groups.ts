@@ -9,6 +9,10 @@ import type {
 
 const url = "/groups"
 
+function ensureTrailingSlash(url: string): string {
+    return url.endsWith("/") ? url : `${url}/`;
+}
+
 /**
  * Returns the list of groups.
  * @returns List of groups.
@@ -519,7 +523,7 @@ export async function removeMembersByApiKey(
 }
 
 /**
- * Generate a custorm url for joining a credential group.
+ * Generate a custom url for joining a credential group.
  * @param dashboardUrl Dashboard url.
  * @param groupId Group id.
  * @param commitment Identity commitment.
@@ -534,7 +538,8 @@ export function getCredentialGroupJoinUrl(
     providerName: string,
     redirectUri?: string
 ): string {
-    let resultUrl = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&provider=${providerName}`
+    const baseUrl = ensureTrailingSlash(dashboardUrl);
+    let resultUrl = `${baseUrl}credentials?group=${groupId}&member=${commitment}&provider=${providerName}`
 
     if (redirectUri) {
         resultUrl += `&redirect_uri=${redirectUri}?redirect=true`
@@ -544,7 +549,7 @@ export function getCredentialGroupJoinUrl(
 }
 
 /**
- * Generate a custorm url for joining a multiple credentials group.
+ * Generate a custom url for joining a multiple credentials group.
  * @param dashboardUrl Dashboard url.
  * @param groupId Group id.
  * @param commitment Identity commitment.
@@ -555,7 +560,6 @@ export function getMultipleCredentialsGroupJoinUrl(
     groupId: string,
     commitment: string
 ): string {
-    const resultUrl = `${dashboardUrl}/credentials?group=${groupId}&member=${commitment}&type=multiple`
-
-    return resultUrl
+    const baseUrl = ensureTrailingSlash(dashboardUrl);
+    return `${baseUrl}credentials?group=${groupId}&member=${commitment}&type=multiple`;
 }
