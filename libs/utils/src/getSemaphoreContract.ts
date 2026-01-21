@@ -1,62 +1,40 @@
 /* istanbul ignore file */
 
-import { Signer } from "@ethersproject/abstract-signer"
-import { Contract, ContractReceipt } from "@ethersproject/contracts"
-import getContract from "./getContract"
-import { Network } from "./types"
+import { Signer } from "@ethersproject/abstract-signer";
+import { Contract, ContractReceipt } from "@ethersproject/contracts";
+import getContract from "./getContract";
+import { Network } from "./types";
 
 export class SemaphoreContract {
-    private contract: Contract
+    private contract: Contract;
 
     constructor(contract: Contract) {
-        this.contract = contract
+        this.contract = contract;
+    }
+
+    private async sendTransaction(method: string, ...args: any[]): Promise<ContractReceipt> {
+        const transaction = await this.contract[method](...args);
+        return transaction.wait(1);
     }
 
     async createGroup(admin: string): Promise<ContractReceipt> {
-        const transaction = await this.contract["createGroup(address)"](admin)
-
-        return transaction.wait(1)
+        return this.sendTransaction("createGroup(address)", admin);
     }
 
-    async updateGroupAdmin(
-        groupId: string,
-        newAdmin: string
-    ): Promise<ContractReceipt> {
-        const transaction = await this.contract.updateGroupAdmin(
-            groupId,
-            newAdmin
-        )
-
-        return transaction.wait(1)
+    async updateGroupAdmin(groupId: string, newAdmin: string): Promise<ContractReceipt> {
+        return this.sendTransaction("updateGroupAdmin", groupId, newAdmin);
     }
 
     async addMember(groupId: string, member: string): Promise<ContractReceipt> {
-        const transaction = await this.contract.addMember(groupId, member)
-
-        return transaction.wait(1)
+        return this.sendTransaction("addMember", groupId, member);
     }
 
-    async addMembers(
-        groupId: string,
-        members: string[]
-    ): Promise<ContractReceipt> {
-        const transaction = await this.contract.addMembers(groupId, members)
-
-        return transaction.wait(1)
+    async addMembers(groupId: string, members: string[]): Promise<ContractReceipt> {
+        return this.sendTransaction("addMembers", groupId, members);
     }
 
-    async removeMember(
-        groupId: string,
-        member: string,
-        siblings: bigint[]
-    ): Promise<ContractReceipt> {
-        const transaction = await this.contract.removeMember(
-            groupId,
-            member,
-            siblings
-        )
-
-        return transaction.wait(1)
+    async removeMember(groupId: string, member: string, siblings: bigint[]): Promise<ContractReceipt> {
+        return this.sendTransaction("removeMember", groupId, member, siblings);
     }
 }
 
@@ -70,7 +48,7 @@ export default function getSemaphoreContract(
         network,
         privateKeyOrSigner,
         apiKey
-    )
+    );
 
-    return new SemaphoreContract(contract)
+    return new SemaphoreContract(contract);
 }
